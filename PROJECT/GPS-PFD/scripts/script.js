@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 0.43,
+		const CurrentVersion = 0.44,
 		GeolocationAPIOptions = {
 			enableHighAccuracy: true
 		};
@@ -844,37 +844,37 @@
 			ChangeValue("Combobox_SettingsDistanceUnit", Subsystem.I18n.DistanceUnit);
 			switch(Subsystem.I18n.DistanceUnit) {
 				case "Kilometer":
-					ChangeMax("Textbox_SettingsOuterMarkerDistance", "15");
-					ChangePlaceholder("Textbox_SettingsOuterMarkerDistance", "0~15");
-					ChangeTooltip("Textbox_SettingsOuterMarkerDistance", "0~15");
-					ChangeMax("Textbox_SettingsMiddleMarkerDistance", "15");
-					ChangePlaceholder("Textbox_SettingsMiddleMarkerDistance", "0~15");
-					ChangeTooltip("Textbox_SettingsMiddleMarkerDistance", "0~15");
-					ChangeMax("Textbox_SettingsInnerMarkerDistance", "15");
-					ChangePlaceholder("Textbox_SettingsInnerMarkerDistance", "0~15");
-					ChangeTooltip("Textbox_SettingsInnerMarkerDistance", "0~15");
+					ChangeMax("Textbox_SettingsOuterMarkerDistance", "20");
+					ChangePlaceholder("Textbox_SettingsOuterMarkerDistance", "0~20");
+					ChangeTooltip("Textbox_SettingsOuterMarkerDistance", "0~20");
+					ChangeMax("Textbox_SettingsMiddleMarkerDistance", "20");
+					ChangePlaceholder("Textbox_SettingsMiddleMarkerDistance", "0~20");
+					ChangeTooltip("Textbox_SettingsMiddleMarkerDistance", "0~20");
+					ChangeMax("Textbox_SettingsInnerMarkerDistance", "20");
+					ChangePlaceholder("Textbox_SettingsInnerMarkerDistance", "0~20");
+					ChangeTooltip("Textbox_SettingsInnerMarkerDistance", "0~20");
 					break;
 				case "Mile":
-					ChangeMax("Textbox_SettingsOuterMarkerDistance", "9.32");
-					ChangePlaceholder("Textbox_SettingsOuterMarkerDistance", "0~9.32");
-					ChangeTooltip("Textbox_SettingsOuterMarkerDistance", "0~9.32");
-					ChangeMax("Textbox_SettingsMiddleMarkerDistance", "9.32");
-					ChangePlaceholder("Textbox_SettingsMiddleMarkerDistance", "0~9.32");
-					ChangeTooltip("Textbox_SettingsMiddleMarkerDistance", "0~9.32");
-					ChangeMax("Textbox_SettingsInnerMarkerDistance", "9.32");
-					ChangePlaceholder("Textbox_SettingsInnerMarkerDistance", "0~9.32");
-					ChangeTooltip("Textbox_SettingsInnerMarkerDistance", "0~9.32");
+					ChangeMax("Textbox_SettingsOuterMarkerDistance", "12.43");
+					ChangePlaceholder("Textbox_SettingsOuterMarkerDistance", "0~12.43");
+					ChangeTooltip("Textbox_SettingsOuterMarkerDistance", "0~12.43");
+					ChangeMax("Textbox_SettingsMiddleMarkerDistance", "12.43");
+					ChangePlaceholder("Textbox_SettingsMiddleMarkerDistance", "0~12.43");
+					ChangeTooltip("Textbox_SettingsMiddleMarkerDistance", "0~12.43");
+					ChangeMax("Textbox_SettingsInnerMarkerDistance", "12.43");
+					ChangePlaceholder("Textbox_SettingsInnerMarkerDistance", "0~12.43");
+					ChangeTooltip("Textbox_SettingsInnerMarkerDistance", "0~12.43");
 					break;
 				case "NauticalMile":
-					ChangeMax("Textbox_SettingsOuterMarkerDistance", "8.1");
-					ChangePlaceholder("Textbox_SettingsOuterMarkerDistance", "0~8.1");
-					ChangeTooltip("Textbox_SettingsOuterMarkerDistance", "0~8.1");
-					ChangeMax("Textbox_SettingsMiddleMarkerDistance", "8.1");
-					ChangePlaceholder("Textbox_SettingsMiddleMarkerDistance", "0~8.1");
-					ChangeTooltip("Textbox_SettingsMiddleMarkerDistance", "0~8.1");
-					ChangeMax("Textbox_SettingsInnerMarkerDistance", "8.1");
-					ChangePlaceholder("Textbox_SettingsInnerMarkerDistance", "0~8.1");
-					ChangeTooltip("Textbox_SettingsInnerMarkerDistance", "0~8.1");
+					ChangeMax("Textbox_SettingsOuterMarkerDistance", "10.8");
+					ChangePlaceholder("Textbox_SettingsOuterMarkerDistance", "0~10.8");
+					ChangeTooltip("Textbox_SettingsOuterMarkerDistance", "0~10.8");
+					ChangeMax("Textbox_SettingsMiddleMarkerDistance", "10.8");
+					ChangePlaceholder("Textbox_SettingsMiddleMarkerDistance", "0~10.8");
+					ChangeTooltip("Textbox_SettingsMiddleMarkerDistance", "0~10.8");
+					ChangeMax("Textbox_SettingsInnerMarkerDistance", "10.8");
+					ChangePlaceholder("Textbox_SettingsInnerMarkerDistance", "0~10.8");
+					ChangeTooltip("Textbox_SettingsInnerMarkerDistance", "0~10.8");
 					break;
 				default:
 					AlertSystemError("The value of Subsystem.I18n.DistanceUnit \"" + Subsystem.I18n.DistanceUnit + "\" in function RefreshSubsystem is invalid.");
@@ -2967,19 +2967,19 @@
 			RefreshPFD();
 		}
 		function SetGlideSlopeAngle() {
-			PFD.Nav.GlideSlopeAngle = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsGlideSlopeAngle") * 100) / 100, 0, 5);
+			PFD.Nav.GlideSlopeAngle = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsGlideSlopeAngle") * 100) / 100, 0, 10);
 			RefreshPFD();
 		}
 		function SetOuterMarkerDistance() {
-			PFD.Nav.MarkerBeaconDistance.OuterMarker = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsOuterMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 15000);
+			PFD.Nav.MarkerBeaconDistance.OuterMarker = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsOuterMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 20000);
 			RefreshPFD();
 		}
 		function SetMiddleMarkerDistance() {
-			PFD.Nav.MarkerBeaconDistance.MiddleMarker = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsMiddleMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 15000);
+			PFD.Nav.MarkerBeaconDistance.MiddleMarker = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsMiddleMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 20000);
 			RefreshPFD();
 		}
 		function SetInnerMarkerDistance() {
-			PFD.Nav.MarkerBeaconDistance.InnerMarker = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsInnerMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 15000);
+			PFD.Nav.MarkerBeaconDistance.InnerMarker = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsInnerMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 20000);
 			RefreshPFD();
 		}
 

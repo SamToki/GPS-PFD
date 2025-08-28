@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v0.43 (2025/08/22) Beta Test. Since 2024/12/01." />
+		<meta name="version" content="v0.44 (2025/08/28) Beta Test. Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -3340,7 +3340,7 @@
 								<li class="Ctrl Hidden" id="Ctrl_SettingsGlideSlopeAngle" inert="true">
 									<label for="Textbox_SettingsGlideSlopeAngle">
 										<span>下滑道角度：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsGlideSlopeAngle" type="number" min="0" max="5" step="0.1" value="3.00" onclick="SelectText('Textbox_SettingsGlideSlopeAngle')" onchange="SetGlideSlopeAngle()" placeholder="0~5" title="0~5" />
+										<input class="Textbox Width120" id="Textbox_SettingsGlideSlopeAngle" type="number" min="0" max="10" step="0.1" value="3.00" onclick="SelectText('Textbox_SettingsGlideSlopeAngle')" onchange="SetGlideSlopeAngle()" placeholder="0~10" title="0~10" />
 										<span>度</span>
 									</label>
 								</li>
@@ -3350,21 +3350,21 @@
 								<li class="Ctrl Hidden" id="Ctrl_SettingsOuterMarkerDistance" inert="true">
 									<label for="Textbox_SettingsOuterMarkerDistance">
 										<span>外指点标距离：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsOuterMarkerDistance" type="number" min="0" max="8.1" step="0.1" value="5.00" onclick="SelectText('Textbox_SettingsOuterMarkerDistance')" onchange="SetOuterMarkerDistance()" placeholder="0~8.1" title="0~8.1" />
+										<input class="Textbox Width120" id="Textbox_SettingsOuterMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="5.00" onclick="SelectText('Textbox_SettingsOuterMarkerDistance')" onchange="SetOuterMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
 										<span id="Label_SettingsOuterMarkerDistanceUnit">海里</span>
 									</label>
 								</li>
 								<li class="Ctrl Hidden" id="Ctrl_SettingsMiddleMarkerDistance" inert="true">
 									<label for="Textbox_SettingsMiddleMarkerDistance">
 										<span>中指点标距离：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsMiddleMarkerDistance" type="number" min="0" max="8.1" step="0.1" value="0.50" onclick="SelectText('Textbox_SettingsMiddleMarkerDistance')" onchange="SetMiddleMarkerDistance()" placeholder="0~8.1" title="0~8.1" />
+										<input class="Textbox Width120" id="Textbox_SettingsMiddleMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="0.50" onclick="SelectText('Textbox_SettingsMiddleMarkerDistance')" onchange="SetMiddleMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
 										<span id="Label_SettingsMiddleMarkerDistanceUnit">海里</span>
 									</label>
 								</li>
 								<li class="Ctrl Hidden" id="Ctrl_SettingsInnerMarkerDistance" inert="true">
 									<label for="Textbox_SettingsInnerMarkerDistance">
 										<span>内指点标距离：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsInnerMarkerDistance" type="number" min="0" max="8.1" step="0.1" value="0.10" onclick="SelectText('Textbox_SettingsInnerMarkerDistance')" onchange="SetInnerMarkerDistance()" placeholder="0~8.1" title="0~8.1" />
+										<input class="Textbox Width120" id="Textbox_SettingsInnerMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="0.10" onclick="SelectText('Textbox_SettingsInnerMarkerDistance')" onchange="SetInnerMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
 										<span id="Label_SettingsInnerMarkerDistanceUnit">海里</span>
 									</label>
 								</li>
@@ -3807,7 +3807,7 @@
 							<legend>关于</legend>
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>版本 v0.43 (<time datetime="2025-08-22" pubdate="pubdate">2025/08/22</time>) Beta Test<br />
+							<p>版本 v0.44 (<time datetime="2025-08-28" pubdate="pubdate">2025/08/28</time>) Beta Test<br />
 								始于 2024/12/01</p>
 							<p class="GreenText Hidden" id="Label_HelpPWANewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
 							<ul class="CtrlGroup BelowParagraph">
