@@ -381,6 +381,10 @@
 			#Html:has(#Topbar.Hidden) #Toast {
 				top: calc(50dvh - 25px);
 			}
+			#Label_Toast {
+				padding: 0 10px;
+				display: flex; justify-content: center; align-items: center;
+			}
 
 			/* Dialog */
 			#ScreenFilter_Dialog {
