@@ -422,10 +422,10 @@
 					} else {
 						Fade("Ctrl_PFDHUDPanelMCPHeadingCircle");
 					}
-					ChangeText("Label_PFDHUDPanelHeadingBalloon", Math.trunc(PFD0.Stats.Heading.Display).toString().padStart(3, "0"));
+					ChangeText("Label_PFDHUDPanelHeadingBalloon", PFD0.Stats.Heading.Display.toFixed(0).toString().padStart(3, "0"));
 					if(PFD.MCP.Heading.IsEnabled == true) {
 						Show("Ctrl_PFDHUDPanelMCPHeading");
-						ChangeText("Label_PFDHUDPanelMCPHeading", Math.trunc(PFD.MCP.Heading.Value).toString().padStart(3, "0"));
+						ChangeText("Label_PFDHUDPanelMCPHeading", PFD.MCP.Heading.Value.toFixed(0).toString().padStart(3, "0"));
 					}
 				} else {
 					Show("Ctrl_PFDHUDPanelHeadingStatus");
