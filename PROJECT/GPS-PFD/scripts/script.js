@@ -1582,21 +1582,19 @@
 						PFD0.Alert.Active.AltitudeCallout = "AltitudeBeep";
 					}
 					switch(PFD.FlightMode.FlightMode) {
-						case "DepartureGround":
 						case "Land":
 						case "ArrivalGround":
 						case "EmergencyReturn":
 							let ConvertedRadioAltitude = 0, ConvertedPreviousRadioAltitude = 0, ConvertedDecisionHeight = 0;
 							switch(PFD.FlightMode.FlightMode) {
-								case "DepartureGround":
-								case "EmergencyReturn":
-									ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Departure, "Meter", Subsystem.I18n.AltitudeUnit);
-									ConvertedPreviousRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.PreviousTapeDisplay - PFD.Altitude.AirportElevation.Departure, "Meter", Subsystem.I18n.AltitudeUnit);
-									break;
 								case "Land":
 								case "ArrivalGround":
 									ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Arrival, "Meter", Subsystem.I18n.AltitudeUnit);
 									ConvertedPreviousRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.PreviousTapeDisplay - PFD.Altitude.AirportElevation.Arrival, "Meter", Subsystem.I18n.AltitudeUnit);
+									break;
+								case "EmergencyReturn":
+									ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Departure, "Meter", Subsystem.I18n.AltitudeUnit);
+									ConvertedPreviousRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.PreviousTapeDisplay - PFD.Altitude.AirportElevation.Departure, "Meter", Subsystem.I18n.AltitudeUnit);
 									break;
 								default:
 									AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
@@ -1652,6 +1650,7 @@
 								PFD0.Alert.Active.AltitudeCallout = "Minimums";
 							}
 							break;
+						case "DepartureGround":
 						case "TakeOff":
 						case "Cruise":
 							break;
@@ -4300,10 +4299,10 @@
 		switch(PFD.FlightMode.FlightMode) {
 			case "DepartureGround":
 				return PFD0.Stats.Speed.TapeDisplay >= PFD.Speed.TakeOff.V1 && PFD0.Stats.Speed.PreviousTapeDisplay < PFD.Speed.TakeOff.V1;
-			case "ArrivalGround":
 			case "TakeOff":
 			case "Cruise":
 			case "Land":
+			case "ArrivalGround":
 			case "EmergencyReturn":
 				return false;
 			default:
