@@ -185,4 +185,21 @@
 						"Repaired user data \"GPSPFD PFD\".");
 				}
 			}
+
+			// v0.46 (2025/10/01) Beta Test
+			// New feature
+			if(localStorage.GPSPFD_PFD != undefined) {
+				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
+				if(PFD.Altitude.SeatHeight == undefined) {
+					PFD.Altitude.SeatHeight = 4.572;
+					PFD.FlightMode.AutoSwitchFlightModeAndSwapAirports = true;
+					delete PFD.FlightMode.AutoSwitchFlightModeAndSwapAirportData;
+					PFD.WarningSystem = {
+						IsEnabled: false
+					};
+					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
+					console.info("● User Data Repairer\n" +
+						"Repaired user data \"GPSPFD PFD\".");
+				}
+			}
 	}

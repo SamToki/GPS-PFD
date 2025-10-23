@@ -11,6 +11,25 @@
 		// Sub-functions
 			// Sub-functions
 			function RefreshHUDPanel() {
+				// Initialization
+				let ActiveAirport = 0, GroundAltitude = 0;
+				switch(PFD.FlightMode.FlightMode) {
+					case "DepartureGround":
+					case "TakeOff":
+					case "EmergencyReturn":
+						ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.Selection.Departure]);
+						break;
+					case "Cruise":
+					case "Land":
+					case "ArrivalGround":
+						ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.Selection.Arrival]);
+						break;
+					default:
+						AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshHUDPanel is invalid.");
+						break;
+				}
+				GroundAltitude = ActiveAirport.Elevation + PFD.Altitude.SeatHeight;
+
 				// Hardware status
 				if(PFD0.Status.GPS.IsPositionAvailable == true) {
 					if(PFD0.Status.GPS.IsPositionAccurate == true && PFD0.Status.GPS.IsAltitudeAvailable == true && PFD0.Status.GPS.IsAltitudeAccurate == true) {
@@ -269,21 +288,7 @@
 						// Other altitudes
 						ChangeTop("CtrlGroup_PFDHUDPanelOtherAltitudes", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) + "px)");
 							// Ground altitude
-							switch(PFD.FlightMode.FlightMode) {
-								case "DepartureGround":
-								case "TakeOff":
-								case "EmergencyReturn":
-									ChangeBottom("Ctrl_PFDHUDPanelGroundAltitude", 0.75 * (ConvertUnit(PFD.Altitude.AirportElevation.Departure, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 40 + "px");
-									break;
-								case "Cruise":
-								case "Land":
-								case "ArrivalGround":
-									ChangeBottom("Ctrl_PFDHUDPanelGroundAltitude", 0.75 * (ConvertUnit(PFD.Altitude.AirportElevation.Arrival, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 40 + "px");
-									break;
-								default:
-									AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshHUDPanel is invalid.");
-									break;
-							}
+							ChangeBottom("Ctrl_PFDHUDPanelGroundAltitude", 0.75 * (ConvertUnit(GroundAltitude, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 40 + "px");
 
 							// Decision altitude
 							switch(PFD.FlightMode.FlightMode) {
@@ -294,17 +299,9 @@
 									break;
 								case "Land":
 								case "ArrivalGround":
-									Show("Ctrl_PFDHUDPanelDecisionAltitude");
-									ChangeBottom("Ctrl_PFDHUDPanelDecisionAltitude", 0.75 * (ConvertUnit(PFD.Altitude.AirportElevation.Arrival + PFD.Altitude.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 10 + "px");
-									if(PFD0.Status.IsDecisionAltitudeActive == true) {
-										AddClass("Ctrl_PFDHUDPanelDecisionAltitude", "Active");
-									} else {
-										RemoveClass("Ctrl_PFDHUDPanelDecisionAltitude", "Active");
-									}
-									break;
 								case "EmergencyReturn":
 									Show("Ctrl_PFDHUDPanelDecisionAltitude");
-									ChangeBottom("Ctrl_PFDHUDPanelDecisionAltitude", 0.75 * (ConvertUnit(PFD.Altitude.AirportElevation.Departure + PFD.Altitude.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 10 + "px");
+									ChangeBottom("Ctrl_PFDHUDPanelDecisionAltitude", 0.75 * (ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 10 + "px");
 									if(PFD0.Status.IsDecisionAltitudeActive == true) {
 										AddClass("Ctrl_PFDHUDPanelDecisionAltitude", "Active");
 									} else {
@@ -380,7 +377,7 @@
 							break;
 						case "FeetButShowMeterBeside":
 							Show("Ctrl_PFDHUDPanelMetricAltitude");
-							ChangeText("Label_PFDHUDPanelMetricAltitude", PFD0.Stats.Altitude.TapeDisplay.toFixed(0) + "<span class=\"SmallerText\">" + Translate("MetricAltitude") + "</span>");
+							ChangeText("Label_PFDHUDPanelMetricAltitude", PFD0.Stats.Altitude.TapeDisplay.toFixed(0) + "<span class=\"SmallerText\">" + Translate("MeterOnPFD") + "</span>");
 							break;
 						default:
 							AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshHUDPanel is invalid.");
@@ -623,7 +620,7 @@
 								case "MiddleMarker":
 								case "InnerMarker":
 									Show("Ctnr_PFDHUDPanelMarkerBeacon");
-									ChangeMarkerBeaconColor(PFD0.Stats.Nav.MarkerBeacon);
+									ChangeMarkerBeacon(PFD0.Stats.Nav.MarkerBeacon);
 									ChangeText("Label_PFDHUDPanelMarkerBeacon", Translate(PFD0.Stats.Nav.MarkerBeacon));
 									break;
 								default:
@@ -713,21 +710,9 @@
 							break;
 						case "Land":
 						case "ArrivalGround":
-							Show("Ctnr_PFDHUDPanelDecisionAltitude");
-							ChangeText("Label_PFDHUDPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(PFD.Altitude.AirportElevation.Arrival + PFD.Altitude.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit)));
-							if(PFD0.Status.IsDecisionAltitudeActive == true) {
-								if(PFD0.Stats.ClockTime - PFD0.Stats.Altitude.DecisionTimestamp < 3000) {
-									AddClass("Ctnr_PFDHUDPanelDecisionAltitude", "Warning");
-								} else {
-									RemoveClass("Ctnr_PFDHUDPanelDecisionAltitude", "Warning");
-								}
-							} else {
-								RemoveClass("Ctnr_PFDHUDPanelDecisionAltitude", "Warning");
-							}
-							break;
 						case "EmergencyReturn":
 							Show("Ctnr_PFDHUDPanelDecisionAltitude");
-							ChangeText("Label_PFDHUDPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(PFD.Altitude.AirportElevation.Departure + PFD.Altitude.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit)));
+							ChangeText("Label_PFDHUDPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit)));
 							if(PFD0.Status.IsDecisionAltitudeActive == true) {
 								if(PFD0.Stats.ClockTime - PFD0.Stats.Altitude.DecisionTimestamp < 3000) {
 									AddClass("Ctnr_PFDHUDPanelDecisionAltitude", "Warning");

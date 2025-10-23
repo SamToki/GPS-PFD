@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v0.45 (2025/09/06) Beta Test. Since 2024/12/01." />
+		<meta name="version" content="v0.46 (2025/10/23) Beta Test. Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -61,6 +61,14 @@
 										<path d="M0 4s0-2 2-2h12s2 0 2 2v6s0 2-2 2h-4q0 1 .25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75Q6 13 6 12H2s-2 0-2-2zm1.398-.855a.76.76 0 0 0-.254.302A1.5 1.5 0 0 0 1 4.01V10c0 .325.078.502.145.602q.105.156.302.254a1.5 1.5 0 0 0 .538.143L2.01 11H14c.325 0 .502-.078.602-.145a.76.76 0 0 0 .254-.302 1.5 1.5 0 0 0 .143-.538L15 9.99V4c0-.325-.078-.502-.145-.602a.76.76 0 0 0-.302-.254A1.5 1.5 0 0 0 13.99 3H2c-.325 0-.502.078-.602.145"/>
 									</svg>
 									<span class="LabelAfterIcon">PFD</span>
+								</a>
+							</li>
+							<li class="Dropctrl Nav" id="Nav_AirportLibrary">
+								<a class="Button" href="#AirportLibrary">
+									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849m.894.448C7.111 2.02 7 2.569 7 3v4a.5.5 0 0 1-.276.447l-5.448 2.724a.5.5 0 0 0-.276.447v.792l5.418-.903a.5.5 0 0 1 .575.41l.5 3a.5.5 0 0 1-.14.437L6.708 15h2.586l-.647-.646a.5.5 0 0 1-.14-.436l.5-3a.5.5 0 0 1 .576-.411L15 11.41v-.792a.5.5 0 0 0-.276-.447L9.276 7.447A.5.5 0 0 1 9 7V3c0-.432-.11-.979-.322-1.401C8.458 1.159 8.213 1 8 1s-.458.158-.678.599"/>
+									</svg>
+									<span class="LabelAfterIcon">机场库</span>
 								</a>
 							</li>
 							<li class="Dropctrl Nav" id="Nav_Settings">
@@ -3022,6 +3030,189 @@
 				</div>
 			</section>
 
+			<section id="AirportLibrary">
+				<h1 class="SectionTitle">机场库</h1>
+				<ul class="ItemGroup">
+					<li class="Item">
+						<fieldset>
+							<legend>机场</legend>
+							<ul class="CtrlGroup">
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryFilter">
+										<span>筛选：</span>
+										<input class="Textbox" id="Textbox_AirportLibraryFilter" type="text" oninput="FilterAirportLibrary()" placeholder="名称/地区/代码" title="名称/地区/代码" />
+									</label>
+								</li>
+								<li class="Ctrl ListHeader">
+									<span id="Label_AirportLibraryItemCount">项目数</span>
+									<span>出发 | 到达</span>
+								</li>
+								<li class="Ctrl ScrollableList">
+									<ul class="CtrlGroup" id="CtrlGroup_AirportLibraryList">
+										<!-- Content will be inserted using script. -->
+									</ul>
+								</li>
+								<li class="Ctrl WidthDividedBy3">
+									<button class="Button" onclick="SwapAirports()">对调</button>
+								</li>
+								<li class="Ctrl WidthDividedBy3">
+									<button class="Button" onclick="NewAirport()">新建</button>
+								</li>
+								<li class="Ctrl WidthDividedBy3">
+									<button class="Button" onclick="SortAirportsByName()">按名称排序</button>
+								</li>
+							</ul>
+						</fieldset>
+					</li>
+					<li class="Item" id="Item_AirportLibraryProperties">
+						<fieldset>
+							<legend>机场属性</legend>
+							<ul class="CtrlGroup">
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryName">
+										<span>名称：</span>
+										<input class="Textbox" id="Textbox_AirportLibraryName" type="text" onchange="SetAirportName()" />
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryRegion">
+										<span>地区：</span>
+										<input class="Textbox" id="Textbox_AirportLibraryRegion" type="text" onchange="SetAirportRegion()" />
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryCode">
+										<span>代码：</span>
+										<input class="Textbox" id="Textbox_AirportLibraryCode" type="text" onchange="SetAirportCode()" />
+									</label>
+								</li>
+							</ul>
+							<h4>地理</h4>
+							<p>北纬、东经是正值，南纬、西经是负值。</p>
+							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl" id="Ctrl_AirportLibraryLat">
+									<label for="Textbox_AirportLibraryLat">
+										<span>纬度：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryLat" type="number" min="-90" max="90" step="0.01" value="0.00000" onclick="SelectText('Textbox_AirportLibraryLat')" onchange="SetAirportLat()" placeholder="-90~90" title="-90~90" />
+									</label>
+								</li>
+								<li class="Ctrl" id="Ctrl_AirportLibraryLon">
+									<label for="Textbox_AirportLibraryLon">
+										<span>经度：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryLon" type="number" min="-180" max="180" step="0.01" value="0.00000" onclick="SelectText('Textbox_AirportLibraryLon')" onchange="SetAirportLon()" placeholder="-180~180" title="-180~180" />
+									</label>
+								</li>
+								<li class="Ctrl" id="Ctrl_AirportLibraryReplaceAirportCoordinatesWithCurrent">
+									<button class="Button" onclick="ReplaceAirportCoordinatesWithCurrent()">替换为当前坐标</button>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryElevation">
+										<span>高度：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryElevation" type="number" min="-1640" max="16404" step="10" value="0" onclick="SelectText('Textbox_AirportLibraryElevation')" onchange="SetAirportElevation()" placeholder="-1640~16404" title="-1640~16404" />
+										<span id="Label_AirportLibraryElevationUnit">英尺</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<button class="Button" onclick="ReplaceAirportElevationWithCurrent()">替换为当前高度</button>
+								</li>
+							</ul>
+							<h4>天气</h4>
+							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryTemperature">
+										<span>气温：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryTemperature" type="number" min="-50" max="50" step="1" value="15" onclick="SelectText('Textbox_AirportLibraryTemperature')" onchange="SetAirportTemperature()" placeholder="-50~50" title="-50~50" />
+										<span id="Label_AirportLibraryTemperatureUnit">℃</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryRelativeHumidity">
+										<span>相对湿度：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryRelativeHumidity" type="number" min="0" max="100" step="1" value="50" onclick="SelectText('Textbox_AirportLibraryRelativeHumidity')" onchange="SetAirportRelativeHumidity()" placeholder="0~100" title="0~100" />
+										<span>%</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryQNH">
+										<span><a href="https://zh.wikipedia.org/wiki/QNH">QNH</a>：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryQNH" type="number" min="900" max="1100" step="1" value="1013.25" onclick="SelectText('Textbox_AirportLibraryQNH')" onchange="SetAirportQNH()" placeholder="900~1100" title="900~1100" />
+										<span id="Label_AirportLibraryQNHUnit">百帕</span>
+									</label>
+								</li>
+							</ul>
+							<h4>进近 (Final Approach)</h4>
+							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryGlideSlopeAngle">
+										<span><a href="https://zh.wikipedia.org/wiki/仪表着陆系统#航向台和下滑台">下滑道</a>角度：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryGlideSlopeAngle" type="number" min="0" max="10" step="0.1" value="3.00" onclick="SelectText('Textbox_AirportLibraryGlideSlopeAngle')" onchange="SetAirportGlideSlopeAngle()" placeholder="0~10" title="0~10" />
+										<span>度</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryOuterMarkerDistance">
+										<span>外<a href="https://zh.wikipedia.org/wiki/仪表着陆系统#指点标">指点标</a>距离：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryOuterMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="5.00" onclick="SelectText('Textbox_AirportLibraryOuterMarkerDistance')" onchange="SetAirportOuterMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
+										<span id="Label_AirportLibraryOuterMarkerDistanceUnit">海里</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryMiddleMarkerDistance">
+										<span>中指点标距离：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryMiddleMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="0.50" onclick="SelectText('Textbox_AirportLibraryMiddleMarkerDistance')" onchange="SetAirportMiddleMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
+										<span id="Label_AirportLibraryMiddleMarkerDistanceUnit">海里</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryInnerMarkerDistance">
+										<span>内指点标距离：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryInnerMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="0.10" onclick="SelectText('Textbox_AirportLibraryInnerMarkerDistance')" onchange="SetAirportInnerMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
+										<span id="Label_AirportLibraryInnerMarkerDistanceUnit">海里</span>
+									</label>
+								</li>
+							</ul>
+							<p>机场高度＋<a href="#Item_SettingsAltitude" onclick="ShowIAmHere('Item_SettingsAltitude')">座位高度</a>＝地面高度。地面高度＋相对决断高度 (decision height)＝<a href="https://en.wikipedia.org/wiki/Instrument_approach#Decision_height_or_altitude">决断高度 (decision altitude)</a>。</p>
+							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryDecisionHeight">
+										<span>相对决断高度：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryDecisionHeight" type="number" min="40" max="2461" step="10" value="250" onclick="SelectText('Textbox_AirportLibraryDecisionHeight')" onchange="SetAirportDecisionHeight()" placeholder="49~2461" title="49~2461" />
+										<span id="Label_AirportLibraryDecisionHeightUnit">英尺</span>
+									</label>
+								</li>
+								<li class="Ctrl Hidden"></li> <!-- Placeholder for the wider fieldset UI. -->
+								<li class="Ctrl">
+									<a class="Button" href="#Item_SettingsI18n" onclick="ShowIAmHere('Item_SettingsI18n')">切换计量单位...</a>
+								</li>
+							</ul>
+						</fieldset>
+					</li>
+					<li class="Item">
+						<fieldset>
+							<legend>管理</legend>
+							<p>「导入」功能可导入机场或整个机场库。支持批量导入，每行一个对象。</p>
+							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl" id="Ctrl_AirportLibraryImport">
+									<textarea class="Textbox" id="Textbox_AirportLibraryImport" placeholder="粘贴 JSON 字符串" title="粘贴 JSON 字符串"></textarea>
+								</li>
+								<li class="Ctrl" id="Ctrl_AirportLibraryImport2">
+									<button class="Button" onclick="ImportAirportLibraryObjects()">导入</button>
+								</li>
+							</ul>
+							<p>若要分享导出的数据，请注意其中是否包含个人信息。「重置机场库」可将机场库恢复至初始状态，仅有内置机场。重置前建议先备份当前机场库。</p>
+							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl WidthDividedBy2">
+									<button class="Button" onclick="ExportAirportLibrary()">导出机场库</button>
+								</li>
+								<li class="Ctrl WidthDividedBy2">
+									<button class="Button" onclick="ConfirmResetAirportLibrary()">重置机场库...</button>
+								</li>
+							</ul>
+						</fieldset>
+					</li>
+				</ul>
+			</section>
+
 			<section id="Settings">
 				<h1 class="SectionTitle">设定</h1>
 				<ul class="ItemGroup">
@@ -3096,64 +3287,15 @@
 										</select>
 									</label>
 								</li>
-								<li class="Ctrl BeforeSmallButtonCtrl" id="Ctrl_SettingsAirportTemperature">
-									<label for="Textbox_SettingsAirportTemperatureDeparture">
-										<span>机场气温：从</span>
-										<input class="Textbox Width80" id="Textbox_SettingsAirportTemperatureDeparture" type="number" min="-50" max="50" step="1" value="15" onclick="SelectText('Textbox_SettingsAirportTemperatureDeparture')" onchange="SetAirportTemperatureDeparture()" placeholder="-50~50" title="-50~50" />
-										<span>至</span>
-										<input class="Textbox Width80" id="Textbox_SettingsAirportTemperatureArrival" type="number" min="-50" max="50" step="1" value="15" onclick="SelectText('Textbox_SettingsAirportTemperatureArrival')" onchange="SetAirportTemperatureArrival()" placeholder="-50~50" title="-50~50" />
-										<span id="Label_SettingsAirportTemperatureUnit">℃</span>
-									</label>
-								</li>
-								<li class="Ctrl SmallButtonCtrl" id="Ctrl_SettingsAirportTemperatureSwap">
-									<button class="Button" id="Button_SettingsAirportTemperatureSwap" disabled="true" onclick="SwapAirportTemperatures()" title="对调" aria-label="对调">
-										<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-											<path d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5"/>
-										</svg>
-									</button>
-								</li>
-								<li class="Ctrl BeforeSmallButtonCtrl Hidden" id="Ctrl_SettingsRelativeHumidity" inert="true">
-									<label for="Textbox_SettingsRelativeHumidityDeparture">
-										<span>相对湿度：从</span>
-										<input class="Textbox Width80" id="Textbox_SettingsRelativeHumidityDeparture" type="number" min="0" max="100" step="1" value="50" onclick="SelectText('Textbox_SettingsRelativeHumidityDeparture')" onchange="SetRelativeHumidityDeparture()" placeholder="0~100" title="0~100" />
-										<span>至</span>
-										<input class="Textbox Width80" id="Textbox_SettingsRelativeHumidityArrival" type="number" min="0" max="100" step="1" value="50" onclick="SelectText('Textbox_SettingsRelativeHumidityArrival')" onchange="SetRelativeHumidityArrival()" placeholder="0~100" title="0~100" />
-										<span>%</span>
-									</label>
-								</li>
-								<li class="Ctrl SmallButtonCtrl Hidden" id="Ctrl_SettingsRelativeHumiditySwap" inert="true">
-									<button class="Button" id="Button_SettingsRelativeHumiditySwap" disabled="true" onclick="SwapRelativeHumiditys()" title="对调" aria-label="对调">
-										<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-											<path d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5"/>
-										</svg>
-									</button>
-								</li>
-								<li class="Ctrl BeforeSmallButtonCtrl Hidden" id="Ctrl_SettingsQNH" inert="true">
-									<label for="Textbox_SettingsQNHDeparture">
-										<span><a href="https://zh.wikipedia.org/wiki/QNH">QNH</a>：从</span>
-										<input class="Textbox Width80" id="Textbox_SettingsQNHDeparture" type="number" min="900" max="1100" step="1" value="1013.25" onclick="SelectText('Textbox_SettingsQNHDeparture')" onchange="SetQNHDeparture()" placeholder="900~1100" title="900~1100" />
-										<span>至</span>
-										<input class="Textbox Width80" id="Textbox_SettingsQNHArrival" type="number" min="900" max="1100" step="1" value="1013.25" onclick="SelectText('Textbox_SettingsQNHArrival')" onchange="SetQNHArrival()" placeholder="900~1100" title="900~1100" />
-										<span id="Label_SettingsQNHUnit">百帕</span>
-									</label>
-								</li>
-								<li class="Ctrl SmallButtonCtrl Hidden" id="Ctrl_SettingsQNHSwap" inert="true">
-									<button class="Button" id="Button_SettingsQNHSwap" disabled="true" onclick="SwapQNHs()" title="对调" aria-label="对调">
-										<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-											<path d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5"/>
-										</svg>
-									</button>
-								</li>
 								<li class="Ctrl">
 									<label for="Textbox_SettingsWindDirection">
 										<span>风：</span>
-										<input class="Textbox Width80" id="Textbox_SettingsWindDirection" type="number" min="0" max="359" step="5" value="0" onclick="SelectText('Textbox_SettingsWindDirection')" onchange="SetWindDirection()" placeholder="0~359" title="0~359" />
+										<input class="Textbox Width100" id="Textbox_SettingsWindDirection" type="number" min="0" max="359" step="5" value="0" onclick="SelectText('Textbox_SettingsWindDirection')" onchange="SetWindDirection()" placeholder="0~359" title="0~359" />
 										<span>度，</span>
-										<input class="Textbox Width80" id="Textbox_SettingsWindSpeed" type="number" min="0" max="539" step="5" value="0" onclick="SelectText('Textbox_SettingsWindSpeed')" onchange="SetWindSpeed()" placeholder="0~539" title="0~539" />
+										<input class="Textbox Width100" id="Textbox_SettingsWindSpeed" type="number" min="0" max="539" step="5" value="0" onclick="SelectText('Textbox_SettingsWindSpeed')" onchange="SetWindSpeed()" placeholder="0~539" title="0~539" />
 										<span id="Label_SettingsWindSpeedUnit">节</span>
 									</label>
 								</li>
-								<li class="Ctrl Hidden"></li> <!-- Placeholder for the wider fieldset UI. -->
 							</ul>
 							<h4>起飞</h4>
 							<ul class="CtrlGroup BelowParagraph">
@@ -3212,7 +3354,7 @@
 							</ul>
 						</fieldset>
 					</li>
-					<li class="Item">
+					<li class="Item" id="Item_SettingsAltitude">
 						<fieldset>
 							<legend>高度</legend>
 							<ul class="CtrlGroup">
@@ -3227,43 +3369,12 @@
 										</select>
 									</label>
 								</li>
-							</ul>
-							<p>设定机场高度时，请考虑地面与您的座位之间的高度差。</p>
-							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl BeforeSmallButtonCtrl">
-									<label for="Textbox_SettingsAirportElevationDeparture">
-										<span>机场高度：从</span>
-										<input class="Textbox Width80" id="Textbox_SettingsAirportElevationDeparture" type="number" min="-1640" max="16404" step="10" value="0" onclick="SelectText('Textbox_SettingsAirportElevationDeparture')" onchange="SetAirportElevationDeparture()" placeholder="-1640~16404" title="-1640~16404" />
-										<span>至</span>
-										<input class="Textbox Width80" id="Textbox_SettingsAirportElevationArrival" type="number" min="-1640" max="16404" step="10" value="0" onclick="SelectText('Textbox_SettingsAirportElevationArrival')" onchange="SetAirportElevationArrival()" placeholder="-1640~16404" title="-1640~16404" />
-										<span id="Label_SettingsAirportElevationUnit">英尺</span>
+								<li class="Ctrl">
+									<label for="Textbox_SettingsSeatHeight">
+										<span>座位高度：</span>
+										<input class="Textbox Width120" id="Textbox_SettingsSeatHeight" type="number" min="0" max="66" step="1" value="13" onclick="SelectText('Textbox_SettingsSeatHeight')" onchange="SetSeatHeight()" placeholder="0~66" title="0~66" />
+										<span id="Label_SettingsSeatHeightUnit">英尺</span>
 									</label>
-								</li>
-								<li class="Ctrl SmallButtonCtrl">
-									<button class="Button" id="Button_SettingsAirportElevationSwap" disabled="true" onclick="SwapAirportElevations()" title="对调" aria-label="对调">
-										<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-											<path d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5"/>
-										</svg>
-									</button>
-								</li>
-								<li class="Ctrl">
-									<button class="Button" id="Button_SettingsAirportElevationApplyCurrentAltitudeToDepartureAirport" onclick="ApplyCurrentAltitudeToDepartureAirport()">将当前高度应用至出发机场</button>
-								</li>
-								<li class="Ctrl">
-									<button class="Button" id="Button_SettingsAirportElevationApplyCurrentAltitudeToArrivalAirport" onclick="ApplyCurrentAltitudeToArrivalAirport()">将当前高度应用至到达机场</button>
-								</li>
-							</ul>
-							<p><a href="https://en.wikipedia.org/wiki/Instrument_approach#Decision_height_or_altitude">决断高度 (decision altitude) </a>等于机场高度加上相对决断高度 (decision height)。</p>
-							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl">
-									<label for="Textbox_SettingsDecisionHeight">
-										<span>相对决断高度：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsDecisionHeight" type="number" min="40" max="2461" step="10" value="250" onclick="SelectText('Textbox_SettingsDecisionHeight')" onchange="SetDecisionHeight()" placeholder="49~2461" title="49~2461" />
-										<span id="Label_SettingsDecisionHeightUnit">英尺</span>
-									</label>
-								</li>
-								<li class="Ctrl">
-									<a class="Button" href="#Item_SettingsI18n" onclick="ShowIAmHere('Item_SettingsI18n')">切换高度单位...</a>
 								</li>
 							</ul>
 						</fieldset>
@@ -3284,43 +3395,16 @@
 							</ul>
 						</fieldset>
 					</li>
-					<li class="Item" id="Item_SettingsNav">
+					<li class="Item">
 						<fieldset>
 							<legend>导航</legend>
-							<p>导航功能参考自<a href="https://zh.wikipedia.org/wiki/仪表着陆系统">仪表着陆系统 (ILS)</a>。包括<a href="https://zh.wikipedia.org/wiki/测距仪">测距仪 (DME) </a>、导航朝向 (bearing)、<a href="https://zh.wikipedia.org/wiki/仪表着陆系统#航向台和下滑台">航向台 (localizer)、下滑道 (glide slope) </a>以及<a href="https://zh.wikipedia.org/wiki/仪表着陆系统#指点标">指点标 (marker beacons)</a>。测距仪测量您与机场之间的水平距离，预测到达机场前的剩余时间。下滑道使<a href="https://zh.wikipedia.org/wiki/近地警告系统">近地警告系统 (GPWS) </a>的下滑道警告功能可用。航向台与下滑道仅在<a href="#Item_SettingsFlightMode" onclick="ShowIAmHere('Item_SettingsFlightMode')">飞航模式</a>为「降落」或「紧急返航」时显示。</p>
+							<p>导航功能参考自<a href="https://zh.wikipedia.org/wiki/仪表着陆系统">仪表着陆系统 (ILS)</a>。包括<a href="https://zh.wikipedia.org/wiki/测距仪">测距仪 (DME) </a>、导航朝向 (bearing)、<a href="https://zh.wikipedia.org/wiki/仪表着陆系统#航向台和下滑台">航向台 (localizer)、下滑道 (glide slope) </a>以及指点标 (marker beacons)。测距仪测量您与机场之间的水平距离，预测到达机场前的剩余时间。下滑道使<a href="https://zh.wikipedia.org/wiki/近地警告系统">近地警告系统 (GPWS) </a>的下滑道警告功能可用。航向台与下滑道仅在<a href="#Item_SettingsFlightMode" onclick="ShowIAmHere('Item_SettingsFlightMode')">飞航模式</a>为「降落」或「紧急返航」时显示。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsEnableNav">
 										<input class="Checkbox" id="Checkbox_SettingsEnableNav" type="checkbox" checked="false" onchange="SetEnableNav()" />
 										<span>启用导航</span>
 									</label>
-								</li>
-							</ul>
-							<h4 class="Hidden" id="Label_SettingsAirportCoordinates" inert="true">机场坐标</h4>
-							<p class="Hidden" id="Label_SettingsAirportCoordinatesInfo" inert="true">下面的设定中，前一个文本框是纬度，后一个文本框是经度。北纬、东经是正值，南纬、西经是负值。</p>
-							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl Hidden" id="Ctrl_SettingsAirportCoordinatesDeparture" inert="true">
-									<label for="Textbox_SettingsAirportCoordinatesDepartureLat">
-										<span>出发机场：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsAirportCoordinatesDepartureLat" type="number" min="-90" max="90" step="0.01" value="0.00000" onclick="SelectText('Textbox_SettingsAirportCoordinatesDepartureLat')" onchange="SetAirportCoordinatesDeparture()" placeholder="-90~90" title="-90~90" />
-										<input class="Textbox Width120" id="Textbox_SettingsAirportCoordinatesDepartureLon" type="number" min="-180" max="180" step="0.01" value="0.00000" onclick="SelectText('Textbox_SettingsAirportCoordinatesDepartureLon')" onchange="SetAirportCoordinatesDeparture()" placeholder="-180~180" title="-180~180" />
-									</label>
-								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsAirportCoordinatesArrival" inert="true">
-									<label for="Textbox_SettingsAirportCoordinatesArrivalLat">
-										<span>到达机场：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsAirportCoordinatesArrivalLat" type="number" min="-90" max="90" step="0.01" value="0.00000" onclick="SelectText('Textbox_SettingsAirportCoordinatesArrivalLat')" onchange="SetAirportCoordinatesArrival()" placeholder="-90~90" title="-90~90" />
-										<input class="Textbox Width120" id="Textbox_SettingsAirportCoordinatesArrivalLon" type="number" min="-180" max="180" step="0.01" value="0.00000" onclick="SelectText('Textbox_SettingsAirportCoordinatesArrivalLon')" onchange="SetAirportCoordinatesArrival()" placeholder="-180~180" title="-180~180" />
-									</label>
-								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsAirportCoordinatesSwap" inert="true">
-									<button class="Button" id="Button_SettingsAirportCoordinatesSwap" disabled="true" onclick="SwapAirportCoordinates()">对调</button>
-								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsAirportCoordinatesApplyCurrentCoordinatesToDepartureAirport" inert="true">
-									<button class="Button" id="Button_SettingsAirportCoordinatesApplyCurrentCoordinatesToDepartureAirport" onclick="ApplyCurrentCoordinatesToDepartureAirport()">将当前坐标应用至出发机场</button>
-								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsAirportCoordinatesApplyCurrentCoordinatesToArrivalAirport" inert="true">
-									<button class="Button" id="Button_SettingsAirportCoordinatesApplyCurrentCoordinatesToArrivalAirport" onclick="ApplyCurrentCoordinatesToArrivalAirport()">将当前坐标应用至到达机场</button>
 								</li>
 							</ul>
 							<h4 class="Hidden" id="Label_SettingsETA" inert="true">预计剩余时间 (ETA)</h4>
@@ -3333,44 +3417,6 @@
 											<option value="UseAvgGS" selected>使用平均地速</option>
 										</select>
 									</label>
-								</li>
-							</ul>
-							<h4 class="Hidden" id="Label_SettingsGlideSlope" inert="true">下滑道</h4>
-							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl Hidden" id="Ctrl_SettingsGlideSlopeAngle" inert="true">
-									<label for="Textbox_SettingsGlideSlopeAngle">
-										<span>下滑道角度：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsGlideSlopeAngle" type="number" min="0" max="10" step="0.1" value="3.00" onclick="SelectText('Textbox_SettingsGlideSlopeAngle')" onchange="SetGlideSlopeAngle()" placeholder="0~10" title="0~10" />
-										<span>度</span>
-									</label>
-								</li>
-							</ul>
-							<h4 class="Hidden" id="Label_SettingsMarkerBeacons" inert="true">指点标</h4>
-							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl Hidden" id="Ctrl_SettingsOuterMarkerDistance" inert="true">
-									<label for="Textbox_SettingsOuterMarkerDistance">
-										<span>外指点标距离：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsOuterMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="5.00" onclick="SelectText('Textbox_SettingsOuterMarkerDistance')" onchange="SetOuterMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
-										<span id="Label_SettingsOuterMarkerDistanceUnit">海里</span>
-									</label>
-								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsMiddleMarkerDistance" inert="true">
-									<label for="Textbox_SettingsMiddleMarkerDistance">
-										<span>中指点标距离：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsMiddleMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="0.50" onclick="SelectText('Textbox_SettingsMiddleMarkerDistance')" onchange="SetMiddleMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
-										<span id="Label_SettingsMiddleMarkerDistanceUnit">海里</span>
-									</label>
-								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsInnerMarkerDistance" inert="true">
-									<label for="Textbox_SettingsInnerMarkerDistance">
-										<span>内指点标距离：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsInnerMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="0.10" onclick="SelectText('Textbox_SettingsInnerMarkerDistance')" onchange="SetInnerMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
-										<span id="Label_SettingsInnerMarkerDistanceUnit">海里</span>
-									</label>
-								</li>
-								<li class="Ctrl Hidden"></li> <!-- Placeholder for the wider fieldset UI. -->
-								<li class="Ctrl Hidden" id="Ctrl_SettingsSwitchDistanceUnit" inert="true">
-									<a class="Button" href="#Item_SettingsI18n" onclick="ShowIAmHere('Item_SettingsI18n')">切换距离单位...</a>
 								</li>
 							</ul>
 						</fieldset>
@@ -3394,9 +3440,22 @@
 									</label>
 								</li>
 								<li class="Ctrl">
-									<label for="Checkbox_SettingsAutoSwitchFlightModeAndSwapAirportData">
-										<input class="Checkbox" id="Checkbox_SettingsAutoSwitchFlightModeAndSwapAirportData" type="checkbox" checked="true" onchange="SetAutoSwitchFlightModeAndSwapAirportData()" />
-										<span>自动切换飞航模式与对调机场数据</span>
+									<label for="Checkbox_SettingsAutoSwitchFlightModeAndSwapAirports">
+										<input class="Checkbox" id="Checkbox_SettingsAutoSwitchFlightModeAndSwapAirports" type="checkbox" checked="true" onchange="SetAutoSwitchFlightModeAndSwapAirports()" />
+										<span>自动切换飞航模式与对调机场</span>
+									</label>
+								</li>
+							</ul>
+						</fieldset>
+					</li>
+					<li class="Item" id="Item_SettingsWarningSystem">
+						<fieldset>
+							<legend>警告系统</legend>
+							<ul class="CtrlGroup">
+								<li class="Ctrl">
+									<label for="Checkbox_SettingsEnableWarningSystem">
+										<input class="Checkbox" id="Checkbox_SettingsEnableWarningSystem" type="checkbox" checked="false" onchange="SetEnableWarningSystem()" />
+										<span>启用警告系统</span>
 									</label>
 								</li>
 							</ul>
@@ -3513,24 +3572,27 @@
 										</select>
 									</label>
 								</li>
+							</ul>
+							<p id="Label_SettingsAudio">请注意区分「警报」(alert) 与「<a href="#Item_SettingsWarningSystem" onclick="ShowIAmHere('Item_SettingsWarningSystem')">警告</a>」(warning)。「警报」包括「播报」(callout) 与「警告」。</p>
+							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl" id="Ctrl_SettingsAttitudeAlertVolume">
 									<label for="Slider_SettingsAttitudeAlertVolume">
 										<span>姿态警报：</span>
-										<input class="Slider Width200" id="Slider_SettingsAttitudeAlertVolume" type="range" min="0" max="100" step="1" value="0" onpointerup="PreviewAttitudeAlertVolume()" oninput="SetAttitudeAlertVolume()" />
+										<input class="Slider Width200" id="Slider_SettingsAttitudeAlertVolume" type="range" min="0" max="100" step="1" value="100" onpointerup="PreviewAttitudeAlertVolume()" oninput="SetAttitudeAlertVolume()" />
 										<span id="Label_SettingsAttitudeAlertVolume">音量</span>
 									</label>
 								</li>
 								<li class="Ctrl" id="Ctrl_SettingsSpeedAlertVolume">
 									<label for="Slider_SettingsSpeedAlertVolume">
 										<span>速度警报：</span>
-										<input class="Slider Width200" id="Slider_SettingsSpeedAlertVolume" type="range" min="0" max="100" step="1" value="0" onpointerup="PreviewSpeedAlertVolume()" oninput="SetSpeedAlertVolume()" />
+										<input class="Slider Width200" id="Slider_SettingsSpeedAlertVolume" type="range" min="0" max="100" step="1" value="100" onpointerup="PreviewSpeedAlertVolume()" oninput="SetSpeedAlertVolume()" />
 										<span id="Label_SettingsSpeedAlertVolume">音量</span>
 									</label>
 								</li>
 								<li class="Ctrl" id="Ctrl_SettingsAltitudeAlertVolume">
 									<label for="Slider_SettingsAltitudeAlertVolume">
 										<span>高度警报：</span>
-										<input class="Slider Width200" id="Slider_SettingsAltitudeAlertVolume" type="range" min="0" max="100" step="1" value="0" onpointerup="PreviewAltitudeAlertVolume()" oninput="SetAltitudeAlertVolume()" />
+										<input class="Slider Width200" id="Slider_SettingsAltitudeAlertVolume" type="range" min="0" max="100" step="1" value="100" onpointerup="PreviewAltitudeAlertVolume()" oninput="SetAltitudeAlertVolume()" />
 										<span id="Label_SettingsAltitudeAlertVolume">音量</span>
 									</label>
 								</li>
@@ -3722,9 +3784,7 @@
 							<h4>离线使用</h4>
 							<p>在没有网络连接的飞机上，您需要离线使用本应用程序。有两种方式来离线使用：①断网前先在线访问一次。②下载资源至本地，在本地运行网页。详见说明文档中的「使用方式」。</p>
 							<h4>安全与隐私</h4>
-							<p>本应用程序仅供娱乐用途。警报功能可能出现误报。使用时请注意安全。本应用程序可能使用位置服务。详见<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('Item_HelpDisclaimer')">免责声明</a>与<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('Item_HelpPrivacyStatement')">隐私权声明</a>。</p>
-							<h4>已知问题</h4>
-							<p>本应用程序仍处于测试阶段。已知问题有：①加速计误差严重。系统已尽可能减小误差。②在 <a href="https://zh.wikipedia.org/wiki/Firefox">Firefox</a> for Android 上，「保持屏幕常亮」可能不起作用。③在 <a href="https://zh.wikipedia.org/wiki/Brave浏览器">Brave</a> for Android 上无法使用。若您有其他问题或建议，请向我<a href="#Item_HelpGetInvolved" onclick="ShowIAmHere('Item_HelpGetInvolved')">提供反馈</a>。</p>
+							<p>本应用程序仅供娱乐用途。<a href="#Item_SettingsWarningSystem" onclick="ShowIAmHere('Item_SettingsWarningSystem')">警告系统</a>可能出现误报。使用时请注意安全。本应用程序可能使用位置服务。详见<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('Item_HelpDisclaimer')">免责声明</a>与<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('Item_HelpPrivacyStatement')">隐私权声明</a>。</p>
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_HelpTutorial">
@@ -3766,7 +3826,7 @@
 							<legend>免责声明</legend>
 							<p>本应用程序仅供娱乐用途，不能替代飞机驾驶舱仪表。</p>
 							<p>首先，系统能够测量的数据有限。空速、风、<a href="https://en.wikipedia.org/wiki/Radio_altimeter">无线电高度</a>、<a href="https://zh.wikipedia.org/wiki/航空器三主轴">偏航 (yaw) </a>等无法测量。因此这些数据或是依赖算法转换，或是依赖手动设定，抑或是直接被忽略。其次，数据不保证准确。GPS 与加速计只能测量地速，因此空速需要通过算法从地速转换而来。GPS 高度也不如<a href="https://zh.wikipedia.org/wiki/高度计#氣壓高度計">气压高度计</a>可靠。其三，数据更新可能有延迟。一方面系统为了显示流畅而设计了显示延迟，另一方面 GPS 信号也会有延迟。</p>
-							<p>鉴于上述原因，您尤其需要注意，警报功能可能出现误报。请勿在公共场合外放警报声音。</p>
+							<p>鉴于上述原因，您尤其需要注意，警告系统可能出现误报。请勿在公共场合外放警告系统的警报声音。</p>
 							<p>在交通工具上使用时，请固定好您的设备，且不要一边驾驶交通工具一边操作设备。</p>
 							<p>若您不当使用本应用程序造成损失，SAM TOKI STUDIO 恕不负责。</p>
 						</fieldset>
@@ -3807,7 +3867,7 @@
 							<legend>关于</legend>
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>版本 v0.45 (<time datetime="2025-09-06" pubdate="pubdate">2025/09/06</time>) Beta Test<br />
+							<p>版本 v0.46 (<time datetime="2025-10-23" pubdate="pubdate">2025/10/23</time>) Beta Test<br />
 								始于 2024/12/01</p>
 							<p class="GreenText Hidden" id="Label_HelpPWANewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
 							<ul class="CtrlGroup BelowParagraph">

@@ -24,6 +24,7 @@
 			IsPointerDown: false, IsInIMEComposition: false, ScreenWakeLock: null
 		},
 		Automation = {
+			ClockRate: 20,
 			HighlightActiveSectionInNav: null,
 			FadeHotkeyIndicators: null, HideToast: null
 		};
@@ -186,6 +187,13 @@
 		}
 		function ChangeStep(ID, Value) {
 			document.getElementById(ID).step = Value;
+		}
+		function ChangeNumberTextbox(ID, Min, Max, Step, Placeholder) {
+			ChangeMin(ID, Min);
+			ChangeMax(ID, Max);
+			ChangeStep(ID, Step);
+			ChangePlaceholder(ID, Placeholder);
+			ChangeTooltip(ID, Placeholder);
 		}
 
 		// Position
@@ -874,3 +882,15 @@
 window.addEventListener("error", function(ErrorEvent) {
 	AlertSystemError(ErrorEvent.message);
 });
+function ForceStop() {
+	// Stop all automations
+	Object.keys(Automation).forEach(function(SubobjectName) {
+		clearTimeout(Automation[SubobjectName]);
+	});
+
+	// Clear dialog events and hide dialog window
+	Interaction.Dialog = [0];
+	setTimeout(function() {
+		ShowDialog("Previous");
+	}, 20);
+}

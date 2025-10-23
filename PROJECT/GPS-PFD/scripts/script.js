@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 0.45,
+		const CurrentVersion = 0.46,
 		GeolocationAPIOptions = {
 			enableHighAccuracy: true
 		};
@@ -115,10 +115,10 @@
 			},
 			Alert: {
 				Active: {
-					AttitudeWarning: "", SpeedCallout: "", SpeedWarning: "", AltitudeCallout: "", AltitudeWarning: ""
+					SpeedCallout: "", AltitudeCallout: "", AttitudeWarning: "", SpeedWarning: "", AltitudeWarning: ""
 				},
 				NowPlaying: {
-					AttitudeWarning: "", SpeedCallout: "", SpeedWarning: "", AltitudeCallout: "", AltitudeWarning: ""
+					SpeedCallout: "", AltitudeCallout: "", AttitudeWarning: "", SpeedWarning: "", AltitudeWarning: ""
 				}
 			}
 		};
@@ -134,7 +134,7 @@
 			},
 			Audio: {
 				Scheme: "Boeing",
-				AttitudeAlertVolume: 0, SpeedAlertVolume: 0, AltitudeAlertVolume: 0
+				AttitudeAlertVolume: 100, SpeedAlertVolume: 100, AltitudeAlertVolume: 100
 			},
 			I18n: {
 				AlwaysUseEnglishTerminologyOnPFD: false,
@@ -155,15 +155,6 @@
 			Speed: {
 				Mode: "GPS",
 				IASAlgorithm: "SimpleAlgorithm",
-				AirportTemperature: {
-					Departure: 288.15, Arrival: 288.15
-				},
-				RelativeHumidity: {
-					Departure: 50, Arrival: 50
-				},
-				QNH: {
-					Departure: 1013.25, Arrival: 1013.25
-				},
 				Wind: {
 					Direction: 0, Speed: 0
 				},
@@ -176,33 +167,21 @@
 			},
 			Altitude: {
 				Mode: "GPS",
-				AirportElevation: {
-					Departure: 0, Arrival: 0
-				},
-				DecisionHeight: 76.2
+				SeatHeight: 3.9624
 			},
 			Heading: {
 				Mode: "GPS"
 			},
 			Nav: {
 				IsEnabled: false,
-				AirportCoordinates: {
-					Departure: {
-						Lat: 0, Lon: 0
-					},
-					Arrival: {
-						Lat: 0, Lon: 0
-					}
-				},
-				ETACalcMethod: "UseAvgGS",
-				GlideSlopeAngle: 3,
-				MarkerBeaconDistance: {
-					OuterMarker: 9260, MiddleMarker: 926, InnerMarker: 185.2
-				}
+				ETACalcMethod: "UseAvgGS"
 			},
 			FlightMode: {
 				FlightMode: "DepartureGround",
-				AutoSwitchFlightModeAndSwapAirportData: true
+				AutoSwitchFlightModeAndSwapAirports: true
+			},
+			WarningSystem: {
+				IsEnabled: false
 			},
 			MCP: {
 				Speed: {
@@ -219,6 +198,44 @@
 				}
 			},
 			Flaps: 0
+		},
+		AirportLibrary = {
+			Selection: {
+				Departure: 1, Arrival: 2
+			},
+			Airport: [
+				0,
+				{
+					Name: "上海虹桥国际机场",
+					Region: "中国大陆",
+					Code: "SHA",
+					Coordinates: {
+						Lat: 31.19758, Lon: 121.33438
+					},
+					Elevation: 4,
+					Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
+					GlideSlopeAngle: 3,
+					MarkerBeaconDistance: {
+						Outer: 9260, Middle: 926, Inner: 185.2
+					},
+					DecisionHeight: 76.2
+				},
+				{
+					Name: "东京国际机场 (羽田机场)",
+					Region: "日本",
+					Code: "HND",
+					Coordinates: {
+						Lat: 35.55001, Lon: 139.78635
+					},
+					Elevation: 4.3,
+					Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
+					GlideSlopeAngle: 3,
+					MarkerBeaconDistance: {
+						Outer: 9260, Middle: 926, Inner: 185.2
+					},
+					DecisionHeight: 76.2
+				}
+			]
 		};
 
 	// Load
@@ -275,12 +292,16 @@
 		if(localStorage.GPSPFD_PFD != undefined) {
 			PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
 		}
+		if(localStorage.GPSPFD_AirportLibrary != undefined) {
+			AirportLibrary = JSON.parse(localStorage.getItem("GPSPFD_AirportLibrary"));
+		}
 
 		// Refresh
 		HighlightActiveSectionInNav();
 		RefreshSystem();
 		RefreshSubsystem();
 		RefreshPFD();
+		RefreshAirportLibrary();
 		ClockAvgSpeeds();
 
 		// PWA
@@ -343,11 +364,24 @@
 // Simplifications
 	// Write
 		// Class
-		function ChangeMarkerBeaconColor(Value) {
-			RemoveClass("Ctnr_PFDDefaultPanelMarkerBeacon", "OuterMarker");
-			RemoveClass("Ctnr_PFDDefaultPanelMarkerBeacon", "MiddleMarker");
-			RemoveClass("Ctnr_PFDDefaultPanelMarkerBeacon", "InnerMarker");
-			AddClass("Ctnr_PFDDefaultPanelMarkerBeacon", Value);
+		function ChangeMarkerBeacon(Value) {
+			switch(Subsystem.Display.PFDStyle) {
+				case "Default":
+					RemoveClass("Ctnr_PFDDefaultPanelMarkerBeacon", "OuterMarker");
+					RemoveClass("Ctnr_PFDDefaultPanelMarkerBeacon", "MiddleMarker");
+					RemoveClass("Ctnr_PFDDefaultPanelMarkerBeacon", "InnerMarker");
+					AddClass("Ctnr_PFDDefaultPanelMarkerBeacon", Value);
+					break;
+				case "HUD":
+					RemoveClass("Ctnr_PFDHUDPanelMarkerBeacon", "OuterMarker");
+					RemoveClass("Ctnr_PFDHUDPanelMarkerBeacon", "MiddleMarker");
+					RemoveClass("Ctnr_PFDHUDPanelMarkerBeacon", "InnerMarker");
+					AddClass("Ctnr_PFDHUDPanelMarkerBeacon", Value);
+					break;
+				default:
+					AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function ChangeMarkerBeacon is invalid.");
+					break;
+			}
 		}
 
 // Refresh
@@ -481,6 +515,7 @@
 			ChangeChecked("Checkbox_SettingsPlayAudio", System.Audio.PlayAudio);
 			if(System.Audio.PlayAudio == true) {
 				Show("Ctrl_SettingsAudioScheme");
+				Show("Label_SettingsAudio");
 				Show("Ctrl_SettingsAttitudeAlertVolume");
 				Show("Ctrl_SettingsSpeedAlertVolume");
 				Show("Ctrl_SettingsAltitudeAlertVolume");
@@ -509,6 +544,7 @@
 			} else {
 				StopAllAudio();
 				Hide("Ctrl_SettingsAudioScheme");
+				Hide("Label_SettingsAudio");
 				Hide("Ctrl_SettingsAttitudeAlertVolume");
 				Hide("Ctrl_SettingsSpeedAlertVolume");
 				Hide("Ctrl_SettingsAltitudeAlertVolume");
@@ -525,8 +561,10 @@
 			ChangeChecked("Checkbox_SettingsTryToOptimizePerformance", System.Dev.TryToOptimizePerformance);
 			if(System.Dev.TryToOptimizePerformance == true) {
 				AddClass("Html", "TryToOptimizePerformance");
+				Automation.ClockRate = 40;
 			} else {
 				RemoveClass("Html", "TryToOptimizePerformance");
+				Automation.ClockRate = 20;
 			}
 			ChangeChecked("Checkbox_SettingsShowDebugOutlines", System.Dev.ShowDebugOutlines);
 			if(System.Dev.ShowDebugOutlines == true) {
@@ -620,402 +658,269 @@
 			}
 
 			// I18n
-			ChangeChecked("Checkbox_SettingsAlwaysUseEnglishTerminologyOnPFD", Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD);
-			if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
-				switch(Subsystem.Display.PFDStyle) {
-					case "Default":
-						ChangeText("Label_PFDDefaultPanelAccelTitle", "加速计");
-						ChangeText("Label_PFDDefaultPanelGSTitle", "地速");
-						ChangeText("Label_PFDDefaultPanelAvgGSTitle", "平均地速");
-						ChangeText("Label_PFDDefaultPanelTASTitle", "真空速");
-						ChangeText("Label_PFDDefaultPanelWindTitle", "风");
-						ChangeText("Label_PFDDefaultPanelFlapsTitle", "襟翼");
-						ChangeText("Label_PFDDefaultPanelSpeedModeTitle", "速度模式");
-						ChangeText("Label_PFDDefaultPanelAltitudeModeTitle", "高度模式");
-						ChangeText("Label_PFDDefaultPanelHeadingModeTitle", "朝向模式");
-						ChangeText("Label_PFDDefaultPanelDMETitle", "测距仪");
-						ChangeText("Label_PFDDefaultPanelDecisionAltitudeTitle", "决断高度");
-						break;
-					case "HUD":
-						ChangeText("Label_PFDHUDPanelAccelTitle", "加速计");
-						ChangeText("Label_PFDHUDPanelSpeedModeTitle", "速度模式");
-						ChangeText("Label_PFDHUDPanelAltitudeModeTitle", "高度模式");
-						ChangeText("Label_PFDHUDPanelHeadingModeTitle", "朝向模式");
-						ChangeText("Label_PFDHUDPanelSpeedGSTitle", "地速");
-						ChangeText("Label_PFDHUDPanelDMETitle", "测距仪");
-						ChangeText("Label_PFDHUDPanelDecisionAltitudeTitle", "决断高度");
-						break;
-					case "Bocchi737":
-					case "AnalogGauges":
-						AlertSystemError("A PFD style which is still under construction was selected.");
-						break;
-					case "AutomobileSpeedometer":
-						ChangeText("Label_PFDAutomobileSpeedometerPanelSpeedUnit", Translate(Subsystem.I18n.SpeedUnit + "OnPFD"));
-						ChangeText("Label_PFDAutomobileSpeedometerPanelDMETitle", "测距仪");
-						ChangeText("Label_PFDAutomobileSpeedometerPanelAltitudeTitle", "高度");
-						break;
-					default:
-						AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshSubsystem is invalid.");
-						break;
+				// English terminology on PFD
+				ChangeChecked("Checkbox_SettingsAlwaysUseEnglishTerminologyOnPFD", Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD);
+				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
+					switch(Subsystem.Display.PFDStyle) {
+						case "Default":
+							ChangeText("Label_PFDDefaultPanelAccelTitle", "加速计");
+							ChangeText("Label_PFDDefaultPanelGSTitle", "地速");
+							ChangeText("Label_PFDDefaultPanelAvgGSTitle", "平均地速");
+							ChangeText("Label_PFDDefaultPanelTASTitle", "真空速");
+							ChangeText("Label_PFDDefaultPanelWindTitle", "风");
+							ChangeText("Label_PFDDefaultPanelFlapsTitle", "襟翼");
+							ChangeText("Label_PFDDefaultPanelSpeedModeTitle", "速度模式");
+							ChangeText("Label_PFDDefaultPanelAltitudeModeTitle", "高度模式");
+							ChangeText("Label_PFDDefaultPanelHeadingModeTitle", "朝向模式");
+							ChangeText("Label_PFDDefaultPanelDMETitle", "测距仪");
+							ChangeText("Label_PFDDefaultPanelDecisionAltitudeTitle", "决断高度");
+							break;
+						case "HUD":
+							ChangeText("Label_PFDHUDPanelAccelTitle", "加速计");
+							ChangeText("Label_PFDHUDPanelSpeedModeTitle", "速度模式");
+							ChangeText("Label_PFDHUDPanelAltitudeModeTitle", "高度模式");
+							ChangeText("Label_PFDHUDPanelHeadingModeTitle", "朝向模式");
+							ChangeText("Label_PFDHUDPanelSpeedGSTitle", "地速");
+							ChangeText("Label_PFDHUDPanelDMETitle", "测距仪");
+							ChangeText("Label_PFDHUDPanelDecisionAltitudeTitle", "决断高度");
+							break;
+						case "Bocchi737":
+						case "AnalogGauges":
+							AlertSystemError("A PFD style which is still under construction was selected.");
+							break;
+						case "AutomobileSpeedometer":
+							ChangeText("Label_PFDAutomobileSpeedometerPanelSpeedUnit", Translate(Subsystem.I18n.SpeedUnit + "OnPFD"));
+							ChangeText("Label_PFDAutomobileSpeedometerPanelDMETitle", "测距仪");
+							ChangeText("Label_PFDAutomobileSpeedometerPanelAltitudeTitle", "高度");
+							break;
+						default:
+							AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshSubsystem is invalid.");
+							break;
+					}
+				} else {
+					switch(Subsystem.Display.PFDStyle) {
+						case "Default":
+							ChangeText("Label_PFDDefaultPanelAccelTitle", "ACCEL");
+							ChangeText("Label_PFDDefaultPanelGSTitle", "GS");
+							ChangeText("Label_PFDDefaultPanelAvgGSTitle", "AVG GS");
+							ChangeText("Label_PFDDefaultPanelTASTitle", "TAS");
+							ChangeText("Label_PFDDefaultPanelWindTitle", "WIND");
+							ChangeText("Label_PFDDefaultPanelFlapsTitle", "FLAPS");
+							ChangeText("Label_PFDDefaultPanelSpeedModeTitle", "SPD MODE");
+							ChangeText("Label_PFDDefaultPanelAltitudeModeTitle", "ALT MODE");
+							ChangeText("Label_PFDDefaultPanelHeadingModeTitle", "HDG MODE");
+							ChangeText("Label_PFDDefaultPanelDMETitle", "DME");
+							ChangeText("Label_PFDDefaultPanelDecisionAltitudeTitle", "DA");
+							break;
+						case "HUD":
+							ChangeText("Label_PFDHUDPanelAccelTitle", "ACCEL");
+							ChangeText("Label_PFDHUDPanelSpeedModeTitle", "SPD MODE");
+							ChangeText("Label_PFDHUDPanelAltitudeModeTitle", "ALT MODE");
+							ChangeText("Label_PFDHUDPanelHeadingModeTitle", "HDG MODE");
+							ChangeText("Label_PFDHUDPanelSpeedGSTitle", "GS");
+							ChangeText("Label_PFDHUDPanelDMETitle", "DME");
+							ChangeText("Label_PFDHUDPanelDecisionAltitudeTitle", "DA");
+							break;
+						case "Bocchi737":
+						case "AnalogGauges":
+							AlertSystemError("A PFD style which is still under construction was selected.");
+							break;
+						case "AutomobileSpeedometer":
+							ChangeText("Label_PFDAutomobileSpeedometerPanelSpeedUnit", Translate(Subsystem.I18n.SpeedUnit + "OnPFD"));
+							ChangeText("Label_PFDAutomobileSpeedometerPanelDMETitle", "DME");
+							ChangeText("Label_PFDAutomobileSpeedometerPanelAltitudeTitle", "ALT");
+							break;
+						default:
+							AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshSubsystem is invalid.");
+							break;
+					}
 				}
-			} else {
-				switch(Subsystem.Display.PFDStyle) {
-					case "Default":
-						ChangeText("Label_PFDDefaultPanelAccelTitle", "ACCEL");
-						ChangeText("Label_PFDDefaultPanelGSTitle", "GS");
-						ChangeText("Label_PFDDefaultPanelAvgGSTitle", "AVG GS");
-						ChangeText("Label_PFDDefaultPanelTASTitle", "TAS");
-						ChangeText("Label_PFDDefaultPanelWindTitle", "WIND");
-						ChangeText("Label_PFDDefaultPanelFlapsTitle", "FLAPS");
-						ChangeText("Label_PFDDefaultPanelSpeedModeTitle", "SPD MODE");
-						ChangeText("Label_PFDDefaultPanelAltitudeModeTitle", "ALT MODE");
-						ChangeText("Label_PFDDefaultPanelHeadingModeTitle", "HDG MODE");
-						ChangeText("Label_PFDDefaultPanelDMETitle", "DME");
-						ChangeText("Label_PFDDefaultPanelDecisionAltitudeTitle", "DA");
-						break;
-					case "HUD":
-						ChangeText("Label_PFDHUDPanelAccelTitle", "ACCEL");
-						ChangeText("Label_PFDHUDPanelSpeedModeTitle", "SPD MODE");
-						ChangeText("Label_PFDHUDPanelAltitudeModeTitle", "ALT MODE");
-						ChangeText("Label_PFDHUDPanelHeadingModeTitle", "HDG MODE");
-						ChangeText("Label_PFDHUDPanelSpeedGSTitle", "GS");
-						ChangeText("Label_PFDHUDPanelDMETitle", "DME");
-						ChangeText("Label_PFDHUDPanelDecisionAltitudeTitle", "DA");
-						break;
-					case "Bocchi737":
-					case "AnalogGauges":
-						AlertSystemError("A PFD style which is still under construction was selected.");
-						break;
-					case "AutomobileSpeedometer":
-						ChangeText("Label_PFDAutomobileSpeedometerPanelSpeedUnit", Translate(Subsystem.I18n.SpeedUnit + "OnPFD"));
-						ChangeText("Label_PFDAutomobileSpeedometerPanelDMETitle", "DME");
-						ChangeText("Label_PFDAutomobileSpeedometerPanelAltitudeTitle", "ALT");
-						break;
-					default:
-						AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshSubsystem is invalid.");
-						break;
-				}
-			}
-			switch(true) {
-				case Subsystem.I18n.SpeedUnit == "KilometerPerHour" && Subsystem.I18n.DistanceUnit == "Kilometer" &&
-				Subsystem.I18n.AltitudeUnit == "Meter" && Subsystem.I18n.VerticalSpeedUnit == "MeterPerSec" &&
-				Subsystem.I18n.PressureUnit == "Hectopascal" && Subsystem.I18n.TemperatureUnit == "Celsius":
-					ChangeValue("Combobox_SettingsMeasurementUnitsPreset", "AllMetric");
-					break;
-				case Subsystem.I18n.SpeedUnit == "Knot" && Subsystem.I18n.DistanceUnit == "NauticalMile" &&
-				Subsystem.I18n.AltitudeUnit == "Feet" && Subsystem.I18n.VerticalSpeedUnit == "FeetPerMin" &&
-				Subsystem.I18n.PressureUnit == "Hectopascal" && Subsystem.I18n.TemperatureUnit == "Celsius":
-					ChangeValue("Combobox_SettingsMeasurementUnitsPreset", "CivilAviation");
-					break;
-				default:
-					ChangeValue("Combobox_SettingsMeasurementUnitsPreset", "");
-					break;
-			}
-			ChangeValue("Combobox_SettingsSpeedUnit", Subsystem.I18n.SpeedUnit);
-			switch(Subsystem.I18n.SpeedUnit) {
-				case "KilometerPerHour":
-					switch(PFD.MCP.Speed.Mode) {
-						case "IAS":
-							ChangeMax("Textbox_PFDMCPSpeed", "999");
-							ChangeStep("Textbox_PFDMCPSpeed", "1");
-							ChangePlaceholder("Textbox_PFDMCPSpeed", "0~999");
-							ChangeTooltip("Textbox_PFDMCPSpeed", "0~999");
+
+				// Units of measurement
+					// Presets
+					switch(true) {
+						case Subsystem.I18n.SpeedUnit == "KilometerPerHour" && Subsystem.I18n.DistanceUnit == "Kilometer" &&
+						Subsystem.I18n.AltitudeUnit == "Meter" && Subsystem.I18n.VerticalSpeedUnit == "MeterPerSec" &&
+						Subsystem.I18n.PressureUnit == "Hectopascal" && Subsystem.I18n.TemperatureUnit == "Celsius":
+							ChangeValue("Combobox_SettingsMeasurementUnitsPreset", "AllMetric");
 							break;
-						case "MachNumber":
-							ChangeMax("Textbox_PFDMCPSpeed", "0.999");
-							ChangeStep("Textbox_PFDMCPSpeed", "0.01");
-							ChangePlaceholder("Textbox_PFDMCPSpeed", "0~0.999");
-							ChangeTooltip("Textbox_PFDMCPSpeed", "0~0.999");
+						case Subsystem.I18n.SpeedUnit == "Knot" && Subsystem.I18n.DistanceUnit == "NauticalMile" &&
+						Subsystem.I18n.AltitudeUnit == "Feet" && Subsystem.I18n.VerticalSpeedUnit == "FeetPerMin" &&
+						Subsystem.I18n.PressureUnit == "Hectopascal" && Subsystem.I18n.TemperatureUnit == "Celsius":
+							ChangeValue("Combobox_SettingsMeasurementUnitsPreset", "CivilAviation");
 							break;
 						default:
-							AlertSystemError("The value of PFD.MCP.Speed.Mode \"" + PFD.MCP.Speed.Mode + "\" in function RefreshSubsystem is invalid.");
+							ChangeValue("Combobox_SettingsMeasurementUnitsPreset", "");
 							break;
 					}
-					ChangeMax("Textbox_SettingsWindSpeed", "999");
-					ChangePlaceholder("Textbox_SettingsWindSpeed", "0~999");
-					ChangeTooltip("Textbox_SettingsWindSpeed", "0~999");
-					ChangeMax("Textbox_SettingsV1", "999");
-					ChangePlaceholder("Textbox_SettingsV1", "0~999");
-					ChangeTooltip("Textbox_SettingsV1", "0~999");
-					ChangeMax("Textbox_SettingsVR", "999");
-					ChangePlaceholder("Textbox_SettingsVR", "0~999");
-					ChangeTooltip("Textbox_SettingsVR", "0~999");
-					ChangeMax("Textbox_SettingsSpeedLimitMin", "980");
-					ChangePlaceholder("Textbox_SettingsSpeedLimitMin", "0~980");
-					ChangeTooltip("Textbox_SettingsSpeedLimitMin", "0~980");
-					ChangeMin("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "20");
-					ChangeMax("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "999");
-					ChangePlaceholder("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "20~999");
-					ChangeTooltip("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "20~999");
-					ChangeMin("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "20");
-					ChangeMax("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "999");
-					ChangePlaceholder("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "20~999");
-					ChangeTooltip("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "20~999");
-					break;
-				case "MilePerHour":
-					switch(PFD.MCP.Speed.Mode) {
-						case "IAS":
-							ChangeMax("Textbox_PFDMCPSpeed", "621");
-							ChangeStep("Textbox_PFDMCPSpeed", "1");
-							ChangePlaceholder("Textbox_PFDMCPSpeed", "0~621");
-							ChangeTooltip("Textbox_PFDMCPSpeed", "0~621");
+
+					// Speed
+					ChangeValue("Combobox_SettingsSpeedUnit", Subsystem.I18n.SpeedUnit);
+					switch(Subsystem.I18n.SpeedUnit) {
+						case "KilometerPerHour":
+							switch(PFD.MCP.Speed.Mode) {
+								case "IAS":
+									ChangeNumberTextbox("Textbox_PFDMCPSpeed", "0", "999", "1", "0~999");
+									break;
+								case "MachNumber":
+									ChangeNumberTextbox("Textbox_PFDMCPSpeed", "0", "0.999", "0.01", "0~0.999");
+									break;
+								default:
+									AlertSystemError("The value of PFD.MCP.Speed.Mode \"" + PFD.MCP.Speed.Mode + "\" in function RefreshSubsystem is invalid.");
+									break;
+							}
+							ChangeNumberTextbox("Textbox_SettingsWindSpeed", "0", "999", "5", "0~999");
+							ChangeNumberTextbox("Textbox_SettingsV1", "0", "999", "5", "0~999");
+							ChangeNumberTextbox("Textbox_SettingsVR", "0", "999", "5", "0~999");
+							ChangeNumberTextbox("Textbox_SettingsSpeedLimitMin", "0", "980", "5", "0~980");
+							ChangeNumberTextbox("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "20", "999", "5", "20~999");
+							ChangeNumberTextbox("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "20", "999", "5", "20~999");
 							break;
-						case "MachNumber":
-							ChangeMax("Textbox_PFDMCPSpeed", "0.999");
-							ChangeStep("Textbox_PFDMCPSpeed", "0.01");
-							ChangePlaceholder("Textbox_PFDMCPSpeed", "0~0.999");
-							ChangeTooltip("Textbox_PFDMCPSpeed", "0~0.999");
+						case "MilePerHour":
+							switch(PFD.MCP.Speed.Mode) {
+								case "IAS":
+									ChangeNumberTextbox("Textbox_PFDMCPSpeed", "0", "621", "1", "0~621");
+									break;
+								case "MachNumber":
+									ChangeNumberTextbox("Textbox_PFDMCPSpeed", "0", "0.999", "0.01", "0~0.999");
+									break;
+								default:
+									AlertSystemError("The value of PFD.MCP.Speed.Mode \"" + PFD.MCP.Speed.Mode + "\" in function RefreshSubsystem is invalid.");
+									break;
+							}
+							ChangeNumberTextbox("Textbox_SettingsWindSpeed", "0", "621", "5", "0~621");
+							ChangeNumberTextbox("Textbox_SettingsV1", "0", "621", "5", "0~621");
+							ChangeNumberTextbox("Textbox_SettingsVR", "0", "621", "5", "0~621");
+							ChangeNumberTextbox("Textbox_SettingsSpeedLimitMin", "0", "609", "5", "0~609");
+							ChangeNumberTextbox("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "10", "621", "5", "12~621");
+							ChangeNumberTextbox("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "10", "621", "5", "12~621");
+							break;
+						case "Knot":
+							switch(PFD.MCP.Speed.Mode) {
+								case "IAS":
+									ChangeNumberTextbox("Textbox_PFDMCPSpeed", "0", "539", "1", "0~539");
+									break;
+								case "MachNumber":
+									ChangeNumberTextbox("Textbox_PFDMCPSpeed", "0", "0.999", "0.01", "0~0.999");
+									break;
+								default:
+									AlertSystemError("The value of PFD.MCP.Speed.Mode \"" + PFD.MCP.Speed.Mode + "\" in function RefreshSubsystem is invalid.");
+									break;
+							}
+							ChangeNumberTextbox("Textbox_SettingsWindSpeed", "0", "539", "5", "0~539");
+							ChangeNumberTextbox("Textbox_SettingsV1", "0", "539", "5", "0~539");
+							ChangeNumberTextbox("Textbox_SettingsVR", "0", "539", "5", "0~539");
+							ChangeNumberTextbox("Textbox_SettingsSpeedLimitMin", "0", "529", "5", "0~529");
+							ChangeNumberTextbox("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "10", "539", "5", "11~539");
+							ChangeNumberTextbox("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "10", "539", "5", "11~539");
 							break;
 						default:
-							AlertSystemError("The value of PFD.MCP.Speed.Mode \"" + PFD.MCP.Speed.Mode + "\" in function RefreshSubsystem is invalid.");
+							AlertSystemError("The value of Subsystem.I18n.SpeedUnit \"" + Subsystem.I18n.SpeedUnit + "\" in function RefreshSubsystem is invalid.");
 							break;
 					}
-					ChangeMax("Textbox_SettingsWindSpeed", "621");
-					ChangePlaceholder("Textbox_SettingsWindSpeed", "0~621");
-					ChangeTooltip("Textbox_SettingsWindSpeed", "0~621");
-					ChangeMax("Textbox_SettingsV1", "621");
-					ChangePlaceholder("Textbox_SettingsV1", "0~621");
-					ChangeTooltip("Textbox_SettingsV1", "0~621");
-					ChangeMax("Textbox_SettingsVR", "621");
-					ChangePlaceholder("Textbox_SettingsVR", "0~621");
-					ChangeTooltip("Textbox_SettingsVR", "0~621");
-					ChangeMax("Textbox_SettingsSpeedLimitMin", "609");
-					ChangePlaceholder("Textbox_SettingsSpeedLimitMin", "0~609");
-					ChangeTooltip("Textbox_SettingsSpeedLimitMin", "0~609");
-					ChangeMin("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "10");
-					ChangeMax("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "621");
-					ChangePlaceholder("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "12~621");
-					ChangeTooltip("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "12~621");
-					ChangeMin("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "10");
-					ChangeMax("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "621");
-					ChangePlaceholder("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "12~621");
-					ChangeTooltip("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "12~621");
-					break;
-				case "Knot":
-					switch(PFD.MCP.Speed.Mode) {
-						case "IAS":
-							ChangeMax("Textbox_PFDMCPSpeed", "539");
-							ChangeStep("Textbox_PFDMCPSpeed", "1");
-							ChangePlaceholder("Textbox_PFDMCPSpeed", "0~539");
-							ChangeTooltip("Textbox_PFDMCPSpeed", "0~539");
+					ChangeText("ComboboxOption_PFDMCPSpeedModeIAS", Translate(Subsystem.I18n.SpeedUnit));
+					ChangeText("Label_SettingsWindSpeedUnit", Translate(Subsystem.I18n.SpeedUnit));
+					ChangeText("Label_SettingsV1Unit", Translate(Subsystem.I18n.SpeedUnit));
+					ChangeText("Label_SettingsVRUnit", Translate(Subsystem.I18n.SpeedUnit));
+					ChangeText("Label_SettingsSpeedLimitMinUnit", Translate(Subsystem.I18n.SpeedUnit));
+					ChangeText("Label_SettingsSpeedLimitOnFlapsUpUnit", Translate(Subsystem.I18n.SpeedUnit));
+					ChangeText("Label_SettingsSpeedLimitOnFlapsFullUnit", Translate(Subsystem.I18n.SpeedUnit));
+
+					// Distance
+					ChangeValue("Combobox_SettingsDistanceUnit", Subsystem.I18n.DistanceUnit);
+					switch(Subsystem.I18n.DistanceUnit) {
+						case "Kilometer":
+							ChangeNumberTextbox("Textbox_AirportLibraryOuterMarkerDistance", "0", "20", "0.1", "0~20");
+							ChangeNumberTextbox("Textbox_AirportLibraryMiddleMarkerDistance", "0", "20", "0.1", "0~20");
+							ChangeNumberTextbox("Textbox_AirportLibraryInnerMarkerDistance", "0", "20", "0.1", "0~20");
 							break;
-						case "MachNumber":
-							ChangeMax("Textbox_PFDMCPSpeed", "0.999");
-							ChangeStep("Textbox_PFDMCPSpeed", "0.01");
-							ChangePlaceholder("Textbox_PFDMCPSpeed", "0~0.999");
-							ChangeTooltip("Textbox_PFDMCPSpeed", "0~0.999");
+						case "Mile":
+							ChangeNumberTextbox("Textbox_AirportLibraryOuterMarkerDistance", "0", "12.43", "0.1", "0~12.43");
+							ChangeNumberTextbox("Textbox_AirportLibraryMiddleMarkerDistance", "0", "12.43", "0.1", "0~12.43");
+							ChangeNumberTextbox("Textbox_AirportLibraryInnerMarkerDistance", "0", "12.43", "0.1", "0~12.43");
+							break;
+						case "NauticalMile":
+							ChangeNumberTextbox("Textbox_AirportLibraryOuterMarkerDistance", "0", "10.8", "0.1", "0~10.8");
+							ChangeNumberTextbox("Textbox_AirportLibraryMiddleMarkerDistance", "0", "10.8", "0.1", "0~10.8");
+							ChangeNumberTextbox("Textbox_AirportLibraryInnerMarkerDistance", "0", "10.8", "0.1", "0~10.8");
 							break;
 						default:
-							AlertSystemError("The value of PFD.MCP.Speed.Mode \"" + PFD.MCP.Speed.Mode + "\" in function RefreshSubsystem is invalid.");
+							AlertSystemError("The value of Subsystem.I18n.DistanceUnit \"" + Subsystem.I18n.DistanceUnit + "\" in function RefreshSubsystem is invalid.");
 							break;
 					}
-					ChangeMax("Textbox_SettingsWindSpeed", "539");
-					ChangePlaceholder("Textbox_SettingsWindSpeed", "0~539");
-					ChangeTooltip("Textbox_SettingsWindSpeed", "0~539");
-					ChangeMax("Textbox_SettingsV1", "539");
-					ChangePlaceholder("Textbox_SettingsV1", "0~539");
-					ChangeTooltip("Textbox_SettingsV1", "0~539");
-					ChangeMax("Textbox_SettingsVR", "539");
-					ChangePlaceholder("Textbox_SettingsVR", "0~539");
-					ChangeTooltip("Textbox_SettingsVR", "0~539");
-					ChangeMax("Textbox_SettingsSpeedLimitMin", "529");
-					ChangePlaceholder("Textbox_SettingsSpeedLimitMin", "0~529");
-					ChangeTooltip("Textbox_SettingsSpeedLimitMin", "0~529");
-					ChangeMin("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "10");
-					ChangeMax("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "539");
-					ChangePlaceholder("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "11~539");
-					ChangeTooltip("Textbox_SettingsSpeedLimitMaxOnFlapsUp", "11~539");
-					ChangeMin("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "10");
-					ChangeMax("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "539");
-					ChangePlaceholder("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "11~539");
-					ChangeTooltip("Textbox_SettingsSpeedLimitMaxOnFlapsFull", "11~539");
-					break;
-				default:
-					AlertSystemError("The value of Subsystem.I18n.SpeedUnit \"" + Subsystem.I18n.SpeedUnit + "\" in function RefreshSubsystem is invalid.");
-					break;
-			}
-			ChangeText("ComboboxOption_PFDMCPSpeedModeIAS", Translate(Subsystem.I18n.SpeedUnit));
-			ChangeText("Label_SettingsWindSpeedUnit", Translate(Subsystem.I18n.SpeedUnit));
-			ChangeText("Label_SettingsV1Unit", Translate(Subsystem.I18n.SpeedUnit));
-			ChangeText("Label_SettingsVRUnit", Translate(Subsystem.I18n.SpeedUnit));
-			ChangeText("Label_SettingsSpeedLimitMinUnit", Translate(Subsystem.I18n.SpeedUnit));
-			ChangeText("Label_SettingsSpeedLimitOnFlapsUpUnit", Translate(Subsystem.I18n.SpeedUnit));
-			ChangeText("Label_SettingsSpeedLimitOnFlapsFullUnit", Translate(Subsystem.I18n.SpeedUnit));
-			ChangeValue("Combobox_SettingsDistanceUnit", Subsystem.I18n.DistanceUnit);
-			switch(Subsystem.I18n.DistanceUnit) {
-				case "Kilometer":
-					ChangeMax("Textbox_SettingsOuterMarkerDistance", "20");
-					ChangePlaceholder("Textbox_SettingsOuterMarkerDistance", "0~20");
-					ChangeTooltip("Textbox_SettingsOuterMarkerDistance", "0~20");
-					ChangeMax("Textbox_SettingsMiddleMarkerDistance", "20");
-					ChangePlaceholder("Textbox_SettingsMiddleMarkerDistance", "0~20");
-					ChangeTooltip("Textbox_SettingsMiddleMarkerDistance", "0~20");
-					ChangeMax("Textbox_SettingsInnerMarkerDistance", "20");
-					ChangePlaceholder("Textbox_SettingsInnerMarkerDistance", "0~20");
-					ChangeTooltip("Textbox_SettingsInnerMarkerDistance", "0~20");
-					break;
-				case "Mile":
-					ChangeMax("Textbox_SettingsOuterMarkerDistance", "12.43");
-					ChangePlaceholder("Textbox_SettingsOuterMarkerDistance", "0~12.43");
-					ChangeTooltip("Textbox_SettingsOuterMarkerDistance", "0~12.43");
-					ChangeMax("Textbox_SettingsMiddleMarkerDistance", "12.43");
-					ChangePlaceholder("Textbox_SettingsMiddleMarkerDistance", "0~12.43");
-					ChangeTooltip("Textbox_SettingsMiddleMarkerDistance", "0~12.43");
-					ChangeMax("Textbox_SettingsInnerMarkerDistance", "12.43");
-					ChangePlaceholder("Textbox_SettingsInnerMarkerDistance", "0~12.43");
-					ChangeTooltip("Textbox_SettingsInnerMarkerDistance", "0~12.43");
-					break;
-				case "NauticalMile":
-					ChangeMax("Textbox_SettingsOuterMarkerDistance", "10.8");
-					ChangePlaceholder("Textbox_SettingsOuterMarkerDistance", "0~10.8");
-					ChangeTooltip("Textbox_SettingsOuterMarkerDistance", "0~10.8");
-					ChangeMax("Textbox_SettingsMiddleMarkerDistance", "10.8");
-					ChangePlaceholder("Textbox_SettingsMiddleMarkerDistance", "0~10.8");
-					ChangeTooltip("Textbox_SettingsMiddleMarkerDistance", "0~10.8");
-					ChangeMax("Textbox_SettingsInnerMarkerDistance", "10.8");
-					ChangePlaceholder("Textbox_SettingsInnerMarkerDistance", "0~10.8");
-					ChangeTooltip("Textbox_SettingsInnerMarkerDistance", "0~10.8");
-					break;
-				default:
-					AlertSystemError("The value of Subsystem.I18n.DistanceUnit \"" + Subsystem.I18n.DistanceUnit + "\" in function RefreshSubsystem is invalid.");
-					break;
-			}
-			ChangeText("Label_SettingsOuterMarkerDistanceUnit", Translate(Subsystem.I18n.DistanceUnit));
-			ChangeText("Label_SettingsMiddleMarkerDistanceUnit", Translate(Subsystem.I18n.DistanceUnit));
-			ChangeText("Label_SettingsInnerMarkerDistanceUnit", Translate(Subsystem.I18n.DistanceUnit));
-			ChangeValue("Combobox_SettingsAltitudeUnit", Subsystem.I18n.AltitudeUnit);
-			switch(Subsystem.I18n.AltitudeUnit) {
-				case "Meter":
-					ChangeMin("Textbox_PFDMCPAltitude", "-700");
-					ChangeMax("Textbox_PFDMCPAltitude", "15240");
-					ChangeStep("Textbox_PFDMCPAltitude", "50");
-					ChangePlaceholder("Textbox_PFDMCPAltitude", "-609~15240");
-					ChangeTooltip("Textbox_PFDMCPAltitude", "-609~15240");
-					ChangeMin("Textbox_SettingsAirportElevationDeparture", "-500");
-					ChangeMax("Textbox_SettingsAirportElevationDeparture", "5000");
-					ChangeStep("Textbox_SettingsAirportElevationDeparture", "5");
-					ChangePlaceholder("Textbox_SettingsAirportElevationDeparture", "-500~5000");
-					ChangeTooltip("Textbox_SettingsAirportElevationDeparture", "-500~5000");
-					ChangeMin("Textbox_SettingsAirportElevationArrival", "-500");
-					ChangeMax("Textbox_SettingsAirportElevationArrival", "5000");
-					ChangeStep("Textbox_SettingsAirportElevationArrival", "5");
-					ChangePlaceholder("Textbox_SettingsAirportElevationArrival", "-500~5000");
-					ChangeTooltip("Textbox_SettingsAirportElevationArrival", "-500~5000");
-					ChangeMin("Textbox_SettingsDecisionHeight", "15");
-					ChangeMax("Textbox_SettingsDecisionHeight", "750");
-					ChangeStep("Textbox_SettingsDecisionHeight", "5");
-					ChangePlaceholder("Textbox_SettingsDecisionHeight", "15~750");
-					ChangeTooltip("Textbox_SettingsDecisionHeight", "15~750");
-					break;
-				case "Feet":
-				case "FeetButShowMeterBeside":
-					ChangeMin("Textbox_PFDMCPAltitude", "-2000");
-					ChangeMax("Textbox_PFDMCPAltitude", "50000");
-					ChangeStep("Textbox_PFDMCPAltitude", "100");
-					ChangePlaceholder("Textbox_PFDMCPAltitude", "-2000~50000");
-					ChangeTooltip("Textbox_PFDMCPAltitude", "-2000~50000");
-					ChangeMin("Textbox_SettingsAirportElevationDeparture", "-1640");
-					ChangeMax("Textbox_SettingsAirportElevationDeparture", "16404");
-					ChangeStep("Textbox_SettingsAirportElevationDeparture", "10");
-					ChangePlaceholder("Textbox_SettingsAirportElevationDeparture", "-1640~16404");
-					ChangeTooltip("Textbox_SettingsAirportElevationDeparture", "-1640~16404");
-					ChangeMin("Textbox_SettingsAirportElevationArrival", "-1640");
-					ChangeMax("Textbox_SettingsAirportElevationArrival", "16404");
-					ChangeStep("Textbox_SettingsAirportElevationArrival", "10");
-					ChangePlaceholder("Textbox_SettingsAirportElevationArrival", "-1640~16404");
-					ChangeTooltip("Textbox_SettingsAirportElevationArrival", "-1640~16404");
-					ChangeMin("Textbox_SettingsDecisionHeight", "40");
-					ChangeMax("Textbox_SettingsDecisionHeight", "2461");
-					ChangeStep("Textbox_SettingsDecisionHeight", "10");
-					ChangePlaceholder("Textbox_SettingsDecisionHeight", "49~2461");
-					ChangeTooltip("Textbox_SettingsDecisionHeight", "49~2461");
-					break;
-				default:
-					AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshSubsystem is invalid.");
-					break;
-			}
-			ChangeText("Label_PFDMCPAltitudeUnit", Translate(Subsystem.I18n.AltitudeUnit));
-			ChangeText("Label_SettingsAirportElevationUnit", Translate(Subsystem.I18n.AltitudeUnit));
-			ChangeText("Label_SettingsDecisionHeightUnit", Translate(Subsystem.I18n.AltitudeUnit));
-			ChangeValue("Combobox_SettingsVerticalSpeedUnit", Subsystem.I18n.VerticalSpeedUnit);
-			ChangeValue("Combobox_SettingsTemperatureUnit", Subsystem.I18n.TemperatureUnit);
-			switch(Subsystem.I18n.VerticalSpeedUnit) {
-				case "MeterPerSec":
-					ChangeMin("Textbox_PFDMCPVerticalSpeed", "-30");
-					ChangeMax("Textbox_PFDMCPVerticalSpeed", "30");
-					ChangeStep("Textbox_PFDMCPVerticalSpeed", "1");
-					ChangePlaceholder("Textbox_PFDMCPVerticalSpeed", "-30~30");
-					ChangeTooltip("Textbox_PFDMCPVerticalSpeed", "-30~30");
-					break;
-				case "FeetPerMin":
-					ChangeMin("Textbox_PFDMCPVerticalSpeed", "-6000");
-					ChangeMax("Textbox_PFDMCPVerticalSpeed", "6000");
-					ChangeStep("Textbox_PFDMCPVerticalSpeed", "100");
-					ChangePlaceholder("Textbox_PFDMCPVerticalSpeed", "-6000~6000");
-					ChangeTooltip("Textbox_PFDMCPVerticalSpeed", "-6000~6000");
-					break;
-				default:
-					AlertSystemError("The value of Subsystem.I18n.VerticalSpeedUnit \"" + Subsystem.I18n.VerticalSpeedUnit + "\" in function RefreshSubsystem is invalid.");
-					break;
-			}
-			ChangeText("Label_PFDMCPVerticalSpeedUnit", Translate(Subsystem.I18n.VerticalSpeedUnit));
-			switch(Subsystem.I18n.TemperatureUnit) {
-				case "Celsius":
-					ChangeMin("Textbox_SettingsAirportTemperatureDeparture", "-50");
-					ChangeMax("Textbox_SettingsAirportTemperatureDeparture", "50");
-					ChangePlaceholder("Textbox_SettingsAirportTemperatureDeparture", "-50~50");
-					ChangeTooltip("Textbox_SettingsAirportTemperatureDeparture", "-50~50");
-					ChangeMin("Textbox_SettingsAirportTemperatureArrival", "-50");
-					ChangeMax("Textbox_SettingsAirportTemperatureArrival", "50");
-					ChangePlaceholder("Textbox_SettingsAirportTemperatureArrival", "-50~50");
-					ChangeTooltip("Textbox_SettingsAirportTemperatureArrival", "-50~50");
-					break;
-				case "Fahrenheit":
-					ChangeMin("Textbox_SettingsAirportTemperatureDeparture", "-58");
-					ChangeMax("Textbox_SettingsAirportTemperatureDeparture", "122");
-					ChangePlaceholder("Textbox_SettingsAirportTemperatureDeparture", "-58~122");
-					ChangeTooltip("Textbox_SettingsAirportTemperatureDeparture", "-58~122");
-					ChangeMin("Textbox_SettingsAirportTemperatureArrival", "-58");
-					ChangeMax("Textbox_SettingsAirportTemperatureArrival", "122");
-					ChangePlaceholder("Textbox_SettingsAirportTemperatureArrival", "-58~122");
-					ChangeTooltip("Textbox_SettingsAirportTemperatureArrival", "-58~122");
-					break;
-				default:
-					AlertSystemError("The value of Subsystem.I18n.TemperatureUnit \"" + Subsystem.I18n.TemperatureUnit + "\" in function RefreshSubsystem is invalid.");
-					break;
-			}
-			ChangeText("Label_SettingsAirportTemperatureUnit", Translate(Subsystem.I18n.TemperatureUnit));
-			ChangeValue("Combobox_SettingsPressureUnit", Subsystem.I18n.PressureUnit);
-			switch(Subsystem.I18n.PressureUnit) {
-				case "Hectopascal":
-					ChangeMin("Textbox_SettingsQNHDeparture", "900");
-					ChangeMax("Textbox_SettingsQNHDeparture", "1100");
-					ChangeStep("Textbox_SettingsQNHDeparture", "1");
-					ChangePlaceholder("Textbox_SettingsQNHDeparture", "900~1100");
-					ChangeTooltip("Textbox_SettingsQNHDeparture", "900~1100");
-					ChangeMin("Textbox_SettingsQNHArrival", "900");
-					ChangeMax("Textbox_SettingsQNHArrival", "1100");
-					ChangeStep("Textbox_SettingsQNHArrival", "1");
-					ChangePlaceholder("Textbox_SettingsQNHArrival", "900~1100");
-					ChangeTooltip("Textbox_SettingsQNHArrival", "900~1100");
-					break;
-				case "InchOfMercury":
-					ChangeMin("Textbox_SettingsQNHDeparture", "26.58");
-					ChangeMax("Textbox_SettingsQNHDeparture", "32.48");
-					ChangeStep("Textbox_SettingsQNHDeparture", "0.01");
-					ChangePlaceholder("Textbox_SettingsQNHDeparture", "26.58~32.48");
-					ChangeTooltip("Textbox_SettingsQNHDeparture", "26.58~32.48");
-					ChangeMin("Textbox_SettingsQNHArrival", "26.58");
-					ChangeMax("Textbox_SettingsQNHArrival", "32.48");
-					ChangeStep("Textbox_SettingsQNHArrival", "0.01");
-					ChangePlaceholder("Textbox_SettingsQNHArrival", "26.58~32.48");
-					ChangeTooltip("Textbox_SettingsQNHArrival", "26.58~32.48");
-					break;
-				default:
-					AlertSystemError("The value of Subsystem.I18n.PressureUnit \"" + Subsystem.I18n.PressureUnit + "\" in function RefreshSubsystem is invalid.");
-					break;
-			}
-			ChangeText("Label_SettingsQNHUnit", Translate(Subsystem.I18n.PressureUnit));
+					ChangeText("Label_AirportLibraryOuterMarkerDistanceUnit", Translate(Subsystem.I18n.DistanceUnit));
+					ChangeText("Label_AirportLibraryMiddleMarkerDistanceUnit", Translate(Subsystem.I18n.DistanceUnit));
+					ChangeText("Label_AirportLibraryInnerMarkerDistanceUnit", Translate(Subsystem.I18n.DistanceUnit));
+
+					// Altitude
+					ChangeValue("Combobox_SettingsAltitudeUnit", Subsystem.I18n.AltitudeUnit);
+					switch(Subsystem.I18n.AltitudeUnit) {
+						case "Meter":
+							ChangeNumberTextbox("Textbox_PFDMCPAltitude", "-700", "15240", "50", "-609~15240");
+							ChangeNumberTextbox("Textbox_AirportLibraryElevation", "-500", "5000", "5", "-500~5000");
+							ChangeNumberTextbox("Textbox_AirportLibraryDecisionHeight", "15", "750", "5", "15~750");
+							ChangeNumberTextbox("Textbox_SettingsSeatHeight", "0", "20", "1", "0~20");
+							break;
+						case "Feet":
+						case "FeetButShowMeterBeside":
+							ChangeNumberTextbox("Textbox_PFDMCPAltitude", "-2000", "50000", "100", "-2000~50000");
+							ChangeNumberTextbox("Textbox_AirportLibraryElevation", "-1640", "16404", "10", "-1640~16404");
+							ChangeNumberTextbox("Textbox_AirportLibraryDecisionHeight", "40", "2461", "10", "49~2461");
+							ChangeNumberTextbox("Textbox_SettingsSeatHeight", "0", "66", "1", "0~66");
+							break;
+						default:
+							AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshSubsystem is invalid.");
+							break;
+					}
+					ChangeText("Label_PFDMCPAltitudeUnit", Translate(Subsystem.I18n.AltitudeUnit));
+					ChangeText("Label_AirportLibraryElevationUnit", Translate(Subsystem.I18n.AltitudeUnit));
+					ChangeText("Label_AirportLibraryDecisionHeightUnit", Translate(Subsystem.I18n.AltitudeUnit));
+					ChangeText("Label_SettingsSeatHeightUnit", Translate(Subsystem.I18n.AltitudeUnit));
+
+					// Vertical speed
+					ChangeValue("Combobox_SettingsVerticalSpeedUnit", Subsystem.I18n.VerticalSpeedUnit);
+					switch(Subsystem.I18n.VerticalSpeedUnit) {
+						case "MeterPerSec":
+							ChangeNumberTextbox("Textbox_PFDMCPVerticalSpeed", "-30", "30", "1", "-30~30");
+							break;
+						case "FeetPerMin":
+							ChangeNumberTextbox("Textbox_PFDMCPVerticalSpeed", "-6000", "6000", "100", "-6000~6000");
+							break;
+						default:
+							AlertSystemError("The value of Subsystem.I18n.VerticalSpeedUnit \"" + Subsystem.I18n.VerticalSpeedUnit + "\" in function RefreshSubsystem is invalid.");
+							break;
+					}
+					ChangeText("Label_PFDMCPVerticalSpeedUnit", Translate(Subsystem.I18n.VerticalSpeedUnit));
+
+					// Temperature
+					ChangeValue("Combobox_SettingsTemperatureUnit", Subsystem.I18n.TemperatureUnit);
+					switch(Subsystem.I18n.TemperatureUnit) {
+						case "Celsius":
+							ChangeNumberTextbox("Textbox_AirportLibraryTemperature", "-50", "50", "1", "-50~50");
+							break;
+						case "Fahrenheit":
+							ChangeNumberTextbox("Textbox_AirportLibraryTemperature", "-58", "122", "1", "-58~122");
+							break;
+						default:
+							AlertSystemError("The value of Subsystem.I18n.TemperatureUnit \"" + Subsystem.I18n.TemperatureUnit + "\" in function RefreshSubsystem is invalid.");
+							break;
+					}
+					ChangeText("Label_AirportLibraryTemperatureUnit", Translate(Subsystem.I18n.TemperatureUnit));
+
+					// Pressure
+					ChangeValue("Combobox_SettingsPressureUnit", Subsystem.I18n.PressureUnit);
+					switch(Subsystem.I18n.PressureUnit) {
+						case "Hectopascal":
+							ChangeNumberTextbox("Textbox_AirportLibraryQNH", "900", "1100", "1", "900~1100");
+							break;
+						case "InchOfMercury":
+							ChangeNumberTextbox("Textbox_AirportLibraryQNH", "26.58", "32.48", "0.01", "26.58~32.48");
+							break;
+						default:
+							AlertSystemError("The value of Subsystem.I18n.PressureUnit \"" + Subsystem.I18n.PressureUnit + "\" in function RefreshSubsystem is invalid.");
+							break;
+					}
+					ChangeText("Label_AirportLibraryQNHUnit", Translate(Subsystem.I18n.PressureUnit));
 
 			// Dev
 			ChangeChecked("Checkbox_SettingsVideoFootageMode", Subsystem.Dev.VideoFootageMode);
@@ -1033,7 +938,7 @@
 	function ClockPFD() {
 		// Automation
 		clearTimeout(Automation.ClockPFD);
-		Automation.ClockPFD = setTimeout(ClockPFD, 20);
+		Automation.ClockPFD = setTimeout(ClockPFD, Automation.ClockRate);
 
 		// Update essentials
 		PFD0.Stats.ClockTime = Date.now();
@@ -1123,6 +1028,25 @@
 			}
 		}
 		function RefreshPFDData() {
+			// Initialization
+			let ActiveAirport = 0, GroundAltitude = 0;
+			switch(PFD.FlightMode.FlightMode) {
+				case "DepartureGround":
+				case "TakeOff":
+				case "EmergencyReturn":
+					ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.Selection.Departure]);
+					break;
+				case "Cruise":
+				case "Land":
+				case "ArrivalGround":
+					ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.Selection.Arrival]);
+					break;
+				default:
+					AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
+					break;
+			}
+			GroundAltitude = ActiveAirport.Elevation + PFD.Altitude.SeatHeight;
+
 			// Attitude
 			if(PFD.Attitude.IsEnabled == true) {
 				switch(true) {
@@ -1168,7 +1092,7 @@
 				// Additional indicators
 					// Altitude trend
 					PFD0.Stats.Altitude.Trend = (PFD0.Stats.Altitude.TapeDisplay - PFD0.Stats.Altitude.PreviousTapeDisplay) * (6000 / Math.max(PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime, 1)); // (1) Altitude trend shows target altitude in 6 sec. (2) If refreshed too frequently, the divisor may become zero. So "Math.max" is applied here.
-					PFD0.Stats.Altitude.TrendDisplay += (PFD0.Stats.Altitude.Trend - PFD0.Stats.Altitude.TrendDisplay) / 5;
+					PFD0.Stats.Altitude.TrendDisplay += (PFD0.Stats.Altitude.Trend - PFD0.Stats.Altitude.TrendDisplay) / 50;
 					PFD0.Stats.Speed.Vertical = PFD0.Stats.Altitude.TrendDisplay / 6;
 
 				// Balloon
@@ -1249,25 +1173,9 @@
 				PFD0.Stats.Speed.TASDisplay += (PFD0.Stats.Speed.TAS - PFD0.Stats.Speed.TASDisplay) / 50 * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 30);
 
 				// IAS
-				switch(PFD.FlightMode.FlightMode) {
-					case "DepartureGround":
-					case "TakeOff":
-					case "EmergencyReturn":
-						PFD0.Stats.Speed.IAS = CalcIAS(PFD.Speed.IASAlgorithm, PFD0.Stats.Speed.TAS, PFD0.Stats.Altitude.TapeDisplay,
-							PFD.Altitude.AirportElevation.Departure, PFD.Speed.AirportTemperature.Departure, PFD.Speed.RelativeHumidity.Departure, PFD.Speed.QNH.Departure,
-							PFD.Attitude.IsEnabled, Math.abs(PFD0.Stats.Attitude.Pitch - PFD0.Stats.Speed.Pitch));
-						break;
-					case "Cruise":
-					case "Land":
-					case "ArrivalGround":
-						PFD0.Stats.Speed.IAS = CalcIAS(PFD.Speed.IASAlgorithm, PFD0.Stats.Speed.TAS, PFD0.Stats.Altitude.TapeDisplay,
-							PFD.Altitude.AirportElevation.Arrival, PFD.Speed.AirportTemperature.Arrival, PFD.Speed.RelativeHumidity.Arrival, PFD.Speed.QNH.Arrival,
-							PFD.Attitude.IsEnabled, Math.abs(PFD0.Stats.Attitude.Pitch - PFD0.Stats.Speed.Pitch));
-						break;
-					default:
-						AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
-						break;
-				}
+				PFD0.Stats.Speed.IAS = CalcIAS(PFD.Speed.IASAlgorithm, PFD0.Stats.Speed.TAS, PFD0.Stats.Altitude.TapeDisplay,
+					GroundAltitude, ActiveAirport.Temperature, ActiveAirport.RelativeHumidity, ActiveAirport.QNH,
+					PFD.Attitude.IsEnabled, Math.abs(PFD0.Stats.Attitude.Pitch - PFD0.Stats.Speed.Pitch));
 					// Tape
 					PFD0.Stats.Speed.TapeDisplay += (PFD0.Stats.Speed.IAS - PFD0.Stats.Speed.TapeDisplay) / 50 * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 30);
 					PFD0.Stats.Speed.TapeDisplay = CheckRangeAndCorrect(PFD0.Stats.Speed.TapeDisplay, 0, 277.5);
@@ -1275,7 +1183,7 @@
 					// Additional indicators
 						// Speed trend
 						PFD0.Stats.Speed.Trend = (PFD0.Stats.Speed.TapeDisplay - PFD0.Stats.Speed.PreviousTapeDisplay) * (10000 / Math.max(PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime, 1)); // Speed trend shows target speed in 10 sec.
-						PFD0.Stats.Speed.TrendDisplay += (PFD0.Stats.Speed.Trend - PFD0.Stats.Speed.TrendDisplay) / 5;
+						PFD0.Stats.Speed.TrendDisplay += (PFD0.Stats.Speed.Trend - PFD0.Stats.Speed.TrendDisplay) / 50;
 
 						// Avg IAS
 						PFD0.Stats.Speed.AvgIASDisplay += (PFD0.Stats.Speed.AvgIAS - PFD0.Stats.Speed.AvgIASDisplay) / 50 * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 30);
@@ -1293,69 +1201,25 @@
 					}
 
 				// Mach number
-				switch(PFD.FlightMode.FlightMode) {
-					case "DepartureGround":
-					case "TakeOff":
-					case "EmergencyReturn":
-						PFD0.Stats.Speed.MachNumber = CalcMachNumber(PFD0.Stats.Speed.TASDisplay, PFD0.Stats.Altitude.TapeDisplay, PFD.Altitude.AirportElevation.Departure, PFD.Speed.AirportTemperature.Departure);
-						break;
-					case "Cruise":
-					case "Land":
-					case "ArrivalGround":
-						PFD0.Stats.Speed.MachNumber = CalcMachNumber(PFD0.Stats.Speed.TASDisplay, PFD0.Stats.Altitude.TapeDisplay, PFD.Altitude.AirportElevation.Arrival, PFD.Speed.AirportTemperature.Arrival);
-						break;
-					default:
-						AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
-						break;
-				}
+				PFD0.Stats.Speed.MachNumber = CalcMachNumber(PFD0.Stats.Speed.TASDisplay, PFD0.Stats.Altitude.TapeDisplay, GroundAltitude, ActiveAirport.Temperature);
 
 			// MCP
 				// Speed
-				switch(PFD.FlightMode.FlightMode) {
-					case "DepartureGround":
-					case "TakeOff":
-					case "EmergencyReturn":
-						switch(PFD.MCP.Speed.Mode) {
-							case "IAS":
-								PFD.MCP.Speed.MachNumber = CheckRangeAndCorrect(
-									CalcMCPMachNumberFromIAS(PFD.Speed.IASAlgorithm, PFD.MCP.Speed.IAS, PFD0.Stats.Altitude.TapeDisplay,
-									PFD.Altitude.AirportElevation.Departure, PFD.Speed.AirportTemperature.Departure, PFD.Speed.RelativeHumidity.Departure, PFD.Speed.QNH.Departure),
-									0, 0.999);
-								break;
-							case "MachNumber":
-								PFD.MCP.Speed.IAS = CheckRangeAndCorrect(
-									CalcMCPIASFromMachNumber(PFD.Speed.IASAlgorithm, PFD.MCP.Speed.MachNumber, PFD0.Stats.Altitude.TapeDisplay,
-									PFD.Altitude.AirportElevation.Departure, PFD.Speed.AirportTemperature.Departure, PFD.Speed.RelativeHumidity.Departure, PFD.Speed.QNH.Departure),
-									0, 277.5);
-								break;
-							default:
-								AlertSystemError("The value of PFD.MCP.Speed.Mode \"" + PFD.MCP.Speed.Mode + "\" in function RefreshPFDData is invalid.");
-								break;
-						}
+				switch(PFD.MCP.Speed.Mode) {
+					case "IAS":
+						PFD.MCP.Speed.MachNumber = CheckRangeAndCorrect(
+							CalcMCPMachNumberFromIAS(PFD.Speed.IASAlgorithm, PFD.MCP.Speed.IAS, PFD0.Stats.Altitude.TapeDisplay,
+							GroundAltitude, ActiveAirport.Temperature, ActiveAirport.RelativeHumidity, ActiveAirport.QNH),
+							0, 0.999);
 						break;
-					case "Cruise":
-					case "Land":
-					case "ArrivalGround":
-						switch(PFD.MCP.Speed.Mode) {
-							case "IAS":
-								PFD.MCP.Speed.MachNumber = CheckRangeAndCorrect(
-									CalcMCPMachNumberFromIAS(PFD.Speed.IASAlgorithm, PFD.MCP.Speed.IAS, PFD0.Stats.Altitude.TapeDisplay,
-									PFD.Altitude.AirportElevation.Arrival, PFD.Speed.AirportTemperature.Arrival, PFD.Speed.RelativeHumidity.Arrival, PFD.Speed.QNH.Arrival),
-									0, 0.999);
-								break;
-							case "MachNumber":
-								PFD.MCP.Speed.IAS = CheckRangeAndCorrect(
-									CalcMCPIASFromMachNumber(PFD.Speed.IASAlgorithm, PFD.MCP.Speed.MachNumber, PFD0.Stats.Altitude.TapeDisplay,
-									PFD.Altitude.AirportElevation.Arrival, PFD.Speed.AirportTemperature.Arrival, PFD.Speed.RelativeHumidity.Arrival, PFD.Speed.QNH.Arrival),
-									0, 277.5);
-								break;
-							default:
-								AlertSystemError("The value of PFD.MCP.Speed.Mode \"" + PFD.MCP.Speed.Mode + "\" in function RefreshPFDData is invalid.");
-								break;
-						}
+					case "MachNumber":
+						PFD.MCP.Speed.IAS = CheckRangeAndCorrect(
+							CalcMCPIASFromMachNumber(PFD.Speed.IASAlgorithm, PFD.MCP.Speed.MachNumber, PFD0.Stats.Altitude.TapeDisplay,
+							GroundAltitude, ActiveAirport.Temperature, ActiveAirport.RelativeHumidity, ActiveAirport.QNH),
+							0, 277.5);
 						break;
 					default:
-						AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
+						AlertSystemError("The value of PFD.MCP.Speed.Mode \"" + PFD.MCP.Speed.Mode + "\" in function RefreshPFDData is invalid.");
 						break;
 				}
 
@@ -1366,23 +1230,8 @@
 				PFD0.Stats.Nav.Lon = PFD0.RawData.GPS.Position.Lon;
 
 				// Distance and bearing
-				switch(PFD.FlightMode.FlightMode) {
-					case "DepartureGround":
-					case "TakeOff":
-					case "EmergencyReturn":
-						PFD0.Stats.Nav.Distance = CalcDistance(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon, PFD.Nav.AirportCoordinates.Departure.Lat, PFD.Nav.AirportCoordinates.Departure.Lon);
-						PFD0.Stats.Nav.Bearing = CalcBearing(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon, PFD.Nav.AirportCoordinates.Departure.Lat, PFD.Nav.AirportCoordinates.Departure.Lon);
-						break;
-					case "Cruise":
-					case "Land":
-					case "ArrivalGround":
-						PFD0.Stats.Nav.Distance = CalcDistance(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon, PFD.Nav.AirportCoordinates.Arrival.Lat, PFD.Nav.AirportCoordinates.Arrival.Lon);
-						PFD0.Stats.Nav.Bearing = CalcBearing(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon, PFD.Nav.AirportCoordinates.Arrival.Lat, PFD.Nav.AirportCoordinates.Arrival.Lon);
-						break;
-					default:
-						AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
-						break;
-				}
+				PFD0.Stats.Nav.Distance = CalcDistance(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon, ActiveAirport.Coordinates.Lat, ActiveAirport.Coordinates.Lon);
+				PFD0.Stats.Nav.Bearing = CalcBearing(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon, ActiveAirport.Coordinates.Lat, ActiveAirport.Coordinates.Lon);
 
 				// DME
 				switch(PFD.Nav.ETACalcMethod) {
@@ -1406,42 +1255,32 @@
 
 				// Glide slope
 				if(PFD0.Stats.Nav.Distance > 0) {
-					PFD0.Stats.Nav.GlideSlopeDeviation = RadToDeg(Math.atan(PFD0.Stats.Altitude.RadioDisplay / PFD0.Stats.Nav.Distance)) - PFD.Nav.GlideSlopeAngle;
+					PFD0.Stats.Nav.GlideSlopeDeviation = RadToDeg(Math.atan(PFD0.Stats.Altitude.RadioDisplay / PFD0.Stats.Nav.Distance)) - ActiveAirport.GlideSlopeAngle;
 				} else {
-					PFD0.Stats.Nav.GlideSlopeDeviation = -PFD.Nav.GlideSlopeAngle;
+					PFD0.Stats.Nav.GlideSlopeDeviation = -ActiveAirport.GlideSlopeAngle;
 				}
 
 				// Marker beacon
 				PFD0.Stats.Nav.MarkerBeacon = "";
 				if(Math.abs(PFD0.Stats.Nav.LocalizerDeviation) <= 2) {
-					if(Math.abs(PFD0.Stats.Nav.Distance - PFD.Nav.MarkerBeaconDistance.OuterMarker) < PFD0.Stats.Altitude.RadioDisplay / 3) {
-						PFD0.Stats.Nav.MarkerBeacon = "OuterMarker";
-					}
-					if(Math.abs(PFD0.Stats.Nav.Distance - PFD.Nav.MarkerBeaconDistance.MiddleMarker) < PFD0.Stats.Altitude.RadioDisplay / 3) {
-						PFD0.Stats.Nav.MarkerBeacon = "MiddleMarker";
-					}
-					if(Math.abs(PFD0.Stats.Nav.Distance - PFD.Nav.MarkerBeaconDistance.InnerMarker) < PFD0.Stats.Altitude.RadioDisplay / 3) {
-						PFD0.Stats.Nav.MarkerBeacon = "InnerMarker";
+					switch(true) {
+						case Math.abs(PFD0.Stats.Nav.Distance - ActiveAirport.MarkerBeaconDistance.Outer) < PFD0.Stats.Altitude.RadioDisplay / 3:
+							PFD0.Stats.Nav.MarkerBeacon = "OuterMarker";
+							break;
+						case Math.abs(PFD0.Stats.Nav.Distance - ActiveAirport.MarkerBeaconDistance.Middle) < PFD0.Stats.Altitude.RadioDisplay / 3:
+							PFD0.Stats.Nav.MarkerBeacon = "MiddleMarker";
+							break;
+						case Math.abs(PFD0.Stats.Nav.Distance - ActiveAirport.MarkerBeaconDistance.Inner) < PFD0.Stats.Altitude.RadioDisplay / 3:
+							PFD0.Stats.Nav.MarkerBeacon = "InnerMarker";
+							break;
+						default:
+							break;
 					}
 				}
 			}
 
 			// Radio altitude
-			switch(PFD.FlightMode.FlightMode) {
-				case "DepartureGround":
-				case "TakeOff":
-				case "EmergencyReturn":
-					PFD0.Stats.Altitude.RadioDisplay = PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Departure;
-					break;
-				case "Cruise":
-				case "Land":
-				case "ArrivalGround":
-					PFD0.Stats.Altitude.RadioDisplay = PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Arrival;
-					break;
-				default:
-					AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
-					break;
-			}
+			PFD0.Stats.Altitude.RadioDisplay = PFD0.Stats.Altitude.TapeDisplay - GroundAltitude;
 
 			// Decision altitude
 			switch(PFD.FlightMode.FlightMode) {
@@ -1452,17 +1291,10 @@
 					PFD0.Status.IsDecisionAltitudeActive = false;
 					break;
 				case "Land":
-					if(PFD0.Stats.Altitude.TapeDisplay <= PFD.Altitude.AirportElevation.Arrival + PFD.Altitude.DecisionHeight) {
-						PFD0.Status.IsDecisionAltitudeActive = true;
-						if(PFD0.Stats.Altitude.PreviousTapeDisplay > PFD.Altitude.AirportElevation.Arrival + PFD.Altitude.DecisionHeight) {
-							PFD0.Stats.Altitude.DecisionTimestamp = PFD0.Stats.ClockTime;
-						}
-					}
-					break;
 				case "EmergencyReturn":
-					if(PFD0.Stats.Altitude.TapeDisplay <= PFD.Altitude.AirportElevation.Departure + PFD.Altitude.DecisionHeight) {
+					if(PFD0.Stats.Altitude.TapeDisplay <= GroundAltitude + ActiveAirport.DecisionHeight) {
 						PFD0.Status.IsDecisionAltitudeActive = true;
-						if(PFD0.Stats.Altitude.PreviousTapeDisplay > PFD.Altitude.AirportElevation.Departure + PFD.Altitude.DecisionHeight) {
+						if(PFD0.Stats.Altitude.PreviousTapeDisplay > GroundAltitude + ActiveAirport.DecisionHeight) {
 							PFD0.Stats.Altitude.DecisionTimestamp = PFD0.Stats.ClockTime;
 						}
 					}
@@ -1473,36 +1305,36 @@
 			}
 
 			// Flight mode auto switch & airport data auto swap
-			if(PFD.FlightMode.AutoSwitchFlightModeAndSwapAirportData == true) {
+			if(PFD.FlightMode.AutoSwitchFlightModeAndSwapAirports == true) {
 				switch(PFD.FlightMode.FlightMode) {
 					case "DepartureGround":
-						if(PFD0.Stats.Speed.TapeDisplay >= 41.152 &&
-						PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Departure >= 9.144 &&
-						PFD0.Stats.Altitude.PreviousTapeDisplay - PFD.Altitude.AirportElevation.Departure < 9.144) {
+						if(PFD0.Stats.Speed.TapeDisplay >= PFD.Speed.TakeOff.VR &&
+						PFD0.Stats.Altitude.TapeDisplay - GroundAltitude >= 9.144 &&
+						PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude < 9.144) {
 							PFD.FlightMode.FlightMode = "TakeOff";
 							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
 							setTimeout(RefreshPFD, 0);
 						}
 						break;
 					case "TakeOff":
-						if(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Departure >= 914.4 &&
-						PFD0.Stats.Altitude.PreviousTapeDisplay - PFD.Altitude.AirportElevation.Departure < 914.4) {
+						if(PFD0.Stats.Altitude.TapeDisplay - GroundAltitude >= 914.4 &&
+						PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude < 914.4) {
 							PFD.FlightMode.FlightMode = "Cruise";
 							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
 							setTimeout(RefreshPFD, 0);
 						}
 						break;
 					case "Cruise":
-						if(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Arrival <= 914.4 &&
-						PFD0.Stats.Altitude.PreviousTapeDisplay - PFD.Altitude.AirportElevation.Arrival > 914.4) {
+						if(PFD0.Stats.Altitude.TapeDisplay - GroundAltitude <= 914.4 &&
+						PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude > 914.4) {
 							PFD.FlightMode.FlightMode = "Land";
 							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
 							setTimeout(RefreshPFD, 0);
 						}
 						break;
 					case "Land":
-						if(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Arrival <= 9.144 &&
-						PFD0.Stats.Altitude.PreviousTapeDisplay - PFD.Altitude.AirportElevation.Arrival > 9.144) {
+						if(PFD0.Stats.Altitude.TapeDisplay - GroundAltitude <= 9.144 &&
+						PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude > 9.144) {
 							PFD.FlightMode.FlightMode = "ArrivalGround";
 							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
 							setTimeout(RefreshPFD, 0);
@@ -1511,18 +1343,14 @@
 					case "ArrivalGround":
 						if(PFD0.Stats.Speed.TapeDisplay <= 2.572 && PFD0.Stats.Speed.PreviousTapeDisplay > 2.572) {
 							PFD.FlightMode.FlightMode = "DepartureGround";
-							SwapAirportTemperatures();
-							SwapRelativeHumidity();
-							SwapQNHs();
-							SwapAirportElevations();
-							SwapAirportCoordinates();
+							SwapAirports();
 							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
 							setTimeout(RefreshPFD, 0);
 						}
 						break;
 					case "EmergencyReturn":
-						if(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Departure <= 9.144 &&
-						PFD0.Stats.Altitude.PreviousTapeDisplay - PFD.Altitude.AirportElevation.Departure > 9.144) {
+						if(PFD0.Stats.Altitude.TapeDisplay - GroundAltitude <= 9.144 &&
+						PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude > 9.144) {
 							PFD.FlightMode.FlightMode = "DepartureGround";
 							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
 							setTimeout(RefreshPFD, 0);
@@ -1537,147 +1365,138 @@
 			// Alerts
 				// Initialize
 				PFD0.Alert.Active = {
-					AttitudeWarning: "", SpeedCallout: "", SpeedWarning: "", AltitudeCallout: "", AltitudeWarning: ""
+					SpeedCallout: "", AltitudeCallout: "", AttitudeWarning: "", SpeedWarning: "", AltitudeWarning: ""
 				};
 
-				// Attitude warning
-				if(PFD.Attitude.IsEnabled == true) {
-					if((PFD.Attitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-					PFD.Attitude.Mode == "Manual") {
-						if(IsExcessiveBankAngle() == true) {
-							PFD0.Alert.Active.AttitudeWarning = "BankAngle";
+				// Callouts
+					// Speed callout
+					if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
+					(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
+					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					PFD.Speed.Mode == "Manual") {
+						if(IsV1() == true) {
+							PFD0.Alert.Active.SpeedCallout = "V1";
 						}
 					}
-				}
 
-				// Speed callout
-				if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-				(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
-				PFD.Speed.Mode == "Manual") {
-					if(IsV1() == true) {
-						PFD0.Alert.Active.SpeedCallout = "V1";
-					}
-				}
-
-				// Speed warning
-				if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-				(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
-				PFD.Speed.Mode == "Manual") {
-					if(IsAirspeedLow() == true) {
-						PFD0.Alert.Active.SpeedWarning = "AirspeedLow";
-					}
-					if(IsOverspeed() == true) {
-						PFD0.Alert.Active.SpeedWarning = "Overspeed";
-					}
-				}
-
-				// Altitude callout
-				if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-				(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
-				PFD.Altitude.Mode == "Manual") {
-					if(IsMCPAltitudeReached() == true) {
-						PFD0.Alert.Active.AltitudeCallout = "AltitudeBeep";
-					}
-					switch(PFD.FlightMode.FlightMode) {
-						case "Land":
-						case "ArrivalGround":
-						case "EmergencyReturn":
-							let ConvertedRadioAltitude = 0, ConvertedPreviousRadioAltitude = 0, ConvertedDecisionHeight = 0;
-							switch(PFD.FlightMode.FlightMode) {
-								case "Land":
-								case "ArrivalGround":
-									ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Arrival, "Meter", Subsystem.I18n.AltitudeUnit);
-									ConvertedPreviousRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.PreviousTapeDisplay - PFD.Altitude.AirportElevation.Arrival, "Meter", Subsystem.I18n.AltitudeUnit);
-									break;
-								case "EmergencyReturn":
-									ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.AirportElevation.Departure, "Meter", Subsystem.I18n.AltitudeUnit);
-									ConvertedPreviousRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.PreviousTapeDisplay - PFD.Altitude.AirportElevation.Departure, "Meter", Subsystem.I18n.AltitudeUnit);
-									break;
-								default:
-									AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
-									break;
-							}
-							ConvertedDecisionHeight = ConvertUnit(PFD.Altitude.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit);
-							if(ConvertedRadioAltitude <= 2500 && ConvertedPreviousRadioAltitude > 2500) {
-								PFD0.Alert.Active.AltitudeCallout = "2500";
-							}
-							if(ConvertedRadioAltitude <= 1000 && ConvertedPreviousRadioAltitude > 1000) {
-								PFD0.Alert.Active.AltitudeCallout = "1000";
-							}
-							if(ConvertedRadioAltitude <= 500 && ConvertedPreviousRadioAltitude > 500) {
-								PFD0.Alert.Active.AltitudeCallout = "500";
-							}
-							if(ConvertedRadioAltitude <= 400 && ConvertedPreviousRadioAltitude > 400) {
-								PFD0.Alert.Active.AltitudeCallout = "400";
-							}
-							if(ConvertedRadioAltitude <= 300 && ConvertedPreviousRadioAltitude > 300) {
-								PFD0.Alert.Active.AltitudeCallout = "300";
-							}
-							if(ConvertedRadioAltitude <= 200 && ConvertedPreviousRadioAltitude > 200) {
-								PFD0.Alert.Active.AltitudeCallout = "200";
-							}
-							if(ConvertedRadioAltitude <= 100 && ConvertedPreviousRadioAltitude > 100) {
-								PFD0.Alert.Active.AltitudeCallout = "100";
-							}
-							if(ConvertedRadioAltitude <= 50 && ConvertedPreviousRadioAltitude > 50) {
-								PFD0.Alert.Active.AltitudeCallout = "50";
-							}
-							if(ConvertedRadioAltitude <= 40 && ConvertedPreviousRadioAltitude > 40) {
-								PFD0.Alert.Active.AltitudeCallout = "40";
-							}
-							if(ConvertedRadioAltitude <= 30 && ConvertedPreviousRadioAltitude > 30) {
-								PFD0.Alert.Active.AltitudeCallout = "30";
-							}
-							if(ConvertedRadioAltitude <= 20 && ConvertedPreviousRadioAltitude > 20) {
-								PFD0.Alert.Active.AltitudeCallout = "20";
-							}
-							if(ConvertedRadioAltitude <= 10 && ConvertedPreviousRadioAltitude > 10) {
-								PFD0.Alert.Active.AltitudeCallout = "10";
-							}
-							if(ConvertedRadioAltitude <= 5 && ConvertedPreviousRadioAltitude > 5) {
-								PFD0.Alert.Active.AltitudeCallout = "5";
-							}
-							if(ConvertedRadioAltitude <= (ConvertedDecisionHeight + 100) && ConvertedPreviousRadioAltitude > (ConvertedDecisionHeight + 100)) {
-								PFD0.Alert.Active.AltitudeCallout = "HundredAbove";
-							}
-							if(ConvertedRadioAltitude <= (ConvertedDecisionHeight + 80) && ConvertedPreviousRadioAltitude > (ConvertedDecisionHeight + 80)) {
-								PFD0.Alert.Active.AltitudeCallout = "ApproachingMinimums";
-							}
-							if(ConvertedRadioAltitude <= ConvertedDecisionHeight && ConvertedPreviousRadioAltitude > ConvertedDecisionHeight) {
-								PFD0.Alert.Active.AltitudeCallout = "Minimums";
-							}
-							break;
-						case "DepartureGround":
-						case "TakeOff":
-						case "Cruise":
-							break;
-						default:
-							AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
-							break;
-					}
-				}
-
-				// Altitude warning
-				if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-				(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
-				PFD.Altitude.Mode == "Manual") {
-					if(IsDontSink() == true) {
-						PFD0.Alert.Active.AltitudeWarning = "DontSink";
-					}
-					if(PFD.Nav.IsEnabled == true && PFD0.Status.GPS.IsPositionAvailable == true) {
-						if(IsExcessivelyBelowGlideSlope() == true) {
-							PFD0.Alert.Active.AltitudeWarning = "GlideSlope";
+					// Altitude callout
+					if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
+					(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
+					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					PFD.Altitude.Mode == "Manual") {
+						if(IsMCPAltitudeReached() == true) {
+							PFD0.Alert.Active.AltitudeCallout = "AltitudeBeep";
+						}
+						switch(PFD.FlightMode.FlightMode) {
+							case "Land":
+							case "ArrivalGround":
+							case "EmergencyReturn":
+								let ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.RadioDisplay, "Meter", Subsystem.I18n.AltitudeUnit),
+								ConvertedPreviousRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude, "Meter", Subsystem.I18n.AltitudeUnit),
+								ConvertedDecisionHeight = ConvertUnit(ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit);
+								if(ConvertedRadioAltitude <= 2500 && ConvertedPreviousRadioAltitude > 2500) {
+									PFD0.Alert.Active.AltitudeCallout = "2500";
+								}
+								if(ConvertedRadioAltitude <= 1000 && ConvertedPreviousRadioAltitude > 1000) {
+									PFD0.Alert.Active.AltitudeCallout = "1000";
+								}
+								if(ConvertedRadioAltitude <= 500 && ConvertedPreviousRadioAltitude > 500) {
+									PFD0.Alert.Active.AltitudeCallout = "500";
+								}
+								if(ConvertedRadioAltitude <= 400 && ConvertedPreviousRadioAltitude > 400) {
+									PFD0.Alert.Active.AltitudeCallout = "400";
+								}
+								if(ConvertedRadioAltitude <= 300 && ConvertedPreviousRadioAltitude > 300) {
+									PFD0.Alert.Active.AltitudeCallout = "300";
+								}
+								if(ConvertedRadioAltitude <= 200 && ConvertedPreviousRadioAltitude > 200) {
+									PFD0.Alert.Active.AltitudeCallout = "200";
+								}
+								if(ConvertedRadioAltitude <= 100 && ConvertedPreviousRadioAltitude > 100) {
+									PFD0.Alert.Active.AltitudeCallout = "100";
+								}
+								if(ConvertedRadioAltitude <= 50 && ConvertedPreviousRadioAltitude > 50) {
+									PFD0.Alert.Active.AltitudeCallout = "50";
+								}
+								if(ConvertedRadioAltitude <= 40 && ConvertedPreviousRadioAltitude > 40) {
+									PFD0.Alert.Active.AltitudeCallout = "40";
+								}
+								if(ConvertedRadioAltitude <= 30 && ConvertedPreviousRadioAltitude > 30) {
+									PFD0.Alert.Active.AltitudeCallout = "30";
+								}
+								if(ConvertedRadioAltitude <= 20 && ConvertedPreviousRadioAltitude > 20) {
+									PFD0.Alert.Active.AltitudeCallout = "20";
+								}
+								if(ConvertedRadioAltitude <= 10 && ConvertedPreviousRadioAltitude > 10) {
+									PFD0.Alert.Active.AltitudeCallout = "10";
+								}
+								if(ConvertedRadioAltitude <= 5 && ConvertedPreviousRadioAltitude > 5) {
+									PFD0.Alert.Active.AltitudeCallout = "5";
+								}
+								if(ConvertedRadioAltitude <= (ConvertedDecisionHeight + 100) && ConvertedPreviousRadioAltitude > (ConvertedDecisionHeight + 100)) {
+									PFD0.Alert.Active.AltitudeCallout = "HundredAbove";
+								}
+								if(ConvertedRadioAltitude <= (ConvertedDecisionHeight + 80) && ConvertedPreviousRadioAltitude > (ConvertedDecisionHeight + 80)) {
+									PFD0.Alert.Active.AltitudeCallout = "ApproachingMinimums";
+								}
+								if(ConvertedRadioAltitude <= ConvertedDecisionHeight && ConvertedPreviousRadioAltitude > ConvertedDecisionHeight) {
+									PFD0.Alert.Active.AltitudeCallout = "Minimums";
+								}
+								break;
+							case "DepartureGround":
+							case "TakeOff":
+							case "Cruise":
+								break;
+							default:
+								AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
+								break;
 						}
 					}
-					if(IsSinkRate() == true) {
-						PFD0.Alert.Active.AltitudeWarning = "SinkRate";
+
+				// Warnings
+				if(PFD.WarningSystem.IsEnabled == true) {
+					// Attitude warning
+					if(PFD.Attitude.IsEnabled == true) {
+						if((PFD.Attitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
+						PFD.Attitude.Mode == "Manual") {
+							if(IsExcessiveBankAngle() == true) {
+								PFD0.Alert.Active.AttitudeWarning = "BankAngle";
+							}
+						}
 					}
-					if(IsSinkRatePullUp() == true) {
-						PFD0.Alert.Active.AltitudeWarning = "PullUp";
+
+					// Speed warning
+					if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
+					(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
+					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					PFD.Speed.Mode == "Manual") {
+						if(IsAirspeedLow() == true) {
+							PFD0.Alert.Active.SpeedWarning = "AirspeedLow";
+						}
+						if(IsOverspeed() == true) {
+							PFD0.Alert.Active.SpeedWarning = "Overspeed";
+						}
+					}
+
+					// Altitude warning
+					if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
+					(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
+					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					PFD.Altitude.Mode == "Manual") {
+						if(IsDontSink() == true) {
+							PFD0.Alert.Active.AltitudeWarning = "DontSink";
+						}
+						if(PFD.Nav.IsEnabled == true && PFD0.Status.GPS.IsPositionAvailable == true) {
+							if(IsExcessivelyBelowGlideSlope() == true) {
+								PFD0.Alert.Active.AltitudeWarning = "GlideSlope";
+							}
+						}
+						if(IsSinkRate() == true) {
+							PFD0.Alert.Active.AltitudeWarning = "SinkRate";
+						}
+						if(IsSinkRatePullUp() == true) {
+							PFD0.Alert.Active.AltitudeWarning = "PullUp";
+						}
 					}
 				}
 		}
@@ -2060,6 +1879,7 @@
 
 	function RefreshPFD() {
 		// Call
+		RefreshAirportLibrary();
 		ClockPFD();
 
 		// PFD
@@ -2120,22 +1940,13 @@
 						case "IAS":
 							switch(Subsystem.I18n.SpeedUnit) {
 								case "KilometerPerHour":
-									ChangeMax("Textbox_PFDMCPSpeed", "999");
-									ChangeStep("Textbox_PFDMCPSpeed", "1");
-									ChangePlaceholder("Textbox_PFDMCPSpeed", "0~999");
-									ChangeTooltip("Textbox_PFDMCPSpeed", "0~999");
+									ChangeNumberTextbox("Textbox_PFDMCPSpeed", "0", "999", "1", "0~999");
 									break;
 								case "MilePerHour":
-									ChangeMax("Textbox_PFDMCPSpeed", "621");
-									ChangeStep("Textbox_PFDMCPSpeed", "1");
-									ChangePlaceholder("Textbox_PFDMCPSpeed", "0~621");
-									ChangeTooltip("Textbox_PFDMCPSpeed", "0~621");
+									ChangeNumberTextbox("Textbox_PFDMCPSpeed", "0", "621", "1", "0~621");
 									break;
 								case "Knot":
-									ChangeMax("Textbox_PFDMCPSpeed", "539");
-									ChangeStep("Textbox_PFDMCPSpeed", "1");
-									ChangePlaceholder("Textbox_PFDMCPSpeed", "0~539");
-									ChangeTooltip("Textbox_PFDMCPSpeed", "0~539");
+									ChangeNumberTextbox("Textbox_PFDMCPSpeed", "0", "539", "1", "0~539");
 									break;
 								default:
 									AlertSystemError("The value of Subsystem.I18n.SpeedUnit \"" + Subsystem.I18n.SpeedUnit + "\" in function RefreshPFD is invalid.");
@@ -2144,10 +1955,7 @@
 							ChangeValue("Textbox_PFDMCPSpeed", ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
 							break;
 						case "MachNumber":
-							ChangeMax("Textbox_PFDMCPSpeed", "0.999");
-							ChangeStep("Textbox_PFDMCPSpeed", "0.01");
-							ChangePlaceholder("Textbox_PFDMCPSpeed", "0~0.999");
-							ChangeTooltip("Textbox_PFDMCPSpeed", "0~0.999");
+							ChangeNumberTextbox("Textbox_PFDMCPSpeed", "0", "0.999", "0.01", "0~0.999");
 							ChangeValue("Textbox_PFDMCPSpeed", PFD.MCP.Speed.MachNumber.toFixed(3).replace("0.", "."));
 							break;
 						default:
@@ -2200,13 +2008,20 @@
 			ChangeChecked("Checkbox_SettingsEnableAttitudeIndicator", PFD.Attitude.IsEnabled);
 			if(PFD.Attitude.IsEnabled == true) {
 				Show("Ctrl_SettingsAttitudeMode");
-				Show("Label_SettingsAttitudeOffset");
-				Show("Label_SettingsAttitudeOffsetInfo");
-				Show("Ctrl_SettingsAttitudeOffsetPitch");
-				Show("Ctrl_SettingsAttitudeOffsetRoll");
 				ChangeValue("Combobox_SettingsAttitudeMode", PFD.Attitude.Mode);
-				ChangeValue("Textbox_SettingsAttitudeOffsetPitch", PFD.Attitude.Offset.Pitch);
-				ChangeValue("Textbox_SettingsAttitudeOffsetRoll", PFD.Attitude.Offset.Roll);
+				if(PFD.Attitude.Mode == "Manual") {
+					Show("Label_SettingsAttitudeOffset");
+					Show("Label_SettingsAttitudeOffsetInfo");
+					Show("Ctrl_SettingsAttitudeOffsetPitch");
+					Show("Ctrl_SettingsAttitudeOffsetRoll");
+					ChangeValue("Textbox_SettingsAttitudeOffsetPitch", PFD.Attitude.Offset.Pitch);
+					ChangeValue("Textbox_SettingsAttitudeOffsetRoll", PFD.Attitude.Offset.Roll);
+				} else {
+					Hide("Label_SettingsAttitudeOffset");
+					Hide("Label_SettingsAttitudeOffsetInfo");
+					Hide("Ctrl_SettingsAttitudeOffsetPitch");
+					Hide("Ctrl_SettingsAttitudeOffsetRoll");
+				}
 			} else {
 				Hide("Ctrl_SettingsAttitudeMode");
 				Hide("Label_SettingsAttitudeOffset");
@@ -2218,46 +2033,6 @@
 			// Speed
 			ChangeValue("Combobox_SettingsSpeedMode", PFD.Speed.Mode);
 			ChangeValue("Combobox_SettingsIASAlgorithm", PFD.Speed.IASAlgorithm);
-			ChangeValue("Textbox_SettingsAirportTemperatureDeparture", ConvertUnit(PFD.Speed.AirportTemperature.Departure, "Kelvin", Subsystem.I18n.TemperatureUnit).toFixed(0));
-			ChangeValue("Textbox_SettingsAirportTemperatureArrival", ConvertUnit(PFD.Speed.AirportTemperature.Arrival, "Kelvin", Subsystem.I18n.TemperatureUnit).toFixed(0));
-			if(PFD.Speed.AirportTemperature.Departure != PFD.Speed.AirportTemperature.Arrival) {
-				ChangeDisabled("Button_SettingsAirportTemperatureSwap", false);
-			} else {
-				ChangeDisabled("Button_SettingsAirportTemperatureSwap", true);
-			}
-			switch(PFD.Speed.IASAlgorithm) {
-				case "SimpleAlgorithm":
-				case "UseTASDirectly":
-					Hide("Ctrl_SettingsRelativeHumidity");
-					Hide("Ctrl_SettingsRelativeHumiditySwap");
-					Hide("Ctrl_SettingsQNH");
-					Hide("Ctrl_SettingsQNHSwap");
-					break;
-				case "AdvancedAlgorithmA":
-				case "AdvancedAlgorithmB":
-					Show("Ctrl_SettingsRelativeHumidity");
-					Show("Ctrl_SettingsRelativeHumiditySwap");
-					Show("Ctrl_SettingsQNH");
-					Show("Ctrl_SettingsQNHSwap");
-					ChangeValue("Textbox_SettingsRelativeHumidityDeparture", PFD.Speed.RelativeHumidity.Departure);
-					ChangeValue("Textbox_SettingsRelativeHumidityArrival", PFD.Speed.RelativeHumidity.Arrival);
-					if(PFD.Speed.RelativeHumidity.Departure != PFD.Speed.RelativeHumidity.Arrival) {
-						ChangeDisabled("Button_SettingsRelativeHumiditySwap", false);
-					} else {
-						ChangeDisabled("Button_SettingsRelativeHumiditySwap", true);
-					}
-					ChangeValue("Textbox_SettingsQNHDeparture", ConvertUnit(PFD.Speed.QNH.Departure, "Hectopascal", Subsystem.I18n.PressureUnit).toFixed(2));
-					ChangeValue("Textbox_SettingsQNHArrival", ConvertUnit(PFD.Speed.QNH.Arrival, "Hectopascal", Subsystem.I18n.PressureUnit).toFixed(2));
-					if(PFD.Speed.QNH.Departure != PFD.Speed.QNH.Arrival) {
-						ChangeDisabled("Button_SettingsQNHSwap", false);
-					} else {
-						ChangeDisabled("Button_SettingsQNHSwap", true);
-					}
-					break;
-				default:
-					AlertSystemError("The value of PFD.Speed.IASAlgorithm \"" + PFD.Speed.IASAlgorithm + "\" in function RefreshPFD is invalid.");
-					break;
-			}
 			ChangeValue("Textbox_SettingsWindDirection", PFD.Speed.Wind.Direction);
 			ChangeValue("Textbox_SettingsWindSpeed", ConvertUnit(PFD.Speed.Wind.Speed, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
 			ChangeValue("Textbox_SettingsV1", ConvertUnit(PFD.Speed.TakeOff.V1, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
@@ -2285,14 +2060,7 @@
 
 			// Altitude
 			ChangeValue("Combobox_SettingsAltitudeMode", PFD.Altitude.Mode);
-			ChangeValue("Textbox_SettingsAirportElevationDeparture", ConvertUnit(PFD.Altitude.AirportElevation.Departure, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0));
-			ChangeValue("Textbox_SettingsAirportElevationArrival", ConvertUnit(PFD.Altitude.AirportElevation.Arrival, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0));
-			if(PFD.Altitude.AirportElevation.Departure != PFD.Altitude.AirportElevation.Arrival) {
-				ChangeDisabled("Button_SettingsAirportElevationSwap", false);
-			} else {
-				ChangeDisabled("Button_SettingsAirportElevationSwap", true);
-			}
-			ChangeValue("Textbox_SettingsDecisionHeight", ConvertUnit(PFD.Altitude.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0));
+			ChangeValue("Textbox_SettingsSeatHeight", ConvertUnit(PFD.Altitude.SeatHeight, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0));
 
 			// Heading
 			ChangeValue("Combobox_SettingsHeadingMode", PFD.Heading.Mode);
@@ -2300,58 +2068,20 @@
 			// Nav
 			ChangeChecked("Checkbox_SettingsEnableNav", PFD.Nav.IsEnabled);
 			if(PFD.Nav.IsEnabled == true) {
-				Show("Label_SettingsAirportCoordinates");
-				Show("Label_SettingsAirportCoordinatesInfo");
-				Show("Ctrl_SettingsAirportCoordinatesDeparture");
-				Show("Ctrl_SettingsAirportCoordinatesArrival");
-				Show("Ctrl_SettingsAirportCoordinatesSwap");
-				Show("Ctrl_SettingsAirportCoordinatesApplyCurrentCoordinatesToDepartureAirport");
-				Show("Ctrl_SettingsAirportCoordinatesApplyCurrentCoordinatesToArrivalAirport");
 				Show("Label_SettingsETA");
 				Show("Ctrl_SettingsETACalcMethod");
-				Show("Label_SettingsGlideSlope");
-				Show("Ctrl_SettingsGlideSlopeAngle");
-				Show("Label_SettingsMarkerBeacons");
-				Show("Ctrl_SettingsOuterMarkerDistance");
-				Show("Ctrl_SettingsMiddleMarkerDistance");
-				Show("Ctrl_SettingsInnerMarkerDistance");
-				Show("Ctrl_SettingsSwitchDistanceUnit");
-				ChangeValue("Textbox_SettingsAirportCoordinatesDepartureLat", PFD.Nav.AirportCoordinates.Departure.Lat.toFixed(5));
-				ChangeValue("Textbox_SettingsAirportCoordinatesDepartureLon", PFD.Nav.AirportCoordinates.Departure.Lon.toFixed(5));
-				ChangeValue("Textbox_SettingsAirportCoordinatesArrivalLat", PFD.Nav.AirportCoordinates.Arrival.Lat.toFixed(5));
-				ChangeValue("Textbox_SettingsAirportCoordinatesArrivalLon", PFD.Nav.AirportCoordinates.Arrival.Lon.toFixed(5));
-				if(PFD.Nav.AirportCoordinates.Departure.Lat != PFD.Nav.AirportCoordinates.Arrival.Lat || PFD.Nav.AirportCoordinates.Departure.Lon != PFD.Nav.AirportCoordinates.Arrival.Lon) {
-					ChangeDisabled("Button_SettingsAirportCoordinatesSwap", false);
-				} else {
-					ChangeDisabled("Button_SettingsAirportCoordinatesSwap", true);
-				}
 				ChangeValue("Combobox_SettingsETACalcMethod", PFD.Nav.ETACalcMethod);
-				ChangeValue("Textbox_SettingsGlideSlopeAngle", PFD.Nav.GlideSlopeAngle.toFixed(2));
-				ChangeValue("Textbox_SettingsOuterMarkerDistance", ConvertUnit(PFD.Nav.MarkerBeaconDistance.OuterMarker, "Meter", Subsystem.I18n.DistanceUnit).toFixed(2));
-				ChangeValue("Textbox_SettingsMiddleMarkerDistance", ConvertUnit(PFD.Nav.MarkerBeaconDistance.MiddleMarker, "Meter", Subsystem.I18n.DistanceUnit).toFixed(2));
-				ChangeValue("Textbox_SettingsInnerMarkerDistance", ConvertUnit(PFD.Nav.MarkerBeaconDistance.InnerMarker, "Meter", Subsystem.I18n.DistanceUnit).toFixed(2));
 			} else {
-				Hide("Label_SettingsAirportCoordinates");
-				Hide("Label_SettingsAirportCoordinatesInfo");
-				Hide("Ctrl_SettingsAirportCoordinatesDeparture");
-				Hide("Ctrl_SettingsAirportCoordinatesArrival");
-				Hide("Ctrl_SettingsAirportCoordinatesSwap");
-				Hide("Ctrl_SettingsAirportCoordinatesApplyCurrentCoordinatesToDepartureAirport");
-				Hide("Ctrl_SettingsAirportCoordinatesApplyCurrentCoordinatesToArrivalAirport");
 				Hide("Label_SettingsETA");
 				Hide("Ctrl_SettingsETACalcMethod");
-				Hide("Label_SettingsGlideSlope");
-				Hide("Ctrl_SettingsGlideSlopeAngle");
-				Hide("Label_SettingsMarkerBeacons");
-				Hide("Ctrl_SettingsOuterMarkerDistance");
-				Hide("Ctrl_SettingsMiddleMarkerDistance");
-				Hide("Ctrl_SettingsInnerMarkerDistance");
-				Hide("Ctrl_SettingsSwitchDistanceUnit");
 			}
 
 			// Flight mode
 			ChangeValue("Combobox_SettingsFlightMode", PFD.FlightMode.FlightMode);
-			ChangeChecked("Checkbox_SettingsAutoSwitchFlightModeAndSwapAirportData", PFD.FlightMode.AutoSwitchFlightModeAndSwapAirportData);
+			ChangeChecked("Checkbox_SettingsAutoSwitchFlightModeAndSwapAirports", PFD.FlightMode.AutoSwitchFlightModeAndSwapAirports);
+
+			// Warning system
+			ChangeChecked("Checkbox_SettingsEnableWarningSystem", PFD.WarningSystem.IsEnabled);
 
 		// Save user data
 		localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
@@ -2534,7 +2264,7 @@
 	function ClockAvgSpeeds() {
 		// Automation
 		clearTimeout(Automation.ClockAvgSpeeds);
-		Automation.ClockAvgSpeeds = setTimeout(ClockAvgSpeeds, 20);
+		Automation.ClockAvgSpeeds = setTimeout(ClockAvgSpeeds, Automation.ClockRate);
 
 		// Main
 		if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
@@ -2545,6 +2275,90 @@
 			PFD0.Stats.Speed.AvgGS = (PFD0.Stats.Speed.AvgGS * (PFD0.Stats.Speed.SampleCount - 1) + PFD0.Stats.Speed.GS) / PFD0.Stats.Speed.SampleCount;
 			PFD0.Stats.Speed.AvgIAS = (PFD0.Stats.Speed.AvgIAS * (PFD0.Stats.Speed.SampleCount - 1) + PFD0.Stats.Speed.IAS) / PFD0.Stats.Speed.SampleCount;
 		}
+	}
+
+	// Airport library
+	function RefreshAirportLibrary() {
+		// Airports
+			// Generate list
+			ChangeText("CtrlGroup_AirportLibraryList", "");
+			for(let Looper = 1; Looper < AirportLibrary.Airport.length; Looper++) {
+				AddText("CtrlGroup_AirportLibraryList",
+					"<li class=\"Ctrl\" id=\"Ctrl_AirportLibraryAirport" + Looper + "\">" +
+					"	<label class=\"ListItemLabel\" id=\"Label_AirportLibraryAirport" + Looper + "\" for=\"Radiobtn_AirportLibraryAirport" + Looper + "Departure\">" +
+					"		<input class=\"Radiobtn\" id=\"Radiobtn_AirportLibraryAirport" + Looper + "Departure\" type=\"radio\" checked=\"false\" onchange=\"SetDepartureAirport(" + Looper + ")\" />" +
+					"		<input class=\"Radiobtn\" id=\"Radiobtn_AirportLibraryAirport" + Looper + "Arrival\" type=\"radio\" checked=\"false\" onchange=\"SetArrivalAirport(" + Looper + ")\" />" +
+					"		<span class=\"ListItemName\">" + ConvertEmptyName(AirportLibrary.Airport[Looper].Name) + "</span>" +
+					"	</label>" +
+					"	<button class=\"Button ShownAsLabel ListItemDuplicate\" onclick=\"DuplicateAirport(" + Looper + ")\" title=\"生成副本\" aria-label=\"生成副本\">" +
+					"		<svg class=\"Icon Smaller\" viewBox=\"0 0 16 16\" aria-hidden=\"true\">" +
+					"			<path d=\"M4 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1h1v1a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1v1z\"/>" +
+					"		</svg>" +
+					"	</button>" +
+					"	<button class=\"Button ShownAsLabel ListItemExport\" onclick=\"ExportAirport(" + Looper + ")\" title=\"导出\" aria-label=\"导出\">" +
+					"		<svg class=\"Icon Smaller\" viewBox=\"0 0 16 16\" aria-hidden=\"true\">" +
+					"			<path d=\"M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5\"/>" +
+					"			<path d=\"M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0z\"/>" +
+					"		</svg>" +
+					"	</button>" +
+					"	<button class=\"Button ShownAsLabel ListItemDelete\" id=\"Button_AirportLibraryAirport" + Looper + "Delete\" onclick=\"ConfirmDeleteAirport(" + Looper + ")\" title=\"删除...\" aria-label=\"删除...\">" +
+					"		<svg class=\"Icon Smaller\" viewBox=\"0 0 16 16\" aria-hidden=\"true\">" +
+					"			<path d=\"M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5\"/>" +
+					"		</svg>" +
+					"	</button>" +
+					"</li>");
+			}
+			if(AirportLibrary.Airport.length <= 1) {
+				AlertSystemError("The airport library is empty.");
+			}
+			if(AirportLibrary.Airport.length == 2) {
+				ChangeDisabled("Button_AirportLibraryAirport1Delete", true);
+			}
+
+			// Selection
+			for(let Looper = 1; Looper < AirportLibrary.Airport.length; Looper++) {
+				if(AirportLibrary.Selection.Departure == Looper) {
+					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Departure", true);
+					AddClass("Label_AirportLibraryAirport" + Looper, "Active");
+				} else {
+					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Departure", false);
+					RemoveClass("Label_AirportLibraryAirport" + Looper, "Active");
+				}
+				if(AirportLibrary.Selection.Arrival == Looper) {
+					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Arrival", true);
+				} else {
+					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Arrival", false);
+				}
+			}
+
+			// Filter
+			FilterAirportLibrary();
+
+		// Airport properties
+			// Basic properties
+			ChangeValue("Textbox_AirportLibraryName", AirportLibrary.Airport[AirportLibrary.Selection.Departure].Name);
+			ChangeValue("Textbox_AirportLibraryRegion", AirportLibrary.Airport[AirportLibrary.Selection.Departure].Region);
+			ChangeValue("Textbox_AirportLibraryCode", AirportLibrary.Airport[AirportLibrary.Selection.Departure].Code);
+
+			// Geography
+			ChangeValue("Textbox_AirportLibraryLat", AirportLibrary.Airport[AirportLibrary.Selection.Departure].Coordinates.Lat.toFixed(5));
+			ChangeValue("Textbox_AirportLibraryLon", AirportLibrary.Airport[AirportLibrary.Selection.Departure].Coordinates.Lon.toFixed(5));
+			ChangeValue("Textbox_AirportLibraryElevation", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].Elevation, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0));
+
+			// Weather
+			ChangeValue("Textbox_AirportLibraryTemperature", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].Temperature, "Kelvin", Subsystem.I18n.TemperatureUnit).toFixed(0));
+			ChangeValue("Textbox_AirportLibraryRelativeHumidity", AirportLibrary.Airport[AirportLibrary.Selection.Departure].RelativeHumidity);
+			ChangeValue("Textbox_AirportLibraryQNH", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].QNH, "Hectopascal", Subsystem.I18n.PressureUnit).toFixed(2));
+
+			// Final approach
+			ChangeValue("Textbox_AirportLibraryGlideSlopeAngle", AirportLibrary.Airport[AirportLibrary.Selection.Departure].GlideSlopeAngle.toFixed(2));
+			ChangeValue("Textbox_AirportLibraryOuterMarkerDistance", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Outer, "Meter", Subsystem.I18n.DistanceUnit).toFixed(2));
+			ChangeValue("Textbox_AirportLibraryMiddleMarkerDistance", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Middle, "Meter", Subsystem.I18n.DistanceUnit).toFixed(2));
+			ChangeValue("Textbox_AirportLibraryInnerMarkerDistance", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Inner, "Meter", Subsystem.I18n.DistanceUnit).toFixed(2));
+			ChangeValue("Textbox_AirportLibraryDecisionHeight", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0));
+
+		// Save user data
+		localStorage.setItem("GPSPFD_AirportLibrary", JSON.stringify(AirportLibrary));
 	}
 
 // Cmds
@@ -2733,6 +2547,264 @@
 				RefreshSubsystem();
 			}
 
+	// Airport library
+		// Filter
+		function FilterAirportLibrary() {
+			let Counter = 0, Counter2 = 0;
+			for(let Looper = 1; Looper < AirportLibrary.Airport.length; Looper++) {
+				if(AirportLibrary.Airport[Looper].Name.toLowerCase().includes(ReadValue("Textbox_AirportLibraryFilter").toLowerCase()) == true ||
+				AirportLibrary.Airport[Looper].Region.toLowerCase().includes(ReadValue("Textbox_AirportLibraryFilter").toLowerCase()) == true ||
+				AirportLibrary.Airport[Looper].Code.toLowerCase().includes(ReadValue("Textbox_AirportLibraryFilter").toLowerCase()) == true) {
+					Show("Ctrl_AirportLibraryAirport" + Looper);
+					Counter++;
+				} else {
+					Hide("Ctrl_AirportLibraryAirport" + Looper);
+				}
+				Counter2++;
+			}
+			ChangeText("Label_AirportLibraryItemCount", "显示 " + Counter + "/" + Counter2);
+		}
+
+		// Airports
+		function SetDepartureAirport(Number) {
+			AirportLibrary.Selection.Departure = Number;
+			RefreshPFD();
+		}
+		function SetArrivalAirport(Number) {
+			AirportLibrary.Selection.Arrival = Number;
+			RefreshPFD();
+		}
+		function DuplicateAirport(Number) {
+			AirportLibrary.Airport.splice(Number + 1, 0, structuredClone(AirportLibrary.Airport[Number]));
+			if(AirportLibrary.Selection.Departure > Number) {
+				AirportLibrary.Selection.Departure++;
+			}
+			if(AirportLibrary.Selection.Arrival > Number) {
+				AirportLibrary.Selection.Arrival++;
+			}
+			RefreshPFD();
+		}
+		function ExportAirport(Number) {
+			navigator.clipboard.writeText(JSON.stringify(AirportLibrary.Airport[Number]));
+			if(System.DontShowAgain.includes("GPSPFD_AirportLibrary_AirportExported") == false) {
+				ShowDialog("AirportLibrary_AirportExported",
+					"Info",
+					"已导出机场「" + AirportLibrary.Airport[Number].Name + "」至剪贴板。",
+					"不再弹窗提示", "", "", "确定");
+			} else {
+				ShowToast("已导出机场");
+			}
+		}
+		function ConfirmDeleteAirport(Number) {
+			Interaction.Deletion = Number;
+			ShowDialog("AirportLibrary_ConfirmDeleteAirport",
+				"Caution",
+				"您确认要删除机场「" + ConvertEmptyName(AirportLibrary.Airport[Number].Name) + "」？",
+				"", "", "删除", "取消");
+		}
+		function SwapAirports() {
+			let Swapper = AirportLibrary.Selection.Departure;
+			AirportLibrary.Selection.Departure = AirportLibrary.Selection.Arrival;
+			AirportLibrary.Selection.Arrival = Swapper;
+			RefreshPFD();
+		}
+		function NewAirport() {
+			AirportLibrary.Airport[AirportLibrary.Airport.length] = {
+				Name: "",
+				Region: "",
+				Code: "",
+				Coordinates: {
+					Lat: 0, Lon: 0
+				},
+				Elevation: 0,
+				Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
+				GlideSlopeAngle: 3,
+				MarkerBeaconDistance: {
+					Outer: 9260, Middle: 926, Inner: 185.2
+				},
+				DecisionHeight: 76.2
+			};
+			AirportLibrary.Selection.Departure = AirportLibrary.Airport.length - 1;
+			RefreshPFD();
+		}
+		function SortByName() {
+			for(let Looper = 1; Looper < AirportLibrary.Airport.length - 1; Looper++) {
+				for(let Looper2 = 1; Looper2 < AirportLibrary.Airport.length - 1; Looper2++) {
+					if(AirportLibrary.Airport[Looper2].Name > AirportLibrary.Airport[Looper2 + 1].Name) {
+						let Swapper = structuredClone(AirportLibrary.Airport[Looper2]);
+						AirportLibrary.Airport[Looper2] = structuredClone(AirportLibrary.Airport[Looper2 + 1]);
+						AirportLibrary.Airport[Looper2 + 1] = structuredClone(Swapper);
+						switch(true) {
+							case AirportLibrary.Selection.Departure == Looper2:
+								AirportLibrary.Selection.Departure++;
+								break;
+							case AirportLibrary.Selection.Departure == Looper2 + 1:
+								AirportLibrary.Selection.Departure--;
+								break;
+							default:
+								break;
+						}
+						switch(true) {
+							case AirportLibrary.Selection.Arrival == Looper2:
+								AirportLibrary.Selection.Arrival++;
+								break;
+							case AirportLibrary.Selection.Arrival == Looper2 + 1:
+								AirportLibrary.Selection.Arrival--;
+								break;
+							default:
+								break;
+						}
+					}
+				}
+			}
+			RefreshPFD();
+		}
+
+		// Airport properties
+			// Basic properties
+			function SetAirportName() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Name = ReadValue("Textbox_AirportLibraryName");
+				RefreshAirportLibrary();
+			}
+			function SetAirportRegion() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Region = ReadValue("Textbox_AirportLibraryRegion");
+				RefreshAirportLibrary();
+			}
+			function SetAirportCode() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Code = ReadValue("Textbox_AirportLibraryCode");
+				RefreshAirportLibrary();
+			}
+
+			// Geography
+			function SetAirportLat() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Coordinates.Lat = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryLat") * 100000) / 100000, -90, 90);
+				RefreshPFD();
+			}
+			function SetAirportLon() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Coordinates.Lon = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryLon") * 100000) / 100000, -180, 180);
+				RefreshPFD();
+			}
+			function ReplaceAirportCoordinatesWithCurrent() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Coordinates = {
+					Lat: CheckRangeAndCorrect(PFD0.Stats.Nav.Lat, -90, 90),
+					Lon: CheckRangeAndCorrect(PFD0.Stats.Nav.Lon, -180, 180)
+				};
+				RefreshPFD();
+			}
+			function SetAirportElevation() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Elevation = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryElevation")), Subsystem.I18n.AltitudeUnit, "Meter"), -500, 5000);
+				RefreshPFD();
+			}
+			function ReplaceAirportElevationWithCurrent() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Elevation = CheckRangeAndCorrect(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.SeatHeight, -500, 5000);
+				RefreshPFD();
+			}
+
+			// Weather
+			function SetAirportTemperature() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Temperature = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryTemperature")), Subsystem.I18n.TemperatureUnit, "Kelvin"), 223.15, 323.15);
+				RefreshPFD();
+			}
+			function SetAirportRelativeHumidity() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].RelativeHumidity = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryRelativeHumidity")), 0, 100);
+				RefreshPFD();
+			}
+			function SetAirportQNH() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].QNH = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryQNH") * 100) / 100, Subsystem.I18n.PressureUnit, "Hectopascal"), 900, 1100);
+				RefreshPFD();
+			}
+
+			// Final approach
+			function SetAirportGlideSlopeAngle() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].GlideSlopeAngle = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryGlideSlopeAngle") * 100) / 100, 0, 10);
+				RefreshPFD();
+			}
+			function SetAirportOuterMarkerDistance() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Outer = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryOuterMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 20000);
+				RefreshPFD();
+			}
+			function SetAirportMiddleMarkerDistance() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Middle = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryMiddleMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 20000);
+				RefreshPFD();
+			}
+			function SetAirportInnerMarkerDistance() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Inner = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryInnerMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 20000);
+				RefreshPFD();
+			}
+			function SetAirportDecisionHeight() {
+				AirportLibrary.Airport[AirportLibrary.Selection.Departure].DecisionHeight = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryDecisionHeight")), Subsystem.I18n.AltitudeUnit, "Meter"), 15, 750);
+				RefreshPFD();
+			}
+
+		// Management
+		function ImportAirportLibraryObjects() {
+			let Objects = ReadValue("Textbox_AirportLibraryImport").split("\n"), Counter = 0, Counter2 = 0;
+			for(let Looper = 0; Looper < Objects.length; Looper++) {
+				switch(true) {
+					// Airport
+					case Objects[Looper].startsWith("{\"Name\":") == true:
+						AirportLibrary.Airport[AirportLibrary.Airport.length] = JSON.parse(Objects[Looper]);
+						Counter++;
+						break;
+
+					// Whole airport library
+					case Objects[Looper].startsWith("{\"Selection\":{\"Departure\":") == true:
+						AirportLibrary = JSON.parse(Objects[Looper]);
+						Counter++;
+						break;
+
+					// Empty line
+					case Objects[Looper] == "":
+						break;
+
+					// Failed to import
+					default:
+						Counter2++;
+						break;
+				}
+			}
+			if(Counter > 0) {
+				if(Counter2 <= 0) {
+					ShowDialog("AirportLibrary_ObjectsImported",
+						"Info",
+						"成功导入" + Counter + "个对象。",
+						"", "", "", "确定");
+				} else {
+					ShowDialog("AirportLibrary_ObjectsImported",
+						"Info",
+						"成功导入" + Counter + "个对象。" + Counter2 + "个对象的 JSON 字符串不合法，无法导入。",
+						"", "", "", "确定");
+				}
+			} else {
+				if(ReadValue("Textbox_AirportLibraryImport") != "") {
+					ShowDialog("AirportLibrary_ImportFailed",
+						"Error",
+						"您键入的 JSON 字符串不合法。",
+						"", "", "", "确定");
+				} else {
+					ShowDialog("AirportLibrary_ImportFailed",
+						"Error",
+						"文本框为空。请先在文本框键入要导入的对象，然后再点击「导入」。",
+						"", "", "", "确定");
+				}
+			}
+			ChangeValue("Textbox_AirportLibraryImport", "");
+			RefreshPFD();
+		}
+		function ExportAirportLibrary() {
+			navigator.clipboard.writeText(JSON.stringify(AirportLibrary));
+			ShowDialog("AirportLibrary_AirportLibraryExported",
+				"Info",
+				"已导出机场库 (" + (AirportLibrary.Airport.length - 1) + "座机场) 至剪贴板。",
+				"", "", "", "确定");
+		}
+		function ConfirmResetAirportLibrary() {
+			ShowDialog("AirportLibrary_ConfirmResetAirportLibrary",
+				"Caution",
+				"您确认要重置机场库？",
+				"", "", "重置", "取消");
+		}
+
 	// Settings
 		// Attitude
 		function SetEnableAttitudeIndicator() {
@@ -2761,48 +2833,6 @@
 			PFD.Speed.IASAlgorithm = ReadValue("Combobox_SettingsIASAlgorithm");
 			RefreshPFD();
 		}
-		function SetAirportTemperatureDeparture() {
-			PFD.Speed.AirportTemperature.Departure = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsAirportTemperatureDeparture")), Subsystem.I18n.TemperatureUnit, "Kelvin"), 223.15, 323.15);
-			RefreshPFD();
-		}
-		function SetAirportTemperatureArrival() {
-			PFD.Speed.AirportTemperature.Arrival = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsAirportTemperatureArrival")), Subsystem.I18n.TemperatureUnit, "Kelvin"), 223.15, 323.15);
-			RefreshPFD();
-		}
-		function SwapAirportTemperatures() {
-			let Swapper = PFD.Speed.AirportTemperature.Departure;
-			PFD.Speed.AirportTemperature.Departure = PFD.Speed.AirportTemperature.Arrival;
-			PFD.Speed.AirportTemperature.Arrival = Swapper;
-			RefreshPFD();
-		}
-		function SetRelativeHumidityDeparture() {
-			PFD.Speed.RelativeHumidity.Departure = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsRelativeHumidityDeparture")), 0, 100);
-			RefreshPFD();
-		}
-		function SetRelativeHumidityArrival() {
-			PFD.Speed.RelativeHumidity.Arrival = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsRelativeHumidityArrival")), 0, 100);
-			RefreshPFD();
-		}
-		function SwapRelativeHumidity() {
-			let Swapper = PFD.Speed.RelativeHumidity.Departure;
-			PFD.Speed.RelativeHumidity.Departure = PFD.Speed.RelativeHumidity.Arrival;
-			PFD.Speed.RelativeHumidity.Arrival = Swapper;
-			RefreshPFD();
-		}
-		function SetQNHDeparture() {
-			PFD.Speed.QNH.Departure = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsQNHDeparture") * 100) / 100, Subsystem.I18n.PressureUnit, "Hectopascal"), 900, 1100);
-			RefreshPFD();
-		}
-		function SetQNHArrival() {
-			PFD.Speed.QNH.Arrival = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsQNHArrival") * 100) / 100, Subsystem.I18n.PressureUnit, "Hectopascal"), 900, 1100);
-			RefreshPFD();
-		}
-		function SwapQNHs() {
-			let Swapper = PFD.Speed.QNH.Departure;
-			PFD.Speed.QNH.Departure = PFD.Speed.QNH.Arrival;
-			PFD.Speed.QNH.Arrival = Swapper;
-			RefreshPFD();
-		}
 		function SetWindDirection() {
 			PFD.Speed.Wind.Direction = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsWindDirection")), 0, 359);
 			RefreshPFD();
@@ -2813,16 +2843,10 @@
 		}
 		function SetV1() {
 			PFD.Speed.TakeOff.V1 = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsV1")), Subsystem.I18n.SpeedUnit, "MeterPerSec"), 0, 277.5);
-			if(PFD.Speed.TakeOff.V1 > PFD.Speed.TakeOff.VR) {
-				PFD.Speed.TakeOff.VR = PFD.Speed.TakeOff.V1;
-			}
 			RefreshPFD();
 		}
 		function SetVR() {
 			PFD.Speed.TakeOff.VR = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsVR")), Subsystem.I18n.SpeedUnit, "MeterPerSec"), 0, 277.5);
-			if(PFD.Speed.TakeOff.VR < PFD.Speed.TakeOff.V1) {
-				PFD.Speed.TakeOff.V1 = PFD.Speed.TakeOff.VR;
-			}
 			RefreshPFD();
 		}
 		function SetSpeedLimitPreset() {
@@ -2889,30 +2913,8 @@
 			PFD.Altitude.Mode = ReadValue("Combobox_SettingsAltitudeMode");
 			RefreshPFD();
 		}
-		function SetAirportElevationDeparture() {
-			PFD.Altitude.AirportElevation.Departure = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsAirportElevationDeparture")), Subsystem.I18n.AltitudeUnit, "Meter"), -500, 5000);
-			RefreshPFD();
-		}
-		function SetAirportElevationArrival() {
-			PFD.Altitude.AirportElevation.Arrival = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsAirportElevationArrival")), Subsystem.I18n.AltitudeUnit, "Meter"), -500, 5000);
-			RefreshPFD();
-		}
-		function SwapAirportElevations() {
-			let Swapper = PFD.Altitude.AirportElevation.Departure;
-			PFD.Altitude.AirportElevation.Departure = PFD.Altitude.AirportElevation.Arrival;
-			PFD.Altitude.AirportElevation.Arrival = Swapper;
-			RefreshPFD();
-		}
-		function ApplyCurrentAltitudeToDepartureAirport() {
-			PFD.Altitude.AirportElevation.Departure = CheckRangeAndCorrect(PFD0.Stats.Altitude.TapeDisplay, -500, 5000);
-			RefreshPFD();
-		}
-		function ApplyCurrentAltitudeToArrivalAirport() {
-			PFD.Altitude.AirportElevation.Arrival = CheckRangeAndCorrect(PFD0.Stats.Altitude.TapeDisplay, -500, 5000);
-			RefreshPFD();
-		}
-		function SetDecisionHeight() {
-			PFD.Altitude.DecisionHeight = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsDecisionHeight")), Subsystem.I18n.AltitudeUnit, "Meter"), 15, 750);
+		function SetSeatHeight() {
+			PFD.Altitude.SeatHeight = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsSeatHeight")), Subsystem.I18n.AltitudeUnit, "Meter"), 0, 20);
 			RefreshPFD();
 		}
 
@@ -2927,58 +2929,8 @@
 			PFD.Nav.IsEnabled = IsChecked("Checkbox_SettingsEnableNav");
 			RefreshPFD();
 		}
-		function SetAirportCoordinatesDeparture() {
-			PFD.Nav.AirportCoordinates.Departure = {
-				Lat: CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsAirportCoordinatesDepartureLat") * 100000) / 100000, -90, 90),
-				Lon: CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsAirportCoordinatesDepartureLon") * 100000) / 100000, -180, 180)
-			};
-			RefreshPFD();
-		}
-		function SetAirportCoordinatesArrival() {
-			PFD.Nav.AirportCoordinates.Arrival = {
-				Lat: CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsAirportCoordinatesArrivalLat") * 100000) / 100000, -90, 90),
-				Lon: CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsAirportCoordinatesArrivalLon") * 100000) / 100000, -180, 180)
-			};
-			RefreshPFD();
-		}
-		function SwapAirportCoordinates() {
-			let Swapper = structuredClone(PFD.Nav.AirportCoordinates.Departure);
-			PFD.Nav.AirportCoordinates.Departure = structuredClone(PFD.Nav.AirportCoordinates.Arrival);
-			PFD.Nav.AirportCoordinates.Arrival = structuredClone(Swapper);
-			RefreshPFD();
-		}
-		function ApplyCurrentCoordinatesToDepartureAirport() {
-			PFD.Nav.AirportCoordinates.Departure = {
-				Lat: CheckRangeAndCorrect(PFD0.Stats.Nav.Lat, -90, 90),
-				Lon: CheckRangeAndCorrect(PFD0.Stats.Nav.Lon, -180, 180)
-			};
-			RefreshPFD();
-		}
-		function ApplyCurrentCoordinatesToArrivalAirport() {
-			PFD.Nav.AirportCoordinates.Arrival = {
-				Lat: CheckRangeAndCorrect(PFD0.Stats.Nav.Lat, -90, 90),
-				Lon: CheckRangeAndCorrect(PFD0.Stats.Nav.Lon, -180, 180)
-			};
-			RefreshPFD();
-		}
 		function SetETACalcMethod() {
 			PFD.Nav.ETACalcMethod = ReadValue("Combobox_SettingsETACalcMethod");
-			RefreshPFD();
-		}
-		function SetGlideSlopeAngle() {
-			PFD.Nav.GlideSlopeAngle = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsGlideSlopeAngle") * 100) / 100, 0, 10);
-			RefreshPFD();
-		}
-		function SetOuterMarkerDistance() {
-			PFD.Nav.MarkerBeaconDistance.OuterMarker = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsOuterMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 20000);
-			RefreshPFD();
-		}
-		function SetMiddleMarkerDistance() {
-			PFD.Nav.MarkerBeaconDistance.MiddleMarker = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsMiddleMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 20000);
-			RefreshPFD();
-		}
-		function SetInnerMarkerDistance() {
-			PFD.Nav.MarkerBeaconDistance.InnerMarker = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsInnerMarkerDistance") * 100) / 100, Subsystem.I18n.DistanceUnit, "Meter"), 0, 20000);
 			RefreshPFD();
 		}
 
@@ -2988,8 +2940,14 @@
 			PFD0.Stats.FlightModeTimestamp = Date.now();
 			RefreshPFD();
 		}
-		function SetAutoSwitchFlightModeAndSwapAirportData() {
-			PFD.FlightMode.AutoSwitchFlightModeAndSwapAirportData = IsChecked("Checkbox_SettingsAutoSwitchFlightModeAndSwapAirportData");
+		function SetAutoSwitchFlightModeAndSwapAirports() {
+			PFD.FlightMode.AutoSwitchFlightModeAndSwapAirports = IsChecked("Checkbox_SettingsAutoSwitchFlightModeAndSwapAirports");
+			RefreshPFD();
+		}
+
+		// Warning system
+		function SetEnableWarningSystem() {
+			PFD.WarningSystem.IsEnabled = IsChecked("Checkbox_SettingsEnableWarningSystem");
 			RefreshPFD();
 		}
 
@@ -3140,7 +3098,8 @@
 			navigator.clipboard.writeText("{" +
 				"\"System\":" + JSON.stringify(System) + "," +
 				"\"GPSPFD_Subsystem\":" + JSON.stringify(Subsystem) + "," +
-				"\"GPSPFD_PFD\":" + JSON.stringify(PFD) +
+				"\"GPSPFD_PFD\":" + JSON.stringify(PFD) + "," +
+				"\"GPSPFD_AirportLibrary\":" + JSON.stringify(AirportLibrary) +
 				"}");
 			ShowDialog("System_UserDataExported",
 				"Info",
@@ -3165,6 +3124,9 @@
 			case "System_RefreshingWebpage":
 			case "System_JSONStringInvalid":
 			case "System_UserDataExported":
+			case "AirportLibrary_ObjectsImported":
+			case "AirportLibrary_ImportFailed":
+			case "AirportLibrary_AirportLibraryExported":
 				switch(Selector) {
 					case 3:
 						break;
@@ -3227,9 +3189,53 @@
 						ShowIAmHere("Item_SettingsUserData");
 						break;
 					case 2:
-						Object.keys(Automation).forEach(function(SubobjectName) {
-							clearTimeout(Automation[SubobjectName]);
-						});
+						ForceStop();
+						break;
+					case 3:
+						break;
+					default:
+						AlertSystemError("The value of Selector \"" + Selector + "\" in function AnswerDialog is invalid.");
+						break;
+				}
+				break;
+			case "AirportLibrary_AirportExported":
+				switch(Selector) {
+					case 3:
+						if(IsChecked("Checkbox_DialogCheckboxOption") == true) {
+							System.DontShowAgain[System.DontShowAgain.length] = "GPSPFD_AirportLibrary_AirportExported";
+							RefreshSystem();
+						}
+						break;
+					default:
+						AlertSystemError("The value of Selector \"" + Selector + "\" in function AnswerDialog is invalid.");
+						break;
+				}
+				break;
+			case "AirportLibrary_ConfirmDeleteAirport":
+				switch(Selector) {
+					case 2:
+						if(AirportLibrary.Selection.Departure >= Interaction.Deletion && AirportLibrary.Selection.Departure > 1) {
+							AirportLibrary.Selection.Departure--;
+						}
+						if(AirportLibrary.Selection.Arrival >= Interaction.Deletion && AirportLibrary.Selection.Arrival > 1) {
+							AirportLibrary.Selection.Arrival--;
+						}
+						AirportLibrary.Airport.splice(Interaction.Deletion, 1);
+						Interaction.Deletion = 0;
+						RefreshPFD();
+						break;
+					case 3:
+						break;
+					default:
+						AlertSystemError("The value of Selector \"" + Selector + "\" in function AnswerDialog is invalid.");
+						break;
+				}
+				break;
+			case "AirportLibrary_ConfirmResetAirportLibrary":
+				switch(Selector) {
+					case 2:
+						localStorage.removeItem("GPSPFD_AirportLibrary");
+						RefreshWebpage();
 						break;
 					case 3:
 						break;
@@ -3592,6 +3598,13 @@
 
 // Features
 	// Converters
+	function ConvertEmptyName(Value) {
+		if(Value != "") {
+			return Value;
+		} else {
+			return "(未命名)";
+		}
+	}
 	function ConvertUnit(Value, InputUnit, OutputUnit) {
 		if(InputUnit != OutputUnit) {
 			switch(InputUnit) {
@@ -3974,12 +3987,6 @@
 				} else {
 					return "ALT";
 				}
-			case "MetricAltitude":
-				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
-					return "米";
-				} else {
-					return "M";
-				}
 			case "VerticalSpeedUnavailable":
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
 					return "垂直速度表不可用";
@@ -4092,7 +4099,7 @@
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
 					return "节";
 				} else {
-					return "KTS";
+					return "KT";
 				}
 			case "Kilometer":
 				return "公里";
@@ -4147,7 +4154,7 @@
 			case "Hectopascal":
 				return "百帕";
 			case "InchOfMercury":
-				return "<span class=\"SmallerText\">英寸<br />汞柱</span>";
+				return "英寸汞柱";
 			default:
 				AlertSystemError("The value of Value \"" + Value + "\" in function Translate is invalid.");
 				break;
@@ -4174,8 +4181,8 @@
 		}
 		return TAS;
 	}
-	function CalcOutsideAirTemperature(Altitude, AirportAltitude, AirportTemperature) { // Air temperature drops 2 Celsius for each 1000 feet. (https://aviation.stackexchange.com/a/44763)
-		return AirportTemperature - 2 * ((Altitude - AirportAltitude) / 304.8);
+	function CalcOutsideAirTemperature(Altitude, GroundAltitude, GroundTemperature) { // Air temperature drops 2 Celsius for each 1000 feet. (https://aviation.stackexchange.com/a/44763)
+		return GroundTemperature - 2 * ((Altitude - GroundAltitude) / 304.8);
 	}
 	function CalcOutsideAirPressure(Altitude, QNH, OutsideAirTemperature) { // https://www.omnicalculator.com/physics/air-pressure-at-altitude
 		return QNH * Math.pow(Math.E, (-9.80665 * 0.0289644 * Altitude) / (8.31432 * OutsideAirTemperature));
@@ -4189,20 +4196,20 @@
 		Calc2 = (WaterVaporPressure * 100) / (461.495 * OutsideAirTemperature);
 		return Calc + Calc2;
 	}
-	function CalcIAS(Algorithm, TAS, Altitude, AirportAltitude, AirportTemperature, RelativeHumidity, QNH, IsAttitudeConsidered, RelativePitch) { // https://aerotoolbox.com/airspeed-conversions/, https://aviation.stackexchange.com/a/25811
+	function CalcIAS(Algorithm, TAS, Altitude, GroundAltitude, GroundTemperature, RelativeHumidity, QNH, IsAttitudeConsidered, RelativePitch) { // https://aerotoolbox.com/airspeed-conversions/, https://aviation.stackexchange.com/a/25811
 		let OutsideAirTemperature = 0, OutsideAirPressure = 0, OutsideAirDensity = 0, IAS = 0;
 		switch(Algorithm) {
 			case "SimpleAlgorithm":
 				IAS = TAS / (1 + 0.02 * (Altitude / 304.8));
 				break;
 			case "AdvancedAlgorithmA":
-				OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, AirportAltitude, AirportTemperature);
+				OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, GroundAltitude, GroundTemperature);
 				OutsideAirPressure = CalcOutsideAirPressure(Altitude, QNH, OutsideAirTemperature);
 				OutsideAirDensity = CalcOutsideAirDensity(OutsideAirTemperature, OutsideAirPressure, RelativeHumidity);
 				IAS = TAS * Math.sqrt(OutsideAirDensity / 1.225);
 				break;
 			case "AdvancedAlgorithmB":
-				OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, AirportAltitude, AirportTemperature);
+				OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, GroundAltitude, GroundTemperature);
 				OutsideAirPressure = CalcOutsideAirPressure(Altitude, QNH, OutsideAirTemperature);
 				OutsideAirDensity = CalcOutsideAirDensity(OutsideAirTemperature, OutsideAirPressure, RelativeHumidity);
 				IAS = 340.3 * Math.sqrt(5 * (Math.pow(OutsideAirDensity / 2 * Math.pow(TAS, 2) / 101325 + 1, 2 / 7) - 1));
@@ -4223,33 +4230,33 @@
 			return IAS;
 		}
 	}
-	function CalcMachNumber(TAS, Altitude, AirportAltitude, AirportTemperature) {
+	function CalcMachNumber(TAS, Altitude, GroundAltitude, GroundTemperature) {
 		let OutsideAirTemperature = 0, SoundSpeed = 0;
-		OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, AirportAltitude, AirportTemperature);
+		OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, GroundAltitude, GroundTemperature);
 		SoundSpeed = 331.15 + 0.61 * ConvertUnit(OutsideAirTemperature, "Kelvin", "Celsius");
 		return TAS / SoundSpeed;
 	}
-	function CalcMCPIASFromMachNumber(IASAlgorithm, MachNumber, Altitude, AirportAltitude, AirportTemperature, RelativeHumidity, QNH) {
+	function CalcMCPIASFromMachNumber(IASAlgorithm, MachNumber, Altitude, GroundAltitude, GroundTemperature, RelativeHumidity, QNH) {
 		let OutsideAirTemperature = 0, SoundSpeed = 0, TAS = 0;
-		OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, AirportAltitude, AirportTemperature);
+		OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, GroundAltitude, GroundTemperature);
 		SoundSpeed = 331.15 + 0.61 * ConvertUnit(OutsideAirTemperature, "Kelvin", "Celsius");
 		TAS = SoundSpeed * MachNumber;
-		return CalcIAS(IASAlgorithm, TAS, Altitude, AirportAltitude, AirportTemperature, RelativeHumidity, QNH, false, null);
+		return CalcIAS(IASAlgorithm, TAS, Altitude, GroundAltitude, GroundTemperature, RelativeHumidity, QNH, false, null);
 	}
-	function CalcMCPMachNumberFromIAS(IASAlgorithm, IAS, Altitude, AirportAltitude, AirportTemperature, RelativeHumidity, QNH) {
+	function CalcMCPMachNumberFromIAS(IASAlgorithm, IAS, Altitude, GroundAltitude, GroundTemperature, RelativeHumidity, QNH) {
 		let OutsideAirTemperature = 0, OutsideAirPressure = 0, OutsideAirDensity = 0, TAS = 0;
 		switch(IASAlgorithm) {
 			case "SimpleAlgorithm":
 				TAS = IAS * (1 + 0.02 * (Altitude / 304.8));
 				break;
 			case "AdvancedAlgorithmA":
-				OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, AirportAltitude, AirportTemperature);
+				OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, GroundAltitude, GroundTemperature);
 				OutsideAirPressure = CalcOutsideAirPressure(Altitude, QNH, OutsideAirTemperature);
 				OutsideAirDensity = CalcOutsideAirDensity(OutsideAirTemperature, OutsideAirPressure, RelativeHumidity);
 				TAS = IAS / Math.sqrt(OutsideAirDensity / 1.225);
 				break;
 			case "AdvancedAlgorithmB":
-				OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, AirportAltitude, AirportTemperature);
+				OutsideAirTemperature = CalcOutsideAirTemperature(Altitude, GroundAltitude, GroundTemperature);
 				OutsideAirPressure = CalcOutsideAirPressure(Altitude, QNH, OutsideAirTemperature);
 				OutsideAirDensity = CalcOutsideAirDensity(OutsideAirTemperature, OutsideAirPressure, RelativeHumidity);
 				TAS = Math.sqrt((Math.pow(Math.pow(IAS / 340.3, 2) / 5 + 1, 7 / 2) - 1) / OutsideAirDensity * 2 * 101325);
@@ -4261,7 +4268,7 @@
 				AlertSystemError("The value of IASAlgorithm \"" + IASAlgorithm + "\" in function CalcMCPMachNumberFromIAS is invalid.");
 				break;
 		}
-		return CalcMachNumber(TAS, Altitude, AirportAltitude, AirportTemperature);
+		return CalcMachNumber(TAS, Altitude, GroundAltitude, GroundTemperature);
 	}
 	function CalcMaxSpeedLimit(MaxSpeedOnFlapsUp, MaxSpeedOnFlapsFull, FlapsPercentage) {
 		return MaxSpeedOnFlapsUp - (MaxSpeedOnFlapsUp - MaxSpeedOnFlapsFull) * (FlapsPercentage / 100);

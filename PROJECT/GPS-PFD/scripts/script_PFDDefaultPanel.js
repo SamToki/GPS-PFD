@@ -11,6 +11,25 @@
 		// Sub-functions
 			// Sub-functions
 			function RefreshDefaultPanel() {
+				// Initialization
+				let ActiveAirport = 0, GroundAltitude = 0;
+				switch(PFD.FlightMode.FlightMode) {
+					case "DepartureGround":
+					case "TakeOff":
+					case "EmergencyReturn":
+						ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.Selection.Departure]);
+						break;
+					case "Cruise":
+					case "Land":
+					case "ArrivalGround":
+						ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.Selection.Arrival]);
+						break;
+					default:
+						AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshDefaultPanel is invalid.");
+						break;
+				}
+				GroundAltitude = ActiveAirport.Elevation + PFD.Altitude.SeatHeight;
+
 				// Info bar
 				if(PFD0.Status.GPS.IsPositionAvailable == true) {
 					RemoveClass("Ctrl_PFDDefaultPanelGPS", "OrangeText");
@@ -34,9 +53,9 @@
 				(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
 				(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
 				PFD.Speed.Mode == "Manual") {
-					ChangeText("Label_PFDDefaultPanelGSValue", ConvertUnit(PFD0.Stats.Speed.GSDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
-					ChangeText("Label_PFDDefaultPanelAvgGSValue", ConvertUnit(PFD0.Stats.Speed.AvgGSDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
-					ChangeText("Label_PFDDefaultPanelTASValue", ConvertUnit(PFD0.Stats.Speed.TASDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
+					ChangeText("Label_PFDDefaultPanelGSValue", ConvertUnit(PFD0.Stats.Speed.GSDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.SpeedUnit + "OnPFD") + "</span>");
+					ChangeText("Label_PFDDefaultPanelAvgGSValue", ConvertUnit(PFD0.Stats.Speed.AvgGSDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.SpeedUnit + "OnPFD") + "</span>");
+					ChangeText("Label_PFDDefaultPanelTASValue", ConvertUnit(PFD0.Stats.Speed.TASDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.SpeedUnit + "OnPFD") + "</span>");
 				} else {
 					ChangeText("Label_PFDDefaultPanelGSValue", "---");
 					ChangeText("Label_PFDDefaultPanelAvgGSValue", "---");
@@ -308,21 +327,7 @@
 						// Other altitudes
 						ChangeTop("CtrlGroup_PFDDefaultPanelOtherAltitudes", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) + "px)");
 							// Ground altitude
-							switch(PFD.FlightMode.FlightMode) {
-								case "DepartureGround":
-								case "TakeOff":
-								case "EmergencyReturn":
-									ChangeBottom("Ctrl_PFDDefaultPanelGroundAltitude", 0.75 * (ConvertUnit(PFD.Altitude.AirportElevation.Departure, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 40 + "px");
-									break;
-								case "Cruise":
-								case "Land":
-								case "ArrivalGround":
-									ChangeBottom("Ctrl_PFDDefaultPanelGroundAltitude", 0.75 * (ConvertUnit(PFD.Altitude.AirportElevation.Arrival, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 40 + "px");
-									break;
-								default:
-									AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshDefaultPanel is invalid.");
-									break;
-							}
+							ChangeBottom("Ctrl_PFDDefaultPanelGroundAltitude", 0.75 * (ConvertUnit(GroundAltitude, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 40 + "px");
 
 							// Decision altitude
 							switch(PFD.FlightMode.FlightMode) {
@@ -333,17 +338,9 @@
 									break;
 								case "Land":
 								case "ArrivalGround":
-									Show("Ctrl_PFDDefaultPanelDecisionAltitude");
-									ChangeBottom("Ctrl_PFDDefaultPanelDecisionAltitude", 0.75 * (ConvertUnit(PFD.Altitude.AirportElevation.Arrival + PFD.Altitude.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 10 + "px");
-									if(PFD0.Status.IsDecisionAltitudeActive == true) {
-										AddClass("Ctrl_PFDDefaultPanelDecisionAltitude", "Active");
-									} else {
-										RemoveClass("Ctrl_PFDDefaultPanelDecisionAltitude", "Active");
-									}
-									break;
 								case "EmergencyReturn":
 									Show("Ctrl_PFDDefaultPanelDecisionAltitude");
-									ChangeBottom("Ctrl_PFDDefaultPanelDecisionAltitude", 0.75 * (ConvertUnit(PFD.Altitude.AirportElevation.Departure + PFD.Altitude.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 10 + "px");
+									ChangeBottom("Ctrl_PFDDefaultPanelDecisionAltitude", 0.75 * (ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 10 + "px");
 									if(PFD0.Status.IsDecisionAltitudeActive == true) {
 										AddClass("Ctrl_PFDDefaultPanelDecisionAltitude", "Active");
 									} else {
@@ -419,7 +416,7 @@
 							break;
 						case "FeetButShowMeterBeside":
 							Show("Ctrl_PFDDefaultPanelMetricAltitude");
-							ChangeText("Label_PFDDefaultPanelMetricAltitude", PFD0.Stats.Altitude.TapeDisplay.toFixed(0) + "<span class=\"SmallerText\">" + Translate("MetricAltitude") + "</span>");
+							ChangeText("Label_PFDDefaultPanelMetricAltitude", PFD0.Stats.Altitude.TapeDisplay.toFixed(0) + "<span class=\"SmallerText\">" + Translate("MeterOnPFD") + "</span>");
 							break;
 						default:
 							AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshDefaultPanel is invalid.");
@@ -814,7 +811,7 @@
 								case "MiddleMarker":
 								case "InnerMarker":
 									Show("Ctnr_PFDDefaultPanelMarkerBeacon");
-									ChangeMarkerBeaconColor(PFD0.Stats.Nav.MarkerBeacon);
+									ChangeMarkerBeacon(PFD0.Stats.Nav.MarkerBeacon);
 									ChangeText("Label_PFDDefaultPanelMarkerBeacon", Translate(PFD0.Stats.Nav.MarkerBeacon));
 									break;
 								default:
@@ -918,23 +915,9 @@
 							break;
 						case "Land":
 						case "ArrivalGround":
-							Show("Ctnr_PFDDefaultPanelDecisionAltitude");
-							ChangeText("Label_PFDDefaultPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(PFD.Altitude.AirportElevation.Arrival + PFD.Altitude.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit)));
-							if(PFD0.Status.IsDecisionAltitudeActive == true) {
-								AddClass("Ctnr_PFDDefaultPanelDecisionAltitude", "Active");
-								if(PFD0.Stats.ClockTime - PFD0.Stats.Altitude.DecisionTimestamp < 3000) {
-									AddClass("Ctnr_PFDDefaultPanelDecisionAltitude", "Caution");
-								} else {
-									RemoveClass("Ctnr_PFDDefaultPanelDecisionAltitude", "Caution");
-								}
-							} else {
-								RemoveClass("Ctnr_PFDDefaultPanelDecisionAltitude", "Active");
-								RemoveClass("Ctnr_PFDDefaultPanelDecisionAltitude", "Caution");
-							}
-							break;
 						case "EmergencyReturn":
 							Show("Ctnr_PFDDefaultPanelDecisionAltitude");
-							ChangeText("Label_PFDDefaultPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(PFD.Altitude.AirportElevation.Departure + PFD.Altitude.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit)));
+							ChangeText("Label_PFDDefaultPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit)));
 							if(PFD0.Status.IsDecisionAltitudeActive == true) {
 								AddClass("Ctnr_PFDDefaultPanelDecisionAltitude", "Active");
 								if(PFD0.Stats.ClockTime - PFD0.Stats.Altitude.DecisionTimestamp < 3000) {

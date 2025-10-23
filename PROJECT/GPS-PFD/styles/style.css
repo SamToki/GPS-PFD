@@ -5,8 +5,8 @@
 /* Area specific */
 	/* Header */
 	#Ctrl_Nav {
-		left: calc(50% - 180px);
-		width: 360px;
+		left: calc(50% - 240px);
+		width: 480px;
 	}
 
 	/* Main */
@@ -1241,12 +1241,43 @@
 						height: 10px;
 					}
 
-		/* Settings */
-		#Settings .BeforeSmallButtonCtrl {
-			width: calc(100% - 45px);
+		/* Airport Library */
+		#AirportLibrary .ListHeader {
+			padding: 5px;
+			display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center;
 		}
-		#Settings .SmallButtonCtrl {
-			width: 35px;
+		#AirportLibrary .Radiobtn {
+			width: 31px;
+		}
+		.ListItemLabel {
+			width: calc(100% - 76px);
+		}
+		.ListItemName {
+			max-width: 216px;
+			overflow: hidden;
+		}
+		#AirportLibrary .Button.ShownAsLabel {
+			width: 22px; height: 22px;
+			justify-content: center;
+		}
+		.ListItemDuplicate {
+			position: absolute; top: calc(50% - 11px); right: 49px;
+		}
+		.ListItemExport {
+			position: absolute; top: calc(50% - 11px); right: 27px;
+		}
+		.ListItemDelete {
+			position: absolute; top: calc(50% - 11px); right: 5px;
+		}
+		#Ctrl_AirportLibraryImport {
+			width: calc(100% - 90px); height: 80px;
+		}
+		#Textbox_AirportLibraryImport {
+			width: 100%;
+			white-space: pre;
+		}
+		#Ctrl_AirportLibraryImport2 {
+			width: 80px; height: 80px;
 		}
 
 /* Responsive web design */
@@ -1254,28 +1285,21 @@
 	/* Area specific */
 		/* Header */
 		#DropctrlGroup_Nav {
-			height: 107px;
+			height: 142px;
 		}
 }
 @media (min-width: 830px) { /* Optimization for long fieldsets exceeding 600px height. */
 	/* Area specific */
 		/* Main */
-			/* Settings */
-			#Item_SettingsSpeed, #Item_SettingsNav {
-				width: 800px;
-			}
-			#Item_SettingsSpeed .Ctrl, #Item_SettingsNav .Ctrl { /* .WidthDividedBy2 */
-				width: calc((100% - 10px) / 2);
-			}
-			#Item_SettingsSpeed .BeforeSmallButtonCtrl {
-				width: calc((100% - 10px) / 2 - 45px);
-			}
-			#Item_SettingsSpeed .SmallButtonCtrl {
-				width: 35px;
-			}
-			#Item_SettingsNav #Ctrl_SettingsAirportCoordinatesSwap,
-			#Item_SettingsNav #Ctrl_SettingsAirportCoordinatesApplyCurrentCoordinatesToDepartureAirport,
-			#Item_SettingsNav #Ctrl_SettingsAirportCoordinatesApplyCurrentCoordinatesToArrivalAirport { /* .WidthDividedBy3 */
-				width: calc((100% - 20px) / 3);
-			}
+		#Item_AirportLibraryProperties, #Item_SettingsSpeed {
+			width: 800px;
+		}
+		#Item_AirportLibraryProperties .Ctrl, #Item_SettingsSpeed .Ctrl { /* .WidthDividedBy2 */
+			width: calc((100% - 10px) / 2);
+		}
+		#Item_AirportLibraryProperties #Ctrl_AirportLibraryLat,
+		#Item_AirportLibraryProperties #Ctrl_AirportLibraryLon,
+		#Item_AirportLibraryProperties #Ctrl_AirportLibraryReplaceAirportCoordinatesWithCurrent { /* .WidthDividedBy3 */
+			width: calc((100% - 20px) / 3);
+		}
 }
