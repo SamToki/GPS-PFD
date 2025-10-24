@@ -36,21 +36,6 @@ Visit the webpage once, before disconnecting to the Internet.
 本应用程序仅供娱乐用途。警报功能可能出现误报。使用时请注意安全。本应用程序可能使用位置服务。详见[免责声明](https://SamToki.github.io/GPS-PFD/#Item_HelpDisclaimer)与[隐私权声明](https://SamToki.github.io/GPS-PFD/#Item_HelpPrivacyStatement)。<br>
 This application is for entertainment purposes only. The alert feature may give false warnings. Mind your safety while using. This application may use location services. Learn more at the [Disclaimer](https://SamToki.github.io/GPS-PFD/#Item_HelpDisclaimer) and the [Privacy Statement](https://SamToki.github.io/GPS-PFD/#Item_HelpPrivacyStatement).
 
-## 已知问题 Known Issues
-
-本应用程序仍处于测试阶段。已知问题有：<br>
-This application is still in beta test. Known issues are as follows:
-
-- 加速计误差严重。系统已尽可能减小误差。<br>
-The accelerometer is seriously inaccurate. The system does its best to reduce errors.
-- 在 [Firefox](https://zh.wikipedia.org/wiki/Firefox) for Android 上，「保持屏幕常亮」可能不起作用。<br>
-On [Firefox](https://en.wikipedia.org/wiki/Firefox) for Android, the "keep screen on" feature may not work.
-- 在 [Brave](https://zh.wikipedia.org/wiki/Brave浏览器) for Android 上无法使用。<br>
-Completely unusable on [Brave](https://en.wikipedia.org/wiki/Brave_(web_browser)) for Android.
-
-若您有其他问题或建议，请向我[提供反馈](https://SamToki.github.io/GPS-PFD/#Item_HelpGetInvolved)。<br>
-Please [provide feedback](https://SamToki.github.io/GPS-PFD/#Item_HelpGetInvolved) to me if you have other problems or suggestions.
-
 # 立即试用 Try Now
 
 https://SamToki.github.io/GPS-PFD
