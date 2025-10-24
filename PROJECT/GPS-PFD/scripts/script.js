@@ -1092,7 +1092,7 @@
 				// Additional indicators
 					// Altitude trend
 					PFD0.Stats.Altitude.Trend = (PFD0.Stats.Altitude.TapeDisplay - PFD0.Stats.Altitude.PreviousTapeDisplay) * (6000 / Math.max(PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime, 1)); // (1) Altitude trend shows target altitude in 6 sec. (2) If refreshed too frequently, the divisor may become zero. So "Math.max" is applied here.
-					PFD0.Stats.Altitude.TrendDisplay += (PFD0.Stats.Altitude.Trend - PFD0.Stats.Altitude.TrendDisplay) / 50;
+					PFD0.Stats.Altitude.TrendDisplay += (PFD0.Stats.Altitude.Trend - PFD0.Stats.Altitude.TrendDisplay) / 200;
 					PFD0.Stats.Speed.Vertical = PFD0.Stats.Altitude.TrendDisplay / 6;
 
 				// Balloon
