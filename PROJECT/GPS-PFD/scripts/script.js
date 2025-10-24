@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 0.46,
+		const CurrentVersion = 0.47,
 		GeolocationAPIOptions = {
 			enableHighAccuracy: true
 		};
@@ -2009,18 +2009,24 @@
 			if(PFD.Attitude.IsEnabled == true) {
 				Show("Ctrl_SettingsAttitudeMode");
 				ChangeValue("Combobox_SettingsAttitudeMode", PFD.Attitude.Mode);
-				if(PFD.Attitude.Mode == "Manual") {
-					Show("Label_SettingsAttitudeOffset");
-					Show("Label_SettingsAttitudeOffsetInfo");
-					Show("Ctrl_SettingsAttitudeOffsetPitch");
-					Show("Ctrl_SettingsAttitudeOffsetRoll");
-					ChangeValue("Textbox_SettingsAttitudeOffsetPitch", PFD.Attitude.Offset.Pitch);
-					ChangeValue("Textbox_SettingsAttitudeOffsetRoll", PFD.Attitude.Offset.Roll);
-				} else {
-					Hide("Label_SettingsAttitudeOffset");
-					Hide("Label_SettingsAttitudeOffsetInfo");
-					Hide("Ctrl_SettingsAttitudeOffsetPitch");
-					Hide("Ctrl_SettingsAttitudeOffsetRoll");
+				switch(PFD.Attitude.Mode) {
+					case "Accel":
+						Show("Label_SettingsAttitudeOffset");
+						Show("Label_SettingsAttitudeOffsetInfo");
+						Show("Ctrl_SettingsAttitudeOffsetPitch");
+						Show("Ctrl_SettingsAttitudeOffsetRoll");
+						ChangeValue("Textbox_SettingsAttitudeOffsetPitch", PFD.Attitude.Offset.Pitch);
+						ChangeValue("Textbox_SettingsAttitudeOffsetRoll", PFD.Attitude.Offset.Roll);
+						break;
+					case "Manual":
+						Hide("Label_SettingsAttitudeOffset");
+						Hide("Label_SettingsAttitudeOffsetInfo");
+						Hide("Ctrl_SettingsAttitudeOffsetPitch");
+						Hide("Ctrl_SettingsAttitudeOffsetRoll");
+						break;
+					default:
+						AlertSystemError("The value of PFD.Attitude.Mode \"" + PFD.Attitude.Mode + "\" in function RefreshPFD is invalid.");
+						break;
 				}
 			} else {
 				Hide("Ctrl_SettingsAttitudeMode");
