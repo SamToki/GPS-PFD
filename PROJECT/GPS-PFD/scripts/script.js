@@ -2595,7 +2595,7 @@
 			if(System.DontShowAgain.includes("GPSPFD_AirportLibrary_AirportExported") == false) {
 				ShowDialog("AirportLibrary_AirportExported",
 					"Info",
-					"已导出机场「" + AirportLibrary.Airport[Number].Name + "」至剪贴板。",
+					"已导出机场「" + ConvertEmptyName(AirportLibrary.Airport[Number].Name) + "」至剪贴板。",
 					"不再弹窗提示", "", "", "确定");
 			} else {
 				ShowToast("已导出机场");
