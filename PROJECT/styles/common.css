@@ -26,7 +26,7 @@
 		#Html {
 			transform-origin: center center;
 			box-sizing: border-box;
-			color: #000000; font-family: ""; font-size: 14px; /* font-family: Sarasa UI J, Source Han Sans, Hiragino Sans GB, PingFang SC, Microsoft YaHei UI, Helvetica, Arial, sans; */
+			color: #000000; font-family: ""; font-size: 14px; line-height: 1.2; /* font-family: Sarasa UI J, Source Han Sans, Hiragino Sans GB, PingFang SC, Microsoft YaHei UI, Helvetica, Arial, sans; */
 			scroll-padding-top: 60px;
 			transition: 250ms, z-index 0ms; scroll-behavior: smooth;
 		}
