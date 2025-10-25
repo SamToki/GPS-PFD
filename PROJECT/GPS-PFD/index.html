@@ -2616,7 +2616,7 @@
 											<ul class="CtrlGroup PFDMenuTitle">
 												<li class="Ctrl">
 													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('Ctrl')">
-														<h3>控制</h3>
+														<h2>控制</h2>
 														<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
 															<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
 														</svg>
@@ -2629,7 +2629,7 @@
 													<span class="HotkeyIndicator Faded" inert="true">T</span>
 												</li>
 												<li class="Ctrl Hidden" id="Ctrl_PFDManualManeuver" inert="true">
-													<h4>手动操作</h4>
+													<h3>手动操作</h3>
 													<ul class="CtrlGroup BelowParagraph">
 														<li class="Ctrl" id="Ctrl_PFDAttitudeManeuver">
 															<span>姿态</span>
@@ -2775,7 +2775,7 @@
 													</ul>
 												</li>
 												<li class="Ctrl" id="Ctrl_PFDMCP">
-													<h4>MCP</h4>
+													<h3>MCP</h3>
 													<ul class="CtrlGroup BelowParagraph">
 														<li class="Ctrl">
 															<label for="Checkbox_PFDMCPSpeed">
@@ -2819,7 +2819,7 @@
 													</ul>
 												</li>
 												<li class="Ctrl" id="Ctrl_PFDFlaps">
-													<h4>襟翼</h4>
+													<h3>襟翼</h3>
 													<ul class="CtrlGroup BelowParagraph">
 														<li class="Ctrl" id="Ctrl_PFDFlapsSlider">
 															<label for="Slider_PFDFlaps">
@@ -2867,7 +2867,7 @@
 											<ul class="CtrlGroup PFDMenuTitle">
 												<li class="Ctrl">
 													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('Options')">
-														<h3>选项</h3>
+														<h2>选项</h2>
 														<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
 															<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
 														</svg>
@@ -2952,7 +2952,7 @@
 											<ul class="CtrlGroup PFDMenuTitle">
 												<li class="Ctrl">
 													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('TechInfo')">
-														<h3>技术信息 (原始数据)</h3>
+														<h2>技术信息 (原始数据)</h2>
 														<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
 															<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
 														</svg>
@@ -2961,7 +2961,7 @@
 											</ul>
 											<ul class="CtrlGroup PFDMenuContent Hidden" id="CtrlGroup_PFDTechInfo" inert="true">
 												<li class="Ctrl">
-													<h4>GPS</h4>
+													<h3>GPS</h3>
 													<p>纬度：<span id="Label_PFDTechInfoLat">未知</span><br />
 														经度：<span id="Label_PFDTechInfoLon">未知</span><br />
 														位置精度：<span id="Label_PFDTechInfoPositionAccuracy">未知</span></p>
@@ -2970,7 +2970,7 @@
 														高度精度：<span id="Label_PFDTechInfoAltitudeAccuracy">未知</span><br />
 														朝向：<span id="Label_PFDTechInfoHeading">未知</span></p>
 													<p>时间戳：<span id="Label_PFDTechInfoGPSTimestamp">未知</span></p>
-													<h4>加速计</h4>
+													<h3>加速计</h3>
 													<p>将手机抬起并逆时针旋转90度。X轴向下是正值，向上是负值。Y轴向右是正值，向左是负值。Z轴向前是正值，向后是负值。</p>
 													<p>绝对X轴 (排除重力)：<span id="Label_PFDTechInfoAbsoluteXAxis">未知</span><br />
 														绝对Y轴 (排除重力)：<span id="Label_PFDTechInfoAbsoluteYAxis">未知</span><br />
@@ -3008,7 +3008,7 @@
 														若速度/高度模式为「双通道」，则每次 GPS 速度/高度更新时，加速计速度/高度会与 GPS 速度/高度对齐。</p>
 													<p>间隔：<span id="Label_PFDTechInfoAccelInterval">未知</span><br />
 														时间戳：<span id="Label_PFDTechInfoAccelTimestamp">未知</span></p>
-													<h4>手动</h4>
+													<h3>手动</h3>
 													<p>俯仰：<span id="Label_PFDTechInfoManualPitch">未知</span><br />
 														俯仰趋势：<span id="Label_PFDTechInfoManualPitchTrend">未知</span><br />
 														横滚：<span id="Label_PFDTechInfoManualRoll">未知</span><br />
@@ -3087,7 +3087,7 @@
 									</label>
 								</li>
 							</ul>
-							<h4>地理</h4>
+							<h3>地理</h3>
 							<p>北纬、东经是正值，南纬、西经是负值。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl" id="Ctrl_AirportLibraryLat">
@@ -3116,7 +3116,7 @@
 									<button class="Button" onclick="ReplaceAirportElevationWithCurrent()">替换为当前高度</button>
 								</li>
 							</ul>
-							<h4>天气</h4>
+							<h3>天气</h3>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryTemperature">
@@ -3140,7 +3140,7 @@
 									</label>
 								</li>
 							</ul>
-							<h4>进近 (Final Approach)</h4>
+							<h3>进近 (Final Approach)</h3>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryGlideSlopeAngle">
@@ -3237,7 +3237,7 @@
 									</label>
 								</li>
 							</ul>
-							<h4 id="Label_SettingsAttitudeOffset">姿态偏移</h4>
+							<h3 id="Label_SettingsAttitudeOffset">姿态偏移</h3>
 							<p id="Label_SettingsAttitudeOffsetInfo">姿态偏移适用于无法自由摆放设备的情况。俯仰抬头是正值，低头是负值。<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚 (roll) </a>右倾是正值，左倾是负值。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl" id="Ctrl_SettingsAttitudeOffsetPitch">
@@ -3273,7 +3273,7 @@
 									</label>
 								</li>
 							</ul>
-							<h4>空速</h4>
+							<h3>空速</h3>
 							<p>GPS 与加速计只能测量地速，因此<a href="https://zh.wikipedia.org/wiki/空速">空速</a>需要通过算法从地速转换而来。详见<a href="docs/GPS-PFD%20说明文档.pdf">说明文档</a>。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
@@ -3297,7 +3297,7 @@
 									</label>
 								</li>
 							</ul>
-							<h4>起飞</h4>
+							<h3>起飞</h3>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Textbox_SettingsV1">
@@ -3314,7 +3314,7 @@
 									</label>
 								</li>
 							</ul>
-							<h4>限速</h4>
+							<h3>限速</h3>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsSpeedLimitPreset">
@@ -3404,7 +3404,7 @@
 									</label>
 								</li>
 							</ul>
-							<h4 class="Hidden" id="Label_SettingsETA" inert="true">预计剩余时间 (ETA)</h4>
+							<h3 class="Hidden" id="Label_SettingsETA" inert="true">预计剩余时间 (ETA)</h3>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl Hidden" id="Ctrl_SettingsETACalcMethod" inert="true">
 									<label for="Combobox_SettingsETACalcMethod">
@@ -3607,7 +3607,7 @@
 									</label>
 								</li>
 							</ul>
-							<h4>计量单位</h4>
+							<h3>计量单位</h3>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsMeasurementUnitsPreset">
@@ -3687,7 +3687,7 @@
 									<button class="Button" id="Button_SettingsInstallPWA" disabled="true" onclick="InstallPWA()">安装</button>
 								</li>
 							</ul>
-							<h4>状态</h4>
+							<h3>状态</h3>
 							<p>PWA standalone display：<span id="Label_SettingsPWAStandaloneDisplay">未知</span><br />
 								PWA service worker registration：<span id="Label_SettingsPWAServiceWorkerRegistration">未知</span><br />
 								PWA service worker controller：<span id="Label_SettingsPWAServiceWorkerController">未知</span></p>
@@ -3776,11 +3776,11 @@
 					<li class="Item" id="Item_HelpReadBeforeUse">
 						<fieldset>
 							<legend>使用前须知</legend>
-							<h4>使用环境</h4>
+							<h3>使用环境</h3>
 							<p>建议在搭载了 GPS 芯片与加速计的移动设备 (智能手机或平板电脑) 上使用本应用程序。否则核心功能可能不可用。在交通工具上可能需要靠窗才能接收到 GPS 信号。GPS 可能会非常耗电，因此建议使用时连接移动电源 (充电宝)。</p>
-							<h4>离线使用</h4>
+							<h3>离线使用</h3>
 							<p>在没有网络连接的飞机上，您需要离线使用本应用程序。有两种方式来离线使用：①断网前先在线访问一次。②下载资源至本地，在本地运行网页。详见说明文档中的「使用方式」。</p>
-							<h4>安全与隐私</h4>
+							<h3>安全与隐私</h3>
 							<p>本应用程序仅供娱乐用途。<a href="#Item_SettingsWarningSystem" onclick="ShowIAmHere('Item_SettingsWarningSystem')">警告系统</a>可能出现误报。使用时请注意安全。本应用程序可能使用位置服务。详见<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('Item_HelpDisclaimer')">免责声明</a>与<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('Item_HelpPrivacyStatement')">隐私权声明</a>。</p>
 						</fieldset>
 					</li>
@@ -3801,7 +3801,7 @@
 					<li class="Item" id="Item_HelpGetInvolved">
 						<fieldset>
 							<legend>参与进来</legend>
-							<h4>反馈</h4>
+							<h3>反馈</h3>
 							<p>您可通过以下渠道向我提供反馈：</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
@@ -3814,7 +3814,7 @@
 									<a class="Button" href="https://message.bilibili.com/#whisper/mid1557377413">哔哩哔哩 (B站) 私信</a>
 								</li>
 							</ul>
-							<h4>翻译</h4>
+							<h3>翻译</h3>
 							<p>Help me translate the webpage into your language! Please contact me if you are interested.</p>
 						</fieldset>
 					</li>
@@ -3850,12 +3850,12 @@
 					<li class="Item" id="Item_HelpCredits">
 						<fieldset>
 							<legend>Credits</legend>
-							<h4>图像</h4>
+							<h3>图像</h3>
 							<p>背景图像：Pixiv ID <a href="https://pixiv.net/en/artworks/71631884">71631884</a> by <a href="https://pixiv.net/en/users/2642047">@Ashima</a><br />
 								背景图像会不定期更换。</p>
-							<h4>图标</h4>
+							<h3>图标</h3>
 							<p>UI 图标：<a href="https://icons.getbootstrap.com">Bootstrap Icons</a></p>
-							<h4>音频</h4>
+							<h3>音频</h3>
 							<p>警报声音：YouTube 视频 <a href="https://youtube.com/watch?v=H_EdufukKfU">#1</a> <a href="https://youtube.com/watch?v=SJ55cCo9GS4">#2</a> <a href="https://youtube.com/watch?v=H2aidghuxzU">#3</a> <a href="https://youtube.com/watch?v=4YW8Lt7ZPCw">#4</a> <a href="https://youtube.com/watch?v=ruBG_SJuFtQ">#5</a></p>
 						</fieldset>
 					</li>

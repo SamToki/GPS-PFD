@@ -1040,7 +1040,7 @@
 				.PFDMenuTitle .Ctrl {
 					width: calc(100% - 50px); height: unset; min-height: 35px;
 				}
-				.PFDMenuTitle h3 {
+				.PFDMenuTitle h2 {
 					padding: 0;
 					font-size: 1.25em;
 				}

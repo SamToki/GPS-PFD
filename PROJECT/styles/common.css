@@ -76,8 +76,7 @@
 			background-color: #F0F0F0E0;
 		}
 		.Prolog {
-			width: unset; max-width: 850px;
-			text-align: center;
+			width: unset; max-width: 410px;
 		}
 		.CtrlGroup {
 			display: flex; flex-wrap: wrap; justify-content: space-between;
@@ -130,19 +129,16 @@
 			font-size: 2.50em; text-align: center;
 		}
 		h2 {
-			padding: 20px 0;
-			font-size: 2.00em;
-		}
-		h3 {
 			padding: 10px 0;
 			font-size: 1.50em;
 		}
-		h4 {
+		h3 {
 			padding: 5px 0;
-			font-size: 1.25em; font-weight: normal;
+			font-size: 1.25em; font-weight: normal; line-height: 1.5;
 		}
 		p {
-			padding: 5px 0;
+			max-width: 400px; padding: 5px 0;
+			line-height: 1.5;
 		}
 		a {
 			border-radius: 5px;
