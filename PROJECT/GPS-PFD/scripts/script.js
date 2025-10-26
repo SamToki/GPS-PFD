@@ -206,13 +206,13 @@
 			Airport: [
 				0,
 				{
-					Name: "上海虹桥国际机场",
-					Region: "中国大陆",
-					Code: "SHA",
+					Name: "上海浦东国际机场",
+					Region: "中国大陆 上海",
+					Code: "PVG, ZSPD",
 					Coordinates: {
-						Lat: 31.19758, Lon: 121.33438
+						Lat: 31.14323, Lon: 121.80602
 					},
-					Elevation: 4,
+					Elevation: 5.2,
 					Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
 					GlideSlopeAngle: 3,
 					MarkerBeaconDistance: {
@@ -222,12 +222,42 @@
 				},
 				{
 					Name: "东京国际机场 (羽田机场)",
-					Region: "日本",
-					Code: "HND",
+					Region: "日本 东京",
+					Code: "HND, RJTT",
 					Coordinates: {
 						Lat: 35.55001, Lon: 139.78635
 					},
 					Elevation: 4.3,
+					Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
+					GlideSlopeAngle: 3,
+					MarkerBeaconDistance: {
+						Outer: 9260, Middle: 926, Inner: 185.2
+					},
+					DecisionHeight: 76.2
+				},
+				{
+					Name: "约翰·肯尼迪国际机场",
+					Region: "美国 纽约",
+					Code: "JFK, KJFK",
+					Coordinates: {
+						Lat: 40.64168, Lon: -73.77834
+					},
+					Elevation: 3,
+					Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
+					GlideSlopeAngle: 3,
+					MarkerBeaconDistance: {
+						Outer: 9260, Middle: 926, Inner: 185.2
+					},
+					DecisionHeight: 76.2
+				},
+				{
+					Name: "希思罗机场",
+					Region: "英国 伦敦",
+					Code: "LHR, EGLL",
+					Coordinates: {
+						Lat: 51.47108, Lon: -0.46143
+					},
+					Elevation: 24,
 					Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
 					GlideSlopeAngle: 3,
 					MarkerBeaconDistance: {
