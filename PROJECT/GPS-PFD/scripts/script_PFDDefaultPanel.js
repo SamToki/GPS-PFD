@@ -53,16 +53,16 @@
 				(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
 				(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
 				PFD.Speed.Mode == "Manual") {
-					ChangeText("Label_PFDDefaultPanelGSValue", ConvertUnit(PFD0.Stats.Speed.GSDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.SpeedUnit + "OnPFD") + "</span>");
-					ChangeText("Label_PFDDefaultPanelAvgGSValue", ConvertUnit(PFD0.Stats.Speed.AvgGSDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.SpeedUnit + "OnPFD") + "</span>");
-					ChangeText("Label_PFDDefaultPanelTASValue", ConvertUnit(PFD0.Stats.Speed.TASDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.SpeedUnit + "OnPFD") + "</span>");
+					ChangeText("Label_PFDDefaultPanelGSValue", ConvertUnit(PFD0.Stats.Speed.GSDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Speed + "OnPFD") + "</span>");
+					ChangeText("Label_PFDDefaultPanelAvgGSValue", ConvertUnit(PFD0.Stats.Speed.AvgGSDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Speed + "OnPFD") + "</span>");
+					ChangeText("Label_PFDDefaultPanelTASValue", ConvertUnit(PFD0.Stats.Speed.TASDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Speed + "OnPFD") + "</span>");
 				} else {
 					ChangeText("Label_PFDDefaultPanelGSValue", "---");
 					ChangeText("Label_PFDDefaultPanelAvgGSValue", "---");
 					ChangeText("Label_PFDDefaultPanelTASValue", "---");
 				}
 				if(PFD.Speed.Wind.Speed > 0) {
-					ChangeText("Label_PFDDefaultPanelWindValue", PFD.Speed.Wind.Direction.toString().padStart(3, "0") + "°/" + ConvertUnit(PFD.Speed.Wind.Speed, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
+					ChangeText("Label_PFDDefaultPanelWindValue", PFD.Speed.Wind.Direction.toString().padStart(3, "0") + "°/" + ConvertUnit(PFD.Speed.Wind.Speed, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0));
 					if((PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable == true) ||
 					PFD.Heading.Mode == "Manual") {
 						Show("PFDDefaultPanelWindDirection");
@@ -167,17 +167,17 @@
 					}
 
 					// Tape
-					ChangeTop("CtrlGroup_PFDDefaultPanelSpeedTape", "calc(50% - 5000px + " + 5 * ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) + "px)");
+					ChangeTop("CtrlGroup_PFDDefaultPanelSpeedTape", "calc(50% - 5000px + " + 5 * ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) + "px)");
 
 					// Additional indicators
 						// Speed trend
-						if(Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit)) >= 3) {
+						if(Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed)) >= 3) {
 							Show("Needle_PFDDefaultPanelSpeedTrend");
 						} else {
 							Fade("Needle_PFDDefaultPanelSpeedTrend");
 						}
-						ChangeTop("Needle_PFDDefaultPanelSpeedTrend", "calc(50% - " + 5 * Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit)) + "px)");
-						ChangeHeight("Needle_PFDDefaultPanelSpeedTrend", 10 * Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit)) + "px");
+						ChangeTop("Needle_PFDDefaultPanelSpeedTrend", "calc(50% - " + 5 * Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed)) + "px)");
+						ChangeHeight("Needle_PFDDefaultPanelSpeedTrend", 10 * Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed)) + "px");
 						if(PFD0.Stats.Speed.TrendDisplay >= 0) {
 							RemoveClass("Needle_PFDDefaultPanelSpeedTrend", "Decreasing");
 						} else {
@@ -185,7 +185,7 @@
 						}
 
 						// Other speeds
-						ChangeTop("CtrlGroup_PFDDefaultPanelOtherSpeeds", "calc(50% - 5000px + " + 5 * ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) + "px)");
+						ChangeTop("CtrlGroup_PFDDefaultPanelOtherSpeeds", "calc(50% - 5000px + " + 5 * ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) + "px)");
 							// Speed limits
 							switch(PFD.FlightMode.FlightMode) {
 								case "DepartureGround":
@@ -197,21 +197,21 @@
 								case "Land":
 								case "EmergencyReturn":
 									Show("Ctrl_PFDDefaultPanelSpeedLimitMin");
-									ChangeHeight("Ctrl_PFDDefaultPanelSpeedLimitMin", 5 * ConvertUnit(PFD.Speed.SpeedLimit.Min, "MeterPerSec", Subsystem.I18n.SpeedUnit) + "px");
+									ChangeHeight("Ctrl_PFDDefaultPanelSpeedLimitMin", 5 * ConvertUnit(PFD0.Stats.Speed.Limit.Min, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) + "px");
 									break;
 								default:
 									AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshDefaultPanel is invalid.");
 									break;
 							}
-							ChangeHeight("Ctrl_PFDDefaultPanelSpeedLimitMax", 5 * (1000 - ConvertUnit(CalcMaxSpeedLimit(PFD.Speed.SpeedLimit.MaxOnFlapsUp, PFD.Speed.SpeedLimit.MaxOnFlapsFull, PFD.Flaps), "MeterPerSec", Subsystem.I18n.SpeedUnit)) + "px");
+							ChangeHeight("Ctrl_PFDDefaultPanelSpeedLimitMax", 5 * (1000 - ConvertUnit(PFD0.Stats.Speed.Limit.Max, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed)) + "px");
 
 							// Avg IAS
-							ChangeBottom("Ctrl_PFDDefaultPanelAvgIAS", 5 * ConvertUnit(PFD0.Stats.Speed.AvgIASDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) - 10 + "px");
+							ChangeBottom("Ctrl_PFDDefaultPanelAvgIAS", 5 * ConvertUnit(PFD0.Stats.Speed.AvgIASDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) - 10 + "px");
 
 							// MCP
 							if(PFD.MCP.Speed.IsEnabled == true) {
 								Show("Ctrl_PFDDefaultPanelMCPSpeedCircle");
-								ChangeBottom("Ctrl_PFDDefaultPanelMCPSpeedCircle", 5 * ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.SpeedUnit) - 10 + "px");
+								ChangeBottom("Ctrl_PFDDefaultPanelMCPSpeedCircle", 5 * ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) - 10 + "px");
 							} else {
 								Fade("Ctrl_PFDDefaultPanelMCPSpeedCircle");
 							}
@@ -221,8 +221,8 @@
 								case "DepartureGround":
 									Show("Ctrl_PFDDefaultPanelV1");
 									Show("Ctrl_PFDDefaultPanelVR");
-									ChangeBottom("Ctrl_PFDDefaultPanelV1", 5 * ConvertUnit(PFD.Speed.TakeOff.V1, "MeterPerSec", Subsystem.I18n.SpeedUnit) + "px");
-									ChangeBottom("Ctrl_PFDDefaultPanelVR", 5 * ConvertUnit(PFD.Speed.TakeOff.VR, "MeterPerSec", Subsystem.I18n.SpeedUnit) + "px");
+									ChangeBottom("Ctrl_PFDDefaultPanelV1", 5 * ConvertUnit(PFD.Speed.TakeOff.V1, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) + "px");
+									ChangeBottom("Ctrl_PFDDefaultPanelVR", 5 * ConvertUnit(PFD.Speed.TakeOff.VR, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) + "px");
 									break;
 								case "TakeOff":
 								case "Cruise":
@@ -241,10 +241,10 @@
 					ChangeTop("RollingDigit_PFDDefaultPanelSpeed1", -45 * (9 - PFD0.Stats.Speed.BalloonDisplay[1]) + "px");
 					ChangeTop("RollingDigit_PFDDefaultPanelSpeed2", -45 * (10 - PFD0.Stats.Speed.BalloonDisplay[2]) + "px");
 					switch(true) {
-						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) < 1:
+						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) < 1:
 							ChangeTop("RollingDigit_PFDDefaultPanelSpeed3", 15 - 30 * (18 - PFD0.Stats.Speed.BalloonDisplay[3]) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) > 998:
+						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) > 998:
 							ChangeTop("RollingDigit_PFDDefaultPanelSpeed3", 15 - 30 * (9 - PFD0.Stats.Speed.BalloonDisplay[3]) + "px");
 							break;
 						default:
@@ -262,7 +262,7 @@
 						Show("Ctrl_PFDDefaultPanelMCPSpeed");
 						switch(PFD.MCP.Speed.Mode) {
 							case "IAS":
-								ChangeText("Label_PFDDefaultPanelMCPSpeed", ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
+								ChangeText("Label_PFDDefaultPanelMCPSpeed", ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0));
 								break;
 							case "MachNumber":
 								ChangeText("Label_PFDDefaultPanelMCPSpeed", PFD.MCP.Speed.MachNumber.toFixed(3).replace("0.", "."));
@@ -307,17 +307,17 @@
 					}
 
 					// Tape
-					ChangeTop("CtrlGroup_PFDDefaultPanelAltitudeTape", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) + "px)");
+					ChangeTop("CtrlGroup_PFDDefaultPanelAltitudeTape", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + "px)");
 
 					// Additional indicators
 						// Altitude trend
-						if(Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.AltitudeUnit)) >= 20) {
+						if(Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)) >= 20) {
 							Show("Needle_PFDDefaultPanelAltitudeTrend");
 						} else {
 							Fade("Needle_PFDDefaultPanelAltitudeTrend");
 						}
-						ChangeTop("Needle_PFDDefaultPanelAltitudeTrend", "calc(50% - " + 0.75 * Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.AltitudeUnit)) + "px)");
-						ChangeHeight("Needle_PFDDefaultPanelAltitudeTrend", 1.5 * Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.AltitudeUnit)) + "px");
+						ChangeTop("Needle_PFDDefaultPanelAltitudeTrend", "calc(50% - " + 0.75 * Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)) + "px)");
+						ChangeHeight("Needle_PFDDefaultPanelAltitudeTrend", 1.5 * Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)) + "px");
 						if(PFD0.Stats.Altitude.TrendDisplay >= 0) {
 							RemoveClass("Needle_PFDDefaultPanelAltitudeTrend", "Decreasing");
 						} else {
@@ -325,9 +325,9 @@
 						}
 
 						// Other altitudes
-						ChangeTop("CtrlGroup_PFDDefaultPanelOtherAltitudes", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) + "px)");
+						ChangeTop("CtrlGroup_PFDDefaultPanelOtherAltitudes", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + "px)");
 							// Ground altitude
-							ChangeBottom("Ctrl_PFDDefaultPanelGroundAltitude", 0.75 * (ConvertUnit(GroundAltitude, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 40 + "px");
+							ChangeBottom("Ctrl_PFDDefaultPanelGroundAltitude", 0.75 * (ConvertUnit(GroundAltitude, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + 2000) - 40 + "px");
 
 							// Decision altitude
 							switch(PFD.FlightMode.FlightMode) {
@@ -340,7 +340,7 @@
 								case "ArrivalGround":
 								case "EmergencyReturn":
 									Show("Ctrl_PFDDefaultPanelDecisionAltitude");
-									ChangeBottom("Ctrl_PFDDefaultPanelDecisionAltitude", 0.75 * (ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 10 + "px");
+									ChangeBottom("Ctrl_PFDDefaultPanelDecisionAltitude", 0.75 * (ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + 2000) - 10 + "px");
 									if(PFD0.Status.IsDecisionAltitudeActive == true) {
 										AddClass("Ctrl_PFDDefaultPanelDecisionAltitude", "Active");
 									} else {
@@ -355,7 +355,7 @@
 							// MCP
 							if(PFD.MCP.Altitude.IsEnabled == true) {
 								Show("Ctrl_PFDDefaultPanelMCPAltitudeCircle");
-								ChangeBottom("Ctrl_PFDDefaultPanelMCPAltitudeCircle", 0.75 * (ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 10 + "px");
+								ChangeBottom("Ctrl_PFDDefaultPanelMCPAltitudeCircle", 0.75 * (ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + 2000) - 10 + "px");
 							} else {
 								Fade("Ctrl_PFDDefaultPanelMCPAltitudeCircle");
 							}
@@ -369,26 +369,26 @@
 					ChangeTop("RollingDigit_PFDDefaultPanelAltitude2", -45 * (10 - PFD0.Stats.Altitude.BalloonDisplay[2]) + "px");
 					ChangeTop("RollingDigit_PFDDefaultPanelAltitude3", -45 * (10 - PFD0.Stats.Altitude.BalloonDisplay[3]) + "px");
 					switch(true) {
-						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) < -1980:
+						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) < -1980:
 							ChangeTop("RollingDigit_PFDDefaultPanelAltitude4", 17.5 - 25 * (21 - PFD0.Stats.Altitude.BalloonDisplay[4] / 20) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) >= -1980 &&
-						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) <= -20:
+						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) >= -1980 &&
+						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) <= -20:
 							ChangeTop("RollingDigit_PFDDefaultPanelAltitude4", 17.5 - 25 * (17 - PFD0.Stats.Altitude.BalloonDisplay[4] / 20) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) > -20 &&
-						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) < 20:
+						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) > -20 &&
+						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) < 20:
 							ChangeTop("RollingDigit_PFDDefaultPanelAltitude4", 17.5 - 25 * (13 - PFD0.Stats.Altitude.BalloonDisplay[4] / 20) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) >= 20 &&
-						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) <= 49980:
+						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) >= 20 &&
+						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) <= 49980:
 							ChangeTop("RollingDigit_PFDDefaultPanelAltitude4", 17.5 - 25 * (9 - PFD0.Stats.Altitude.BalloonDisplay[4] / 20) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) > 49980:
+						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) > 49980:
 							ChangeTop("RollingDigit_PFDDefaultPanelAltitude4", 17.5 - 25 * (5 - PFD0.Stats.Altitude.BalloonDisplay[4] / 20) + "px");
 							break;
 						default:
-							AlertSystemError("The value of ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, \"Meter\", Subsystem.I18n.AltitudeUnit) \"" + ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) + "\" in function RefreshDefaultPanel is invalid.");
+							AlertSystemError("The value of ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, \"Meter\", Subsystem.I18n.MeasurementUnit.Altitude) \"" + ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + "\" in function RefreshDefaultPanel is invalid.");
 							break;
 					}
 					if(PFD0.Stats.ClockTime - PFD0.Stats.Altitude.BeepTimestamp < 10000 && PFD0.Alert.Active.AltitudeWarning == "") {
@@ -405,21 +405,21 @@
 					// MCP
 					if(PFD.MCP.Altitude.IsEnabled == true) {
 						Show("Ctrl_PFDDefaultPanelMCPAltitude");
-						ChangeText("Label_PFDDefaultPanelMCPAltitude", Math.trunc(ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0) / 100) +
-							"<span class=\"SmallerText\">" + Math.abs(ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0) % 100).toString().padStart(2, "0") + "</span>");
+						ChangeText("Label_PFDDefaultPanelMCPAltitude", Math.trunc(ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.MeasurementUnit.Altitude).toFixed(0) / 100) +
+							"<span class=\"SmallerText\">" + Math.abs(ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.MeasurementUnit.Altitude).toFixed(0) % 100).toString().padStart(2, "0") + "</span>");
 					}
 
 					// Metric
-					switch(Subsystem.I18n.AltitudeUnit) {
+					switch(Subsystem.I18n.MeasurementUnit.Altitude) {
 						case "Meter":
-						case "Feet":
+						case "Foot":
 							break;
-						case "FeetButShowMeterBeside":
+						case "FootButShowMeterBeside":
 							Show("Ctrl_PFDDefaultPanelMetricAltitude");
 							ChangeText("Label_PFDDefaultPanelMetricAltitude", PFD0.Stats.Altitude.TapeDisplay.toFixed(0) + "<span class=\"SmallerText\">" + Translate("MeterOnPFD") + "</span>");
 							break;
 						default:
-							AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshDefaultPanel is invalid.");
+							AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.Altitude \"" + Subsystem.I18n.MeasurementUnit.Altitude + "\" in function RefreshDefaultPanel is invalid.");
 							break;
 					}
 				} else {
@@ -453,9 +453,9 @@
 							// MCP
 							if(PFD.MCP.VerticalSpeed.IsEnabled == true) {
 								Show("Ctrl_PFDDefaultPanelMCPVerticalSpeedCircle");
-								let ConvertedVerticalSpeed = ConvertUnit(PFD.MCP.VerticalSpeed.Value, "MeterPerSec", Subsystem.I18n.VerticalSpeedUnit),
+								let ConvertedVerticalSpeed = ConvertUnit(PFD.MCP.VerticalSpeed.Value, "MeterPerSec", Subsystem.I18n.MeasurementUnit.VerticalSpeed),
 								VerticalPixels = 0;
-								switch(Subsystem.I18n.VerticalSpeedUnit) {
+								switch(Subsystem.I18n.MeasurementUnit.VerticalSpeed) {
 									case "MeterPerSec":
 										switch(true) {
 											case ConvertedVerticalSpeed <= -6:
@@ -501,7 +501,7 @@
 										}
 										break;
 									default:
-										AlertSystemError("The value of Subsystem.I18n.VerticalSpeedUnit \"" + Subsystem.I18n.VerticalSpeedUnit + "\" in function RefreshDefaultPanel is invalid.");
+										AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.VerticalSpeed \"" + Subsystem.I18n.MeasurementUnit.VerticalSpeed + "\" in function RefreshDefaultPanel is invalid.");
 										break;
 								}
 								ChangeBottom("Ctrl_PFDDefaultPanelMCPVerticalSpeedCircle", 170 + VerticalPixels + "px");
@@ -511,9 +511,9 @@
 
 					// Needle
 						// Calc needle angle
-						let ConvertedVerticalSpeed = ConvertUnit(PFD0.Stats.Speed.Vertical, "MeterPerSec", Subsystem.I18n.VerticalSpeedUnit),
+						let ConvertedVerticalSpeed = ConvertUnit(PFD0.Stats.Speed.Vertical, "MeterPerSec", Subsystem.I18n.MeasurementUnit.VerticalSpeed),
 						VerticalPixels = 0, NeedleAngle = 0;
-						switch(Subsystem.I18n.VerticalSpeedUnit) {
+						switch(Subsystem.I18n.MeasurementUnit.VerticalSpeed) {
 							case "MeterPerSec":
 								switch(true) {
 									case ConvertedVerticalSpeed <= -6:
@@ -559,7 +559,7 @@
 								}
 								break;
 							default:
-								AlertSystemError("The value of Subsystem.I18n.VerticalSpeedUnit \"" + Subsystem.I18n.VerticalSpeedUnit + "\" in function RefreshDefaultPanel is invalid.");
+								AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.VerticalSpeed \"" + Subsystem.I18n.MeasurementUnit.VerticalSpeed + "\" in function RefreshDefaultPanel is invalid.");
 								break;
 						}
 						NeedleAngle = RadToDeg(Math.atan(VerticalPixels / 100));
@@ -571,11 +571,11 @@
 						ChangeHeight("Needle_PFDDefaultPanelVerticalSpeed", NeedleLength * 2 + "px");
 
 					// Balloon
-					if((Subsystem.I18n.VerticalSpeedUnit == "MeterPerSec" && Math.abs(ConvertedVerticalSpeed) >= 1) ||
-					(Subsystem.I18n.VerticalSpeedUnit == "FeetPerMin" && Math.abs(ConvertedVerticalSpeed) >= 400)) {
+					if((Subsystem.I18n.MeasurementUnit.VerticalSpeed == "MeterPerSec" && Math.abs(ConvertedVerticalSpeed) >= 1) ||
+					(Subsystem.I18n.MeasurementUnit.VerticalSpeed == "FeetPerMin" && Math.abs(ConvertedVerticalSpeed) >= 400)) {
 						Show("Ctrl_PFDDefaultPanelVerticalSpeedBalloon");
 						let VerticalSpeedDisplay = 0;
-						switch(Subsystem.I18n.VerticalSpeedUnit) {
+						switch(Subsystem.I18n.MeasurementUnit.VerticalSpeed) {
 							case "MeterPerSec":
 								VerticalSpeedDisplay = CheckRangeAndCorrect(Math.trunc(ConvertedVerticalSpeed / 0.2) * 0.2, -50, 50);
 								if(VerticalSpeedDisplay >= 0) {
@@ -593,7 +593,7 @@
 								}
 								break;
 							default:
-								AlertSystemError("The value of Subsystem.I18n.VerticalSpeedUnit \"" + Subsystem.I18n.VerticalSpeedUnit + "\" in function RefreshDefaultPanel is invalid.");
+								AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.VerticalSpeed \"" + Subsystem.I18n.MeasurementUnit.VerticalSpeed + "\" in function RefreshDefaultPanel is invalid.");
 								break;
 						}
 					}
@@ -601,8 +601,8 @@
 					// MCP
 					if(PFD.MCP.VerticalSpeed.IsEnabled == true) {
 						Show("Ctrl_PFDDefaultPanelMCPVerticalSpeed");
-						ConvertedVerticalSpeed = ConvertUnit(PFD.MCP.VerticalSpeed.Value, "MeterPerSec", Subsystem.I18n.VerticalSpeedUnit);
-						switch(Subsystem.I18n.VerticalSpeedUnit) {
+						ConvertedVerticalSpeed = ConvertUnit(PFD.MCP.VerticalSpeed.Value, "MeterPerSec", Subsystem.I18n.MeasurementUnit.VerticalSpeed);
+						switch(Subsystem.I18n.MeasurementUnit.VerticalSpeed) {
 							case "MeterPerSec":
 								if(ConvertedVerticalSpeed >= 0) {
 									ChangeText("Label_PFDDefaultPanelMCPVerticalSpeed", "+" + ConvertedVerticalSpeed.toFixed(1));
@@ -618,7 +618,7 @@
 								}
 								break;
 							default:
-								AlertSystemError("The value of Subsystem.I18n.VerticalSpeedUnit \"" + Subsystem.I18n.VerticalSpeedUnit + "\" in function RefreshDefaultPanel is invalid.");
+								AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.VerticalSpeed \"" + Subsystem.I18n.MeasurementUnit.VerticalSpeed + "\" in function RefreshDefaultPanel is invalid.");
 								break;
 						}
 					}
@@ -673,7 +673,7 @@
 					Show("Ctnr_PFDDefaultPanelDME");
 					if(PFD0.Stats.Nav.Distance < 10000000) { // Max 10000 kilometers.
 						ChangeText("Label_PFDDefaultPanelDMEDistance",
-							ConvertUnit(PFD0.Stats.Nav.Distance, "Meter", Subsystem.I18n.DistanceUnit).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.DistanceUnit + "OnPFD") + "</span>");
+							ConvertUnit(PFD0.Stats.Nav.Distance, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Distance + "OnPFD") + "</span>");
 						if(PFD0.Stats.Speed.GSDisplay > 0 && PFD0.Stats.Nav.ETA < 360000000) { // Max 100 hours.
 							ChangeText("Label_PFDDefaultPanelDMEETA",
 								Math.trunc(PFD0.Stats.Nav.ETA / 3600000) + "<span class=\"SmallerText\">" + Translate("Hour") + "</span>" +
@@ -834,48 +834,48 @@
 				) &&
 				Math.abs(PFD0.Stats.Altitude.RadioDisplay) <= 762) {
 					Show("Ctnr_PFDDefaultPanelRadioAltitude");
-					let ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.RadioDisplay, "Meter", Subsystem.I18n.AltitudeUnit),
+					let ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.RadioDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude),
 					ConvertedRadioAltitudeDisplay = 0;
 					switch(true) {
 						case Math.abs(ConvertedRadioAltitude) >= 500:
-							switch(Subsystem.I18n.AltitudeUnit) {
+							switch(Subsystem.I18n.MeasurementUnit.Altitude) {
 								case "Meter":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude / 10) * 10;
 									break;
-								case "Feet":
-								case "FeetButShowMeterBeside":
+								case "Foot":
+								case "FootButShowMeterBeside":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude / 20) * 20;
 									break;
 								default:
-									AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshDefaultPanel is invalid.");
+									AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.Altitude \"" + Subsystem.I18n.MeasurementUnit.Altitude + "\" in function RefreshDefaultPanel is invalid.");
 									break;
 							}
 							break;
 						case Math.abs(ConvertedRadioAltitude) >= 100 && Math.abs(ConvertedRadioAltitude) < 500:
-							switch(Subsystem.I18n.AltitudeUnit) {
+							switch(Subsystem.I18n.MeasurementUnit.Altitude) {
 								case "Meter":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude / 5) * 5;
 									break;
-								case "Feet":
-								case "FeetButShowMeterBeside":
+								case "Foot":
+								case "FootButShowMeterBeside":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude / 10) * 10;
 									break;
 								default:
-									AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshDefaultPanel is invalid.");
+									AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.Altitude \"" + Subsystem.I18n.MeasurementUnit.Altitude + "\" in function RefreshDefaultPanel is invalid.");
 									break;
 							}
 							break;
 						case Math.abs(ConvertedRadioAltitude) < 100:
-							switch(Subsystem.I18n.AltitudeUnit) {
+							switch(Subsystem.I18n.MeasurementUnit.Altitude) {
 								case "Meter":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude);
 									break;
-								case "Feet":
-								case "FeetButShowMeterBeside":
+								case "Foot":
+								case "FootButShowMeterBeside":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude / 2) * 2;
 									break;
 								default:
-									AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshDefaultPanel is invalid.");
+									AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.Altitude \"" + Subsystem.I18n.MeasurementUnit.Altitude + "\" in function RefreshDefaultPanel is invalid.");
 									break;
 							}
 							break;
@@ -917,7 +917,7 @@
 						case "ArrivalGround":
 						case "EmergencyReturn":
 							Show("Ctnr_PFDDefaultPanelDecisionAltitude");
-							ChangeText("Label_PFDDefaultPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit)));
+							ChangeText("Label_PFDDefaultPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)));
 							if(PFD0.Status.IsDecisionAltitudeActive == true) {
 								AddClass("Ctnr_PFDDefaultPanelDecisionAltitude", "Active");
 								if(PFD0.Stats.ClockTime - PFD0.Stats.Altitude.DecisionTimestamp < 3000) {

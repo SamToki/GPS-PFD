@@ -202,4 +202,36 @@
 						"Repaired user data \"GPSPFD PFD\".");
 				}
 			}
+
+			// v0.48 (2025/10/27) Beta Test
+			// New feature
+			if(localStorage.GPSPFD_Subsystem != undefined) {
+				let Subsystem = JSON.parse(localStorage.getItem("GPSPFD_Subsystem"));
+				if(Subsystem.I18n.MeasurementUnit == undefined) {
+					Subsystem.I18n.MeasurementUnit = {
+						Speed: "Knot", Distance: "NauticalMile", Altitude: "Foot", VerticalSpeed: "FeetPerMin",
+						Temperature: "Celsius", Pressure: "Hectopascal", Weight: "Kilogram", Area: "SquareMeter"
+					};
+					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
+					console.info("● User Data Repairer\n" +
+						"Repaired user data \"GPSPFD Subsystem\".");
+				}
+			}
+			if(localStorage.GPSPFD_PFD != undefined) {
+				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
+				if(PFD.Speed.Limit == undefined) {
+					PFD.Speed.Limit = {
+						Min: 61.728,
+						Weight: 60000, WingArea: 125,
+						MaxLiftCoefficient: {
+							OnFlapsUp: 1.4, OnFlapsFull: 2.7
+						},
+						VMO: 174.896, VFE: 83.3328, MMO: 0.82
+					};
+					delete PFD.Speed.SpeedLimit;
+					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
+					console.info("● User Data Repairer\n" +
+						"Repaired user data \"GPSPFD PFD\".");
+				}
+			}
 	}

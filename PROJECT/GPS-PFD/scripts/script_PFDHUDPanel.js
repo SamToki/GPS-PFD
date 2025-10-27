@@ -125,17 +125,17 @@
 					}
 
 					// Tape
-					ChangeTop("CtrlGroup_PFDHUDPanelSpeedTape", "calc(50% - 5000px + " + 5 * ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) + "px)");
+					ChangeTop("CtrlGroup_PFDHUDPanelSpeedTape", "calc(50% - 5000px + " + 5 * ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) + "px)");
 
 					// Additional indicators
 						// Speed trend
-						if(Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit)) >= 3) {
+						if(Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed)) >= 3) {
 							Show("Needle_PFDHUDPanelSpeedTrend");
 						} else {
 							Fade("Needle_PFDHUDPanelSpeedTrend");
 						}
-						ChangeTop("Needle_PFDHUDPanelSpeedTrend", "calc(50% - " + 5 * Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit)) + "px)");
-						ChangeHeight("Needle_PFDHUDPanelSpeedTrend", 10 * Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit)) + "px");
+						ChangeTop("Needle_PFDHUDPanelSpeedTrend", "calc(50% - " + 5 * Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed)) + "px)");
+						ChangeHeight("Needle_PFDHUDPanelSpeedTrend", 10 * Math.abs(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed)) + "px");
 						if(PFD0.Stats.Speed.TrendDisplay >= 0) {
 							RemoveClass("Needle_PFDHUDPanelSpeedTrend", "Decreasing");
 						} else {
@@ -143,7 +143,7 @@
 						}
 
 						// Other speeds
-						ChangeTop("CtrlGroup_PFDHUDPanelOtherSpeeds", "calc(50% - 5000px + " + 5 * ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) + "px)");
+						ChangeTop("CtrlGroup_PFDHUDPanelOtherSpeeds", "calc(50% - 5000px + " + 5 * ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) + "px)");
 							// Speed limits
 							switch(PFD.FlightMode.FlightMode) {
 								case "DepartureGround":
@@ -155,21 +155,21 @@
 								case "Land":
 								case "EmergencyReturn":
 									Show("Ctrl_PFDHUDPanelSpeedLimitMin");
-									ChangeHeight("Ctrl_PFDHUDPanelSpeedLimitMin", 5 * ConvertUnit(PFD.Speed.SpeedLimit.Min, "MeterPerSec", Subsystem.I18n.SpeedUnit) + "px");
+									ChangeHeight("Ctrl_PFDHUDPanelSpeedLimitMin", 5 * ConvertUnit(PFD0.Stats.Speed.Limit.Min, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) + "px");
 									break;
 								default:
 									AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshHUDPanel is invalid.");
 									break;
 							}
-							ChangeHeight("Ctrl_PFDHUDPanelSpeedLimitMax", 5 * (1000 - ConvertUnit(CalcMaxSpeedLimit(PFD.Speed.SpeedLimit.MaxOnFlapsUp, PFD.Speed.SpeedLimit.MaxOnFlapsFull, PFD.Flaps), "MeterPerSec", Subsystem.I18n.SpeedUnit)) + "px");
+							ChangeHeight("Ctrl_PFDHUDPanelSpeedLimitMax", 5 * (1000 - ConvertUnit(PFD0.Stats.Speed.Limit.Max, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed)) + "px");
 
 							// Avg IAS
-							ChangeBottom("Ctrl_PFDHUDPanelAvgIAS", 5 * ConvertUnit(PFD0.Stats.Speed.AvgIASDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) - 10 + "px");
+							ChangeBottom("Ctrl_PFDHUDPanelAvgIAS", 5 * ConvertUnit(PFD0.Stats.Speed.AvgIASDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) - 10 + "px");
 
 							// MCP
 							if(PFD.MCP.Speed.IsEnabled == true) {
 								Show("Ctrl_PFDHUDPanelMCPSpeedCircle");
-								ChangeBottom("Ctrl_PFDHUDPanelMCPSpeedCircle", 5 * ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.SpeedUnit) - 10 + "px");
+								ChangeBottom("Ctrl_PFDHUDPanelMCPSpeedCircle", 5 * ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) - 10 + "px");
 							} else {
 								Fade("Ctrl_PFDHUDPanelMCPSpeedCircle");
 							}
@@ -179,8 +179,8 @@
 								case "DepartureGround":
 									Show("Ctrl_PFDHUDPanelV1");
 									Show("Ctrl_PFDHUDPanelVR");
-									ChangeBottom("Ctrl_PFDHUDPanelV1", 5 * ConvertUnit(PFD.Speed.TakeOff.V1, "MeterPerSec", Subsystem.I18n.SpeedUnit) + "px");
-									ChangeBottom("Ctrl_PFDHUDPanelVR", 5 * ConvertUnit(PFD.Speed.TakeOff.VR, "MeterPerSec", Subsystem.I18n.SpeedUnit) + "px");
+									ChangeBottom("Ctrl_PFDHUDPanelV1", 5 * ConvertUnit(PFD.Speed.TakeOff.V1, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) + "px");
+									ChangeBottom("Ctrl_PFDHUDPanelVR", 5 * ConvertUnit(PFD.Speed.TakeOff.VR, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) + "px");
 									break;
 								case "TakeOff":
 								case "Cruise":
@@ -199,10 +199,10 @@
 					ChangeTop("RollingDigit_PFDHUDPanelSpeed1", -45 * (9 - PFD0.Stats.Speed.BalloonDisplay[1]) + "px");
 					ChangeTop("RollingDigit_PFDHUDPanelSpeed2", -45 * (10 - PFD0.Stats.Speed.BalloonDisplay[2]) + "px");
 					switch(true) {
-						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) < 1:
+						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) < 1:
 							ChangeTop("RollingDigit_PFDHUDPanelSpeed3", 15 - 30 * (18 - PFD0.Stats.Speed.BalloonDisplay[3]) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) > 998:
+						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) > 998:
 							ChangeTop("RollingDigit_PFDHUDPanelSpeed3", 15 - 30 * (9 - PFD0.Stats.Speed.BalloonDisplay[3]) + "px");
 							break;
 						default:
@@ -220,7 +220,7 @@
 						Show("Ctrl_PFDHUDPanelMCPSpeed");
 						switch(PFD.MCP.Speed.Mode) {
 							case "IAS":
-								ChangeText("Label_PFDHUDPanelMCPSpeed", ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
+								ChangeText("Label_PFDHUDPanelMCPSpeed", ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0));
 								break;
 							case "MachNumber":
 								ChangeText("Label_PFDHUDPanelMCPSpeed", PFD.MCP.Speed.MachNumber.toFixed(3).replace("0.", "."));
@@ -238,7 +238,7 @@
 					}
 
 					// GS
-					ChangeText("Label_PFDHUDPanelSpeedGSValue", ConvertUnit(PFD0.Stats.Speed.GSDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
+					ChangeText("Label_PFDHUDPanelSpeedGSValue", ConvertUnit(PFD0.Stats.Speed.GSDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0));
 				} else {
 					Show("Ctrl_PFDHUDPanelSpeedStatus");
 					ChangeText("Label_PFDHUDPanelSpeedStatus", Translate("SpeedUnavailable"));
@@ -268,17 +268,17 @@
 					}
 
 					// Tape
-					ChangeTop("CtrlGroup_PFDHUDPanelAltitudeTape", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) + "px)");
+					ChangeTop("CtrlGroup_PFDHUDPanelAltitudeTape", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + "px)");
 
 					// Additional indicators
 						// Altitude trend
-						if(Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.AltitudeUnit)) >= 20) {
+						if(Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)) >= 20) {
 							Show("Needle_PFDHUDPanelAltitudeTrend");
 						} else {
 							Fade("Needle_PFDHUDPanelAltitudeTrend");
 						}
-						ChangeTop("Needle_PFDHUDPanelAltitudeTrend", "calc(50% - " + 0.75 * Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.AltitudeUnit)) + "px)");
-						ChangeHeight("Needle_PFDHUDPanelAltitudeTrend", 1.5 * Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.AltitudeUnit)) + "px");
+						ChangeTop("Needle_PFDHUDPanelAltitudeTrend", "calc(50% - " + 0.75 * Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)) + "px)");
+						ChangeHeight("Needle_PFDHUDPanelAltitudeTrend", 1.5 * Math.abs(ConvertUnit(PFD0.Stats.Altitude.TrendDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)) + "px");
 						if(PFD0.Stats.Altitude.TrendDisplay >= 0) {
 							RemoveClass("Needle_PFDHUDPanelAltitudeTrend", "Decreasing");
 						} else {
@@ -286,9 +286,9 @@
 						}
 
 						// Other altitudes
-						ChangeTop("CtrlGroup_PFDHUDPanelOtherAltitudes", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) + "px)");
+						ChangeTop("CtrlGroup_PFDHUDPanelOtherAltitudes", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + "px)");
 							// Ground altitude
-							ChangeBottom("Ctrl_PFDHUDPanelGroundAltitude", 0.75 * (ConvertUnit(GroundAltitude, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 40 + "px");
+							ChangeBottom("Ctrl_PFDHUDPanelGroundAltitude", 0.75 * (ConvertUnit(GroundAltitude, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + 2000) - 40 + "px");
 
 							// Decision altitude
 							switch(PFD.FlightMode.FlightMode) {
@@ -301,7 +301,7 @@
 								case "ArrivalGround":
 								case "EmergencyReturn":
 									Show("Ctrl_PFDHUDPanelDecisionAltitude");
-									ChangeBottom("Ctrl_PFDHUDPanelDecisionAltitude", 0.75 * (ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 10 + "px");
+									ChangeBottom("Ctrl_PFDHUDPanelDecisionAltitude", 0.75 * (ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + 2000) - 10 + "px");
 									if(PFD0.Status.IsDecisionAltitudeActive == true) {
 										AddClass("Ctrl_PFDHUDPanelDecisionAltitude", "Active");
 									} else {
@@ -316,7 +316,7 @@
 							// MCP
 							if(PFD.MCP.Altitude.IsEnabled == true) {
 								Show("Ctrl_PFDHUDPanelMCPAltitudeCircle");
-								ChangeBottom("Ctrl_PFDHUDPanelMCPAltitudeCircle", 0.75 * (ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.AltitudeUnit) + 2000) - 10 + "px");
+								ChangeBottom("Ctrl_PFDHUDPanelMCPAltitudeCircle", 0.75 * (ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + 2000) - 10 + "px");
 							} else {
 								Fade("Ctrl_PFDHUDPanelMCPAltitudeCircle");
 							}
@@ -330,26 +330,26 @@
 					ChangeTop("RollingDigit_PFDHUDPanelAltitude2", -45 * (10 - PFD0.Stats.Altitude.BalloonDisplay[2]) + "px");
 					ChangeTop("RollingDigit_PFDHUDPanelAltitude3", -45 * (10 - PFD0.Stats.Altitude.BalloonDisplay[3]) + "px");
 					switch(true) {
-						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) < -1980:
+						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) < -1980:
 							ChangeTop("RollingDigit_PFDHUDPanelAltitude4", 17.5 - 25 * (21 - PFD0.Stats.Altitude.BalloonDisplay[4] / 20) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) >= -1980 &&
-						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) <= -20:
+						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) >= -1980 &&
+						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) <= -20:
 							ChangeTop("RollingDigit_PFDHUDPanelAltitude4", 17.5 - 25 * (17 - PFD0.Stats.Altitude.BalloonDisplay[4] / 20) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) > -20 &&
-						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) < 20:
+						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) > -20 &&
+						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) < 20:
 							ChangeTop("RollingDigit_PFDHUDPanelAltitude4", 17.5 - 25 * (13 - PFD0.Stats.Altitude.BalloonDisplay[4] / 20) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) >= 20 &&
-						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) <= 49980:
+						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) >= 20 &&
+						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) <= 49980:
 							ChangeTop("RollingDigit_PFDHUDPanelAltitude4", 17.5 - 25 * (9 - PFD0.Stats.Altitude.BalloonDisplay[4] / 20) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) > 49980:
+						case ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) > 49980:
 							ChangeTop("RollingDigit_PFDHUDPanelAltitude4", 17.5 - 25 * (5 - PFD0.Stats.Altitude.BalloonDisplay[4] / 20) + "px");
 							break;
 						default:
-							AlertSystemError("The value of ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, \"Meter\", Subsystem.I18n.AltitudeUnit) \"" + ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit) + "\" in function RefreshHUDPanel is invalid.");
+							AlertSystemError("The value of ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, \"Meter\", Subsystem.I18n.MeasurementUnit.Altitude) \"" + ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + "\" in function RefreshHUDPanel is invalid.");
 							break;
 					}
 					if(PFD0.Stats.ClockTime - PFD0.Stats.Altitude.BeepTimestamp < 10000 && PFD0.Alert.Active.AltitudeWarning == "") {
@@ -366,21 +366,21 @@
 					// MCP
 					if(PFD.MCP.Altitude.IsEnabled == true) {
 						Show("Ctrl_PFDHUDPanelMCPAltitude");
-						ChangeText("Label_PFDHUDPanelMCPAltitude", Math.trunc(ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0) / 100) +
-							"<span class=\"SmallerText\">" + Math.abs(ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0) % 100).toString().padStart(2, "0") + "</span>");
+						ChangeText("Label_PFDHUDPanelMCPAltitude", Math.trunc(ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.MeasurementUnit.Altitude).toFixed(0) / 100) +
+							"<span class=\"SmallerText\">" + Math.abs(ConvertUnit(PFD.MCP.Altitude.Value, "Meter", Subsystem.I18n.MeasurementUnit.Altitude).toFixed(0) % 100).toString().padStart(2, "0") + "</span>");
 					}
 
 					// Metric
-					switch(Subsystem.I18n.AltitudeUnit) {
+					switch(Subsystem.I18n.MeasurementUnit.Altitude) {
 						case "Meter":
-						case "Feet":
+						case "Foot":
 							break;
-						case "FeetButShowMeterBeside":
+						case "FootButShowMeterBeside":
 							Show("Ctrl_PFDHUDPanelMetricAltitude");
 							ChangeText("Label_PFDHUDPanelMetricAltitude", PFD0.Stats.Altitude.TapeDisplay.toFixed(0) + "<span class=\"SmallerText\">" + Translate("MeterOnPFD") + "</span>");
 							break;
 						default:
-							AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshHUDPanel is invalid.");
+							AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.Altitude \"" + Subsystem.I18n.MeasurementUnit.Altitude + "\" in function RefreshHUDPanel is invalid.");
 							break;
 					}
 				} else {
@@ -437,7 +437,7 @@
 				)) {
 					Show("Ctnr_PFDHUDPanelWind");
 					ChangeRotate("Needle_PFDHUDPanelWindDirection", PFD0.Stats.Speed.Wind.RelativeHeading);
-					ChangeText("Label_PFDHUDPanelWind", ConvertUnit(PFD.Speed.Wind.Speed, "MeterPerSec", Subsystem.I18n.SpeedUnit).toFixed(0));
+					ChangeText("Label_PFDHUDPanelWind", ConvertUnit(PFD.Speed.Wind.Speed, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0));
 				} else {
 					Fade("Ctnr_PFDHUDPanelWind");
 				}
@@ -448,16 +448,16 @@
 				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
 				PFD.Altitude.Mode == "Manual") {
 					let ConvertedVerticalSpeed = 0, VerticalSpeedDisplay = 0;
-					ConvertedVerticalSpeed = ConvertUnit(PFD0.Stats.Speed.Vertical, "MeterPerSec", Subsystem.I18n.VerticalSpeedUnit);
-					if((Subsystem.I18n.VerticalSpeedUnit == "MeterPerSec" && Math.abs(ConvertedVerticalSpeed) >= 0.2) ||
-					(Subsystem.I18n.VerticalSpeedUnit == "FeetPerMin" && Math.abs(ConvertedVerticalSpeed) >= 50)) {
+					ConvertedVerticalSpeed = ConvertUnit(PFD0.Stats.Speed.Vertical, "MeterPerSec", Subsystem.I18n.MeasurementUnit.VerticalSpeed);
+					if((Subsystem.I18n.MeasurementUnit.VerticalSpeed == "MeterPerSec" && Math.abs(ConvertedVerticalSpeed) >= 0.2) ||
+					(Subsystem.I18n.MeasurementUnit.VerticalSpeed == "FeetPerMin" && Math.abs(ConvertedVerticalSpeed) >= 50)) {
 						Show("Ctnr_PFDHUDPanelVerticalSpeed");
 						if(ConvertedVerticalSpeed >= 0) {
 							RemoveClass("Icon_PFDHUDPanelVerticalSpeed", "Decreasing");
 						} else {
 							AddClass("Icon_PFDHUDPanelVerticalSpeed", "Decreasing");
 						}
-						switch(Subsystem.I18n.VerticalSpeedUnit) {
+						switch(Subsystem.I18n.MeasurementUnit.VerticalSpeed) {
 							case "MeterPerSec":
 								VerticalSpeedDisplay = CheckRangeAndCorrect(Math.trunc(ConvertedVerticalSpeed / 0.2) * 0.2, -50, 50);
 								ChangeText("Label_PFDHUDPanelVerticalSpeed", Math.abs(VerticalSpeedDisplay).toFixed(1));
@@ -467,7 +467,7 @@
 								ChangeText("Label_PFDHUDPanelVerticalSpeed", Math.abs(VerticalSpeedDisplay));
 								break;
 							default:
-								AlertSystemError("The value of Subsystem.I18n.VerticalSpeedUnit \"" + Subsystem.I18n.VerticalSpeedUnit + "\" in function RefreshHUDPanel is invalid.");
+								AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.VerticalSpeed \"" + Subsystem.I18n.MeasurementUnit.VerticalSpeed + "\" in function RefreshHUDPanel is invalid.");
 								break;
 						}
 					} else {
@@ -482,7 +482,7 @@
 					Show("Ctnr_PFDHUDPanelDME");
 					if(PFD0.Stats.Nav.Distance < 10000000) { // Max 10000 kilometers.
 						ChangeText("Label_PFDHUDPanelDMEDistance",
-							ConvertUnit(PFD0.Stats.Nav.Distance, "Meter", Subsystem.I18n.DistanceUnit).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.DistanceUnit + "OnPFD") + "</span>");
+							ConvertUnit(PFD0.Stats.Nav.Distance, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Distance + "OnPFD") + "</span>");
 						if(PFD0.Stats.Speed.GSDisplay > 0 && PFD0.Stats.Nav.ETA < 360000000) { // Max 100 hours.
 							ChangeText("Label_PFDHUDPanelDMEETA",
 								Math.trunc(PFD0.Stats.Nav.ETA / 3600000) + "<span class=\"SmallerText\">" + Translate("Hour") + "</span>" +
@@ -643,48 +643,48 @@
 				) &&
 				Math.abs(PFD0.Stats.Altitude.RadioDisplay) <= 762) {
 					Show("Ctnr_PFDHUDPanelRadioAltitude");
-					let ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.RadioDisplay, "Meter", Subsystem.I18n.AltitudeUnit),
+					let ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.RadioDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude),
 					ConvertedRadioAltitudeDisplay = 0;
 					switch(true) {
 						case Math.abs(ConvertedRadioAltitude) >= 500:
-							switch(Subsystem.I18n.AltitudeUnit) {
+							switch(Subsystem.I18n.MeasurementUnit.Altitude) {
 								case "Meter":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude / 10) * 10;
 									break;
-								case "Feet":
-								case "FeetButShowMeterBeside":
+								case "Foot":
+								case "FootButShowMeterBeside":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude / 20) * 20;
 									break;
 								default:
-									AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshHUDPanel is invalid.");
+									AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.Altitude \"" + Subsystem.I18n.MeasurementUnit.Altitude + "\" in function RefreshHUDPanel is invalid.");
 									break;
 							}
 							break;
 						case Math.abs(ConvertedRadioAltitude) >= 100 && Math.abs(ConvertedRadioAltitude) < 500:
-							switch(Subsystem.I18n.AltitudeUnit) {
+							switch(Subsystem.I18n.MeasurementUnit.Altitude) {
 								case "Meter":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude / 5) * 5;
 									break;
-								case "Feet":
-								case "FeetButShowMeterBeside":
+								case "Foot":
+								case "FootButShowMeterBeside":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude / 10) * 10;
 									break;
 								default:
-									AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshHUDPanel is invalid.");
+									AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.Altitude \"" + Subsystem.I18n.MeasurementUnit.Altitude + "\" in function RefreshHUDPanel is invalid.");
 									break;
 							}
 							break;
 						case Math.abs(ConvertedRadioAltitude) < 100:
-							switch(Subsystem.I18n.AltitudeUnit) {
+							switch(Subsystem.I18n.MeasurementUnit.Altitude) {
 								case "Meter":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude);
 									break;
-								case "Feet":
-								case "FeetButShowMeterBeside":
+								case "Foot":
+								case "FootButShowMeterBeside":
 									ConvertedRadioAltitudeDisplay = Math.round(ConvertedRadioAltitude / 2) * 2;
 									break;
 								default:
-									AlertSystemError("The value of Subsystem.I18n.AltitudeUnit \"" + Subsystem.I18n.AltitudeUnit + "\" in function RefreshHUDPanel is invalid.");
+									AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.Altitude \"" + Subsystem.I18n.MeasurementUnit.Altitude + "\" in function RefreshHUDPanel is invalid.");
 									break;
 							}
 							break;
@@ -712,7 +712,7 @@
 						case "ArrivalGround":
 						case "EmergencyReturn":
 							Show("Ctnr_PFDHUDPanelDecisionAltitude");
-							ChangeText("Label_PFDHUDPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.AltitudeUnit)));
+							ChangeText("Label_PFDHUDPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)));
 							if(PFD0.Status.IsDecisionAltitudeActive == true) {
 								if(PFD0.Stats.ClockTime - PFD0.Stats.Altitude.DecisionTimestamp < 3000) {
 									AddClass("Ctnr_PFDHUDPanelDecisionAltitude", "Warning");

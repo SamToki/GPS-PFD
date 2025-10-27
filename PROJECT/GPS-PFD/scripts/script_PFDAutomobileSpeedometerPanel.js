@@ -47,8 +47,8 @@
 					}
 
 					// Needle
-					if(ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) <= 125) {
-						ChangeRotate("Needle_PFDAutomobileSpeedometerPanel", -120 + ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) * 2);
+					if(ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) <= 125) {
+						ChangeRotate("Needle_PFDAutomobileSpeedometerPanel", -120 + ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) * 2);
 					} else {
 						ChangeRotate("Needle_PFDAutomobileSpeedometerPanel", 130);
 					}
@@ -64,8 +64,8 @@
 							case "Cruise":
 							case "Land":
 							case "EmergencyReturn":
-								if(ConvertUnit(PFD.Speed.SpeedLimit.Min, "MeterPerSec", Subsystem.I18n.SpeedUnit) <= 120) {
-									ChangeProgring("ProgringFg_PFDAutomobileSpeedometerPanelSpeedLimitMin", 400, ConvertUnit(PFD.Speed.SpeedLimit.Min, "MeterPerSec", Subsystem.I18n.SpeedUnit) * 2 / 360 * 100);
+								if(ConvertUnit(PFD0.Stats.Speed.Limit.Min, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) <= 120) {
+									ChangeProgring("ProgringFg_PFDAutomobileSpeedometerPanelSpeedLimitMin", 400, ConvertUnit(PFD0.Stats.Speed.Limit.Min, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) * 2 / 360 * 100);
 								} else {
 									ChangeProgring("ProgringFg_PFDAutomobileSpeedometerPanelSpeedLimitMin", 400, 240 / 360 * 100);
 								}
@@ -74,17 +74,17 @@
 								AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDPanel is invalid.");
 								break;
 						}
-						if(ConvertUnit(CalcMaxSpeedLimit(PFD.Speed.SpeedLimit.MaxOnFlapsUp, PFD.Speed.SpeedLimit.MaxOnFlapsFull, PFD.Flaps), "MeterPerSec", Subsystem.I18n.SpeedUnit) <= 120) {
+						if(ConvertUnit(PFD0.Stats.Speed.Limit.Max, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) <= 120) {
 							document.getElementById("ProgringFg_PFDAutomobileSpeedometerPanelSpeedLimitMax").style.strokeDasharray = "0, " +
-								(Math.PI * 395) * (1 - (120 - ConvertUnit(CalcMaxSpeedLimit(PFD.Speed.SpeedLimit.MaxOnFlapsUp, PFD.Speed.SpeedLimit.MaxOnFlapsFull, PFD.Flaps), "MeterPerSec", Subsystem.I18n.SpeedUnit)) * 2 / 360) + "px, " +
-								(Math.PI * 395) * ((120 - ConvertUnit(CalcMaxSpeedLimit(PFD.Speed.SpeedLimit.MaxOnFlapsUp, PFD.Speed.SpeedLimit.MaxOnFlapsFull, PFD.Flaps), "MeterPerSec", Subsystem.I18n.SpeedUnit)) * 2 / 360) + "px";
+								(Math.PI * 395) * (1 - (120 - ConvertUnit(PFD0.Stats.Speed.Limit.Max, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed)) * 2 / 360) + "px, " +
+								(Math.PI * 395) * ((120 - ConvertUnit(PFD0.Stats.Speed.Limit.Max, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed)) * 2 / 360) + "px";
 						} else {
 							document.getElementById("ProgringFg_PFDAutomobileSpeedometerPanelSpeedLimitMax").style.strokeDasharray = "0, " + (Math.PI * 395) + "px";
 						}
 
 						// Avg IAS
-						if(ConvertUnit(PFD0.Stats.Speed.AvgIASDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) <= 120) {
-							ChangeRotate("Ctrl_PFDAutomobileSpeedometerPanelAvgIAS", -120 + ConvertUnit(PFD0.Stats.Speed.AvgIASDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) * 2);
+						if(ConvertUnit(PFD0.Stats.Speed.AvgIASDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) <= 120) {
+							ChangeRotate("Ctrl_PFDAutomobileSpeedometerPanelAvgIAS", -120 + ConvertUnit(PFD0.Stats.Speed.AvgIASDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) * 2);
 						} else {
 							ChangeRotate("Ctrl_PFDAutomobileSpeedometerPanelAvgIAS", 120);
 						}
@@ -92,8 +92,8 @@
 						// MCP
 						if(PFD.MCP.Speed.IsEnabled == true) {
 							Show("Ctrl_PFDAutomobileSpeedometerPanelMCPSpeedCircle");
-							if(ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.SpeedUnit) <= 120) {
-								ChangeRotate("Ctrl_PFDAutomobileSpeedometerPanelMCPSpeedCircle", -120 + ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.SpeedUnit) * 2);
+							if(ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) <= 120) {
+								ChangeRotate("Ctrl_PFDAutomobileSpeedometerPanelMCPSpeedCircle", -120 + ConvertUnit(PFD.MCP.Speed.IAS, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) * 2);
 							} else {
 								ChangeRotate("Ctrl_PFDAutomobileSpeedometerPanelMCPSpeedCircle", 120);
 							}
@@ -105,10 +105,10 @@
 					ChangeTop("RollingDigit_PFDAutomobileSpeedometerPanel1", -45 * (9 - PFD0.Stats.Speed.BalloonDisplay[1]) + "px");
 					ChangeTop("RollingDigit_PFDAutomobileSpeedometerPanel2", -45 * (10 - PFD0.Stats.Speed.BalloonDisplay[2]) + "px");
 					switch(true) {
-						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) < 1:
+						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) < 1:
 							ChangeTop("RollingDigit_PFDAutomobileSpeedometerPanel3", 15 - 30 * (18 - PFD0.Stats.Speed.BalloonDisplay[3]) + "px");
 							break;
-						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) > 998:
+						case ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) > 998:
 							ChangeTop("RollingDigit_PFDAutomobileSpeedometerPanel3", 15 - 30 * (9 - PFD0.Stats.Speed.BalloonDisplay[3]) + "px");
 							break;
 						default:
@@ -137,22 +137,22 @@
 					RemoveClass("Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend" + Looper, "Green");
 					RemoveClass("Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend" + (Looper + 3), "Red");
 				}
-				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) >= 3) {
+				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) >= 3) {
 					AddClass("Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend3", "Green");
 				}
-				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) >= 15) {
+				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) >= 15) {
 					AddClass("Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend2", "Green");
 				}
-				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) >= 30) {
+				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) >= 30) {
 					AddClass("Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend1", "Green");
 				}
-				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) <= -3) {
+				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) <= -3) {
 					AddClass("Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend4", "Red");
 				}
-				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) <= -15) {
+				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) <= -15) {
 					AddClass("Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend5", "Red");
 				}
-				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.SpeedUnit) <= -30) {
+				if(ConvertUnit(PFD0.Stats.Speed.TrendDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) <= -30) {
 					AddClass("Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend6", "Red");
 				}
 
@@ -161,7 +161,7 @@
 					Show("Ctnr_PFDAutomobileSpeedometerPanelDME");
 					if(PFD0.Stats.Nav.Distance < 10000000) { // Max 10000 kilometers.
 						ChangeText("Label_PFDAutomobileSpeedometerPanelDMEDistance",
-							ConvertUnit(PFD0.Stats.Nav.Distance, "Meter", Subsystem.I18n.DistanceUnit).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.DistanceUnit + "OnPFD") + "</span>");
+							ConvertUnit(PFD0.Stats.Nav.Distance, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Distance + "OnPFD") + "</span>");
 						if(PFD0.Stats.Speed.GSDisplay > 0 && PFD0.Stats.Nav.ETA < 360000000) { // Max 100 hours.
 							ChangeText("Label_PFDAutomobileSpeedometerPanelDMEETA",
 								Math.trunc(PFD0.Stats.Nav.ETA / 3600000) + "<span class=\"SmallerText\">" + Translate("Hour") + "</span>" +
@@ -184,7 +184,7 @@
 				PFD.Altitude.Mode == "Manual") {
 					Show("Ctnr_PFDAutomobileSpeedometerPanelAltitude");
 					ChangeText("Label_PFDAutomobileSpeedometerPanelAltitudeValue",
-						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.AltitudeUnit).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.AltitudeUnit + "OnPFD") + "</span>");
+						ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Altitude + "OnPFD") + "</span>");
 				} else {
 					Fade("Ctnr_PFDAutomobileSpeedometerPanelAltitude");
 				}

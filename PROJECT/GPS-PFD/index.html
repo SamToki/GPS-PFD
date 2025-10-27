@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v0.47 (2025/10/24) Beta Test. Since 2024/12/01." />
+		<meta name="version" content="v0.48 (2025/10/27) Beta Test. Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -3219,7 +3219,7 @@
 					<li class="Item">
 						<fieldset>
 							<legend>姿态仪</legend>
-							<p>若启用<a href="https://zh.wikipedia.org/wiki/姿态指引仪">姿态仪</a>，<a href="https://zh.wikipedia.org/wiki/空速#指示空速">表速 (IAS) </a>的计算会将<a href="https://zh.wikipedia.org/wiki/航空器三主轴">俯仰 (pitch) 姿态</a>考虑在内。</p>
+							<p>若启用<a href="https://zh.wikipedia.org/wiki/姿态指引仪">姿态仪</a>，<a href="https://zh.wikipedia.org/wiki/空速#指示空速">表速 (IAS) </a>的计算会将<a href="https://zh.wikipedia.org/wiki/航空器三主轴">俯仰 (pitch) 姿态</a>考虑在内，<a href="https://zh.wikipedia.org/wiki/失速">失速</a>速度的计算会将<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚 (roll) </a>姿态考虑在内。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsEnableAttitudeIndicator">
@@ -3238,7 +3238,7 @@
 								</li>
 							</ul>
 							<h3 id="Label_SettingsAttitudeOffset">姿态偏移</h3>
-							<p id="Label_SettingsAttitudeOffsetInfo">姿态偏移适用于无法自由摆放设备的情况。俯仰抬头是正值，低头是负值。<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚 (roll) </a>右倾是正值，左倾是负值。</p>
+							<p id="Label_SettingsAttitudeOffsetInfo">姿态偏移适用于无法自由摆放设备的情况。俯仰抬头是正值，低头是负值。横滚右倾是正值，左倾是负值。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl" id="Ctrl_SettingsAttitudeOffsetPitch">
 									<label for="Textbox_SettingsAttitudeOffsetPitch">
@@ -3273,7 +3273,6 @@
 									</label>
 								</li>
 							</ul>
-							<h3>空速</h3>
 							<p>GPS 与加速计只能测量地速，因此<a href="https://zh.wikipedia.org/wiki/空速">空速</a>需要通过算法从地速转换而来。详见<a href="docs/GPS-PFD%20说明文档.pdf">说明文档</a>。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
@@ -3294,6 +3293,16 @@
 										<span>度，</span>
 										<input class="Textbox Width100" id="Textbox_SettingsWindSpeed" type="number" min="0" max="539" step="5" value="0" onclick="SelectText('Textbox_SettingsWindSpeed')" onchange="SetWindSpeed()" placeholder="0~539" title="0~539" />
 										<span id="Label_SettingsWindSpeedUnit">节</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Combobox_SettingsSpeedPreset">
+										<span>预设：</span>
+										<select class="Combobox" id="Combobox_SettingsSpeedPreset" onchange="SetSpeedPreset()">
+											<option value="Boeing737-800" selected>波音 737-800</option>
+											<option value="AirbusA320">空客 A320</option>
+											<option value="GroundVehicle">地面交通工具</option>
+										</select>
 									</label>
 								</li>
 							</ul>
@@ -3317,35 +3326,67 @@
 							<h3>限速</h3>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
-									<label for="Combobox_SettingsSpeedLimitPreset">
-										<span>预设：</span>
-										<select class="Combobox" id="Combobox_SettingsSpeedLimitPreset" onchange="SetSpeedLimitPreset()">
-											<option value="NoSpeedLimits" selected>不限速</option>
-											<option value="Boeing737-800">波音 737-800</option>
-											<option value="AirbusA320">空客 A320</option>
-											<option value="GroundVehicle">地面交通工具</option>
-										</select>
-									</label>
-								</li>
-								<li class="Ctrl">
 									<label for="Textbox_SettingsSpeedLimitMin">
 										<span>最小表速：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsSpeedLimitMin" type="number" min="0" max="529" step="5" value="0" onclick="SelectText('Textbox_SettingsSpeedLimitMin')" onchange="SetSpeedLimitMin()" placeholder="0~529" title="0~529" />
+										<input class="Textbox Width120" id="Textbox_SettingsSpeedLimitMin" type="number" min="0" max="529" step="5" value="120" onclick="SelectText('Textbox_SettingsSpeedLimitMin')" onchange="SetSpeedLimitMin()" placeholder="0~529" title="0~529" />
 										<span id="Label_SettingsSpeedLimitMinUnit">节</span>
 									</label>
 								</li>
+							</ul>
+							<p>若无法得知飞机实时的重量，失速速度是不可靠的。</p>
+							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
-									<label for="Textbox_SettingsSpeedLimitMaxOnFlapsUp">
-										<span><a href="https://zh.wikipedia.org/wiki/襟翼">襟翼</a>收起时最大表速：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsSpeedLimitMaxOnFlapsUp" type="number" min="10" max="539" step="5" value="539" onclick="SelectText('Textbox_SettingsSpeedLimitMaxOnFlapsUp')" onchange="SetSpeedLimitMaxOnFlapsUp()" placeholder="11~539" title="11~539" />
-										<span id="Label_SettingsSpeedLimitOnFlapsUpUnit">节</span>
+									<label for="Checkbox_SettingsCalcStallSpeed">
+										<input class="Checkbox" id="Checkbox_SettingsCalcStallSpeed" type="checkbox" checked="false" onchange="SetCalcStallSpeed()" />
+										<span>计算失速速度 (不推荐)</span>
+									</label>
+								</li>
+								<li class="Ctrl Hidden"></li> <!-- Placeholder for the wider fieldset UI. -->
+								<li class="Ctrl Hidden" id="Ctrl_SettingsWeight">
+									<label for="Textbox_SettingsWeight">
+										<span>重量：</span>
+										<input class="Textbox Width120" id="Textbox_SettingsWeight" type="number" min="0" max="100000" step="100" value="60000" onclick="SelectText('Textbox_SettingsWeight')" onchange="SetWeight()" placeholder="0~100000" title="0~100000" />
+										<span id="Label_SettingsWeightUnit">公斤</span>
+									</label>
+								</li>
+								<li class="Ctrl Hidden" id="Ctrl_SettingsWingArea">
+									<label for="Textbox_SettingsWingArea">
+										<span>机翼面积：</span>
+										<input class="Textbox Width120" id="Textbox_SettingsWingArea" type="number" min="1" max="1000" step="1" value="125" onclick="SelectText('Textbox_SettingsWingArea')" onchange="SetWingArea()" placeholder="1~1000" title="1~1000" />
+										<span id="Label_SettingsWingAreaUnit">平方米</span>
+									</label>
+								</li>
+								<li class="Ctrl Hidden" id="Ctrl_SettingsMaxLiftCoefficientOnFlapsUp">
+									<label for="Textbox_SettingsMaxLiftCoefficientOnFlapsUp">
+										<span><a href="https://zh.wikipedia.org/wiki/襟翼">襟翼</a>收起时最大升力系数：</span>
+										<input class="Textbox Width120" id="Textbox_SettingsMaxLiftCoefficientOnFlapsUp" type="number" min="0.1" max="10" step="0.1" value="1.4" onclick="SelectText('Textbox_SettingsMaxLiftCoefficientOnFlapsUp')" onchange="SetMaxLiftCoefficientOnFlapsUp()" placeholder="0.1~10" title="0.1~10" />
+									</label>
+								</li>
+								<li class="Ctrl Hidden" id="Ctrl_SettingsMaxLiftCoefficientOnFlapsFull">
+									<label for="Textbox_SettingsMaxLiftCoefficientOnFlapsFull">
+										<span>襟翼全开时最大升力系数：</span>
+										<input class="Textbox Width120" id="Textbox_SettingsMaxLiftCoefficientOnFlapsFull" type="number" min="0.1" max="10" step="0.1" value="2.7" onclick="SelectText('Textbox_SettingsMaxLiftCoefficientOnFlapsFull')" onchange="SetMaxLiftCoefficientOnFlapsFull()" placeholder="0.1~10" title="0.1~10" />
 									</label>
 								</li>
 								<li class="Ctrl">
-									<label for="Textbox_SettingsSpeedLimitMaxOnFlapsFull">
-										<span>襟翼全开时最大表速：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsSpeedLimitMaxOnFlapsFull" type="number" min="10" max="539" step="5" value="539" onclick="SelectText('Textbox_SettingsSpeedLimitMaxOnFlapsFull')" onchange="SetSpeedLimitMaxOnFlapsFull()" placeholder="11~539" title="11~539" />
-										<span id="Label_SettingsSpeedLimitOnFlapsFullUnit">节</span>
+									<label for="Textbox_SettingsVMO">
+										<span>V<sub>MO</sub> <span class="SmallerText">(<a href="https://zh.wikipedia.org/wiki/襟翼">襟翼</a>收起时最大表速)</span>：</span>
+										<input class="Textbox Width120" id="Textbox_SettingsVMO" type="number" min="10" max="539" step="5" value="340" onclick="SelectText('Textbox_SettingsVMO')" onchange="SetVMO()" placeholder="11~539" title="11~539" />
+										<span id="Label_SettingsVMOUnit">节</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_SettingsVFE">
+										<span>V<sub>FE</sub> <span class="SmallerText">(襟翼全开时最大表速)</span>：</span>
+										<input class="Textbox Width120" id="Textbox_SettingsVFE" type="number" min="10" max="539" step="5" value="162" onclick="SelectText('Textbox_SettingsVFE')" onchange="SetVFE()" placeholder="11~539" title="11~539" />
+										<span id="Label_SettingsVFEUnit">节</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_SettingsMMO">
+										<span>M<sub>MO</sub> (最大马赫数)：</span>
+										<input class="Textbox Width120" id="Textbox_SettingsMMO" type="number" min="0.5" max="9.999" step="0.01" value="0.82" onclick="SelectText('Textbox_SettingsMMO')" onchange="SetMMO()" placeholder="0.5~9.999" title="0.5~9.999" />
+										<span>马赫</span>
 									</label>
 								</li>
 							</ul>
@@ -3610,9 +3651,9 @@
 							<h3>计量单位</h3>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
-									<label for="Combobox_SettingsMeasurementUnitsPreset">
+									<label for="Combobox_SettingsMeasurementUnitPreset">
 										<span>预设：</span>
-										<select class="Combobox" id="Combobox_SettingsMeasurementUnitsPreset" onchange="SetMeasurementUnitsPreset()">
+										<select class="Combobox" id="Combobox_SettingsMeasurementUnitPreset" onchange="SetMeasurementUnitPreset()">
 											<option value="AllMetric">全部公制</option>
 											<option value="CivilAviation" selected>民航</option>
 										</select>
@@ -3643,8 +3684,8 @@
 										<span>高度单位：</span>
 										<select class="Combobox" id="Combobox_SettingsAltitudeUnit" onchange="SetAltitudeUnit()">
 											<option value="Meter">米 (m)</option>
-											<option value="Feet" selected>英尺 (ft)</option>
-											<option value="FeetButShowMeterBeside">英尺，在旁边显示米制</option>
+											<option value="Foot" selected>英尺 (ft)</option>
+											<option value="FootButShowMeterBeside">英尺，在旁边显示米制</option>
 										</select>
 									</label>
 								</li>
@@ -3672,6 +3713,24 @@
 										<select class="Combobox" id="Combobox_SettingsPressureUnit" onchange="SetPressureUnit()">
 											<option value="Hectopascal" selected>百帕，毫巴 (hPa)</option>
 											<option value="InchOfMercury">英寸汞柱 (inHg)</option>
+										</select>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Combobox_SettingsWeightUnit">
+										<span>重量单位：</span>
+										<select class="Combobox" id="Combobox_SettingsWeightUnit" onchange="SetWeightUnit()">
+											<option value="Kilogram" selected>公斤 (kg)</option>
+											<option value="Pound">磅 (lb)</option>
+										</select>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Combobox_SettingsAreaUnit">
+										<span>面积单位：</span>
+										<select class="Combobox" id="Combobox_SettingsAreaUnit" onchange="SetAreaUnit()">
+											<option value="SquareMeter" selected>平方米 (m²)</option>
+											<option value="SquareFoot">平方英尺 (sq ft)</option>
 										</select>
 									</label>
 								</li>
@@ -3864,7 +3923,7 @@
 							<legend>关于</legend>
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>版本 v0.47 (<time datetime="2025-10-24" pubdate="pubdate">2025/10/24</time>) Beta Test<br />
+							<p>版本 v0.48 (<time datetime="2025-10-27" pubdate="pubdate">2025/10/27</time>) Beta Test<br />
 								始于 2024/12/01</p>
 							<p class="GreenText Hidden" id="Label_HelpPWANewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
 							<ul class="CtrlGroup BelowParagraph">
