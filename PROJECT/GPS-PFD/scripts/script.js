@@ -1325,7 +1325,7 @@
 							if(PFD.Speed.CalcStallSpeed == true) {
 								let StallSpeed = CalcStallSpeed(PFD0.Stats.Altitude.TapeDisplay,
 									GroundAltitude, ActiveAirport.Temperature, ActiveAirport.RelativeHumidity, ActiveAirport.QNH,
-									PFD.Attitude.IsEnabled, Math.abs(PFD0.Stats.Attitude.Roll),
+									PFD.Attitude.IsEnabled, PFD0.Stats.Attitude.Roll,
 									PFD.Speed.Limit.Weight, PFD.Speed.Limit.WingArea,
 									CalcMaxLiftCoefficient(PFD.Speed.Limit.MaxLiftCoefficient.OnFlapsUp, PFD.Speed.Limit.MaxLiftCoefficient.OnFlapsFull, PFD.Flaps));
 								PFD0.Stats.Speed.Limit.Min = Math.max(PFD.Speed.Limit.Min, StallSpeed);
@@ -4496,7 +4496,7 @@
 		OutsideAirDensity = CalcOutsideAirDensity(OutsideAirTemperature, OutsideAirPressure, RelativeHumidity);
 		StallSpeed = Math.sqrt((2 * Weight * 9.80665) / (OutsideAirDensity * WingArea * MaxLiftCoefficient));
 		if(IsAttitudeConsidered == true) {
-			return StallSpeed * Math.sqrt(1 / Math.cos(DegToRad(CheckRangeAndCorrect(Roll, 0, 89.99999))));
+			return StallSpeed * Math.sqrt(1 / Math.cos(DegToRad(CheckRangeAndCorrect(Math.abs(Roll), 0, 89.99999))));
 		} else {
 			return StallSpeed;
 		}
