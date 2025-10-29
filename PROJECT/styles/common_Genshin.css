@@ -75,7 +75,7 @@
 
 		/* Interactive ctrls */
 		.Button, .Combobox {
-			border: none; border-radius: 17.5px;
+			border: 1px solid #EEE4D9; border-radius: 17.5px;
 			background-color: #EEE4D9;
 			color: #485267;
 		}
@@ -84,14 +84,14 @@
 			color: #EEE4D9;
 		}
 		.DropctrlGroup {
-			border: none; border-radius: 17.5px;
+			border: 1px solid #EEE4D9; border-radius: 17.5px;
 			background-color: #EEE4D9;
 		}
 		.Combobox {
 			padding: 5px 10px;
 		}
 		.Textbox {
-			border: none; border-radius: 17.5px; padding: 5px 10px;
+			border: 1px solid #F5F5F5; border-radius: 17.5px; padding: 5px 10px;
 			background-color: #F5F5F5;
 			color: #323232;
 		}
@@ -260,11 +260,14 @@
 	/* Area specific */
 		/* Header */
 		#DropctrlGroup_Nav {
-			border: none;
+			border: 1px solid #EEE4D9;
 			background-color: #EEE4D9;
 		}
 		#DropctrlGroup_Nav .Button:not(:hover):not(:active) {
 			color: #485267;
+		}
+		#Ctrl_NavUnderline {
+			background-color: #485267;
 		}
 }
 
