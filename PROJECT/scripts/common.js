@@ -251,6 +251,12 @@
 		function ChangeFont(ID, Value) {
 			document.getElementById(ID).style.fontFamily = Value;
 		}
+		function ChangeFontOverall(Value) {
+			let Elements = document.getElementsByTagName("*");
+			for(let Looper = 0; Looper < Elements.length; Looper++) {
+				Elements[Looper].style.fontFamily = Value;
+			}
+		}
 		function ChangeProgbar(ID, HorizontalOrVertical, Percentage) {
 			switch(HorizontalOrVertical) {
 				case "Horizontal":

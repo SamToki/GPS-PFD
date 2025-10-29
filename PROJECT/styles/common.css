@@ -17,16 +17,36 @@
 /* General */
 	/* Basics */
 		/* Overall */
+		@font-face {
+			font-family: "Inter";
+			src: local("Inter"), url(../fonts/Inter-Regular.woff2), url(../fonts/Inter-Italic.woff2), url(../fonts/Inter-Bold.woff2), url(../fonts/Inter-BoldItalic.woff2);
+		}
+		@font-face {
+			font-family: "Iosevka";
+			src: local("Iosevka"), url(../fonts/Iosevka-Regular.woff2);
+		}
 		* {
 			transform-origin: inherit;
 			box-sizing: inherit; padding: 0; margin: 0;
-			font-family: inherit; font-size: inherit; font-style: inherit; /* These 3 properties need to be set as inherit due to buttons. */
+			font-variant-numeric: inherit; font-size: inherit; font-style: inherit; /* These properties need to be set as inherit due to buttons, textboxes and cheating mode. */
 			transition: inherit; scroll-behavior: inherit;
+		}
+		*:lang(en-US) {
+			font-family: "Inter", "Helvetica", "Arial", sans-serif;
+		}
+		*:lang(ja-JP) {
+			font-family: "Inter", "Sarasa UI J", "Source Han Sans", "HiraginoKaku", "Yu Gothic UI", "MS UI Gothic", sans-serif;
+		}
+		*:lang(zh-CN) {
+			font-family: "Inter", "Sarasa UI SC", "Source Han Sans SC", "Hiragino Sans GB", "PingFang SC", "Microsoft YaHei UI", sans-serif;
+		}
+		*:lang(zh-TW) {
+			font-family: "Inter", "Sarasa UI TC", "Source Han Sans TC", "Hiragino Sans TC", "PingFang TC", "Microsoft JhengHei UI", sans-serif;
 		}
 		#Html {
 			transform-origin: center center;
 			box-sizing: border-box;
-			color: #000000; font-family: ""; font-size: 14px; line-height: 1.2; /* font-family: Sarasa UI J, Source Han Sans, Hiragino Sans GB, PingFang SC, Microsoft YaHei UI, Helvetica, Arial, sans; */
+			color: #000000; font-variant-numeric: tabular-nums; font-size: 14px; line-height: 1.2;
 			scroll-padding-top: 60px;
 			transition: 250ms, z-index 0ms; scroll-behavior: smooth;
 		}
@@ -574,7 +594,7 @@
 			font-weight: bold;
 		}
 		.Code {
-			font-family: monospace; /* font-family: Sarasa Mono J, LXGW WenKai Mono, XHei Square Mono, Consolas, monospace; */
+			font-family: "Iosevka", "Sarasa Mono J", "Sarasa Mono SC", "LXGW WenKai Mono", "XHei Square Mono", "Consolas", monospace;
 			white-space: pre; /* https://stackoverflow.com/a/13446005 */
 		}
 

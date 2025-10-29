@@ -72,6 +72,28 @@
 				}
 			}
 
+			// v4.06 (2025/10/29)
+			// Rename values (Game font)
+			if(localStorage.KanaMaster_Subsystem != undefined) {
+				let Subsystem = JSON.parse(localStorage.getItem("KanaMaster_Subsystem"));
+				switch(Subsystem.Display.GameFont) {
+					case "Default":
+						Subsystem.Display.GameFont = "Inherit";
+						localStorage.setItem("KanaMaster_Subsystem", JSON.stringify(Subsystem));
+						console.info("● User Data Repairer\n" +
+							"Repaired user data \"KanaMaster Subsystem\".");
+						break;
+					case "Sans":
+						Subsystem.Display.GameFont = "Sans-serif";
+						localStorage.setItem("KanaMaster_Subsystem", JSON.stringify(Subsystem));
+						console.info("● User Data Repairer\n" +
+							"Repaired user data \"KanaMaster Subsystem\".");
+						break;
+					default:
+						break;
+				}
+			}
+
 		// Yamanobo-Ryou
 			// v2.00 (2025/01/08)
 			// Optimize user data structure
@@ -125,6 +147,28 @@
 					localStorage.setItem("YamanoboRyou_Game", JSON.stringify(Game));
 					console.info("● User Data Repairer\n" +
 						"Repaired user data \"YamanoboRyou Game Stats Keystroke\".");
+				}
+			}
+
+			// v2.14 (2025/10/29)
+			// Rename values (Game font)
+			if(localStorage.YamanoboRyou_Subsystem != undefined) {
+				let Subsystem = JSON.parse(localStorage.getItem("YamanoboRyou_Subsystem"));
+				switch(Subsystem.Display.GameFont) {
+					case "Default":
+						Subsystem.Display.GameFont = "Iosevka, monospace";
+						localStorage.setItem("YamanoboRyou_Subsystem", JSON.stringify(Subsystem));
+						console.info("● User Data Repairer\n" +
+							"Repaired user data \"YamanoboRyou Subsystem\".");
+						break;
+					case "Sans":
+						Subsystem.Display.GameFont = "Sans-serif";
+						localStorage.setItem("YamanoboRyou_Subsystem", JSON.stringify(Subsystem));
+						console.info("● User Data Repairer\n" +
+							"Repaired user data \"YamanoboRyou Subsystem\".");
+						break;
+					default:
+						break;
 				}
 			}
 
