@@ -297,7 +297,7 @@
 							background-color: #00000080;
 						}
 						.TapeNumber {
-							width: calc(100% - 40px);
+							width: calc(100% - 41px);
 							color: #00000080; font-size: 1.50em; text-align: end;
 						}
 
