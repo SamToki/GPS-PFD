@@ -430,7 +430,7 @@
 				fill: #FF0000;
 			}
 			#Ctrl_DialogText {
-				width: calc(100% - 35px); height: 100%; padding: 6px 5px 0 10px;
+				width: calc(100% - 35px); height: 100%; padding: 7px 5px 0 10px;
 				line-height: 1.5;
 				overflow: auto;
 			}
