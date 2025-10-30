@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 0.48,
+		const CurrentVersion = 0.49,
 		Preset = {
 			Subsystem: {
 				I18n: {
@@ -1247,7 +1247,7 @@
 				}
 
 				// Altitude beep
-				if(IsMCPAltitudeReached() == true) {
+				if(IsApproachingMCPAltitude() == true) {
 					PFD0.Stats.Altitude.BeepTimestamp = PFD0.Stats.ClockTime;
 				}
 
@@ -1535,7 +1535,7 @@
 					(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
 					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
 					PFD.Altitude.Mode == "Manual") {
-						if(IsMCPAltitudeReached() == true) {
+						if(IsApproachingMCPAltitude() == true) {
 							PFD0.Alert.Active.AltitudeCallout = "AltitudeBeep";
 						}
 						switch(PFD.FlightMode.FlightMode) {
@@ -4569,7 +4569,7 @@
 	function IsOverspeed() {
 		return PFD0.Stats.Speed.TapeDisplay >= PFD0.Stats.Speed.Limit.Max;
 	}
-	function IsMCPAltitudeReached() {
+	function IsApproachingMCPAltitude() {
 		if(PFD.MCP.Altitude.IsEnabled == true) {
 			switch(PFD.FlightMode.FlightMode) {
 				case "DepartureGround":
@@ -4579,8 +4579,8 @@
 				case "Cruise":
 				case "Land":
 				case "EmergencyReturn":
-					return (PFD0.Stats.Altitude.TapeDisplay >= PFD.MCP.Altitude.Value && PFD0.Stats.Altitude.PreviousTapeDisplay < PFD.MCP.Altitude.Value) ||
-						(PFD0.Stats.Altitude.TapeDisplay <= PFD.MCP.Altitude.Value && PFD0.Stats.Altitude.PreviousTapeDisplay > PFD.MCP.Altitude.Value);
+					return (PFD0.Stats.Altitude.TapeDisplay >= PFD.MCP.Altitude.Value - 121.92 && PFD0.Stats.Altitude.PreviousTapeDisplay < PFD.MCP.Altitude.Value - 121.92) ||
+						(PFD0.Stats.Altitude.TapeDisplay <= PFD.MCP.Altitude.Value + 121.92 && PFD0.Stats.Altitude.PreviousTapeDisplay > PFD.MCP.Altitude.Value + 121.92);
 				default:
 					AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function IsAirspeedLow is invalid.");
 					break;
