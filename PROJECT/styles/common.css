@@ -16,15 +16,29 @@
 
 /* General */
 	/* Basics */
-		/* Overall */
+		/* Web fonts */
 		@font-face {
-			font-family: "Inter";
-			src: local("Inter"), url(../fonts/Inter-Regular.woff2), url(../fonts/Inter-Italic.woff2), url(../fonts/Inter-Bold.woff2), url(../fonts/Inter-BoldItalic.woff2);
+			font-family: "Inter"; font-weight: normal; font-style: normal;
+			src: local("Inter"), url(../fonts/Inter-Regular.woff2);
+		}
+		@font-face {
+			font-family: "Inter"; font-weight: normal; font-style: italic;
+			src: local("Inter"), url(../fonts/Inter-Italic.woff2);
+		}
+		@font-face {
+			font-family: "Inter"; font-weight: bold; font-style: normal;
+			src: local("Inter"), url(../fonts/Inter-Bold.woff2);
+		}
+		@font-face {
+			font-family: "Inter"; font-weight: bold; font-style: italic;
+			src: local("Inter"), url(../fonts/Inter-BoldItalic.woff2);
 		}
 		@font-face {
 			font-family: "Iosevka";
 			src: local("Iosevka"), url(../fonts/Iosevka-Regular.woff2);
 		}
+
+		/* Overall */
 		* {
 			transform-origin: inherit;
 			box-sizing: inherit; padding: 0; margin: 0;
