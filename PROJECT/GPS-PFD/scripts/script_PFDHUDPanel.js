@@ -641,7 +641,7 @@
 					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
 					PFD.Altitude.Mode == "Manual"
 				) &&
-				Math.abs(PFD0.Stats.Altitude.RadioDisplay) <= 762) {
+				PFD0.Stats.Altitude.RadioDisplay > -304.8 && PFD0.Stats.Altitude.RadioDisplay <= 762) {
 					Show("Ctnr_PFDHUDPanelRadioAltitude");
 					let ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.RadioDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude),
 					ConvertedRadioAltitudeDisplay = 0;
