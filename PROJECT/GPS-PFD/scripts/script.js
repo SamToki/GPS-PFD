@@ -2187,7 +2187,7 @@
 
 					// Runways ahead
 					if(Math.abs(HeadingDeviation) <= 10) {
-						RunwayAhead[Looper] = Looper;
+						RunwayAhead[RunwayAhead.length] = Looper;
 					}
 				}
 
