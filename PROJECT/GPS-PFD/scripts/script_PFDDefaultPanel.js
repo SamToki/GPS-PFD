@@ -11,47 +11,38 @@
 		// Sub-functions
 			// Sub-functions
 			function RefreshDefaultPanel() {
-				// Initialization
-				let ActiveAirport = 0, GroundAltitude = 0;
-				switch(PFD.FlightMode.FlightMode) {
-					case "DepartureGround":
-					case "TakeOff":
-					case "EmergencyReturn":
-						ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.Selection.Departure]);
-						break;
-					case "Cruise":
-					case "Land":
-					case "ArrivalGround":
-						ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.Selection.Arrival]);
-						break;
-					default:
-						AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshDefaultPanel is invalid.");
-						break;
-				}
-				GroundAltitude = ActiveAirport.Elevation + PFD.Altitude.SeatHeight;
-
 				// Info bar
-				if(PFD0.Status.GPS.IsPositionAvailable == true) {
-					RemoveClass("Ctrl_PFDDefaultPanelGPS", "OrangeText");
-					if(PFD0.Status.GPS.IsPositionAccurate == true && PFD0.Status.GPS.IsAltitudeAvailable == true && PFD0.Status.GPS.IsAltitudeAccurate == true) {
-						ChangeText("Label_PFDDefaultPanelGPSValue", Translate("Normal"));
+				if(PFD0.Status.GPS.PermissionStatus != "Denied") {
+					if(PFD0.Status.GPS.IsPositionAvailable == true) {
+						RemoveClass("Ctrl_PFDDefaultPanelGPS", "OrangeText");
+						if(PFD0.Status.GPS.IsPositionAccurate == true && PFD0.Status.GPS.IsAltitudeAvailable == true && PFD0.Status.GPS.IsAltitudeAccurate == true) {
+							ChangeText("Label_PFDDefaultPanelGPSValue", Translate("Normal"));
+						} else {
+							ChangeText("Label_PFDDefaultPanelGPSValue", Translate("SignalWeak"));
+						}
 					} else {
-						ChangeText("Label_PFDDefaultPanelGPSValue", Translate("SignalWeak"));
+						AddClass("Ctrl_PFDDefaultPanelGPS", "OrangeText");
+						ChangeText("Label_PFDDefaultPanelGPSValue", Translate("Unavailable"));
 					}
 				} else {
 					AddClass("Ctrl_PFDDefaultPanelGPS", "OrangeText");
-					ChangeText("Label_PFDDefaultPanelGPSValue", Translate("Unavailable"));
+					ChangeText("Label_PFDDefaultPanelGPSValue", Translate("Denied"));
 				}
-				if(PFD0.Status.IsAccelAvailable == true) {
-					RemoveClass("Ctrl_PFDDefaultPanelAccel", "OrangeText");
-					ChangeText("Label_PFDDefaultPanelAccelValue", Translate("Normal"));
+				if(PFD0.Status.Accel.PermissionStatus != "Denied") {
+					if(PFD0.Status.Accel.IsAvailable == true) {
+						RemoveClass("Ctrl_PFDDefaultPanelAccel", "OrangeText");
+						ChangeText("Label_PFDDefaultPanelAccelValue", Translate("Normal"));
+					} else {
+						AddClass("Ctrl_PFDDefaultPanelAccel", "OrangeText");
+						ChangeText("Label_PFDDefaultPanelAccelValue", Translate("Unavailable"));
+					}
 				} else {
 					AddClass("Ctrl_PFDDefaultPanelAccel", "OrangeText");
-					ChangeText("Label_PFDDefaultPanelAccelValue", Translate("Unavailable"));
+					ChangeText("Label_PFDDefaultPanelAccelValue", Translate("Denied"));
 				}
 				if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-				(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+				(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+				(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 				PFD.Speed.Mode == "Manual") {
 					ChangeText("Label_PFDDefaultPanelGSValue", ConvertUnit(PFD0.Stats.Speed.GSDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Speed + "OnPFD") + "</span>");
 					ChangeText("Label_PFDDefaultPanelAvgGSValue", ConvertUnit(PFD0.Stats.Speed.AvgGSDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Speed + "OnPFD") + "</span>");
@@ -99,7 +90,7 @@
 				Fade("Ctrl_PFDDefaultPanelAttitudeRoll");
 				Fade("Ctrl_PFDDefaultPanelAttitudeAircraftSymbol");
 				if(PFD.Attitude.IsEnabled == true) {
-					if((PFD.Attitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
+					if((PFD.Attitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
 					PFD.Attitude.Mode == "Manual") {
 						Show("Ctrl_PFDDefaultPanelAttitudeBg");
 						Show("Ctrl_PFDDefaultPanelAttitudePitch");
@@ -151,8 +142,8 @@
 				Fade("Ctrl_PFDDefaultPanelMCPSpeed");
 				Fade("Ctrl_PFDDefaultPanelMachNumber");
 				if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-				(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+				(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+				(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 				PFD.Speed.Mode == "Manual") {
 					// Show ctrls
 					Show("Ctrl_PFDDefaultPanelSpeedTape");
@@ -291,8 +282,8 @@
 				Fade("Ctrl_PFDDefaultPanelMCPAltitude");
 				Fade("Ctrl_PFDDefaultPanelMetricAltitude");
 				if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-				(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+				(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 				PFD.Altitude.Mode == "Manual") {
 					// Show ctrls
 					Show("Ctrl_PFDDefaultPanelAltitudeTape");
@@ -327,7 +318,7 @@
 						// Other altitudes
 						ChangeTop("CtrlGroup_PFDDefaultPanelOtherAltitudes", "calc(50% - 37500px + " + 0.75 * ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + "px)");
 							// Ground altitude
-							ChangeBottom("Ctrl_PFDDefaultPanelGroundAltitude", 0.75 * (ConvertUnit(GroundAltitude, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + 2000) - 40 + "px");
+							ChangeBottom("Ctrl_PFDDefaultPanelGroundAltitude", 0.75 * (ConvertUnit(PFD0.Stats.Altitude.Ground, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + 2000) - 40 + "px");
 
 							// Decision altitude
 							switch(PFD.FlightMode.FlightMode) {
@@ -340,7 +331,7 @@
 								case "ArrivalGround":
 								case "EmergencyReturn":
 									Show("Ctrl_PFDDefaultPanelDecisionAltitude");
-									ChangeBottom("Ctrl_PFDDefaultPanelDecisionAltitude", 0.75 * (ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + 2000) - 10 + "px");
+									ChangeBottom("Ctrl_PFDDefaultPanelDecisionAltitude", 0.75 * (ConvertUnit(PFD0.Stats.Altitude.Ground + AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) + 2000) - 10 + "px");
 									if(PFD0.Status.IsDecisionAltitudeActive == true) {
 										AddClass("Ctrl_PFDDefaultPanelDecisionAltitude", "Active");
 									} else {
@@ -435,8 +426,8 @@
 				Fade("Ctrl_PFDDefaultPanelVerticalSpeedBalloon");
 				Fade("Ctrl_PFDDefaultPanelMCPVerticalSpeed");
 				if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-				(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+				(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 				PFD.Altitude.Mode == "Manual") {
 					// Show ctrls
 					Show("Ctrl_PFDDefaultPanelVerticalSpeedTape");
@@ -671,9 +662,9 @@
 				// DME
 				if(PFD.Nav.IsEnabled == true && PFD0.Status.GPS.IsPositionAvailable == true) {
 					Show("Ctnr_PFDDefaultPanelDME");
+					ChangeText("Label_PFDDefaultPanelDMERunway", Translate("Runway") + " " + AirportLibrary0.ActiveRunwayName);
 					if(PFD0.Stats.Nav.Distance < 10000000) { // Max 10000 kilometers.
-						ChangeText("Label_PFDDefaultPanelDMEDistance",
-							ConvertUnit(PFD0.Stats.Nav.Distance, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Distance + "OnPFD") + "</span>");
+						ChangeText("Label_PFDDefaultPanelDMEDistance", ConvertUnit(PFD0.Stats.Nav.Distance, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Distance + "OnPFD") + "</span>");
 						if(PFD0.Stats.Speed.GSDisplay > 0 && PFD0.Stats.Nav.ETA < 360000000) { // Max 100 hours.
 							ChangeText("Label_PFDDefaultPanelDMEETA",
 								Math.trunc(PFD0.Stats.Nav.ETA / 3600000) + "<span class=\"SmallerText\">" + Translate("Hour") + "</span>" +
@@ -738,8 +729,8 @@
 				PFD0.Status.GPS.IsPositionAvailable == true &&
 				(
 					(PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-					(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 					PFD.Altitude.Mode == "Manual"
 				)) {
 					switch(PFD.FlightMode.FlightMode) {
@@ -788,8 +779,8 @@
 				PFD0.Status.GPS.IsPositionAvailable == true &&
 				(
 					(PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-					(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 					PFD.Altitude.Mode == "Manual"
 				) &&
 				(
@@ -828,8 +819,8 @@
 				// Radio altitude
 				if((
 					(PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-					(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 					PFD.Altitude.Mode == "Manual"
 				) &&
 				PFD0.Stats.Altitude.RadioDisplay > -304.8 && PFD0.Stats.Altitude.RadioDisplay <= 762) {
@@ -905,8 +896,8 @@
 				// Decision altitude
 				Fade("Ctnr_PFDDefaultPanelDecisionAltitude");
 				if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-				(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+				(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 				PFD.Altitude.Mode == "Manual") {
 					switch(PFD.FlightMode.FlightMode) {
 						case "DepartureGround":
@@ -917,7 +908,7 @@
 						case "ArrivalGround":
 						case "EmergencyReturn":
 							Show("Ctnr_PFDDefaultPanelDecisionAltitude");
-							ChangeText("Label_PFDDefaultPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(GroundAltitude + ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)));
+							ChangeText("Label_PFDDefaultPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(PFD0.Stats.Altitude.Ground + AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)));
 							if(PFD0.Status.IsDecisionAltitudeActive == true) {
 								AddClass("Ctnr_PFDDefaultPanelDecisionAltitude", "Active");
 								if(PFD0.Stats.ClockTime - PFD0.Stats.Altitude.DecisionTimestamp < 3000) {

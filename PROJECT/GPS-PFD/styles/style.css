@@ -1058,7 +1058,7 @@
 				}
 
 				/* Area specific */
-					/* Ctrl */
+					/* Ctrls */
 						/* Fullscreen etc. */
 						#Ctrl_PFDToggleFullscreen, #Ctrl_PFDResetAccelSpeed, #Ctrl_PFDResetAvgSpeeds, #Ctrl_PFDHotkeyList {
 							height: 35px;
@@ -1214,6 +1214,26 @@
 							top: 100%;
 						}
 
+					/* Runways */
+					#CtrlGroup_PFDRunways .ScrollableList {
+						height: 225px;
+					}
+					#CtrlGroup_PFDRunways .Glow {
+						box-shadow: inset 0 0 10px 5px #F0D0FF;
+						animation: Anim_GlowInside 1500ms infinite ease-in-out;
+					}
+						@keyframes Anim_GlowInside {
+							0%, 100% {
+								box-shadow: none;
+							}
+							50% {
+								box-shadow: inset 0 0 10px 5px #F0D0FF;
+							}
+						}
+					.PFDRunwayNavData {
+						margin: 0 0 0 10px;
+					}
+
 					/* Options */
 					#CtrlGroup_PFDOptions .Ctrl {
 						height: 35px; margin: 0 0 10px 0;
@@ -1246,14 +1266,7 @@
 			padding: 5px;
 			display: flex; flex-direction: row-reverse; justify-content: space-between; align-items: center;
 		}
-		#AirportLibrary .Radiobtn {
-			width: 31px;
-		}
-		.ListItemLabel {
-			width: calc(100% - 76px);
-		}
 		.ListItemName {
-			max-width: 216px;
 			overflow: hidden;
 		}
 		#AirportLibrary .Button.ShownAsLabel {
@@ -1269,16 +1282,36 @@
 		.ListItemDelete {
 			position: absolute; top: calc(50% - 11px); right: 5px;
 		}
-		#Ctrl_AirportLibraryImport {
-			width: calc(100% - 90px); height: 80px;
-		}
-		#Textbox_AirportLibraryImport {
-			width: 100%;
-			white-space: pre;
-		}
-		#Ctrl_AirportLibraryImport2 {
-			width: 80px; height: 80px;
-		}
+			/* Airports */
+			#CtrlGroup_AirportLibraryAirportList .Radiobtn {
+				width: 31px;
+			}
+			.AirportLibraryAirportLabel {
+				width: calc(100% - 76px);
+			}
+			#CtrlGroup_AirportLibraryAirportList .ListItemName {
+				max-width: 216px;
+			}
+
+			/* Runways */
+			.AirportLibraryRunwayLabel {
+				width: calc(100% - 32px);
+			}
+			#CtrlGroup_AirportLibraryRunwayList .ListItemName {
+				max-width: 313px;
+			}
+
+			/* Management */
+			#Ctrl_AirportLibraryImport {
+				width: calc(100% - 90px); height: 80px;
+			}
+			#Textbox_AirportLibraryImport {
+				width: 100%;
+				white-space: pre;
+			}
+			#Ctrl_AirportLibraryImport2 {
+				width: 80px; height: 80px;
+			}
 
 /* Responsive web design */
 @media (max-width: 880px) {
@@ -1291,15 +1324,15 @@
 @media (min-width: 830px) { /* Optimization for long fieldsets exceeding 600px height. */
 	/* Area specific */
 		/* Main */
-		#Item_AirportLibraryProperties, #Item_SettingsSpeed {
+		#Item_AirportLibraryRunwayProperties, #Item_SettingsSpeed {
 			width: 800px;
 		}
-		#Item_AirportLibraryProperties .Ctrl, #Item_SettingsSpeed .Ctrl { /* .WidthDividedBy2 */
+		#Item_AirportLibraryRunwayProperties .Ctrl, #Item_SettingsSpeed .Ctrl { /* .WidthDividedBy2 */
 			width: calc((100% - 10px) / 2);
 		}
-		#Item_AirportLibraryProperties #Ctrl_AirportLibraryLat,
-		#Item_AirportLibraryProperties #Ctrl_AirportLibraryLon,
-		#Item_AirportLibraryProperties #Ctrl_AirportLibraryReplaceAirportCoordinatesWithCurrent { /* .WidthDividedBy3 */
+		#Item_AirportLibraryRunwayProperties #Ctrl_AirportLibraryLat,
+		#Item_AirportLibraryRunwayProperties #Ctrl_AirportLibraryLon,
+		#Item_AirportLibraryRunwayProperties #Ctrl_AirportLibraryReplaceRunwayCoordinatesWithCurrent { /* .WidthDividedBy3 */
 			width: calc((100% - 20px) / 3);
 		}
 }

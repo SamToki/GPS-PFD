@@ -142,7 +142,7 @@
 			overflow: auto;
 		}
 		.ScrollableList {
-			height: 280px;
+			height: 295px;
 			overflow: auto;
 		}
 		.ScrollableList .Ctrl {
@@ -791,7 +791,7 @@
 				margin: 0 7.5px 15px 7.5px;
 			}
 			.ScrollableList {
-				height: 210px;
+				height: 225px;
 			}
 
 			/* Floating ctrls */

@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 0.50,
+		const CurrentVersion = 0.51,
 		Preset = {
 			Subsystem: {
 				I18n: {
@@ -57,7 +57,7 @@
 						{
 							Name: "Boeing737-800",
 							Content: {
-								Min: 61.728,
+								Min: 55.5552,
 								Weight: 60000, WingArea: 125,
 								MaxLiftCoefficient: {
 									OnFlapsUp: 1.4, OnFlapsFull: 2.7
@@ -68,7 +68,7 @@
 						{
 							Name: "AirbusA320",
 							Content: {
-								Min: 61.728,
+								Min: 60.6992,
 								Weight: 60000, WingArea: 122.6,
 								MaxLiftCoefficient: {
 									OnFlapsUp: 1.5, OnFlapsFull: 2.0
@@ -155,14 +155,19 @@
 			},
 			Status: {
 				GPS: {
+					PermissionStatus: "Unknown",
 					IsPositionAvailable: false, IsPositionAccurate: false,
 					IsSpeedAvailable: false, IsAltitudeAvailable: false, IsAltitudeAccurate: false, IsHeadingAvailable: false
 				},
-				IsAccelAvailable: false,
+				Accel: {
+					PermissionStatus: "Unknown",
+					IsAvailable: false
+				},
 				IsDecisionAltitudeActive: false
 			},
 			Stats: {
 				ClockTime: 0, PreviousClockTime: Date.now(),
+				FlightModeTimestamp: 0,
 				Attitude: {
 					Pitch: 0, Pitch2: 0, Roll: 0
 				},
@@ -187,8 +192,7 @@
 					Altitude: 0, TapeDisplay: 0, PreviousTapeDisplay: 0, BalloonDisplay: [0, 0, 0, 0, 0],
 					Trend: 0, TrendDisplay: 0,
 					BeepTimestamp: 0,
-					RadioDisplay: 0,
-					DecisionTimestamp: 0
+					Ground: 0, RadioDisplay: 0, DecisionTimestamp: 0
 				},
 				Heading: {
 					Heading: 0, Display: 0
@@ -197,8 +201,7 @@
 					Lat: 0, Lon: 0,
 					Distance: 0, Bearing: 0,
 					ETA: 0, LocalizerDeviation: 0, GlideSlopeDeviation: 0, MarkerBeacon: ""
-				},
-				FlightModeTimestamp: 0
+				}
 			},
 			Alert: {
 				Active: {
@@ -208,6 +211,9 @@
 					SpeedCallout: "", AltitudeCallout: "", AttitudeWarning: "", SpeedWarning: "", AltitudeWarning: ""
 				}
 			}
+		},
+		AirportLibrary0 = {
+			DepartureAirport: 0, ActiveAirport: 0, ActiveRunwayName: ""
 		};
 		Automation.ClockPFD = null;
 		Automation.ClockAvgSpeeds = null;
@@ -232,6 +238,10 @@
 			}
 		},
 		PFD = {
+			FlightMode: {
+				FlightMode: "DepartureGround",
+				AutoSwitchFlightModeAndSwapAirports: true
+			},
 			Attitude: {
 				IsEnabled: true,
 				Mode: "Accel",
@@ -258,11 +268,8 @@
 			},
 			Nav: {
 				IsEnabled: false,
-				ETACalcMethod: "UseAvgGS"
-			},
-			FlightMode: {
-				FlightMode: "DepartureGround",
-				AutoSwitchFlightModeAndSwapAirports: true
+				ETACalcMethod: "UseRealTimeGS",
+				AutoSwitchRunwayWhenLanding: true
 			},
 			WarningSystem: {
 				IsEnabled: false
@@ -284,7 +291,7 @@
 			Flaps: 0
 		},
 		AirportLibrary = {
-			Selection: {
+			AirportSelection: {
 				Departure: 1, Arrival: 2
 			},
 			Airport: [
@@ -293,61 +300,341 @@
 					Name: "上海浦东国际机场",
 					Region: "中国大陆 上海",
 					Code: "PVG, ZSPD",
-					Coordinates: {
-						Lat: 31.14323, Lon: 121.80602
-					},
-					Elevation: 5.2,
 					Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
-					GlideSlopeAngle: 3,
-					MarkerBeaconDistance: {
-						Outer: 9260, Middle: 926, Inner: 185.2
-					},
-					DecisionHeight: 76.2
+					RunwaySelection: 1,
+					Runway: [
+						0,
+						{
+							Heading: 15, Suffix: "",
+							Lat: 31.14940, Lon: 121.83949,
+							Elevation: -5,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 16, Suffix: "L",
+							Lat: 31.15837, Lon: 121.81684,
+							Elevation: 2.4,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 16, Suffix: "R",
+							Lat: 31.15763, Lon: 121.81220,
+							Elevation: 3.6,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 17, Suffix: "L",
+							Lat: 31.15983, Lon: 121.78645,
+							Elevation: 1,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 17, Suffix: "R",
+							Lat: 31.15337, Lon: 121.78388,
+							Elevation: 4.9,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 33, Suffix: "",
+							Lat: 31.12391, Lon: 121.84902,
+							Elevation: 1,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 34, Suffix: "L",
+							Lat: 31.12810, Lon: 121.82344,
+							Elevation: 3.4,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 34, Suffix: "R",
+							Lat: 31.12957, Lon: 121.82756,
+							Elevation: 3.2,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 35, Suffix: "L",
+							Lat: 31.12744, Lon: 121.79366,
+							Elevation: 5,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 35, Suffix: "R",
+							Lat: 31.12891, Lon: 121.79812,
+							Elevation: 3.4,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						}
+					]
 				},
 				{
 					Name: "东京国际机场 (羽田机场)",
 					Region: "日本 东京",
 					Code: "HND, RJTT",
-					Coordinates: {
-						Lat: 35.55001, Lon: 139.78635
-					},
-					Elevation: 4.3,
 					Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
-					GlideSlopeAngle: 3,
-					MarkerBeaconDistance: {
-						Outer: 9260, Middle: 926, Inner: 185.2
-					},
-					DecisionHeight: 76.2
+					RunwaySelection: 1,
+					Runway: [
+						0,
+						{
+							Heading: 4, Suffix: "",
+							Lat: 35.54987, Lon: 139.76206,
+							Elevation: -4.4,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 5, Suffix: "",
+							Lat: 35.52502, Lon: 139.80446,
+							Elevation: -18,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 16, Suffix: "L",
+							Lat: 35.56488, Lon: 139.78721,
+							Elevation: -5,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 16, Suffix: "R",
+							Lat: 35.55826, Lon: 139.77026,
+							Elevation: -0.1,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 22, Suffix: "",
+							Lat: 35.56692, Lon: 139.77661,
+							Elevation: 2.5,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 23, Suffix: "",
+							Lat: 35.53983, Lon: 139.82128,
+							Elevation: -18,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 34, Suffix: "L",
+							Lat: 35.53780, Lon: 139.78480,
+							Elevation: -4.7,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 34, Suffix: "R",
+							Lat: 35.54046, Lon: 139.80459,
+							Elevation: -15,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						}
+					]
 				},
 				{
 					Name: "约翰·肯尼迪国际机场",
 					Region: "美国 纽约",
 					Code: "JFK, KJFK",
-					Coordinates: {
-						Lat: 40.64168, Lon: -73.77834
-					},
-					Elevation: 3,
 					Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
-					GlideSlopeAngle: 3,
-					MarkerBeaconDistance: {
-						Outer: 9260, Middle: 926, Inner: 185.2
-					},
-					DecisionHeight: 76.2
+					RunwaySelection: 1,
+					Runway: [
+						0,
+						{
+							Heading: 4, Suffix: "L",
+							Lat: 40.62306, Lon: -73.78487,
+							Elevation: 3,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 4, Suffix: "R",
+							Lat: 40.62655, Lon: -73.76950,
+							Elevation: 3.9,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 13, Suffix: "L",
+							Lat: 40.65706, Lon: -73.78873,
+							Elevation: 3,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 13, Suffix: "R",
+							Lat: 40.64749, Lon: -73.81469,
+							Elevation: 3,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 22, Suffix: "L",
+							Lat: 40.64426, Lon: -73.75564,
+							Elevation: 3,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 22, Suffix: "R",
+							Lat: 40.64928, Lon: -73.76440,
+							Elevation: 4,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 31, Suffix: "L",
+							Lat: 40.62887, Lon: -73.77367,
+							Elevation: 3,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 31, Suffix: "R",
+							Lat: 40.64440, Lon: -73.76070,
+							Elevation: 3,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						}
+					]
 				},
 				{
 					Name: "希思罗机场",
 					Region: "英国 伦敦",
 					Code: "LHR, EGLL",
-					Coordinates: {
-						Lat: 51.47108, Lon: -0.46143
-					},
-					Elevation: 24,
 					Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
-					GlideSlopeAngle: 3,
-					MarkerBeaconDistance: {
-						Outer: 9260, Middle: 926, Inner: 185.2
-					},
-					DecisionHeight: 76.2
+					RunwaySelection: 1,
+					Runway: [
+						0,
+						{
+							Heading: 9, Suffix: "L",
+							Lat: 51.47752, Lon: -0.48735,
+							Elevation: 24.4,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 9, Suffix: "R",
+							Lat: 51.46477, Lon: -0.48417,
+							Elevation: 18.2,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 27, Suffix: "L",
+							Lat: 51.46496, Lon: -0.43658,
+							Elevation: 19.4,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						},
+						{
+							Heading: 27, Suffix: "R",
+							Lat: 51.47766, Lon: -0.43576,
+							Elevation: 31,
+							GlideSlopeAngle: 3,
+							MarkerBeaconDistance: {
+								Outer: 9260, Middle: 926, Inner: 185.2
+							},
+							DecisionHeight: 76.2
+						}
+					]
 				}
 			]
 		};
@@ -439,9 +726,11 @@
 				switch(true) {
 					case ServiceWorkerRegistration.installing != null:
 						ChangeText("Label_SettingsPWAServiceWorkerRegistration", "等待生效");
+						AddClass("Label_SettingsPWAServiceWorkerRegistration", "GreenText");
 						break;
 					case ServiceWorkerRegistration.waiting != null:
 						ChangeText("Label_SettingsPWAServiceWorkerRegistration", "等待更新");
+						AddClass("Label_SettingsPWAServiceWorkerRegistration", "GreenText");
 						Show("Label_HelpPWANewVersionReady");
 						ShowDialog("System_PWANewVersionReady",
 							"Info",
@@ -470,8 +759,8 @@
 		if(System.DontShowAgain.includes("GPSPFD_System_Welcome") == false) {
 			ShowDialog("System_Welcome",
 				"Info",
-				"欢迎使用 GPS-PFD。若您是首次使用，请先阅读「使用前须知」。",
-				"不再提示", "", "了解更多", "关闭");
+				"欢迎使用 GPS-PFD。若您是首次使用，请先前往阅读「使用前须知」。",
+				"不再提示", "", "前往", "关闭");
 		}
 	}
 
@@ -786,7 +1075,6 @@
 							ChangeText("Label_PFDDefaultPanelSpeedModeTitle", "速度模式");
 							ChangeText("Label_PFDDefaultPanelAltitudeModeTitle", "高度模式");
 							ChangeText("Label_PFDDefaultPanelHeadingModeTitle", "朝向模式");
-							ChangeText("Label_PFDDefaultPanelDMETitle", "测距仪");
 							ChangeText("Label_PFDDefaultPanelDecisionAltitudeTitle", "决断高度");
 							break;
 						case "HUD":
@@ -795,7 +1083,6 @@
 							ChangeText("Label_PFDHUDPanelAltitudeModeTitle", "高度模式");
 							ChangeText("Label_PFDHUDPanelHeadingModeTitle", "朝向模式");
 							ChangeText("Label_PFDHUDPanelSpeedGSTitle", "地速");
-							ChangeText("Label_PFDHUDPanelDMETitle", "测距仪");
 							ChangeText("Label_PFDHUDPanelDecisionAltitudeTitle", "决断高度");
 							break;
 						case "Bocchi737":
@@ -823,7 +1110,6 @@
 							ChangeText("Label_PFDDefaultPanelSpeedModeTitle", "SPD MODE");
 							ChangeText("Label_PFDDefaultPanelAltitudeModeTitle", "ALT MODE");
 							ChangeText("Label_PFDDefaultPanelHeadingModeTitle", "HDG MODE");
-							ChangeText("Label_PFDDefaultPanelDMETitle", "DME");
 							ChangeText("Label_PFDDefaultPanelDecisionAltitudeTitle", "DA");
 							break;
 						case "HUD":
@@ -832,7 +1118,6 @@
 							ChangeText("Label_PFDHUDPanelAltitudeModeTitle", "ALT MODE");
 							ChangeText("Label_PFDHUDPanelHeadingModeTitle", "HDG MODE");
 							ChangeText("Label_PFDHUDPanelSpeedGSTitle", "GS");
-							ChangeText("Label_PFDHUDPanelDMETitle", "DME");
 							ChangeText("Label_PFDHUDPanelDecisionAltitudeTitle", "DA");
 							break;
 						case "Bocchi737":
@@ -1085,8 +1370,10 @@
 		RefreshPFDData();
 		RefreshScale();
 		RefreshPanel();
-		RefreshPFDAudio();
+		RefreshAudio();
+		RefreshRunways();
 		RefreshTechInfo();
+		AutoSwitchFlightModeAndSwapAirports();
 
 		// Update previous variables
 		PFD0.Stats.PreviousClockTime = PFD0.Stats.ClockTime;
@@ -1096,9 +1383,28 @@
 		// Sub-functions
 		function RefreshGPSStatus() {
 			PFD0.Status.GPS = {
+				PermissionStatus: "Unknown",
 				IsPositionAvailable: false, IsPositionAccurate: false,
 				IsSpeedAvailable: false, IsAltitudeAvailable: false, IsAltitudeAccurate: false, IsHeadingAvailable: false
 			};
+			navigator.permissions.query({name:"geolocation"}).then(function(PermissionStatus) {
+				switch(PermissionStatus.state) {
+					case "granted":
+						PFD0.Status.GPS.PermissionStatus = "Allowed";
+						ChangeText("Label_SettingsPermissionsGPS", "已被允许");
+						RemoveClass("Label_SettingsPermissionsGPS", "RedText");
+						break;
+					case "denied":
+						PFD0.Status.GPS.PermissionStatus = "Denied";
+						ChangeText("Label_SettingsPermissionsGPS", "已被禁止");
+						AddClass("Label_SettingsPermissionsGPS", "RedText");
+						break;
+					default:
+						ChangeText("Label_SettingsPermissionsGPS", "未知");
+						RemoveClass("Label_SettingsPermissionsGPS", "RedText");
+						break;
+				}
+			});
 			if(PFD0.Stats.ClockTime - PFD0.RawData.GPS.Timestamp < 3000) {
 				if(PFD0.RawData.GPS.Position.Lat != null && PFD0.RawData.GPS.Position.Lon != null) {
 					PFD0.Status.GPS.IsPositionAvailable = true;
@@ -1123,9 +1429,9 @@
 		function RefreshAccelStatus() {
 			if(PFD0.Stats.ClockTime - PFD0.RawData.Accel.Timestamp < 1000 &&
 			PFD0.RawData.Accel.Accel.Absolute.X != null && PFD0.RawData.Accel.Accel.AbsoluteWithGravity.X != null) {
-				PFD0.Status.IsAccelAvailable = true;
+				PFD0.Status.Accel.IsAvailable = true;
 			} else {
-				PFD0.Status.IsAccelAvailable = false;
+				PFD0.Status.Accel.IsAvailable = false;
 			}
 		}
 		function RefreshManualData() {
@@ -1163,29 +1469,10 @@
 			}
 		}
 		function RefreshPFDData() {
-			// Initialization
-			let ActiveAirport = 0, GroundAltitude = 0;
-			switch(PFD.FlightMode.FlightMode) {
-				case "DepartureGround":
-				case "TakeOff":
-				case "EmergencyReturn":
-					ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.Selection.Departure]);
-					break;
-				case "Cruise":
-				case "Land":
-				case "ArrivalGround":
-					ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.Selection.Arrival]);
-					break;
-				default:
-					AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
-					break;
-			}
-			GroundAltitude = ActiveAirport.Elevation + PFD.Altitude.SeatHeight;
-
 			// Attitude
 			if(PFD.Attitude.IsEnabled == true) {
 				switch(true) {
-					case PFD.Attitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true:
+					case PFD.Attitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true:
 						PFD0.Stats.Attitude.Pitch = CheckRangeAndCorrect(PFD0.RawData.Accel.Attitude.Aligned.Pitch, -90, 90);
 						PFD0.Stats.Attitude.Roll = PFD0.RawData.Accel.Attitude.Aligned.Roll;
 						if(PFD0.Stats.Attitude.Roll < -180) {
@@ -1210,8 +1497,8 @@
 				case PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true:
 					PFD0.Stats.Altitude.Altitude = PFD0.RawData.GPS.Altitude.Altitude;
 					break;
-				case PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true:
-				case PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true):
+				case PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true:
+				case PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true):
 					PFD0.Stats.Altitude.Altitude = PFD0.RawData.Accel.Altitude;
 					break;
 				case PFD.Altitude.Mode == "Manual":
@@ -1269,8 +1556,8 @@
 				case PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true:
 					PFD0.Stats.Speed.Speed = PFD0.RawData.GPS.Speed;
 					break;
-				case PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true:
-				case PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true):
+				case PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true:
+				case PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true):
 					PFD0.Stats.Speed.Speed = PFD0.RawData.Accel.Speed.Speed;
 					break;
 				case PFD.Speed.Mode == "Manual":
@@ -1309,7 +1596,7 @@
 
 				// IAS
 				PFD0.Stats.Speed.IAS = CalcIAS(PFD.Speed.IASAlgorithm, PFD0.Stats.Speed.TAS, PFD0.Stats.Altitude.TapeDisplay,
-					GroundAltitude, ActiveAirport.Temperature, ActiveAirport.RelativeHumidity, ActiveAirport.QNH,
+					PFD0.Stats.Altitude.Ground, AirportLibrary0.ActiveAirport.Temperature, AirportLibrary0.ActiveAirport.RelativeHumidity, AirportLibrary0.ActiveAirport.QNH,
 					PFD.Attitude.IsEnabled, Math.abs(PFD0.Stats.Attitude.Pitch - PFD0.Stats.Speed.Pitch));
 					// Tape
 					PFD0.Stats.Speed.TapeDisplay += (PFD0.Stats.Speed.IAS - PFD0.Stats.Speed.TapeDisplay) / 50 * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 30);
@@ -1324,7 +1611,7 @@
 							// Speed limits
 							if(PFD.Speed.CalcStallSpeed == true) {
 								let StallSpeed = CalcStallSpeed(PFD0.Stats.Altitude.TapeDisplay,
-									GroundAltitude, ActiveAirport.Temperature, ActiveAirport.RelativeHumidity, ActiveAirport.QNH,
+									PFD0.Stats.Altitude.Ground, AirportLibrary0.ActiveAirport.Temperature, AirportLibrary0.ActiveAirport.RelativeHumidity, AirportLibrary0.ActiveAirport.QNH,
 									PFD.Attitude.IsEnabled, PFD0.Stats.Attitude.Roll,
 									PFD.Speed.Limit.Weight, PFD.Speed.Limit.WingArea,
 									CalcMaxLiftCoefficient(PFD.Speed.Limit.MaxLiftCoefficient.OnFlapsUp, PFD.Speed.Limit.MaxLiftCoefficient.OnFlapsFull, PFD.Flaps));
@@ -1334,7 +1621,7 @@
 							}
 							PFD0.Stats.Speed.Limit.Max = CalcMaxSpeedLimit(PFD.Speed.Limit.VMO, PFD.Speed.Limit.VFE, PFD.Flaps,
 								CalcIASFromMachNumber(PFD.Speed.IASAlgorithm, PFD.Speed.Limit.MMO, PFD0.Stats.Altitude.TapeDisplay,
-								GroundAltitude, ActiveAirport.Temperature, ActiveAirport.RelativeHumidity, ActiveAirport.QNH));
+								PFD0.Stats.Altitude.Ground, AirportLibrary0.ActiveAirport.Temperature, AirportLibrary0.ActiveAirport.RelativeHumidity, AirportLibrary0.ActiveAirport.QNH));
 
 							// Avg IAS
 							PFD0.Stats.Speed.AvgIASDisplay += (PFD0.Stats.Speed.AvgIAS - PFD0.Stats.Speed.AvgIASDisplay) / 50 * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 30);
@@ -1352,7 +1639,7 @@
 					}
 
 				// Mach number
-				PFD0.Stats.Speed.MachNumber = CalcMachNumber(PFD0.Stats.Speed.TASDisplay, PFD0.Stats.Altitude.TapeDisplay, GroundAltitude, ActiveAirport.Temperature);
+				PFD0.Stats.Speed.MachNumber = CalcMachNumber(PFD0.Stats.Speed.TASDisplay, PFD0.Stats.Altitude.TapeDisplay, PFD0.Stats.Altitude.Ground, AirportLibrary0.ActiveAirport.Temperature);
 
 			// MCP
 				// Speed
@@ -1360,13 +1647,13 @@
 					case "IAS":
 						PFD.MCP.Speed.MachNumber = CheckRangeAndCorrect(
 							CalcMachNumberFromIAS(PFD.Speed.IASAlgorithm, PFD.MCP.Speed.IAS, PFD0.Stats.Altitude.TapeDisplay,
-							GroundAltitude, ActiveAirport.Temperature, ActiveAirport.RelativeHumidity, ActiveAirport.QNH),
+							PFD0.Stats.Altitude.Ground, AirportLibrary0.ActiveAirport.Temperature, AirportLibrary0.ActiveAirport.RelativeHumidity, AirportLibrary0.ActiveAirport.QNH),
 							0, 9.999);
 						break;
 					case "MachNumber":
 						PFD.MCP.Speed.IAS = CheckRangeAndCorrect(
 							CalcIASFromMachNumber(PFD.Speed.IASAlgorithm, PFD.MCP.Speed.MachNumber, PFD0.Stats.Altitude.TapeDisplay,
-							GroundAltitude, ActiveAirport.Temperature, ActiveAirport.RelativeHumidity, ActiveAirport.QNH),
+							PFD0.Stats.Altitude.Ground, AirportLibrary0.ActiveAirport.Temperature, AirportLibrary0.ActiveAirport.RelativeHumidity, AirportLibrary0.ActiveAirport.QNH),
 							0, 277.5);
 						break;
 					default:
@@ -1381,10 +1668,13 @@
 				PFD0.Stats.Nav.Lon = PFD0.RawData.GPS.Position.Lon;
 
 				// Distance and bearing
-				PFD0.Stats.Nav.Distance = CalcDistance(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon, ActiveAirport.Coordinates.Lat, ActiveAirport.Coordinates.Lon);
-				PFD0.Stats.Nav.Bearing = CalcBearing(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon, ActiveAirport.Coordinates.Lat, ActiveAirport.Coordinates.Lon);
+				PFD0.Stats.Nav.Distance = CalcDistance(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon,
+					AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Lat, AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Lon);
+				PFD0.Stats.Nav.Bearing = CalcBearing(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon,
+					AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Lat, AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Lon);
 
 				// DME
+				AirportLibrary0.ActiveRunwayName = AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Heading.toString().padStart(2, "0") + AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Suffix;
 				switch(PFD.Nav.ETACalcMethod) {
 					case "UseRealTimeGS":
 						if(PFD0.Stats.Speed.GSDisplay > 0) {
@@ -1403,25 +1693,31 @@
 
 				// Localizer
 				PFD0.Stats.Nav.LocalizerDeviation = PFD0.Stats.Heading.Display - PFD0.Stats.Nav.Bearing;
+				if(PFD0.Stats.Nav.LocalizerDeviation < -180) {
+					PFD0.Stats.Nav.LocalizerDeviation += 360;
+				}
+				if(PFD0.Stats.Nav.LocalizerDeviation > 180) {
+					PFD0.Stats.Nav.LocalizerDeviation -= 360;
+				}
 
 				// Glide slope
 				if(PFD0.Stats.Nav.Distance > 0) {
-					PFD0.Stats.Nav.GlideSlopeDeviation = RadToDeg(Math.atan(PFD0.Stats.Altitude.RadioDisplay / PFD0.Stats.Nav.Distance)) - ActiveAirport.GlideSlopeAngle;
+					PFD0.Stats.Nav.GlideSlopeDeviation = RadToDeg(Math.atan(PFD0.Stats.Altitude.RadioDisplay / PFD0.Stats.Nav.Distance)) - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].GlideSlopeAngle;
 				} else {
-					PFD0.Stats.Nav.GlideSlopeDeviation = -ActiveAirport.GlideSlopeAngle;
+					PFD0.Stats.Nav.GlideSlopeDeviation = -AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].GlideSlopeAngle;
 				}
 
 				// Marker beacon
 				PFD0.Stats.Nav.MarkerBeacon = "";
 				if(Math.abs(PFD0.Stats.Nav.LocalizerDeviation) <= 2) {
 					switch(true) {
-						case Math.abs(PFD0.Stats.Nav.Distance - ActiveAirport.MarkerBeaconDistance.Outer) < PFD0.Stats.Altitude.RadioDisplay / 3:
+						case Math.abs(PFD0.Stats.Nav.Distance - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].MarkerBeaconDistance.Outer) < PFD0.Stats.Altitude.RadioDisplay / 3:
 							PFD0.Stats.Nav.MarkerBeacon = "OuterMarker";
 							break;
-						case Math.abs(PFD0.Stats.Nav.Distance - ActiveAirport.MarkerBeaconDistance.Middle) < PFD0.Stats.Altitude.RadioDisplay / 3:
+						case Math.abs(PFD0.Stats.Nav.Distance - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].MarkerBeaconDistance.Middle) < PFD0.Stats.Altitude.RadioDisplay / 3:
 							PFD0.Stats.Nav.MarkerBeacon = "MiddleMarker";
 							break;
-						case Math.abs(PFD0.Stats.Nav.Distance - ActiveAirport.MarkerBeaconDistance.Inner) < PFD0.Stats.Altitude.RadioDisplay / 3:
+						case Math.abs(PFD0.Stats.Nav.Distance - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].MarkerBeaconDistance.Inner) < PFD0.Stats.Altitude.RadioDisplay / 3:
 							PFD0.Stats.Nav.MarkerBeacon = "InnerMarker";
 							break;
 						default:
@@ -1431,7 +1727,7 @@
 			}
 
 			// Radio altitude
-			PFD0.Stats.Altitude.RadioDisplay = PFD0.Stats.Altitude.TapeDisplay - GroundAltitude;
+			PFD0.Stats.Altitude.RadioDisplay = PFD0.Stats.Altitude.TapeDisplay - PFD0.Stats.Altitude.Ground;
 
 			// Decision altitude
 			switch(PFD.FlightMode.FlightMode) {
@@ -1443,9 +1739,9 @@
 					break;
 				case "Land":
 				case "EmergencyReturn":
-					if(PFD0.Stats.Altitude.TapeDisplay <= GroundAltitude + ActiveAirport.DecisionHeight) {
+					if(PFD0.Stats.Altitude.TapeDisplay <= PFD0.Stats.Altitude.Ground + AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].DecisionHeight) {
 						PFD0.Status.IsDecisionAltitudeActive = true;
-						if(PFD0.Stats.Altitude.PreviousTapeDisplay > GroundAltitude + ActiveAirport.DecisionHeight) {
+						if(PFD0.Stats.Altitude.PreviousTapeDisplay > PFD0.Stats.Altitude.Ground + AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].DecisionHeight) {
 							PFD0.Stats.Altitude.DecisionTimestamp = PFD0.Stats.ClockTime;
 						}
 					}
@@ -1453,64 +1749,6 @@
 				default:
 					AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
 					break;
-			}
-
-			// Flight mode auto switch & airport data auto swap
-			if(PFD.FlightMode.AutoSwitchFlightModeAndSwapAirports == true) {
-				switch(PFD.FlightMode.FlightMode) {
-					case "DepartureGround":
-						if(PFD0.Stats.Speed.TapeDisplay >= PFD.Speed.TakeOff.VR &&
-						PFD0.Stats.Altitude.TapeDisplay - GroundAltitude >= 9.144 &&
-						PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude < 9.144) {
-							PFD.FlightMode.FlightMode = "TakeOff";
-							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
-							setTimeout(RefreshPFD, 0);
-						}
-						break;
-					case "TakeOff":
-						if(PFD0.Stats.Altitude.TapeDisplay - GroundAltitude >= 914.4 &&
-						PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude < 914.4) {
-							PFD.FlightMode.FlightMode = "Cruise";
-							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
-							setTimeout(RefreshPFD, 0);
-						}
-						break;
-					case "Cruise":
-						if(PFD0.Stats.Altitude.TapeDisplay - GroundAltitude <= 914.4 &&
-						PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude > 914.4) {
-							PFD.FlightMode.FlightMode = "Land";
-							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
-							setTimeout(RefreshPFD, 0);
-						}
-						break;
-					case "Land":
-						if(PFD0.Stats.Altitude.TapeDisplay - GroundAltitude <= 9.144 &&
-						PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude > 9.144) {
-							PFD.FlightMode.FlightMode = "ArrivalGround";
-							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
-							setTimeout(RefreshPFD, 0);
-						}
-						break;
-					case "ArrivalGround":
-						if(PFD0.Stats.Speed.TapeDisplay <= 2.572 && PFD0.Stats.Speed.PreviousTapeDisplay > 2.572) {
-							PFD.FlightMode.FlightMode = "DepartureGround";
-							SwapAirports();
-							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
-							setTimeout(RefreshPFD, 0);
-						}
-						break;
-					case "EmergencyReturn":
-						if(PFD0.Stats.Altitude.TapeDisplay - GroundAltitude <= 9.144 &&
-						PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude > 9.144) {
-							PFD.FlightMode.FlightMode = "DepartureGround";
-							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
-							setTimeout(RefreshPFD, 0);
-						}
-						break;
-					default:
-						AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
-						break;
-				}
 			}
 
 			// Alerts
@@ -1522,8 +1760,8 @@
 				// Callouts
 					// Speed callout
 					if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-					(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 					PFD.Speed.Mode == "Manual") {
 						if(IsV1() == true) {
 							PFD0.Alert.Active.SpeedCallout = "V1";
@@ -1532,8 +1770,8 @@
 
 					// Altitude callout
 					if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-					(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 					PFD.Altitude.Mode == "Manual") {
 						if(IsApproachingMCPAltitude() == true) {
 							PFD0.Alert.Active.AltitudeCallout = "AltitudeBeep";
@@ -1543,8 +1781,8 @@
 							case "ArrivalGround":
 							case "EmergencyReturn":
 								let ConvertedRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.RadioDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude),
-								ConvertedPreviousRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.PreviousTapeDisplay - GroundAltitude, "Meter", Subsystem.I18n.MeasurementUnit.Altitude),
-								ConvertedDecisionHeight = ConvertUnit(ActiveAirport.DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude);
+								ConvertedPreviousRadioAltitude = ConvertUnit(PFD0.Stats.Altitude.PreviousTapeDisplay - PFD0.Stats.Altitude.Ground, "Meter", Subsystem.I18n.MeasurementUnit.Altitude),
+								ConvertedDecisionHeight = ConvertUnit(AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude);
 								if(ConvertedRadioAltitude <= 2500 && ConvertedPreviousRadioAltitude > 2500) {
 									PFD0.Alert.Active.AltitudeCallout = "2500";
 								}
@@ -1608,7 +1846,7 @@
 				if(PFD.WarningSystem.IsEnabled == true) {
 					// Attitude warning
 					if(PFD.Attitude.IsEnabled == true) {
-						if((PFD.Attitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
+						if((PFD.Attitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
 						PFD.Attitude.Mode == "Manual") {
 							if(IsExcessiveBankAngle() == true) {
 								PFD0.Alert.Active.AttitudeWarning = "BankAngle";
@@ -1618,8 +1856,8 @@
 
 					// Speed warning
 					if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-					(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 					PFD.Speed.Mode == "Manual") {
 						if(IsAirspeedLow() == true) {
 							PFD0.Alert.Active.SpeedWarning = "AirspeedLow";
@@ -1631,8 +1869,8 @@
 
 					// Altitude warning
 					if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-					(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 					PFD.Altitude.Mode == "Manual") {
 						if(IsDontSink() == true) {
 							PFD0.Alert.Active.AltitudeWarning = "DontSink";
@@ -1685,14 +1923,14 @@
 					RefreshAutomobileSpeedometerPanel();
 					break;
 				default:
-					AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshPFDPanel is invalid.");
+					AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshPanel is invalid.");
 					break;
 			}
 		}
 			// Sub-functions
 			// These functions are in separate files.
 
-		function RefreshPFDAudio() {
+		function RefreshAudio() {
 			switch(Subsystem.Audio.Scheme) {
 				case "Boeing":
 					RefreshBoeingAudio();
@@ -1701,7 +1939,7 @@
 					RefreshAirbusAudio();
 					break;
 				default:
-					AlertSystemError("The value of Subsystem.Audio.Scheme \"" + Subsystem.Audio.Scheme + "\" in function RefreshPFDAudio is invalid.");
+					AlertSystemError("The value of Subsystem.Audio.Scheme \"" + Subsystem.Audio.Scheme + "\" in function RefreshAudio is invalid.");
 					break;
 			}
 		}
@@ -1913,6 +2151,95 @@
 				}
 			}
 
+		function RefreshRunways() {
+			if(PFD.Nav.IsEnabled == true && PFD0.Status.GPS.IsPositionAvailable == true &&
+			((PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable == true) || PFD.Heading.Mode == "Manual")) {
+				// Initialization
+				let HeadingDeviation = 0, Distance = [0], RunwayAhead = [0], RecommendedRunway = 0;
+
+				// Update runway nav data and generate list of runways ahead
+				for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length; Looper++) {
+					// Calc
+					HeadingDeviation = PFD0.Stats.Heading.Display - CalcBearing(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon, AirportLibrary0.ActiveAirport.Runway[Looper].Lat, AirportLibrary0.ActiveAirport.Runway[Looper].Lon);
+					if(HeadingDeviation < -180) {
+						HeadingDeviation += 360;
+					}
+					if(HeadingDeviation > 180) {
+						HeadingDeviation -= 360;
+					}
+					Distance[Looper] = CalcDistance(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon, AirportLibrary0.ActiveAirport.Runway[Looper].Lat, AirportLibrary0.ActiveAirport.Runway[Looper].Lon);
+
+					// Display
+					RemoveClass("Label_PFDRunway" + Looper, "Glow");
+					Show("Label_PFDRunway" + Looper + "NavData");
+					switch(true) {
+						case HeadingDeviation < -0.5:
+							ChangeText("Label_PFDRunway" + Looper + "NavData", "右偏" + Math.abs(HeadingDeviation).toFixed(1) + "度");
+							break;
+						case HeadingDeviation > 0.5:
+							ChangeText("Label_PFDRunway" + Looper + "NavData", "左偏" + Math.abs(HeadingDeviation).toFixed(1) + "度");
+							break;
+						default:
+							ChangeText("Label_PFDRunway" + Looper + "NavData", "正前方");
+							break;
+					}
+					AddText("Label_PFDRunway" + Looper + "NavData", "，" + ConvertUnit(Distance[Looper], "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(1) + Translate(Subsystem.I18n.MeasurementUnit.Distance + "OnPFD"));
+
+					// Runways ahead
+					if(Math.abs(HeadingDeviation) <= 10) {
+						RunwayAhead[Looper] = Looper;
+					}
+				}
+
+				// Judge the correct runway
+				if(RunwayAhead.length >= 2) {
+					// There are runways ahead
+					RecommendedRunway = RunwayAhead[1];
+					for(let Looper = 1; Looper < RunwayAhead.length - 1; Looper++) {
+						if(Distance[RunwayAhead[Looper]] > Distance[RunwayAhead[Looper + 1]]) {
+							RecommendedRunway = RunwayAhead[Looper + 1];
+						}
+					}
+				} else {
+					// There are no runways ahead
+					RecommendedRunway = 1;
+					for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length - 1; Looper++) {
+						if(Distance[Looper] > Distance[Looper + 1]) {
+							RecommendedRunway = Looper + 1;
+						}
+					}
+				}
+
+				// Auto switch or glow
+				if(PFD.Nav.AutoSwitchRunwayWhenLanding == true && PFD.FlightMode.FlightMode == "Land" && PFD0.Stats.Altitude.RadioDisplay >= 60.96 && PFD0.Stats.Altitude.RadioDisplay <= 914.4) {
+					Show("Ctrl_PFDAutoSwitchRunwayActive");
+					Show("Label_AirportLibraryAutoSwitchRunwayActive");
+					for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length; Looper++) {
+						ChangeDisabled("Radiobtn_PFDRunway" + Looper, true);
+					}
+					if(AirportLibrary0.ActiveAirport.RunwaySelection != RecommendedRunway) {
+						SetRunwayAtPFD(RecommendedRunway);
+					}
+				} else {
+					Hide("Ctrl_PFDAutoSwitchRunwayActive");
+					Hide("Label_AirportLibraryAutoSwitchRunwayActive");
+					for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length; Looper++) {
+						ChangeDisabled("Radiobtn_PFDRunway" + Looper, false);
+					}
+					if(AirportLibrary0.ActiveAirport.RunwaySelection != RecommendedRunway) {
+						AddClass("Label_PFDRunway" + RecommendedRunway, "Glow");
+					}
+				}
+			} else {
+				Hide("Ctrl_PFDAutoSwitchRunwayActive");
+				Hide("Label_AirportLibraryAutoSwitchRunwayActive");
+				for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length; Looper++) {
+					RemoveClass("Label_PFDRunway" + Looper, "Glow");
+					ChangeDisabled("Radiobtn_PFDRunway" + Looper, false);
+					Fade("Label_PFDRunway" + Looper + "NavData");
+				}
+			}
+		}
 		function RefreshTechInfo() {
 			// GPS
 			if(PFD0.RawData.GPS.Position.Lat != null) {
@@ -2027,13 +2354,121 @@
 			ChangeText("Label_PFDTechInfoManualHeading", PFD0.RawData.Manual.Heading.toFixed(2) + "度");
 			ChangeText("Label_PFDTechInfoManualHeadingTrend", PFD0.RawData.Manual.HeadingTrend.toFixed(2) + "度/秒");
 		}
+		function AutoSwitchFlightModeAndSwapAirports() {
+			if(PFD.FlightMode.AutoSwitchFlightModeAndSwapAirports == true) {
+				switch(PFD.FlightMode.FlightMode) {
+					case "DepartureGround":
+						if(PFD0.Stats.Speed.TapeDisplay >= PFD.Speed.TakeOff.VR &&
+						PFD0.Stats.Altitude.TapeDisplay - PFD0.Stats.Altitude.Ground >= 9.144 &&
+						PFD0.Stats.Altitude.PreviousTapeDisplay - PFD0.Stats.Altitude.Ground < 9.144) {
+							PFD.FlightMode.FlightMode = "TakeOff";
+							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
+							setTimeout(RefreshPFD, 0);
+						}
+						break;
+					case "TakeOff":
+						if(PFD0.Stats.Altitude.TapeDisplay - PFD0.Stats.Altitude.Ground >= 914.4 &&
+						PFD0.Stats.Altitude.PreviousTapeDisplay - PFD0.Stats.Altitude.Ground < 914.4) {
+							PFD.FlightMode.FlightMode = "Cruise";
+							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
+							setTimeout(RefreshPFD, 0);
+						}
+						break;
+					case "Cruise":
+						if(PFD0.Stats.Altitude.TapeDisplay - PFD0.Stats.Altitude.Ground <= 914.4 &&
+						PFD0.Stats.Altitude.PreviousTapeDisplay - PFD0.Stats.Altitude.Ground > 914.4) {
+							PFD.FlightMode.FlightMode = "Land";
+							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
+							setTimeout(RefreshPFD, 0);
+						}
+						break;
+					case "Land":
+						if(PFD0.Stats.Altitude.TapeDisplay - PFD0.Stats.Altitude.Ground <= 9.144 &&
+						PFD0.Stats.Altitude.PreviousTapeDisplay - PFD0.Stats.Altitude.Ground > 9.144) {
+							PFD.FlightMode.FlightMode = "ArrivalGround";
+							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
+							setTimeout(RefreshPFD, 0);
+						}
+						break;
+					case "ArrivalGround":
+						if(PFD0.Stats.Speed.TapeDisplay <= 2.572 && PFD0.Stats.Speed.PreviousTapeDisplay > 2.572) {
+							PFD.FlightMode.FlightMode = "DepartureGround";
+							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
+							setTimeout(SwapAirports, 0);
+						}
+						break;
+					case "EmergencyReturn":
+						if(PFD0.Stats.Altitude.TapeDisplay - PFD0.Stats.Altitude.Ground <= 9.144 &&
+						PFD0.Stats.Altitude.PreviousTapeDisplay - PFD0.Stats.Altitude.Ground > 9.144) {
+							PFD.FlightMode.FlightMode = "DepartureGround";
+							PFD0.Stats.FlightModeTimestamp = PFD0.Stats.ClockTime;
+							setTimeout(RefreshPFD, 0);
+						}
+						break;
+					default:
+						AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFDData is invalid.");
+						break;
+				}
+			}
+		}
 
 	function RefreshPFD() {
-		// Call
-		RefreshAirportLibrary();
-		ClockPFD();
+		// Sort runways
+		SortRunwaysByName();
+
+		// Active airport and ground altitude
+		switch(PFD.FlightMode.FlightMode) {
+			case "DepartureGround":
+			case "TakeOff":
+			case "EmergencyReturn":
+				AirportLibrary0.ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure]);
+				break;
+			case "Cruise":
+			case "Land":
+			case "ArrivalGround":
+				AirportLibrary0.ActiveAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.AirportSelection.Arrival]);
+				break;
+			default:
+				AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function RefreshPFD is invalid.");
+				break;
+		}
+		PFD0.Stats.Altitude.Ground = AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Elevation + PFD.Altitude.SeatHeight;
 
 		// PFD
+			// Menu
+				// Runways
+					// Airport name
+					ChangeText("Label_PFDAirportName", AirportLibrary0.ActiveAirport.Name);
+
+					// Generate list
+					ChangeText("CtrlGroup_PFDRunwayList", "");
+					for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length; Looper++) {
+						AddText("CtrlGroup_PFDRunwayList",
+							"<li class=\"Ctrl\" id=\"Ctrl_PFDRunway" + Looper + "\">" +
+							"	<label id=\"Label_PFDRunway" + Looper + "\" for=\"Radiobtn_PFDRunway" + Looper + "\">" +
+							"		<input class=\"Radiobtn\" id=\"Radiobtn_PFDRunway" + Looper + "\" type=\"radio\" checked=\"false\" onchange=\"SetRunwayAtPFD(" + Looper + ")\" />" +
+							"		<span>" + AirportLibrary0.ActiveAirport.Runway[Looper].Heading.toString().padStart(2, "0") + AirportLibrary0.ActiveAirport.Runway[Looper].Suffix + "</span>" +
+							"		<span class=\"PFDRunwayNavData\" id=\"Label_PFDRunway" + Looper + "NavData\">导航数据</span>" +
+							"	</label>" +
+							"</li>");
+					}
+					if(AirportLibrary0.ActiveAirport.Runway.length <= 1) {
+						AlertSystemError("The active airport has no runways.");
+					}
+
+					// Selection
+					for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length; Looper++) {
+						if(AirportLibrary0.ActiveAirport.RunwaySelection == Looper) {
+							ChangeChecked("Radiobtn_PFDRunway" + Looper, true);
+						} else {
+							ChangeChecked("Radiobtn_PFDRunway" + Looper, false);
+						}
+					}
+
+		// Call
+		ClockPFD();
+
+		// PFD (2)
 			// Menu
 				// Ctrl
 					// Manual maneuver
@@ -2155,6 +2590,15 @@
 				ChangeChecked("Checkbox_PFDOptionsKeepScreenOn", Subsystem.Display.KeepScreenOn);
 
 		// Settings
+			// Permissions
+			if(typeof DeviceMotionEvent.requestPermission == "function") {
+				Show("Label_SettingsRequestAccelPermission");
+				Show("Ctrl_SettingsRequestAccelPermission");
+			} else {
+				Hide("Label_SettingsRequestAccelPermission");
+				Hide("Ctrl_SettingsRequestAccelPermission");
+			}
+
 			// Attitude
 			ChangeChecked("Checkbox_SettingsEnableAttitudeIndicator", PFD.Attitude.IsEnabled);
 			if(PFD.Attitude.IsEnabled == true) {
@@ -2234,12 +2678,13 @@
 			// Nav
 			ChangeChecked("Checkbox_SettingsEnableNav", PFD.Nav.IsEnabled);
 			if(PFD.Nav.IsEnabled == true) {
-				Show("Label_SettingsETA");
 				Show("Ctrl_SettingsETACalcMethod");
+				Show("Ctrl_SettingsAutoSwitchRunwayWhenLanding");
 				ChangeValue("Combobox_SettingsETACalcMethod", PFD.Nav.ETACalcMethod);
+				ChangeChecked("Checkbox_SettingsAutoSwitchRunwayWhenLanding", PFD.Nav.AutoSwitchRunwayWhenLanding);
 			} else {
-				Hide("Label_SettingsETA");
 				Hide("Ctrl_SettingsETACalcMethod");
+				Hide("Ctrl_SettingsAutoSwitchRunwayWhenLanding");
 			}
 
 			// Flight mode
@@ -2434,8 +2879,8 @@
 
 		// Main
 		if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-		(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-		(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+		(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+		(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 		PFD.Speed.Mode == "Manual") {
 			PFD0.Stats.Speed.SampleCount++;
 			PFD0.Stats.Speed.AvgGS = (PFD0.Stats.Speed.AvgGS * (PFD0.Stats.Speed.SampleCount - 1) + PFD0.Stats.Speed.GS) / PFD0.Stats.Speed.SampleCount;
@@ -2444,14 +2889,41 @@
 	}
 
 	// Airport library
+	function SortRunwaysByName() {
+		for(let Looper = 1; Looper < AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway.length - 1; Looper++) {
+			for(let Looper2 = 1; Looper2 < AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway.length - 1; Looper2++) {
+				let RunwayName1 = AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[Looper2].Heading.toString().padStart(2, "0") + AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[Looper2].Suffix,
+				RunwayName2 = AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[Looper2 + 1].Heading.toString().padStart(2, "0") + AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[Looper2 + 1].Suffix;
+				if(RunwayName1 > RunwayName2) {
+					let Swapper = structuredClone(AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[Looper2]);
+					AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[Looper2] = structuredClone(AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[Looper2 + 1]);
+					AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[Looper2 + 1] = structuredClone(Swapper);
+					switch(true) {
+						case AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection == Looper2:
+							AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection++;
+							break;
+						case AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection == Looper2 + 1:
+							AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection--;
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		}
+	}
 	function RefreshAirportLibrary() {
+		// Initialization
+		SortRunwaysByName();
+		AirportLibrary0.DepartureAirport = structuredClone(AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure]);
+
 		// Airports
 			// Generate list
-			ChangeText("CtrlGroup_AirportLibraryList", "");
+			ChangeText("CtrlGroup_AirportLibraryAirportList", "");
 			for(let Looper = 1; Looper < AirportLibrary.Airport.length; Looper++) {
-				AddText("CtrlGroup_AirportLibraryList",
+				AddText("CtrlGroup_AirportLibraryAirportList",
 					"<li class=\"Ctrl\" id=\"Ctrl_AirportLibraryAirport" + Looper + "\">" +
-					"	<label class=\"ListItemLabel\" id=\"Label_AirportLibraryAirport" + Looper + "\" for=\"Radiobtn_AirportLibraryAirport" + Looper + "Departure\">" +
+					"	<label class=\"AirportLibraryAirportLabel\" id=\"Label_AirportLibraryAirport" + Looper + "\" for=\"Radiobtn_AirportLibraryAirport" + Looper + "Departure\">" +
 					"		<input class=\"Radiobtn\" id=\"Radiobtn_AirportLibraryAirport" + Looper + "Departure\" type=\"radio\" checked=\"false\" onchange=\"SetDepartureAirport(" + Looper + ")\" />" +
 					"		<input class=\"Radiobtn\" id=\"Radiobtn_AirportLibraryAirport" + Looper + "Arrival\" type=\"radio\" checked=\"false\" onchange=\"SetArrivalAirport(" + Looper + ")\" />" +
 					"		<span class=\"ListItemName\">" + ConvertEmptyName(AirportLibrary.Airport[Looper].Name) + "</span>" +
@@ -2483,14 +2955,14 @@
 
 			// Selection
 			for(let Looper = 1; Looper < AirportLibrary.Airport.length; Looper++) {
-				if(AirportLibrary.Selection.Departure == Looper) {
+				if(AirportLibrary.AirportSelection.Departure == Looper) {
 					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Departure", true);
 					AddClass("Label_AirportLibraryAirport" + Looper, "Active");
 				} else {
 					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Departure", false);
 					RemoveClass("Label_AirportLibraryAirport" + Looper, "Active");
 				}
-				if(AirportLibrary.Selection.Arrival == Looper) {
+				if(AirportLibrary.AirportSelection.Arrival == Looper) {
 					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Arrival", true);
 				} else {
 					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Arrival", false);
@@ -2498,30 +2970,72 @@
 			}
 
 			// Filter
-			FilterAirportLibrary();
+			FilterAirports();
 
 		// Airport properties
 			// Basic properties
-			ChangeValue("Textbox_AirportLibraryName", AirportLibrary.Airport[AirportLibrary.Selection.Departure].Name);
-			ChangeValue("Textbox_AirportLibraryRegion", AirportLibrary.Airport[AirportLibrary.Selection.Departure].Region);
-			ChangeValue("Textbox_AirportLibraryCode", AirportLibrary.Airport[AirportLibrary.Selection.Departure].Code);
-
-			// Geography
-			ChangeValue("Textbox_AirportLibraryLat", AirportLibrary.Airport[AirportLibrary.Selection.Departure].Coordinates.Lat.toFixed(5));
-			ChangeValue("Textbox_AirportLibraryLon", AirportLibrary.Airport[AirportLibrary.Selection.Departure].Coordinates.Lon.toFixed(5));
-			ChangeValue("Textbox_AirportLibraryElevation", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].Elevation, "Meter", Subsystem.I18n.MeasurementUnit.Altitude).toFixed(0));
+			ChangeValue("Textbox_AirportLibraryName", AirportLibrary0.DepartureAirport.Name);
+			ChangeValue("Textbox_AirportLibraryRegion", AirportLibrary0.DepartureAirport.Region);
+			ChangeValue("Textbox_AirportLibraryCode", AirportLibrary0.DepartureAirport.Code);
 
 			// Weather
-			ChangeValue("Textbox_AirportLibraryTemperature", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].Temperature, "Kelvin", Subsystem.I18n.MeasurementUnit.Temperature).toFixed(0));
-			ChangeValue("Textbox_AirportLibraryRelativeHumidity", AirportLibrary.Airport[AirportLibrary.Selection.Departure].RelativeHumidity);
-			ChangeValue("Textbox_AirportLibraryQNH", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].QNH, "Hectopascal", Subsystem.I18n.MeasurementUnit.Pressure).toFixed(2));
+			ChangeValue("Textbox_AirportLibraryTemperature", ConvertUnit(AirportLibrary0.DepartureAirport.Temperature, "Kelvin", Subsystem.I18n.MeasurementUnit.Temperature).toFixed(0));
+			ChangeValue("Textbox_AirportLibraryRelativeHumidity", AirportLibrary0.DepartureAirport.RelativeHumidity);
+			ChangeValue("Textbox_AirportLibraryQNH", ConvertUnit(AirportLibrary0.DepartureAirport.QNH, "Hectopascal", Subsystem.I18n.MeasurementUnit.Pressure).toFixed(2));
+
+		// Runways
+			// Generate list
+			ChangeText("CtrlGroup_AirportLibraryRunwayList", "");
+			for(let Looper = 1; Looper < AirportLibrary0.DepartureAirport.Runway.length; Looper++) {
+				AddText("CtrlGroup_AirportLibraryRunwayList",
+					"<li class=\"Ctrl\" id=\"Ctrl_AirportLibraryRunway" + Looper + "\">" +
+					"	<label class=\"AirportLibraryRunwayLabel\" id=\"Label_AirportLibraryRunway" + Looper + "\" for=\"Radiobtn_AirportLibraryRunway" + Looper + "\">" +
+					"		<input class=\"Radiobtn\" id=\"Radiobtn_AirportLibraryRunway" + Looper + "\" type=\"radio\" checked=\"false\" onchange=\"SetRunway(" + Looper + ")\" />" +
+					"		<span class=\"ListItemName\">" +
+							AirportLibrary0.DepartureAirport.Runway[Looper].Heading.toString().padStart(2, "0") +
+							AirportLibrary0.DepartureAirport.Runway[Looper].Suffix + "</span>" +
+					"	</label>" +
+					"	<button class=\"Button ShownAsLabel ListItemDelete\" id=\"Button_AirportLibraryRunway" + Looper + "Delete\" onclick=\"ConfirmDeleteRunway(" + Looper + ")\" title=\"删除...\" aria-label=\"删除...\">" +
+					"		<svg class=\"Icon Smaller\" viewBox=\"0 0 16 16\" aria-hidden=\"true\">" +
+					"			<path d=\"M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5\"/>" +
+					"		</svg>" +
+					"	</button>" +
+					"</li>");
+			}
+			if(AirportLibrary0.DepartureAirport.Runway.length <= 1) {
+				AlertSystemError("The departure airport has no runways.");
+			}
+			if(AirportLibrary0.DepartureAirport.Runway.length == 2) {
+				ChangeDisabled("Button_AirportLibraryRunway1Delete", true);
+			}
+
+			// Selection
+			for(let Looper = 1; Looper < AirportLibrary0.DepartureAirport.Runway.length; Looper++) {
+				if(AirportLibrary0.DepartureAirport.RunwaySelection == Looper) {
+					ChangeChecked("Radiobtn_AirportLibraryRunway" + Looper, true);
+					AddClass("Label_AirportLibraryRunway" + Looper, "Active");
+				} else {
+					ChangeChecked("Radiobtn_AirportLibraryRunway" + Looper, false);
+					RemoveClass("Label_AirportLibraryRunway" + Looper, "Active");
+				}
+			}
+
+		// Runway properties
+			// Basic properties
+			ChangeValue("Textbox_AirportLibraryRunwayHeading", AirportLibrary0.DepartureAirport.Runway[AirportLibrary0.DepartureAirport.RunwaySelection].Heading.toString().padStart(2, "0"));
+			ChangeValue("Combobox_AirportLibraryRunwaySuffix", AirportLibrary0.DepartureAirport.Runway[AirportLibrary0.DepartureAirport.RunwaySelection].Suffix);
+
+			// Geography
+			ChangeValue("Textbox_AirportLibraryLat", AirportLibrary0.DepartureAirport.Runway[AirportLibrary0.DepartureAirport.RunwaySelection].Lat.toFixed(5));
+			ChangeValue("Textbox_AirportLibraryLon", AirportLibrary0.DepartureAirport.Runway[AirportLibrary0.DepartureAirport.RunwaySelection].Lon.toFixed(5));
+			ChangeValue("Textbox_AirportLibraryElevation", ConvertUnit(AirportLibrary0.DepartureAirport.Runway[AirportLibrary0.DepartureAirport.RunwaySelection].Elevation, "Meter", Subsystem.I18n.MeasurementUnit.Altitude).toFixed(0));
 
 			// Final approach
-			ChangeValue("Textbox_AirportLibraryGlideSlopeAngle", AirportLibrary.Airport[AirportLibrary.Selection.Departure].GlideSlopeAngle.toFixed(2));
-			ChangeValue("Textbox_AirportLibraryOuterMarkerDistance", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Outer, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(2));
-			ChangeValue("Textbox_AirportLibraryMiddleMarkerDistance", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Middle, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(2));
-			ChangeValue("Textbox_AirportLibraryInnerMarkerDistance", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Inner, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(2));
-			ChangeValue("Textbox_AirportLibraryDecisionHeight", ConvertUnit(AirportLibrary.Airport[AirportLibrary.Selection.Departure].DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude).toFixed(0));
+			ChangeValue("Textbox_AirportLibraryGlideSlopeAngle", AirportLibrary0.DepartureAirport.Runway[AirportLibrary0.DepartureAirport.RunwaySelection].GlideSlopeAngle.toFixed(2));
+			ChangeValue("Textbox_AirportLibraryOuterMarkerDistance", ConvertUnit(AirportLibrary0.DepartureAirport.Runway[AirportLibrary0.DepartureAirport.RunwaySelection].MarkerBeaconDistance.Outer, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(2));
+			ChangeValue("Textbox_AirportLibraryMiddleMarkerDistance", ConvertUnit(AirportLibrary0.DepartureAirport.Runway[AirportLibrary0.DepartureAirport.RunwaySelection].MarkerBeaconDistance.Middle, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(2));
+			ChangeValue("Textbox_AirportLibraryInnerMarkerDistance", ConvertUnit(AirportLibrary0.DepartureAirport.Runway[AirportLibrary0.DepartureAirport.RunwaySelection].MarkerBeaconDistance.Inner, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(2));
+			ChangeValue("Textbox_AirportLibraryDecisionHeight", ConvertUnit(AirportLibrary0.DepartureAirport.Runway[AirportLibrary0.DepartureAirport.RunwaySelection].DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude).toFixed(0));
 
 		// Save user data
 		localStorage.setItem("GPSPFD_AirportLibrary", JSON.stringify(AirportLibrary));
@@ -2678,44 +3192,65 @@
 					RefreshPFD();
 				}
 
+			// Runways
+			function SetRunwayAtPFD(Number) {
+				switch(PFD.FlightMode.FlightMode) {
+					case "DepartureGround":
+					case "TakeOff":
+					case "EmergencyReturn":
+						AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection = Number;
+						break;
+					case "Cruise":
+					case "Land":
+					case "ArrivalGround":
+						AirportLibrary.Airport[AirportLibrary.AirportSelection.Arrival].RunwaySelection = Number;
+						break;
+					default:
+						AlertSystemError("The value of PFD.FlightMode.FlightMode \"" + PFD.FlightMode.FlightMode + "\" in function SetRunwayAtPFD is invalid.");
+						break;
+				}
+				RefreshPFD();
+				RefreshAirportLibrary();
+			}
+
 			// Options
-			function SetEnableAttitudeIndicatorAtPFDOptions() {
+			function SetEnableAttitudeIndicatorAtPFD() {
 				PFD.Attitude.IsEnabled = IsChecked("Checkbox_PFDOptionsEnableAttitudeIndicator");
 				RefreshPFD();
 			}
-			function SetAttitudeModeAtPFDOptions() {
+			function SetAttitudeModeAtPFD() {
 				PFD.Attitude.Mode = ReadValue("Combobox_PFDOptionsAttitudeMode");
 				RefreshPFD();
 			}
-			function SetSpeedModeAtPFDOptions() {
+			function SetSpeedModeAtPFD() {
 				PFD.Speed.Mode = ReadValue("Combobox_PFDOptionsSpeedMode");
 				RefreshPFD();
 			}
-			function SetAltitudeModeAtPFDOptions() {
+			function SetAltitudeModeAtPFD() {
 				PFD.Altitude.Mode = ReadValue("Combobox_PFDOptionsAltitudeMode");
 				RefreshPFD();
 			}
-			function SetHeadingModeAtPFDOptions() {
+			function SetHeadingModeAtPFD() {
 				PFD.Heading.Mode = ReadValue("Combobox_PFDOptionsHeadingMode");
 				RefreshPFD();
 			}
-			function SetEnableNavAtPFDOptions() {
+			function SetEnableNavAtPFD() {
 				PFD.Nav.IsEnabled = IsChecked("Checkbox_PFDOptionsEnableNav");
 				RefreshPFD();
 			}
-			function SetFlightModeAtPFDOptions() {
+			function SetFlightModeAtPFD() {
 				PFD.FlightMode.FlightMode = ReadValue("Combobox_PFDOptionsFlightMode");
 				PFD0.Stats.FlightModeTimestamp = Date.now();
 				RefreshPFD();
 			}
-			function SetKeepScreenOnAtPFDOptions() {
+			function SetKeepScreenOnAtPFD() {
 				Subsystem.Display.KeepScreenOn = IsChecked("Checkbox_PFDOptionsKeepScreenOn");
 				RefreshSubsystem();
 			}
 
 	// Airport library
 		// Filter
-		function FilterAirportLibrary() {
+		function FilterAirports() {
 			let Counter = 0, Counter2 = 0;
 			for(let Looper = 1; Looper < AirportLibrary.Airport.length; Looper++) {
 				if(AirportLibrary.Airport[Looper].Name.toLowerCase().includes(ReadValue("Textbox_AirportLibraryFilter").toLowerCase()) == true ||
@@ -2733,22 +3268,25 @@
 
 		// Airports
 		function SetDepartureAirport(Number) {
-			AirportLibrary.Selection.Departure = Number;
+			AirportLibrary.AirportSelection.Departure = Number;
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 		function SetArrivalAirport(Number) {
-			AirportLibrary.Selection.Arrival = Number;
+			AirportLibrary.AirportSelection.Arrival = Number;
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 		function DuplicateAirport(Number) {
 			AirportLibrary.Airport.splice(Number + 1, 0, structuredClone(AirportLibrary.Airport[Number]));
-			if(AirportLibrary.Selection.Departure > Number) {
-				AirportLibrary.Selection.Departure++;
+			if(AirportLibrary.AirportSelection.Departure > Number) {
+				AirportLibrary.AirportSelection.Departure++;
 			}
-			if(AirportLibrary.Selection.Arrival > Number) {
-				AirportLibrary.Selection.Arrival++;
+			if(AirportLibrary.AirportSelection.Arrival > Number) {
+				AirportLibrary.AirportSelection.Arrival++;
 			}
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 		function ExportAirport(Number) {
 			navigator.clipboard.writeText(JSON.stringify(AirportLibrary.Airport[Number]));
@@ -2769,31 +3307,38 @@
 				"", "", "删除", "取消");
 		}
 		function SwapAirports() {
-			let Swapper = AirportLibrary.Selection.Departure;
-			AirportLibrary.Selection.Departure = AirportLibrary.Selection.Arrival;
-			AirportLibrary.Selection.Arrival = Swapper;
+			let Swapper = AirportLibrary.AirportSelection.Departure;
+			AirportLibrary.AirportSelection.Departure = AirportLibrary.AirportSelection.Arrival;
+			AirportLibrary.AirportSelection.Arrival = Swapper;
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 		function NewAirport() {
 			AirportLibrary.Airport[AirportLibrary.Airport.length] = {
 				Name: "",
 				Region: "",
 				Code: "",
-				Coordinates: {
-					Lat: 0, Lon: 0
-				},
-				Elevation: 0,
 				Temperature: 288.15, RelativeHumidity: 50, QNH: 1013.25,
-				GlideSlopeAngle: 3,
-				MarkerBeaconDistance: {
-					Outer: 9260, Middle: 926, Inner: 185.2
-				},
-				DecisionHeight: 76.2
+				RunwaySelection: 1,
+				Runway: [
+					0,
+					{
+						Heading: 1, Suffix: "",
+						Lat: 0, Lon: 0,
+						Elevation: 0,
+						GlideSlopeAngle: 3,
+						MarkerBeaconDistance: {
+							Outer: 9260, Middle: 926, Inner: 185.2
+						},
+						DecisionHeight: 76.2
+					}
+				]
 			};
-			AirportLibrary.Selection.Departure = AirportLibrary.Airport.length - 1;
+			AirportLibrary.AirportSelection.Departure = AirportLibrary.Airport.length - 1;
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
-		function SortByName() {
+		function SortAirportsByName() {
 			for(let Looper = 1; Looper < AirportLibrary.Airport.length - 1; Looper++) {
 				for(let Looper2 = 1; Looper2 < AirportLibrary.Airport.length - 1; Looper2++) {
 					if(AirportLibrary.Airport[Looper2].Name > AirportLibrary.Airport[Looper2 + 1].Name) {
@@ -2801,21 +3346,21 @@
 						AirportLibrary.Airport[Looper2] = structuredClone(AirportLibrary.Airport[Looper2 + 1]);
 						AirportLibrary.Airport[Looper2 + 1] = structuredClone(Swapper);
 						switch(true) {
-							case AirportLibrary.Selection.Departure == Looper2:
-								AirportLibrary.Selection.Departure++;
+							case AirportLibrary.AirportSelection.Departure == Looper2:
+								AirportLibrary.AirportSelection.Departure++;
 								break;
-							case AirportLibrary.Selection.Departure == Looper2 + 1:
-								AirportLibrary.Selection.Departure--;
+							case AirportLibrary.AirportSelection.Departure == Looper2 + 1:
+								AirportLibrary.AirportSelection.Departure--;
 								break;
 							default:
 								break;
 						}
 						switch(true) {
-							case AirportLibrary.Selection.Arrival == Looper2:
-								AirportLibrary.Selection.Arrival++;
+							case AirportLibrary.AirportSelection.Arrival == Looper2:
+								AirportLibrary.AirportSelection.Arrival++;
 								break;
-							case AirportLibrary.Selection.Arrival == Looper2 + 1:
-								AirportLibrary.Selection.Arrival--;
+							case AirportLibrary.AirportSelection.Arrival == Looper2 + 1:
+								AirportLibrary.AirportSelection.Arrival--;
 								break;
 							default:
 								break;
@@ -2824,82 +3369,165 @@
 				}
 			}
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 
 		// Airport properties
 			// Basic properties
 			function SetAirportName() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Name = ReadValue("Textbox_AirportLibraryName");
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Name = ReadValue("Textbox_AirportLibraryName");
+				RefreshPFD();
 				RefreshAirportLibrary();
 			}
 			function SetAirportRegion() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Region = ReadValue("Textbox_AirportLibraryRegion");
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Region = ReadValue("Textbox_AirportLibraryRegion");
 				RefreshAirportLibrary();
 			}
 			function SetAirportCode() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Code = ReadValue("Textbox_AirportLibraryCode");
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Code = ReadValue("Textbox_AirportLibraryCode");
 				RefreshAirportLibrary();
-			}
-
-			// Geography
-			function SetAirportLat() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Coordinates.Lat = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryLat") * 100000) / 100000, -90, 90);
-				RefreshPFD();
-			}
-			function SetAirportLon() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Coordinates.Lon = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryLon") * 100000) / 100000, -180, 180);
-				RefreshPFD();
-			}
-			function ReplaceAirportCoordinatesWithCurrent() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Coordinates = {
-					Lat: CheckRangeAndCorrect(PFD0.Stats.Nav.Lat, -90, 90),
-					Lon: CheckRangeAndCorrect(PFD0.Stats.Nav.Lon, -180, 180)
-				};
-				RefreshPFD();
-			}
-			function SetAirportElevation() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Elevation = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryElevation")), Subsystem.I18n.MeasurementUnit.Altitude, "Meter"), -500, 5000);
-				RefreshPFD();
-			}
-			function ReplaceAirportElevationWithCurrent() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Elevation = CheckRangeAndCorrect(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.SeatHeight, -500, 5000);
-				RefreshPFD();
 			}
 
 			// Weather
 			function SetAirportTemperature() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].Temperature = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryTemperature")), Subsystem.I18n.MeasurementUnit.Temperature, "Kelvin"), 223.15, 323.15);
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Temperature = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryTemperature")), Subsystem.I18n.MeasurementUnit.Temperature, "Kelvin"), 223.15, 323.15);
 				RefreshPFD();
+				RefreshAirportLibrary();
 			}
 			function SetAirportRelativeHumidity() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].RelativeHumidity = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryRelativeHumidity")), 0, 100);
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RelativeHumidity = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryRelativeHumidity")), 0, 100);
 				RefreshPFD();
+				RefreshAirportLibrary();
 			}
 			function SetAirportQNH() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].QNH = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryQNH") * 100) / 100, Subsystem.I18n.MeasurementUnit.Pressure, "Hectopascal"), 900, 1100);
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].QNH = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryQNH") * 100) / 100, Subsystem.I18n.MeasurementUnit.Pressure, "Hectopascal"), 900, 1100);
 				RefreshPFD();
+				RefreshAirportLibrary();
+			}
+
+		// Runways
+		function SetRunway(Number) {
+			AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection = Number;
+			RefreshPFD();
+			RefreshAirportLibrary();
+		}
+		function ConfirmDeleteRunway(Number) {
+			Interaction.Deletion = Number;
+			ShowDialog("AirportLibrary_ConfirmDeleteRunway",
+				"Caution",
+				"您确认要删除跑道 " +
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[Number].Heading.toString().padStart(2, "0") +
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[Number].Suffix + "？",
+				"", "", "删除", "取消");
+		}
+		function NewRunway() {
+			AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway.length] = {
+				Heading: 1, Suffix: "",
+				Lat: 0, Lon: 0,
+				Elevation: 0,
+				GlideSlopeAngle: 3,
+				MarkerBeaconDistance: {
+					Outer: 9260, Middle: 926, Inner: 185.2
+				},
+				DecisionHeight: 76.2
+			};
+			AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection = AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway.length - 1;
+			RefreshPFD();
+			RefreshAirportLibrary();
+		}
+
+		// Runway properties
+			// Basic properties
+			function SetRunwayHeading() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					Heading = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryRunwayHeading")), 1, 36);
+				RefreshPFD();
+				RefreshAirportLibrary();
+			}
+			function SetRunwaySuffix() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					Suffix = ReadValue("Combobox_AirportLibraryRunwaySuffix");
+				RefreshPFD();
+				RefreshAirportLibrary();
+			}
+
+			// Geography
+			function SetRunwayLat() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					Lat = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryLat") * 100000) / 100000, -90, 90);
+				RefreshPFD();
+				RefreshAirportLibrary();
+			}
+			function SetRunwayLon() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					Lon = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryLon") * 100000) / 100000, -180, 180);
+				RefreshPFD();
+				RefreshAirportLibrary();
+			}
+			function ReplaceRunwayCoordinatesWithCurrent() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					Lat = CheckRangeAndCorrect(PFD0.Stats.Nav.Lat, -90, 90);
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					Lon = CheckRangeAndCorrect(PFD0.Stats.Nav.Lon, -180, 180);
+				RefreshPFD();
+				RefreshAirportLibrary();
+			}
+			function SetRunwayElevation() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					Elevation = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryElevation")), Subsystem.I18n.MeasurementUnit.Altitude, "Meter"), -500, 5000);
+				RefreshPFD();
+				RefreshAirportLibrary();
+			}
+			function ReplaceRunwayElevationWithCurrent() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					Elevation = CheckRangeAndCorrect(PFD0.Stats.Altitude.TapeDisplay - PFD.Altitude.SeatHeight, -500, 5000);
+				RefreshPFD();
+				RefreshAirportLibrary();
 			}
 
 			// Final approach
-			function SetAirportGlideSlopeAngle() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].GlideSlopeAngle = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryGlideSlopeAngle") * 100) / 100, 0, 10);
+			function SetRunwayGlideSlopeAngle() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					GlideSlopeAngle = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_AirportLibraryGlideSlopeAngle") * 100) / 100, 0, 10);
 				RefreshPFD();
+				RefreshAirportLibrary();
 			}
-			function SetAirportOuterMarkerDistance() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Outer = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryOuterMarkerDistance") * 100) / 100, Subsystem.I18n.MeasurementUnit.Distance, "Meter"), 0, 20000);
+			function SetRunwayOuterMarkerDistance() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					MarkerBeaconDistance.Outer = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryOuterMarkerDistance") * 100) / 100, Subsystem.I18n.MeasurementUnit.Distance, "Meter"), 0, 20000);
 				RefreshPFD();
+				RefreshAirportLibrary();
 			}
-			function SetAirportMiddleMarkerDistance() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Middle = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryMiddleMarkerDistance") * 100) / 100, Subsystem.I18n.MeasurementUnit.Distance, "Meter"), 0, 20000);
+			function SetRunwayMiddleMarkerDistance() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					MarkerBeaconDistance.Middle = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryMiddleMarkerDistance") * 100) / 100, Subsystem.I18n.MeasurementUnit.Distance, "Meter"), 0, 20000);
 				RefreshPFD();
+				RefreshAirportLibrary();
 			}
-			function SetAirportInnerMarkerDistance() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].MarkerBeaconDistance.Inner = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryInnerMarkerDistance") * 100) / 100, Subsystem.I18n.MeasurementUnit.Distance, "Meter"), 0, 20000);
+			function SetRunwayInnerMarkerDistance() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					MarkerBeaconDistance.Inner = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryInnerMarkerDistance") * 100) / 100, Subsystem.I18n.MeasurementUnit.Distance, "Meter"), 0, 20000);
 				RefreshPFD();
+				RefreshAirportLibrary();
 			}
-			function SetAirportDecisionHeight() {
-				AirportLibrary.Airport[AirportLibrary.Selection.Departure].DecisionHeight = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryDecisionHeight")), Subsystem.I18n.MeasurementUnit.Altitude, "Meter"), 15, 750);
+			function SetRunwayDecisionHeight() {
+				AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].
+					Runway[AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection].
+					DecisionHeight = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_AirportLibraryDecisionHeight")), Subsystem.I18n.MeasurementUnit.Altitude, "Meter"), 15, 750);
 				RefreshPFD();
+				RefreshAirportLibrary();
 			}
 
 		// Management
@@ -2914,7 +3542,7 @@
 						break;
 
 					// Whole airport library
-					case Objects[Looper].startsWith("{\"Selection\":{\"Departure\":") == true:
+					case Objects[Looper].startsWith("{\"AirportSelection\":{\"Departure\":") == true:
 						AirportLibrary = JSON.parse(Objects[Looper]);
 						Counter++;
 						break;
@@ -2956,6 +3584,7 @@
 			}
 			ChangeValue("Textbox_AirportLibraryImport", "");
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 		function ExportAirportLibrary() {
 			navigator.clipboard.writeText(JSON.stringify(AirportLibrary));
@@ -2972,6 +3601,41 @@
 		}
 
 	// Settings
+		// Permissions
+		function RequestAccelPermission() {
+			DeviceMotionEvent.requestPermission().then(function(PermissionStatus) {
+				switch(PermissionStatus) {
+					case "granted":
+						PFD0.Status.Accel.PermissionStatus = "Allowed";
+						ChangeText("Label_SettingsPermissionsAccel", "已被允许");
+						RemoveClass("Label_SettingsPermissionsAccel", "RedText");
+						window.addEventListener("devicemotion", RefreshAccelData);
+						break;
+					case "denied":
+						PFD0.Status.Accel.PermissionStatus = "Denied";
+						ChangeText("Label_SettingsPermissionsAccel", "已被禁止");
+						AddClass("Label_SettingsPermissionsAccel", "RedText");
+						break;
+					default:
+						PFD0.Status.Accel.PermissionStatus = "Unknown";
+						ChangeText("Label_SettingsPermissionsAccel", "未知");
+						RemoveClass("Label_SettingsPermissionsAccel", "RedText");
+						break;
+				}
+			});
+		}
+
+		// Flight mode
+		function SetFlightMode() {
+			PFD.FlightMode.FlightMode = ReadValue("Combobox_SettingsFlightMode");
+			PFD0.Stats.FlightModeTimestamp = Date.now();
+			RefreshPFD();
+		}
+		function SetAutoSwitchFlightModeAndSwapAirports() {
+			PFD.FlightMode.AutoSwitchFlightModeAndSwapAirports = IsChecked("Checkbox_SettingsAutoSwitchFlightModeAndSwapAirports");
+			RefreshPFD();
+		}
+
 		// Attitude
 		function SetEnableAttitudeIndicator() {
 			PFD.Attitude.IsEnabled = IsChecked("Checkbox_SettingsEnableAttitudeIndicator");
@@ -3110,15 +3774,8 @@
 			PFD.Nav.ETACalcMethod = ReadValue("Combobox_SettingsETACalcMethod");
 			RefreshPFD();
 		}
-
-		// Flight mode
-		function SetFlightMode() {
-			PFD.FlightMode.FlightMode = ReadValue("Combobox_SettingsFlightMode");
-			PFD0.Stats.FlightModeTimestamp = Date.now();
-			RefreshPFD();
-		}
-		function SetAutoSwitchFlightModeAndSwapAirports() {
-			PFD.FlightMode.AutoSwitchFlightModeAndSwapAirports = IsChecked("Checkbox_SettingsAutoSwitchFlightModeAndSwapAirports");
+		function SetAutoSwitchRunwayWhenLanding() {
+			PFD.Nav.AutoSwitchRunwayWhenLanding = IsChecked("Checkbox_SettingsAutoSwitchRunwayWhenLanding");
 			RefreshPFD();
 		}
 
@@ -3356,8 +4013,8 @@
 			case "System_Error":
 				switch(Selector) {
 					case 1:
-						ScrollIntoView("Item_SettingsUserData");
-						ShowIAmHere("Item_SettingsUserData");
+						ScrollIntoView("Item_HelpGetInvolved");
+						ShowIAmHere("Item_HelpGetInvolved");
 						break;
 					case 2:
 						ForceStop();
@@ -3385,15 +4042,35 @@
 			case "AirportLibrary_ConfirmDeleteAirport":
 				switch(Selector) {
 					case 2:
-						if(AirportLibrary.Selection.Departure >= Interaction.Deletion && AirportLibrary.Selection.Departure > 1) {
-							AirportLibrary.Selection.Departure--;
+						if(AirportLibrary.AirportSelection.Departure >= Interaction.Deletion && AirportLibrary.AirportSelection.Departure > 1) {
+							AirportLibrary.AirportSelection.Departure--;
 						}
-						if(AirportLibrary.Selection.Arrival >= Interaction.Deletion && AirportLibrary.Selection.Arrival > 1) {
-							AirportLibrary.Selection.Arrival--;
+						if(AirportLibrary.AirportSelection.Arrival >= Interaction.Deletion && AirportLibrary.AirportSelection.Arrival > 1) {
+							AirportLibrary.AirportSelection.Arrival--;
 						}
 						AirportLibrary.Airport.splice(Interaction.Deletion, 1);
 						Interaction.Deletion = 0;
 						RefreshPFD();
+						RefreshAirportLibrary();
+						break;
+					case 3:
+						break;
+					default:
+						AlertSystemError("The value of Selector \"" + Selector + "\" in function AnswerDialog is invalid.");
+						break;
+				}
+				break;
+			case "AirportLibrary_ConfirmDeleteRunway":
+				switch(Selector) {
+					case 2:
+						if(AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection >= Interaction.Deletion &&
+						AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection > 1) {
+							AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection--;
+						}
+						AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway.splice(Interaction.Deletion, 1);
+						Interaction.Deletion = 0;
+						RefreshPFD();
+						RefreshAirportLibrary();
 						break;
 					case 3:
 						break;
@@ -4104,7 +4781,13 @@
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
 					return "不可用";
 				} else {
-					return "UNAVAIL";
+					return "N/A";
+				}
+			case "Denied":
+				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
+					return "被禁止";
+				} else {
+					return "DENIED";
 				}
 			case "NoWind":
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
@@ -4209,6 +4892,12 @@
 					return "朝向指示器不可用";
 				} else {
 					return "HDG";
+				}
+			case "Runway":
+				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
+					return "跑道";
+				} else {
+					return "RWY";
 				}
 			case "DistanceTooFar":
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
@@ -4676,8 +5365,8 @@ function AlertSystemError(Message) {
 		Message);
 	ShowDialog("System_Error",
 		"Error",
-		"抱歉，发生了系统错误。您可尝试清空用户数据来修复错误，或向我提供反馈。若无法关闭对话框，请点击「强制停止」。<br />" +
+		"抱歉，发生了系统错误。若错误持续发生，请前往提供反馈。若无法关闭对话框，请点击「强制停止」。<br />" +
 		"<br />" +
 		"错误信息：" + Message,
-		"", "了解更多", "强制停止", "关闭");
+		"", "前往", "强制停止", "关闭");
 }

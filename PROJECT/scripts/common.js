@@ -644,7 +644,7 @@
 	});
 
 	// When PWA installation is available
-	window.addEventListener("beforeinstallprompt", function(Event) { // This does not seem to work.
+	window.addEventListener("beforeinstallprompt", function(Event) { // Works on Google Chrome for Android.
 		TheDocument.PWAInstallation = Event;
 		ChangeDisabled("Button_SettingsInstallPWA", false);
 	});

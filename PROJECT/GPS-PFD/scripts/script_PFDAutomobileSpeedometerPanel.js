@@ -17,24 +17,34 @@
 				RemoveClass("Ctnr_PFDAutomobileSpeedometerPanelInfo", "OrangeText");
 
 				// Status
+				RemoveClass("Ctrl_PFDAutomobileSpeedometerPanelGPS", "Red");
 				RemoveClass("Ctrl_PFDAutomobileSpeedometerPanelGPS", "Orange");
 				RemoveClass("Ctrl_PFDAutomobileSpeedometerPanelGPS", "Green");
+				RemoveClass("Ctrl_PFDAutomobileSpeedometerPanelAccel", "Red");
 				RemoveClass("Ctrl_PFDAutomobileSpeedometerPanelAccel", "Green");
-				if(PFD0.Status.GPS.IsPositionAvailable == true) {
-					if(PFD0.Status.GPS.IsPositionAccurate == true && PFD0.Status.GPS.IsAltitudeAvailable == true && PFD0.Status.GPS.IsAltitudeAccurate == true) {
-						AddClass("Ctrl_PFDAutomobileSpeedometerPanelGPS", "Green");
-					} else {
-						AddClass("Ctrl_PFDAutomobileSpeedometerPanelGPS", "Orange");
+				if(PFD0.Status.GPS.PermissionStatus != "Denied") {
+					if(PFD0.Status.GPS.IsPositionAvailable == true) {
+						if(PFD0.Status.GPS.IsPositionAccurate == true && PFD0.Status.GPS.IsAltitudeAvailable == true && PFD0.Status.GPS.IsAltitudeAccurate == true) {
+							AddClass("Ctrl_PFDAutomobileSpeedometerPanelGPS", "Green");
+						} else {
+							AddClass("Ctrl_PFDAutomobileSpeedometerPanelGPS", "Orange");
+						}
 					}
+				} else {
+					AddClass("Ctrl_PFDAutomobileSpeedometerPanelGPS", "Red");
 				}
-				if(PFD0.Status.IsAccelAvailable == true) {
-					AddClass("Ctrl_PFDAutomobileSpeedometerPanelAccel", "Green");
+				if(PFD0.Status.Accel.PermissionStatus != "Denied") {
+					if(PFD0.Status.Accel.IsAvailable == true) {
+						AddClass("Ctrl_PFDAutomobileSpeedometerPanelAccel", "Green");
+					}
+				} else {
+					AddClass("Ctrl_PFDAutomobileSpeedometerPanelAccel", "Red");
 				}
 
 				// Speed
 				if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-				(PFD.Speed.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+				(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+				(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 				PFD.Speed.Mode == "Manual") {
 					// Show ctrls
 					RemoveClass("Ctnr_PFDAutomobileSpeedometerPanelSpeed", "Transparent");
@@ -179,8 +189,8 @@
 
 				// Altitude
 				if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-				(PFD.Altitude.Mode == "Accel" && PFD0.Status.IsAccelAvailable == true) ||
-				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.IsAccelAvailable == true)) ||
+				(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+				(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
 				PFD.Altitude.Mode == "Manual") {
 					Show("Ctnr_PFDAutomobileSpeedometerPanelAltitude");
 					ChangeText("Label_PFDAutomobileSpeedometerPanelAltitudeValue",

@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v0.50 (2025/11/01) Beta Test. Since 2024/12/01." />
+		<meta name="version" content="v0.51 (2025/11/11) Beta Test. Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -1181,7 +1181,7 @@
 							</ul>
 						</div>
 						<div class="Ctnr Faded" id="Ctnr_PFDDefaultPanelDME" inert="true">
-							<span id="Label_PFDDefaultPanelDMETitle">测距仪</span>
+							<span id="Label_PFDDefaultPanelDMERunway">跑道</span>
 							<span id="Label_PFDDefaultPanelDMEDistance">距离</span>
 							<span id="Label_PFDDefaultPanelDMEETA"><span class="SmallerText">预计剩余时间</span></span>
 						</div>
@@ -2369,7 +2369,7 @@
 							<span id="Label_PFDHUDPanelVerticalSpeed" title="当前垂直速度" aria-label="当前垂直速度">垂直速度</span>
 						</div>
 						<div class="Ctnr Faded" id="Ctnr_PFDHUDPanelDME" inert="true">
-							<span id="Label_PFDHUDPanelDMETitle">测距仪</span>
+							<span id="Label_PFDHUDPanelDMERunway">跑道</span>
 							<span id="Label_PFDHUDPanelDMEDistance">距离</span>
 							<span id="Label_PFDHUDPanelDMEETA"><span class="SmallerText">预计剩余时间</span></span>
 						</div>
@@ -2615,7 +2615,7 @@
 										<li class="Ctrl PFDMenuSection">
 											<ul class="CtrlGroup PFDMenuTitle">
 												<li class="Ctrl">
-													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('Ctrl')">
+													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('Ctrls')">
 														<h2>控制</h2>
 														<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
 															<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
@@ -2623,7 +2623,7 @@
 													</button>
 												</li>
 											</ul>
-											<ul class="CtrlGroup PFDMenuContent" id="CtrlGroup_PFDCtrl">
+											<ul class="CtrlGroup PFDMenuContent" id="CtrlGroup_PFDCtrls">
 												<li class="Ctrl" id="Ctrl_PFDToggleFullscreen">
 													<button class="Button" id="Button_PFDToggleFullscreen" onclick="ToggleFullscreen()">全屏</button>
 													<span class="HotkeyIndicator Faded" inert="true">T</span>
@@ -2833,7 +2833,7 @@
 														<li class="Ctrl" id="Ctrl_PFDFlapsReference" title="襟翼参考标尺" aria-label="襟翼参考标尺">
 															<span>B738</span><span>A320</span>
 															<ul class="CtrlGroup">
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale0"><div class="FlapsScale"></div><span class="FlapsLabel">0</span></li>
+																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale0"><div class="FlapsScale"></div><span class="FlapsLabel">UP</span></li>
 																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale1To5"><div class="FlapsScale"></div><span class="FlapsLabel">1~5</span></li>
 																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale10"><div class="FlapsScale"></div><span class="FlapsLabel">10</span></li>
 																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale15"><div class="FlapsScale"></div><span class="FlapsLabel">15</span></li>
@@ -2866,6 +2866,31 @@
 										<li class="Ctrl PFDMenuSection">
 											<ul class="CtrlGroup PFDMenuTitle">
 												<li class="Ctrl">
+													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('Runways')">
+														<h2>跑道</h2>
+														<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+															<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+														</svg>
+													</button>
+												</li>
+											</ul>
+											<ul class="CtrlGroup PFDMenuContent" id="CtrlGroup_PFDRunways">
+												<li class="Ctrl Hidden" id="Ctrl_PFDAutoSwitchRunwayActive" inert="true">
+													<span class="GreenText">「自动切换跑道」工作中。</span>
+												</li>
+												<li class="Ctrl">
+													<span id="Label_PFDAirportName">机场名称</span>
+												</li>
+												<li class="Ctrl ScrollableList">
+													<ul class="CtrlGroup" id="CtrlGroup_PFDRunwayList">
+														<!-- Content will be inserted using script. -->
+													</ul>
+												</li>
+											</ul>
+										</li>
+										<li class="Ctrl PFDMenuSection">
+											<ul class="CtrlGroup PFDMenuTitle">
+												<li class="Ctrl">
 													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('Options')">
 														<h2>选项</h2>
 														<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
@@ -2876,61 +2901,9 @@
 											</ul>
 											<ul class="CtrlGroup PFDMenuContent" id="CtrlGroup_PFDOptions">
 												<li class="Ctrl">
-													<label for="Checkbox_PFDOptionsEnableAttitudeIndicator">
-														<input class="Checkbox" id="Checkbox_PFDOptionsEnableAttitudeIndicator" type="checkbox" checked="true" onchange="SetEnableAttitudeIndicatorAtPFDOptions()" />
-														<span>启用<a href="https://zh.wikipedia.org/wiki/姿态指引仪">姿态仪</a></span>
-													</label>
-												</li>
-												<li class="Ctrl" id="Ctrl_PFDOptionsAttitudeMode">
-													<label for="Combobox_PFDOptionsAttitudeMode">
-														<span>姿态模式：</span>
-														<select class="Combobox" id="Combobox_PFDOptionsAttitudeMode" onchange="SetAttitudeModeAtPFDOptions()">
-															<option value="Accel" selected>加速计</option>
-															<option value="Manual">手动</option>
-														</select>
-													</label>
-												</li>
-												<li class="Ctrl">
-													<label for="Combobox_PFDOptionsSpeedMode">
-														<span>速度模式：</span>
-														<select class="Combobox" id="Combobox_PFDOptionsSpeedMode" onchange="SetSpeedModeAtPFDOptions()">
-															<option value="GPS" selected>GPS</option>
-															<option value="Accel">加速计 (不推荐)</option>
-															<option value="DualChannel">双通道 (GPS 与加速计)</option>
-															<option value="Manual">手动</option>
-														</select>
-													</label>
-												</li>
-												<li class="Ctrl">
-													<label for="Combobox_PFDOptionsAltitudeMode">
-														<span>高度模式：</span>
-														<select class="Combobox" id="Combobox_PFDOptionsAltitudeMode" onchange="SetAltitudeModeAtPFDOptions()">
-															<option value="GPS" selected>GPS</option>
-															<option value="Accel">加速计 (不推荐)</option>
-															<option value="DualChannel">双通道 (GPS 与加速计)</option>
-															<option value="Manual">手动</option>
-														</select>
-													</label>
-												</li>
-												<li class="Ctrl">
-													<label for="Combobox_PFDOptionsHeadingMode">
-														<span>朝向模式：</span>
-														<select class="Combobox" id="Combobox_PFDOptionsHeadingMode" onchange="SetHeadingModeAtPFDOptions()">
-															<option value="GPS" selected>GPS</option>
-															<option value="Manual">手动</option>
-														</select>
-													</label>
-												</li>
-												<li class="Ctrl">
-													<label for="Checkbox_PFDOptionsEnableNav">
-														<input class="Checkbox" id="Checkbox_PFDOptionsEnableNav" type="checkbox" checked="true" onchange="SetEnableNavAtPFDOptions()" />
-														<span>启用导航</span>
-													</label>
-												</li>
-												<li class="Ctrl">
 													<label for="Combobox_PFDOptionsFlightMode">
 														<span>飞航模式：</span>
-														<select class="Combobox" id="Combobox_PFDOptionsFlightMode" onchange="SetFlightModeAtPFDOptions()">
+														<select class="Combobox" id="Combobox_PFDOptionsFlightMode" onchange="SetFlightModeAtPFD()">
 															<option value="DepartureGround" selected>出发地面</option>
 															<option value="TakeOff">起飞</option>
 															<option value="Cruise">巡航</option>
@@ -2941,8 +2914,60 @@
 													</label>
 												</li>
 												<li class="Ctrl">
+													<label for="Checkbox_PFDOptionsEnableAttitudeIndicator">
+														<input class="Checkbox" id="Checkbox_PFDOptionsEnableAttitudeIndicator" type="checkbox" checked="true" onchange="SetEnableAttitudeIndicatorAtPFD()" />
+														<span>启用<a href="https://zh.wikipedia.org/wiki/姿态指引仪">姿态仪</a></span>
+													</label>
+												</li>
+												<li class="Ctrl" id="Ctrl_PFDOptionsAttitudeMode">
+													<label for="Combobox_PFDOptionsAttitudeMode">
+														<span>姿态模式：</span>
+														<select class="Combobox" id="Combobox_PFDOptionsAttitudeMode" onchange="SetAttitudeModeAtPFD()">
+															<option value="Accel" selected>加速计</option>
+															<option value="Manual">手动</option>
+														</select>
+													</label>
+												</li>
+												<li class="Ctrl">
+													<label for="Combobox_PFDOptionsSpeedMode">
+														<span>速度模式：</span>
+														<select class="Combobox" id="Combobox_PFDOptionsSpeedMode" onchange="SetSpeedModeAtPFD()">
+															<option value="GPS" selected>GPS</option>
+															<option value="Accel">加速计 (不推荐)</option>
+															<option value="DualChannel">双通道 (GPS 与加速计)</option>
+															<option value="Manual">手动</option>
+														</select>
+													</label>
+												</li>
+												<li class="Ctrl">
+													<label for="Combobox_PFDOptionsAltitudeMode">
+														<span>高度模式：</span>
+														<select class="Combobox" id="Combobox_PFDOptionsAltitudeMode" onchange="SetAltitudeModeAtPFD()">
+															<option value="GPS" selected>GPS</option>
+															<option value="Accel">加速计 (不推荐)</option>
+															<option value="DualChannel">双通道 (GPS 与加速计)</option>
+															<option value="Manual">手动</option>
+														</select>
+													</label>
+												</li>
+												<li class="Ctrl">
+													<label for="Combobox_PFDOptionsHeadingMode">
+														<span>朝向模式：</span>
+														<select class="Combobox" id="Combobox_PFDOptionsHeadingMode" onchange="SetHeadingModeAtPFD()">
+															<option value="GPS" selected>GPS</option>
+															<option value="Manual">手动</option>
+														</select>
+													</label>
+												</li>
+												<li class="Ctrl">
+													<label for="Checkbox_PFDOptionsEnableNav">
+														<input class="Checkbox" id="Checkbox_PFDOptionsEnableNav" type="checkbox" checked="true" onchange="SetEnableNavAtPFD()" />
+														<span>启用导航</span>
+													</label>
+												</li>
+												<li class="Ctrl">
 													<label for="Checkbox_PFDOptionsKeepScreenOn">
-														<input class="Checkbox" id="Checkbox_PFDOptionsKeepScreenOn" type="checkbox" checked="false" onchange="SetKeepScreenOnAtPFDOptions()" />
+														<input class="Checkbox" id="Checkbox_PFDOptionsKeepScreenOn" type="checkbox" checked="false" onchange="SetKeepScreenOnAtPFD()" />
 														<span>保持屏幕常亮</span>
 													</label>
 												</li>
@@ -3040,7 +3065,7 @@
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryFilter">
 										<span>筛选：</span>
-										<input class="Textbox" id="Textbox_AirportLibraryFilter" type="text" oninput="FilterAirportLibrary()" placeholder="名称/地区/代码" title="名称/地区/代码" />
+										<input class="Textbox" id="Textbox_AirportLibraryFilter" type="text" oninput="FilterAirports()" placeholder="名称/地区/代码" title="名称/地区/代码" />
 									</label>
 								</li>
 								<li class="Ctrl ListHeader">
@@ -3048,7 +3073,7 @@
 									<span>出发 | 到达</span>
 								</li>
 								<li class="Ctrl ScrollableList">
-									<ul class="CtrlGroup" id="CtrlGroup_AirportLibraryList">
+									<ul class="CtrlGroup" id="CtrlGroup_AirportLibraryAirportList">
 										<!-- Content will be inserted using script. -->
 									</ul>
 								</li>
@@ -3064,7 +3089,7 @@
 							</ul>
 						</fieldset>
 					</li>
-					<li class="Item" id="Item_AirportLibraryProperties">
+					<li class="Item">
 						<fieldset>
 							<legend>机场属性</legend>
 							<ul class="CtrlGroup">
@@ -3087,36 +3112,7 @@
 									</label>
 								</li>
 							</ul>
-							<h3>地理</h3>
-							<p>北纬、东经是正值，南纬、西经是负值。</p>
-							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl" id="Ctrl_AirportLibraryLat">
-									<label for="Textbox_AirportLibraryLat">
-										<span>纬度：</span>
-										<input class="Textbox Width120" id="Textbox_AirportLibraryLat" type="number" min="-90" max="90" step="0.01" value="0.00000" onclick="SelectText('Textbox_AirportLibraryLat')" onchange="SetAirportLat()" placeholder="-90~90" title="-90~90" />
-									</label>
-								</li>
-								<li class="Ctrl" id="Ctrl_AirportLibraryLon">
-									<label for="Textbox_AirportLibraryLon">
-										<span>经度：</span>
-										<input class="Textbox Width120" id="Textbox_AirportLibraryLon" type="number" min="-180" max="180" step="0.01" value="0.00000" onclick="SelectText('Textbox_AirportLibraryLon')" onchange="SetAirportLon()" placeholder="-180~180" title="-180~180" />
-									</label>
-								</li>
-								<li class="Ctrl" id="Ctrl_AirportLibraryReplaceAirportCoordinatesWithCurrent">
-									<button class="Button" onclick="ReplaceAirportCoordinatesWithCurrent()">替换为当前坐标</button>
-								</li>
-								<li class="Ctrl">
-									<label for="Textbox_AirportLibraryElevation">
-										<span>高度：</span>
-										<input class="Textbox Width120" id="Textbox_AirportLibraryElevation" type="number" min="-1640" max="16404" step="10" value="0" onclick="SelectText('Textbox_AirportLibraryElevation')" onchange="SetAirportElevation()" placeholder="-1640~16404" title="-1640~16404" />
-										<span id="Label_AirportLibraryElevationUnit">英尺</span>
-									</label>
-								</li>
-								<li class="Ctrl">
-									<button class="Button" onclick="ReplaceAirportElevationWithCurrent()">替换为当前高度</button>
-								</li>
-							</ul>
-							<h3>天气</h3>
+							<p>请记得在起飞前更新两座机场的天气数据。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryTemperature">
@@ -3139,50 +3135,123 @@
 										<span id="Label_AirportLibraryQNHUnit">百帕</span>
 									</label>
 								</li>
+								<li class="Ctrl">
+									<a class="Button" href="#Item_SettingsI18n" onclick="ShowIAmHere('Item_SettingsI18n')">切换计量单位...</a>
+								</li>
+							</ul>
+						</fieldset>
+					</li>
+					<li class="Item">
+						<fieldset>
+							<legend>跑道</legend>
+							<p class="Hidden" id="Label_AirportLibraryAutoSwitchRunwayActive" inert="true"><span class="RedText">注意：</span>「<a href="#Item_SettingsNav" onclick="ShowIAmHere('Item_SettingsNav')">自动切换跑道</a>」工作中。这里可能无法操作。</p>
+							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl ScrollableList">
+									<ul class="CtrlGroup" id="CtrlGroup_AirportLibraryRunwayList">
+										<!-- Content will be inserted using script. -->
+									</ul>
+								</li>
+								<li class="Ctrl">
+									<button class="Button" onclick="NewRunway()">新建</button>
+								</li>
+							</ul>
+						</fieldset>
+					</li>
+					<li class="Item" id="Item_AirportLibraryRunwayProperties">
+						<fieldset>
+							<legend>跑道属性</legend>
+							<ul class="CtrlGroup">
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryRunwayHeading">
+										<span>名称：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryRunwayHeading" type="number" min="1" max="36" step="1" value="1" onclick="SelectText('Textbox_AirportLibraryRunwayHeading')" onchange="SetRunwayHeading()" placeholder="01~36" title="01~36" />
+										<select class="Combobox Width120" id="Combobox_AirportLibraryRunwaySuffix" onchange="SetRunwaySuffix()">
+											<optgroup label="常见">
+												<option value="" selected>(无后缀)</option>
+												<option value="L">L (左)</option>
+												<option value="C">C (中)</option>
+												<option value="R">R (右)</option>
+											</optgroup>
+											<optgroup label="稀有">
+												<option value="T">T (真北)</option>
+												<option value="W">W (水上飞机)</option>
+												<option value="G">G (滑翔机)</option>
+												<option value="S">S (超短跑道)</option>
+												<option value="U">U (超轻飞机)</option>
+												<option value="H">H (直升机)</option>
+											</optgroup>
+										</select>
+									</label>
+								</li>
+							</ul>
+							<h3>地理</h3>
+							<p>北纬、东经是正值，南纬、西经是负值。</p>
+							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl" id="Ctrl_AirportLibraryLat">
+									<label for="Textbox_AirportLibraryLat">
+										<span>纬度：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryLat" type="number" min="-90" max="90" step="0.01" value="0.00000" onclick="SelectText('Textbox_AirportLibraryLat')" onchange="SetRunwayLat()" placeholder="-90~90" title="-90~90" />
+									</label>
+								</li>
+								<li class="Ctrl" id="Ctrl_AirportLibraryLon">
+									<label for="Textbox_AirportLibraryLon">
+										<span>经度：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryLon" type="number" min="-180" max="180" step="0.01" value="0.00000" onclick="SelectText('Textbox_AirportLibraryLon')" onchange="SetRunwayLon()" placeholder="-180~180" title="-180~180" />
+									</label>
+								</li>
+								<li class="Ctrl" id="Ctrl_AirportLibraryReplaceRunwayCoordinatesWithCurrent">
+									<button class="Button" onclick="ReplaceRunwayCoordinatesWithCurrent()">替换为当前坐标</button>
+								</li>
+								<li class="Ctrl">
+									<label for="Textbox_AirportLibraryElevation">
+										<span>高度：</span>
+										<input class="Textbox Width120" id="Textbox_AirportLibraryElevation" type="number" min="-1640" max="16404" step="10" value="0" onclick="SelectText('Textbox_AirportLibraryElevation')" onchange="SetRunwayElevation()" placeholder="-1640~16404" title="-1640~16404" />
+										<span id="Label_AirportLibraryElevationUnit">英尺</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<button class="Button" onclick="ReplaceRunwayElevationWithCurrent()">替换为当前高度</button>
+								</li>
 							</ul>
 							<h3>进近 (Final Approach)</h3>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryGlideSlopeAngle">
 										<span><a href="https://zh.wikipedia.org/wiki/仪表着陆系统#航向台和下滑台">下滑道</a>角度：</span>
-										<input class="Textbox Width120" id="Textbox_AirportLibraryGlideSlopeAngle" type="number" min="0" max="10" step="0.1" value="3.00" onclick="SelectText('Textbox_AirportLibraryGlideSlopeAngle')" onchange="SetAirportGlideSlopeAngle()" placeholder="0~10" title="0~10" />
+										<input class="Textbox Width120" id="Textbox_AirportLibraryGlideSlopeAngle" type="number" min="0" max="10" step="0.1" value="3.00" onclick="SelectText('Textbox_AirportLibraryGlideSlopeAngle')" onchange="SetRunwayGlideSlopeAngle()" placeholder="0~10" title="0~10" />
 										<span>度</span>
 									</label>
 								</li>
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryOuterMarkerDistance">
 										<span>外<a href="https://zh.wikipedia.org/wiki/仪表着陆系统#指点标">指点标</a>距离：</span>
-										<input class="Textbox Width120" id="Textbox_AirportLibraryOuterMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="5.00" onclick="SelectText('Textbox_AirportLibraryOuterMarkerDistance')" onchange="SetAirportOuterMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
+										<input class="Textbox Width120" id="Textbox_AirportLibraryOuterMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="5.00" onclick="SelectText('Textbox_AirportLibraryOuterMarkerDistance')" onchange="SetRunwayOuterMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
 										<span id="Label_AirportLibraryOuterMarkerDistanceUnit">海里</span>
 									</label>
 								</li>
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryMiddleMarkerDistance">
 										<span>中指点标距离：</span>
-										<input class="Textbox Width120" id="Textbox_AirportLibraryMiddleMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="0.50" onclick="SelectText('Textbox_AirportLibraryMiddleMarkerDistance')" onchange="SetAirportMiddleMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
+										<input class="Textbox Width120" id="Textbox_AirportLibraryMiddleMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="0.50" onclick="SelectText('Textbox_AirportLibraryMiddleMarkerDistance')" onchange="SetRunwayMiddleMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
 										<span id="Label_AirportLibraryMiddleMarkerDistanceUnit">海里</span>
 									</label>
 								</li>
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryInnerMarkerDistance">
 										<span>内指点标距离：</span>
-										<input class="Textbox Width120" id="Textbox_AirportLibraryInnerMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="0.10" onclick="SelectText('Textbox_AirportLibraryInnerMarkerDistance')" onchange="SetAirportInnerMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
+										<input class="Textbox Width120" id="Textbox_AirportLibraryInnerMarkerDistance" type="number" min="0" max="10.8" step="0.1" value="0.10" onclick="SelectText('Textbox_AirportLibraryInnerMarkerDistance')" onchange="SetRunwayInnerMarkerDistance()" placeholder="0~10.8" title="0~10.8" />
 										<span id="Label_AirportLibraryInnerMarkerDistanceUnit">海里</span>
 									</label>
 								</li>
 							</ul>
-							<p>机场高度＋<a href="#Item_SettingsAltitude" onclick="ShowIAmHere('Item_SettingsAltitude')">座位高度</a>＝地面高度。地面高度＋相对决断高度 (decision height)＝<a href="https://en.wikipedia.org/wiki/Instrument_approach#Decision_height_or_altitude">决断高度 (decision altitude)</a>。</p>
+							<p>跑道高度＋<a href="#Item_SettingsAltitude" onclick="ShowIAmHere('Item_SettingsAltitude')">座位高度</a>＝地面高度。地面高度＋相对决断高度 (decision height)＝<a href="https://en.wikipedia.org/wiki/Instrument_approach#Decision_height_or_altitude">决断高度 (decision altitude)</a>。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryDecisionHeight">
 										<span>相对决断高度：</span>
-										<input class="Textbox Width120" id="Textbox_AirportLibraryDecisionHeight" type="number" min="40" max="2461" step="10" value="250" onclick="SelectText('Textbox_AirportLibraryDecisionHeight')" onchange="SetAirportDecisionHeight()" placeholder="49~2461" title="49~2461" />
+										<input class="Textbox Width120" id="Textbox_AirportLibraryDecisionHeight" type="number" min="40" max="2461" step="10" value="250" onclick="SelectText('Textbox_AirportLibraryDecisionHeight')" onchange="SetRunwayDecisionHeight()" placeholder="49~2461" title="49~2461" />
 										<span id="Label_AirportLibraryDecisionHeightUnit">英尺</span>
 									</label>
-								</li>
-								<li class="Ctrl Hidden"></li> <!-- Placeholder for the wider fieldset UI. -->
-								<li class="Ctrl">
-									<a class="Button" href="#Item_SettingsI18n" onclick="ShowIAmHere('Item_SettingsI18n')">切换计量单位...</a>
 								</li>
 							</ul>
 						</fieldset>
@@ -3199,7 +3268,7 @@
 									<button class="Button" onclick="ImportAirportLibraryObjects()">导入</button>
 								</li>
 							</ul>
-							<p>若要分享导出的数据，请注意其中是否包含个人信息。「重置机场库」可将机场库恢复至初始状态，仅有内置机场。重置前建议先备份当前机场库。</p>
+							<p>若要分享导出的数据，请注意其中是否包含个人信息。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl WidthDividedBy2">
 									<button class="Button" onclick="ExportAirportLibrary()">导出机场库</button>
@@ -3218,13 +3287,53 @@
 				<ul class="ItemGroup">
 					<li class="Item">
 						<fieldset>
-							<legend>姿态仪</legend>
-							<p>若启用<a href="https://zh.wikipedia.org/wiki/姿态指引仪">姿态仪</a>，<a href="https://zh.wikipedia.org/wiki/空速#指示空速">表速 (IAS) </a>的计算会将<a href="https://zh.wikipedia.org/wiki/航空器三主轴">俯仰 (pitch) </a>姿态考虑在内，<a href="https://zh.wikipedia.org/wiki/失速">失速</a>速度的计算会将<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚 (roll) </a>姿态考虑在内。</p>
+							<legend>权限</legend>
+							<p>本应用程序需要使用<a href="https://zh.wikipedia.org/wiki/位置服务">位置服务</a>与<a href="https://zh.wikipedia.org/wiki/加速计">加速计</a>来实现核心功能。请阅读<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('Item_HelpPrivacyStatement')">隐私权声明</a>。</p>
+							<p class="Hidden" id="Label_SettingsRequestAccelPermission" inert="true"><a href="https://zh.wikipedia.org/wiki/苹果公司">苹果公司</a>出于加强保护用户隐私的理由，在 <a href="https://zh.wikipedia.org/wiki/iOS">iOS</a> 13+ 环境下，您需要手动允许本应用程序使用加速计。</p>
 							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl Hidden" id="Ctrl_SettingsRequestAccelPermission" inert="true">
+									<button class="Button" id="Button_SettingsRequestAccelPermission" onclick="RequestAccelPermission()">请求加速计权限</button>
+								</li>
+							</ul>
+							<h3>状态</h3>
+							<p>位置服务：<span id="Label_SettingsPermissionsGPS">未知</span><br />
+								加速计：<span id="Label_SettingsPermissionsAccel">未知</span></p>
+						</fieldset>
+					</li>
+					<li class="Item">
+						<fieldset>
+							<legend>飞航模式</legend>
+							<ul class="CtrlGroup">
+								<li class="Ctrl">
+									<label for="Combobox_SettingsFlightMode">
+										<span>飞航模式：</span>
+										<select class="Combobox" id="Combobox_SettingsFlightMode" onchange="SetFlightMode()">
+											<option value="DepartureGround" selected>出发地面</option>
+											<option value="TakeOff">起飞</option>
+											<option value="Cruise">巡航</option>
+											<option value="Land">降落</option>
+											<option value="ArrivalGround">到达地面</option>
+											<option value="EmergencyReturn">紧急返航</option>
+										</select>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Checkbox_SettingsAutoSwitchFlightModeAndSwapAirports">
+										<input class="Checkbox" id="Checkbox_SettingsAutoSwitchFlightModeAndSwapAirports" type="checkbox" checked="true" onchange="SetAutoSwitchFlightModeAndSwapAirports()" />
+										<span>自动切换飞航模式与对调机场</span>
+									</label>
+								</li>
+							</ul>
+						</fieldset>
+					</li>
+					<li class="Item">
+						<fieldset>
+							<legend>姿态仪</legend>
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsEnableAttitudeIndicator">
 										<input class="Checkbox" id="Checkbox_SettingsEnableAttitudeIndicator" type="checkbox" checked="true" onchange="SetEnableAttitudeIndicator()" />
-										<span>启用姿态仪</span>
+										<span>启用<a href="https://zh.wikipedia.org/wiki/姿态指引仪">姿态仪</a></span>
 									</label>
 								</li>
 								<li class="Ctrl" id="Ctrl_SettingsAttitudeMode">
@@ -3238,7 +3347,7 @@
 								</li>
 							</ul>
 							<h3 id="Label_SettingsAttitudeOffset">姿态偏移</h3>
-							<p id="Label_SettingsAttitudeOffsetInfo">姿态偏移适用于无法自由摆放设备的情况。俯仰抬头是正值，低头是负值。横滚右倾是正值，左倾是负值。</p>
+							<p id="Label_SettingsAttitudeOffsetInfo"><a href="https://zh.wikipedia.org/wiki/航空器三主轴">俯仰 (pitch) </a>抬头是正值，低头是负值。<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚 (roll) </a>右倾是正值，左倾是负值。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl" id="Ctrl_SettingsAttitudeOffsetPitch">
 									<label for="Textbox_SettingsAttitudeOffsetPitch">
@@ -3272,12 +3381,9 @@
 										</select>
 									</label>
 								</li>
-							</ul>
-							<p>GPS 与加速计只能测量地速，因此<a href="https://zh.wikipedia.org/wiki/空速">空速</a>需要通过算法从地速转换而来。详见<a href="docs/GPS-PFD%20说明文档.pdf">说明文档</a>。</p>
-							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsIASAlgorithm">
-										<span>表速算法：</span>
+										<span><a href="https://zh.wikipedia.org/wiki/空速#指示空速">表速 (IAS) </a>算法：</span>
 										<select class="Combobox" id="Combobox_SettingsIASAlgorithm" onchange="SetIASAlgorithm()">
 											<option value="SimpleAlgorithm" selected>简单算法</option>
 											<option value="AdvancedAlgorithmA">高级算法A</option>
@@ -3328,20 +3434,16 @@
 								<li class="Ctrl">
 									<label for="Textbox_SettingsSpeedLimitMin">
 										<span>最小表速：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsSpeedLimitMin" type="number" min="0" max="529" step="5" value="120" onclick="SelectText('Textbox_SettingsSpeedLimitMin')" onchange="SetSpeedLimitMin()" placeholder="0~529" title="0~529" />
+										<input class="Textbox Width120" id="Textbox_SettingsSpeedLimitMin" type="number" min="0" max="529" step="5" value="108" onclick="SelectText('Textbox_SettingsSpeedLimitMin')" onchange="SetSpeedLimitMin()" placeholder="0~529" title="0~529" />
 										<span id="Label_SettingsSpeedLimitMinUnit">节</span>
 									</label>
 								</li>
-							</ul>
-							<p>若无法得知飞机实时的重量，失速速度是不可靠的。</p>
-							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsCalcStallSpeed">
 										<input class="Checkbox" id="Checkbox_SettingsCalcStallSpeed" type="checkbox" checked="false" onchange="SetCalcStallSpeed()" />
-										<span>计算失速速度</span>
+										<span>计算<a href="https://zh.wikipedia.org/wiki/失速">失速</a>速度</span>
 									</label>
 								</li>
-								<li class="Ctrl Hidden"></li> <!-- Placeholder for the wider fieldset UI. -->
 								<li class="Ctrl Hidden" id="Ctrl_SettingsWeight">
 									<label for="Textbox_SettingsWeight">
 										<span>重量：</span>
@@ -3433,54 +3535,29 @@
 							</ul>
 						</fieldset>
 					</li>
-					<li class="Item">
+					<li class="Item" id="Item_SettingsNav">
 						<fieldset>
 							<legend>导航</legend>
-							<p>导航功能参考自<a href="https://zh.wikipedia.org/wiki/仪表着陆系统">仪表着陆系统 (ILS)</a>。包括<a href="https://zh.wikipedia.org/wiki/测距仪">测距仪 (DME)</a>、导航朝向 (bearing)、<a href="https://zh.wikipedia.org/wiki/仪表着陆系统#航向台和下滑台">航向台 (localizer)、下滑道 (glide slope) </a>以及指点标 (marker beacons)。测距仪测量您与机场之间的水平距离，预测到达机场前的剩余时间。下滑道使<a href="https://zh.wikipedia.org/wiki/近地警告系统">近地警告系统 (GPWS) </a>的下滑道警告功能可用。航向台与下滑道仅在<a href="#Item_SettingsFlightMode" onclick="ShowIAmHere('Item_SettingsFlightMode')">飞航模式</a>为「降落」或「紧急返航」时显示。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsEnableNav">
 										<input class="Checkbox" id="Checkbox_SettingsEnableNav" type="checkbox" checked="false" onchange="SetEnableNav()" />
 										<span>启用导航</span>
 									</label>
 								</li>
-							</ul>
-							<h3 class="Hidden" id="Label_SettingsETA" inert="true">预计剩余时间 (ETA)</h3>
-							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl Hidden" id="Ctrl_SettingsETACalcMethod" inert="true">
 									<label for="Combobox_SettingsETACalcMethod">
-										<span>计算方法：</span>
-										<select class="Combobox" id="Combobox_SettingsETACalcMethod" onchange="SetETACalcMethod()">
-											<option value="UseRealTimeGS">使用实时地速</option>
-											<option value="UseAvgGS" selected>使用平均地速</option>
+										<span>预计剩余时间的计算方法：</span>
+										<select class="Combobox Width160" id="Combobox_SettingsETACalcMethod" onchange="SetETACalcMethod()">
+											<option value="UseRealTimeGS" selected>使用实时地速</option>
+											<option value="UseAvgGS">使用平均地速</option>
 										</select>
 									</label>
 								</li>
-							</ul>
-						</fieldset>
-					</li>
-					<li class="Item" id="Item_SettingsFlightMode">
-						<fieldset>
-							<legend>飞航模式</legend>
-							<p>飞航模式用于决定参考出发机场还是到达机场的数据，以及切换近地警告系统的模式。飞航模式可在特定条件下自动切换。具体条件详见说明文档。</p>
-							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl">
-									<label for="Combobox_SettingsFlightMode">
-										<span>飞航模式：</span>
-										<select class="Combobox" id="Combobox_SettingsFlightMode" onchange="SetFlightMode()">
-											<option value="DepartureGround" selected>出发地面</option>
-											<option value="TakeOff">起飞</option>
-											<option value="Cruise">巡航</option>
-											<option value="Land">降落</option>
-											<option value="ArrivalGround">到达地面</option>
-											<option value="EmergencyReturn">紧急返航</option>
-										</select>
-									</label>
-								</li>
-								<li class="Ctrl">
-									<label for="Checkbox_SettingsAutoSwitchFlightModeAndSwapAirports">
-										<input class="Checkbox" id="Checkbox_SettingsAutoSwitchFlightModeAndSwapAirports" type="checkbox" checked="true" onchange="SetAutoSwitchFlightModeAndSwapAirports()" />
-										<span>自动切换飞航模式与对调机场</span>
+								<li class="Ctrl Hidden" id="Ctrl_SettingsAutoSwitchRunwayWhenLanding" inert="true">
+									<label for="Checkbox_SettingsAutoSwitchRunwayWhenLanding">
+										<input class="Checkbox" id="Checkbox_SettingsAutoSwitchRunwayWhenLanding" type="checkbox" checked="true" onchange="SetAutoSwitchRunwayWhenLanding()" />
+										<span>降落时自动切换跑道</span>
 									</label>
 								</li>
 							</ul>
@@ -3489,7 +3566,8 @@
 					<li class="Item" id="Item_SettingsWarningSystem">
 						<fieldset>
 							<legend>警告系统</legend>
-							<ul class="CtrlGroup">
+							<p><span class="RedText">注意：</span>启用警告系统前请先阅读<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('Item_HelpDisclaimer')">免责声明</a>。</p>
+							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsEnableWarningSystem">
 										<input class="Checkbox" id="Checkbox_SettingsEnableWarningSystem" type="checkbox" checked="false" onchange="SetEnableWarningSystem()" />
@@ -3558,7 +3636,7 @@
 									</label>
 								</li>
 							</ul>
-							<p>「<a href="https://zh.wikipedia.org/wiki/主飞行显示器">PFD</a> 样式」中，「默认」样式的配色取决于主题。除此之外的样式均不受主题的影响。在 OLED 屏幕上全屏使用「<a href="https://zh.wikipedia.org/wiki/HUD">HUD</a>」样式可以<a href="https://bejamas.io/blog/does-dark-mode-save-battery">省电</a>。</p>
+							<p>「<a href="https://zh.wikipedia.org/wiki/主飞行显示器">PFD</a> 样式」中，「默认」样式的配色取决于主题。除此之外的样式均不受主题的影响。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsPFDStyle">
@@ -3802,7 +3880,7 @@
 					<li class="Item" id="Item_SettingsUserData">
 						<fieldset>
 							<legend>用户数据</legend>
-							<p>本功能可快速更改整个网站的用户数据。若要分享导出的数据，请注意其中是否包含个人信息。若您遇到系统错误，可尝试清空用户数据。若错误仍会发生，请向我<a href="#Item_HelpGetInvolved" onclick="ShowIAmHere('Item_HelpGetInvolved')">提供反馈</a>。</p>
+							<p>本功能可快速更改整个网站的用户数据。若要分享导出的数据，请注意其中是否包含个人信息。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Textbox_SettingsUserDataImport">
@@ -3828,7 +3906,7 @@
 					<li class="Item">
 						<fieldset>
 							<legend>简介</legend>
-							<p>GPS-PFD，利用 <a href="https://zh.wikipedia.org/wiki/GPS">GPS</a> 与<a href="https://zh.wikipedia.org/wiki/加速计">加速计</a>，在移动设备上模拟飞机驾驶舱的 PFD。</p>
+							<p>GPS-PFD，利用 <a href="https://zh.wikipedia.org/wiki/GPS">GPS</a> 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。</p>
 							<p>备注：这里的「GPS」指的是位置服务，其利用以 GPS 为代表的<a href="https://zh.wikipedia.org/wiki/卫星导航系统">卫星导航系统 (GNSS) </a>来精确定位。卫星导航系统包括美国 GPS、俄罗斯 <a href="https://zh.wikipedia.org/wiki/GLONASS">GLONASS</a>，以及中国<a href="https://zh.wikipedia.org/wiki/北斗卫星导航系统">北斗</a>等。加速计亦称加速度传感器、重力感应器，用于测量姿态、速度与高度。</p>
 						</fieldset>
 					</li>
@@ -3841,15 +3919,15 @@
 							<p>在没有网络连接的飞机上，您需要离线使用本应用程序。有两种方式来离线使用：<br />
 								・断网前先在线访问一次。<br />
 								・下载资源至本地，在本地运行网页。<br />
-								详见说明文档中的「使用方式」。</p>
+								详见<a href="docs/GPS-PFD%20说明文档.pdf">说明文档</a>中的「使用方式」。</p>
 							<h3>安全与隐私</h3>
-							<p>本应用程序仅供娱乐用途。<a href="#Item_SettingsWarningSystem" onclick="ShowIAmHere('Item_SettingsWarningSystem')">警告系统</a>可能出现误报。使用时请注意安全。本应用程序可能使用位置服务。详见<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('Item_HelpDisclaimer')">免责声明</a>与<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('Item_HelpPrivacyStatement')">隐私权声明</a>。</p>
+							<p>详见<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('Item_HelpDisclaimer')">免责声明</a>与<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('Item_HelpPrivacyStatement')">隐私权声明</a>。</p>
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_HelpTutorial">
 						<fieldset>
 							<legend>教程</legend>
-							<p>本应用程序的教程以 PDF 文档的形式提供。这方便您保存至本地，还可以打印出来备用。</p>
+							<p>本应用程序的教程以 <a href="https://zh.wikipedia.org/wiki/PDF">PDF</a> 文档的形式提供。这方便您保存至本地，还可以打印出来备用。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl WidthDividedBy2">
 									<a class="Button" href="docs/GPS-PFD%20说明文档.pdf">说明文档</a>
@@ -3884,7 +3962,7 @@
 						<fieldset>
 							<legend>免责声明</legend>
 							<p>本应用程序仅供娱乐用途，不能替代飞机驾驶舱仪表。</p>
-							<p>首先，系统能够测量的数据有限。空速、风、<a href="https://en.wikipedia.org/wiki/Radio_altimeter">无线电高度</a>、<a href="https://zh.wikipedia.org/wiki/航空器三主轴">偏航 (yaw) </a>等无法测量。因此这些数据或是依赖算法转换，或是依赖手动设定，抑或是直接被忽略。其次，数据不保证准确。GPS 与加速计只能测量地速，因此空速需要通过算法从地速转换而来。GPS 高度也不如<a href="https://zh.wikipedia.org/wiki/高度计#氣壓高度計">气压高度计</a>可靠。其三，数据更新可能有延迟。一方面系统为了显示流畅而设计了显示延迟，另一方面 GPS 信号也会有延迟。</p>
+							<p>首先，系统能够测量的数据有限。<a href="https://zh.wikipedia.org/wiki/空速">空速</a>、风、<a href="https://en.wikipedia.org/wiki/Radio_altimeter">无线电高度</a>、<a href="https://zh.wikipedia.org/wiki/航空器三主轴">偏航 (yaw) </a>等无法测量。因此这些数据或是依赖算法转换，或是依赖手动设定，抑或是直接被忽略。其次，数据不保证准确。GPS 与加速计只能测量地速，因此空速需要通过算法从地速转换而来。GPS 高度也不如<a href="https://zh.wikipedia.org/wiki/高度计#氣壓高度計">气压高度计</a>可靠。其三，数据更新可能有延迟。一方面系统为了显示流畅而设计了显示延迟，另一方面 GPS 信号也会有延迟。</p>
 							<p>鉴于上述原因，您尤其需要注意，警告系统可能出现误报。请勿在公共场合外放警告系统的警报声音。</p>
 							<p>在交通工具上使用时，请固定好您的设备，且不要一边驾驶交通工具一边操作设备。</p>
 							<p>若您不当使用本应用程序造成损失，SAM TOKI STUDIO 恕不负责。</p>
@@ -3895,7 +3973,7 @@
 							<legend>隐私权声明</legend>
 							<p>本站为 <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages">GitHub Pages</a> 静态网站，只使用浏览器的 Local Storage 功能在本地存储<a href="#Item_SettingsUserData" onclick="ShowIAmHere('Item_SettingsUserData')">用户数据</a>。您可随时手动删除。本站不使用 <a href="https://zh.wikipedia.org/wiki/Cookie">Cookies</a>，不收集任何个人信息。</p>
 							<p>出于安全考虑，<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#data-collection">GitHub 的服务器可能会记录您的 IP 地址</a>。SAM TOKI STUDIO 无法访问这些数据。</p>
-							<p>本应用程序可能使用位置服务。位置服务涉及敏感数据，系统不会 (且没有必要) 保存这些数据。关闭网页时这些数据立即丢失。</p>
+							<p>本应用程序使用的位置服务与加速计涉及敏感数据。系统不会 (且没有必要) 保存这些数据。关闭网页时这些数据立即丢失。</p>
 						</fieldset>
 					</li>
 					<li class="Item">
@@ -3906,6 +3984,7 @@
 							<p>「<a href="https://zh.moegirl.org.cn/苏菲的炼金工房2_～不可思议梦的炼金术士～">苏菲的炼金工房</a>」是 <a href="https://zh.moegirl.org.cn/光荣特库摩游戏">KOEI TECMO GAMES</a> CO., LTD. 的作品与商标。<br />
 								「<a href="https://zh.moegirl.org.cn/孤独摇滚！">孤独摇滚！</a>」是 <span lang="ja-JP"><a href="https://zh.moegirl.org.cn/はまじあき">はまじあき</a>／<a href="https://zh.moegirl.org.cn/芳文社">芳文社</a>・<a href="https://zh.moegirl.org.cn/アニプレックス">アニプレックス</a></span> 的作品与商标。<br />
 								「<a href="https://zh.moegirl.org.cn/原神">原神</a>」是 <a href="https://zh.moegirl.org.cn/miHoYo">miHoYo</a> Inc. 的作品与商标。<br />
+								「<a href="https://zh.wikipedia.org/wiki/iOS">iOS</a>」是 <a href="https://zh.wikipedia.org/wiki/苹果公司">Apple</a> Inc. 的商标。<br />
 								「<a href="https://zh.moegirl.org.cn/沉默的魔女">Silent Witch 沉默魔女的秘密</a>」是 <span lang="ja-JP">依空まつり・藤実なんな/<a href="https://zh.moegirl.org.cn/KADOKAWA">KADOKAWA</a>/セレンディア学園広報部</span> 的作品与商标。</p>
 						</fieldset>
 					</li>
@@ -3928,8 +4007,9 @@
 							<legend>关于</legend>
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>版本 v0.50 (<time datetime="2025-11-01" pubdate="pubdate">2025/11/01</time>) Beta Test<br />
+							<p>版本 v0.51 (<time datetime="2025-11-11" pubdate="pubdate">2025/11/11</time>) Beta Test<br />
 								始于 2024/12/01</p>
+							<p><span class="RedText">注意：</span>测试版本更新迭代时可能会丢失用户数据。</p>
 							<p class="GreenText Hidden" id="Label_HelpPWANewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
@@ -4012,6 +4092,50 @@
 			<audio class="Audio" id="Audio_AttitudeAlert"><source src="../audio/Beep.mp3" /></audio>
 			<audio class="Audio" id="Audio_SpeedAlert"><source src="../audio/Beep.mp3" /></audio>
 			<audio class="Audio" id="Audio_AltitudeAlert"><source src="../audio/Beep.mp3" /></audio>
+		</div>
+		<div class="NonInteractiveCtnr">
+			<!-- Audio preload -->
+			<audio><source src="audio/Airbus_5.mp3" /></audio>
+			<audio><source src="audio/Airbus_20.mp3" /></audio>
+			<audio><source src="audio/Airbus_30.mp3" /></audio>
+			<audio><source src="audio/Airbus_40.mp3" /></audio>
+			<audio><source src="audio/Airbus_50.mp3" /></audio>
+			<audio><source src="audio/Airbus_100.mp3" /></audio>
+			<audio><source src="audio/Airbus_200.mp3" /></audio>
+			<audio><source src="audio/Airbus_300.mp3" /></audio>
+			<audio><source src="audio/Airbus_400.mp3" /></audio>
+			<audio><source src="audio/Airbus_500.mp3" /></audio>
+			<audio><source src="audio/Airbus_1000.mp3" /></audio>
+			<audio><source src="audio/Airbus_2500.mp3" /></audio>
+			<audio><source src="audio/Airbus_AirspeedLow.mp3" /></audio>
+			<audio><source src="audio/Airbus_HundredAbove.mp3" /></audio>
+			<audio><source src="audio/Airbus_Minimums.mp3" /></audio>
+			<audio><source src="audio/Airbus_Overspeed.mp3" /></audio>
+			<audio><source src="audio/Airbus_Retard.mp3" /></audio>
+			<audio><source src="audio/Airbus_V1.mp3" /></audio>
+			<audio><source src="audio/Boeing_10.mp3" /></audio>
+			<audio><source src="audio/Boeing_20.mp3" /></audio>
+			<audio><source src="audio/Boeing_30.mp3" /></audio>
+			<audio><source src="audio/Boeing_40.mp3" /></audio>
+			<audio><source src="audio/Boeing_50.mp3" /></audio>
+			<audio><source src="audio/Boeing_100.mp3" /></audio>
+			<audio><source src="audio/Boeing_200.mp3" /></audio>
+			<audio><source src="audio/Boeing_300.mp3" /></audio>
+			<audio><source src="audio/Boeing_400.mp3" /></audio>
+			<audio><source src="audio/Boeing_500.mp3" /></audio>
+			<audio><source src="audio/Boeing_1000.mp3" /></audio>
+			<audio><source src="audio/Boeing_2500.mp3" /></audio>
+			<audio><source src="audio/Boeing_AirspeedLow.mp3" /></audio>
+			<audio><source src="audio/Boeing_ApproachingMinimums.mp3" /></audio>
+			<audio><source src="audio/Boeing_Minimums.mp3" /></audio>
+			<audio><source src="audio/Boeing_Overspeed.mp3" /></audio>
+			<audio><source src="audio/Boeing_V1.mp3" /></audio>
+			<audio><source src="audio/Common_AltitudeBeep.mp3" /></audio>
+			<audio><source src="audio/Common_BankAngle.mp3" /></audio>
+			<audio><source src="audio/Common_DontSink.mp3" /></audio>
+			<audio><source src="audio/Common_GlideSlope.mp3" /></audio>
+			<audio><source src="audio/Common_PullUp.mp3" /></audio>
+			<audio><source src="audio/Common_SinkRate.mp3" /></audio>
 		</div>
 	</body>
 </html>

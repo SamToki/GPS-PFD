@@ -94,6 +94,26 @@
 				}
 			}
 
+			// v5.00 (2025/11/12)
+			// Change question range structure
+			if(localStorage.KanaMaster_Game != undefined) {
+				let Game = JSON.parse(localStorage.getItem("KanaMaster_Game"));
+				if(Game.QuestionRange.length != 28) {
+					Game.QuestionRange = [
+						0,
+						true, true, true, true, true, true, true, true, true, true,
+						true, true, true, true, true, true, true, true, true, true,
+						true,
+						false, false,
+						false, false,
+						false, false
+					];
+					localStorage.setItem("KanaMaster_Game", JSON.stringify(Game));
+					console.info("● User Data Repairer\n" +
+						"Repaired user data \"KanaMaster Game QuestionRange\".");
+				}
+			}
+
 		// Yamanobo-Ryou
 			// v2.00 (2025/01/08)
 			// Optimize user data structure
@@ -276,6 +296,26 @@
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
 					console.info("● User Data Repairer\n" +
 						"Repaired user data \"GPSPFD PFD\".");
+				}
+			}
+
+			// v0.51 (2025/11/13) Beta Test
+			// New runway feature, causing airport library structure overhaul
+			if(localStorage.GPSPFD_PFD != undefined) {
+				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
+				if(PFD.Nav.AutoSwitchRunwayWhenLanding == undefined) {
+					PFD.Nav.AutoSwitchRunwayWhenLanding = true;
+					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
+					console.info("● User Data Repairer\n" +
+						"Repaired user data \"GPSPFD PFD\".");
+				}
+			}
+			if(localStorage.GPSPFD_AirportLibrary != undefined) {
+				let AirportLibrary = JSON.parse(localStorage.getItem("GPSPFD_AirportLibrary"));
+				if(AirportLibrary.AirportSelection == undefined) {
+					localStorage.removeItem("GPSPFD_AirportLibrary");
+					console.info("● User Data Repairer\n" +
+						"Deleted user data \"GPSPFD AirportLibrary\".");
 				}
 			}
 	}

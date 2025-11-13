@@ -39,6 +39,9 @@
 						display: flex; justify-content: center; align-items: center;
 						color: #404040;
 					}
+					#Ctnr_PFDAutomobileSpeedometerPanelHardwareStatus .Ctrl.Red {
+						color: #FF6060;
+					}
 					#Ctnr_PFDAutomobileSpeedometerPanelHardwareStatus .Ctrl.Orange {
 						color: #FFA000;
 					}

@@ -33,8 +33,8 @@ Visit the webpage once, before disconnecting to the Internet.
 
 ## 安全与隐私 Safety and Privacy
 
-本应用程序仅供娱乐用途。警报功能可能出现误报。使用时请注意安全。本应用程序可能使用位置服务。详见[免责声明](https://SamToki.github.io/GPS-PFD/#Item_HelpDisclaimer)与[隐私权声明](https://SamToki.github.io/GPS-PFD/#Item_HelpPrivacyStatement)。<br>
-This application is for entertainment purposes only. The alert feature may give false warnings. Mind your safety while using. This application may use location services. Learn more at the [Disclaimer](https://SamToki.github.io/GPS-PFD/#Item_HelpDisclaimer) and the [Privacy Statement](https://SamToki.github.io/GPS-PFD/#Item_HelpPrivacyStatement).
+详见[免责声明](https://SamToki.github.io/GPS-PFD/#Item_HelpDisclaimer)与[隐私权声明](https://SamToki.github.io/GPS-PFD/#Item_HelpPrivacyStatement)。<br>
+See the [Disclaimer](https://SamToki.github.io/GPS-PFD/#Item_HelpDisclaimer) and the [Privacy Statement](https://SamToki.github.io/GPS-PFD/#Item_HelpPrivacyStatement).
 
 # 立即试用 Try Now
 
