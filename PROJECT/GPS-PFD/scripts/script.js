@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 0.51,
+		const CurrentVersion = 0.52,
 		Preset = {
 			Subsystem: {
 				I18n: {

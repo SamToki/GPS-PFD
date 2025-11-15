@@ -238,6 +238,9 @@
 						width: 120px; height: 70px; padding: 5px;
 						display: flex; flex-direction: column; justify-content: end;
 					}
+					#Label_PFDAutomobileSpeedometerPanelDMETitle { /* .SmallerText */
+						font-size: 0.75em;
+					}
 
 					/* Altitude */
 					#Ctnr_PFDAutomobileSpeedometerPanelAltitude {
@@ -245,6 +248,9 @@
 						width: 120px; height: 70px; padding: 5px;
 						text-align: end;
 						display: flex; flex-direction: column; justify-content: end;
+					}
+					#Label_PFDAutomobileSpeedometerPanelAltitudeTitle {
+						font-size: 0.75em;
 					}
 
 					/* Info */
