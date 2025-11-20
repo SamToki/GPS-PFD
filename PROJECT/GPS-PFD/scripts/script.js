@@ -2611,8 +2611,8 @@
 						Show("Ctrl_SettingsAttitudeOffsetPitch");
 						Show("Ctrl_SettingsAttitudeOffsetRoll");
 						Show("Ctrl_SettingsCalibrateAttitudeToZero");
-						ChangeValue("Textbox_SettingsAttitudeOffsetPitch", PFD.Attitude.Offset.Pitch);
-						ChangeValue("Textbox_SettingsAttitudeOffsetRoll", PFD.Attitude.Offset.Roll);
+						ChangeValue("Textbox_SettingsAttitudeOffsetPitch", PFD.Attitude.Offset.Pitch.toFixed(0));
+						ChangeValue("Textbox_SettingsAttitudeOffsetRoll", PFD.Attitude.Offset.Roll.toFixed(0));
 						break;
 					case "Manual":
 						Hide("Label_SettingsAttitudeOffset");
