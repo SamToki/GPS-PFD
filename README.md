@@ -34,7 +34,7 @@ Visit the webpage once, before disconnecting to the Internet.
 ## 安全与隐私 Safety and Privacy
 
 详见[免责声明](https://SamToki.github.io/GPS-PFD/#Item_HelpDisclaimer)与[隐私权声明](https://SamToki.github.io/GPS-PFD/#Item_HelpPrivacyStatement)。<br>
-See the [Disclaimer](https://SamToki.github.io/GPS-PFD/#Item_HelpDisclaimer) and the [Privacy Statement](https://SamToki.github.io/GPS-PFD/#Item_HelpPrivacyStatement).
+See the [Disclaimer](https://SamToki.github.io/GPS-PFD/#Item_HelpDisclaimer) and the [Privacy Statement](https://SamToki.github.io/GPS-PFD/#Item_HelpPrivacyStatement) (in simplified Chinese).
 
 # 立即试用 Try Now
 
@@ -47,11 +47,12 @@ Scan the QR code to use on mobile devices:
 
 # 教程 Tutorial
 
-[说明文档](/PROJECT/GPS-PFD/docs/GPS-PFD%20说明文档.pdf)
+「教程」「使用方式」「常见问题与解答」「技术说明」「免责声明」「隐私权声明」与「鸣谢」记载于[说明文档](/PROJECT/GPS-PFD/docs/GPS-PFD%20说明文档.pdf)。<br>
+"Tutorial", "Ways of Usage", "FAQ", "Technical Info", "Disclaimer", "Privacy Statement" and "Acknowlegment" are written in the [documentation](/PROJECT/GPS-PFD/docs/GPS-PFD%20说明文档.pdf) (in simplified Chinese).
 
 # 版权说明 Copyright Info
 
 本站的源代码遵循 [GNU GPL v3 软件开源协议](https://www.gnu.org/licenses/gpl-3.0.en.html)。本站的部分内容为他人作品，版权为原作者所有，本站遵循 [fair use](https://zh.wikipedia.org/wiki/fair_use) 原则使用并于 Credits 标注来源。除上述内容之外，本站所有内容以及排版、美术设计均保留版权。文档保留版权。<br>
-The source codes of this website are released under [GNU GPL v3 open source license](https://www.gnu.org/licenses/gpl-3.0.en.html). Some contents in the website are works by other people, and their copyrights belong to the corresponding authors. They are used under the "[fair use](https://en.wikipedia.org/wiki/fair_use)" principle and are credited. Other contents and the webpage design are copyrighted. The documentations are also copyrighted.
+The source codes of this website are released under [GNU GPL v3 open source license](https://www.gnu.org/licenses/gpl-3.0.en.html). Some contents in the website are works by other people, and their copyrights belong to the corresponding authors. They are used under the "[fair use](https://en.wikipedia.org/wiki/fair_use)" principle and are credited. Other contents and the webpage design are copyrighted. The documents are also copyrighted.
 
 © 2025 SAM TOKI STUDIO

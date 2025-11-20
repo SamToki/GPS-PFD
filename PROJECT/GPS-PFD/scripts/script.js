@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 0.52,
+		const CurrentVersion = 0.53,
 		Preset = {
 			Subsystem: {
 				I18n: {
@@ -2610,6 +2610,7 @@
 						Show("Label_SettingsAttitudeOffsetInfo");
 						Show("Ctrl_SettingsAttitudeOffsetPitch");
 						Show("Ctrl_SettingsAttitudeOffsetRoll");
+						Show("Ctrl_SettingsCalibrateAttitudeToZero");
 						ChangeValue("Textbox_SettingsAttitudeOffsetPitch", PFD.Attitude.Offset.Pitch);
 						ChangeValue("Textbox_SettingsAttitudeOffsetRoll", PFD.Attitude.Offset.Roll);
 						break;
@@ -2618,6 +2619,7 @@
 						Hide("Label_SettingsAttitudeOffsetInfo");
 						Hide("Ctrl_SettingsAttitudeOffsetPitch");
 						Hide("Ctrl_SettingsAttitudeOffsetRoll");
+						Hide("Ctrl_SettingsCalibrateAttitudeToZero");
 						break;
 					default:
 						AlertSystemError("The value of PFD.Attitude.Mode \"" + PFD.Attitude.Mode + "\" in function RefreshPFD is invalid.");
@@ -2629,6 +2631,7 @@
 				Hide("Label_SettingsAttitudeOffsetInfo");
 				Hide("Ctrl_SettingsAttitudeOffsetPitch");
 				Hide("Ctrl_SettingsAttitudeOffsetRoll");
+				Hide("Ctrl_SettingsCalibrateAttitudeToZero");
 			}
 
 			// Speed
@@ -3651,6 +3654,10 @@
 		}
 		function SetAttitudeOffsetRoll() {
 			PFD.Attitude.Offset.Roll = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsAttitudeOffsetRoll")), -90, 90);
+			RefreshPFD();
+		}
+		function CalibrateAttitudeToZero() {
+			PFD.Attitude.Offset = structuredClone(PFD0.RawData.Accel.Attitude.Original);
 			RefreshPFD();
 		}
 
