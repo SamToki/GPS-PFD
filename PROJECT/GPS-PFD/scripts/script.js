@@ -3657,7 +3657,8 @@
 			RefreshPFD();
 		}
 		function CalibrateAttitudeToZero() {
-			PFD.Attitude.Offset = structuredClone(PFD0.RawData.Accel.Attitude.Original);
+			PFD.Attitude.Offset.Pitch = -PFD0.RawData.Accel.Attitude.Original.Pitch;
+			PFD.Attitude.Offset.Roll = -PFD0.RawData.Accel.Attitude.Original.Roll;
 			RefreshPFD();
 		}
 
