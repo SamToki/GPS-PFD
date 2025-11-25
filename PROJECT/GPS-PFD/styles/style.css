@@ -2,6 +2,14 @@
 /* Released under GNU GPL v3 open source license. */
 /* © 2025 SAM TOKI STUDIO */
 
+/* General */
+	/* Basics */
+		/* Web fonts */
+		@font-face {
+			font-family: "Century Gothic";
+			src: local("Century Gothic"), url(fonts/Century%20Gothic.ttf);
+		}
+
 /* Area specific */
 	/* Header */
 	#Ctrl_Nav {
@@ -18,6 +26,9 @@
 			.PFDPanel {
 				position: relative;
 				flex-shrink: 0;
+			}
+			.PFDPanel * {
+				font-family: inherit;
 			}
 				/* Default panel */
 				#Ctnr_PFDDefaultPanel {

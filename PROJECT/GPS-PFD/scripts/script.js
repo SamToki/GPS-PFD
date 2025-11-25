@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 0.54,
+		const CurrentVersion = 0.55,
 		Preset = {
 			Subsystem: {
 				I18n: {
@@ -221,7 +221,7 @@
 		// Saved
 		var Subsystem = {
 			Display: {
-				PFDStyle: "Default",
+				PFDStyle: "Default", PFDFont: "Inherit",
 				FlipPFDVertically: false,
 				KeepScreenOn: false
 			},
@@ -975,8 +975,8 @@
 			} else {
 				RemoveClass("Html", "ShowDebugOutlines");
 			}
-			ChangeChecked("Checkbox_SettingsUseJapaneseGlyph", System.Dev.UseJapaneseGlyph);
-			if(System.Dev.UseJapaneseGlyph == true) {
+			ChangeChecked("Checkbox_SettingsUseJapaneseOrthography", System.Dev.UseJapaneseOrthography);
+			if(System.Dev.UseJapaneseOrthography == true) {
 				ChangeLanguage("Html", "ja-JP");
 			} else {
 				ChangeLanguage("Html", "zh-CN");
@@ -1023,6 +1023,27 @@
 					break;
 				default:
 					AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshSubsystem is invalid.");
+					break;
+			}
+			ChangeValue("Combobox_SettingsPFDFont", Subsystem.Display.PFDFont);
+			let PFDPanels = document.getElementsByClassName("PFDPanel");
+			switch(Subsystem.Display.PFDFont) {
+				case "Inherit":
+					for(let Looper = 0; Looper < PFDPanels.length; Looper++) {
+						PFDPanels[Looper].style.fontFamily = System.Dev.Font; // Not set as "Inherit" because that would cause wrong display when with specified language like Japanese.
+					}
+					break;
+				case "Sans-serif":
+				case "Serif":
+				case "Monospace":
+				case "Inter, sans-serif":
+				case "Century Gothic, sans-serif":
+					for(let Looper = 0; Looper < PFDPanels.length; Looper++) {
+						PFDPanels[Looper].style.fontFamily = Subsystem.Display.PFDFont;
+					}
+					break;
+				default:
+					AlertSystemError("The value of Subsystem.Display.PFDFont \"" + Subsystem.Display.PFDFont + "\" in function RefreshSubsystem is invalid.");
 					break;
 			}
 			ChangeChecked("Checkbox_SettingsFlipPFDVertically", Subsystem.Display.FlipPFDVertically);
@@ -1890,10 +1911,10 @@
 				}
 		}
 		function RefreshScale() {
-			let Elements = document.getElementsByClassName("PFDPanel"), ActivePFDPanelID = "Unknown";
-			for(let Looper = 0; Looper < Elements.length; Looper++) {
-				if(Elements[Looper].classList.contains("HiddenHorizontally") == false) {
-					ActivePFDPanelID = Elements[Looper].id;
+			let PFDPanels = document.getElementsByClassName("PFDPanel"), ActivePFDPanelID = "Unknown";
+			for(let Looper = 0; Looper < PFDPanels.length; Looper++) {
+				if(PFDPanels[Looper].classList.contains("HiddenHorizontally") == false) {
+					ActivePFDPanelID = PFDPanels[Looper].id;
 					break;
 				}
 			}
@@ -3796,6 +3817,11 @@
 		// Display
 		function SetPFDStyle() {
 			Subsystem.Display.PFDStyle = ReadValue("Combobox_SettingsPFDStyle");
+			RefreshSubsystem();
+			RefreshPFD();
+		}
+		function SetPFDFont() {
+			Subsystem.Display.PFDFont = ReadValue("Combobox_SettingsPFDFont");
 			RefreshSubsystem();
 			RefreshPFD();
 		}

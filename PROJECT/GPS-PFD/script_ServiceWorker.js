@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CacheName = "GPS-PFD_v0.54";
+		const CacheName = "GPS-PFD_v0.55";
 
 // Listeners
 	// Service worker (https://learn.microsoft.com/en-us/microsoft-edge/progressive-web-apps-chromium/how-to/#step-5---add-a-service-worker)
@@ -46,6 +46,7 @@
 				"../fonts/Inter-Bold.woff2",
 				"../fonts/Inter-BoldItalic.woff2",
 				// "../fonts/Iosevka-Regular.woff2",
+				"fonts/Century Gothic.ttf",
 				"../images/Background.jpg",
 				"../cursors/BTRAhoge.cur",
 				"../cursors/Genshin.cur",

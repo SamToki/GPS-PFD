@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v0.54 (2025/11/25) Beta Test. Since 2024/12/01." />
+		<meta name="version" content="v0.55 (2025/11/25) Beta Test. Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -3658,6 +3658,19 @@
 									</label>
 								</li>
 								<li class="Ctrl">
+									<label for="Combobox_SettingsPFDFont">
+										<span>PFD 字体：</span>
+										<select class="Combobox" id="Combobox_SettingsPFDFont" onchange="SetPFDFont()">
+											<option value="Inherit" selected>继承</option>
+											<option value="Sans-serif">黑体 (Sans-serif)</option>
+											<option value="Serif">宋体 (Serif)</option>
+											<option value="Monospace">等宽字体 (Monospace)</option>
+											<option value="Inter, sans-serif">Inter</option>
+											<option value="Century Gothic, sans-serif">Century Gothic</option>
+										</select>
+									</label>
+								</li>
+								<li class="Ctrl">
 									<label for="Checkbox_SettingsFlipPFDVertically">
 										<input class="Checkbox" id="Checkbox_SettingsFlipPFDVertically" type="checkbox" checked="false" onchange="SetFlipPFDVertically()" />
 										<span>垂直翻转 PFD</span>
@@ -3860,8 +3873,8 @@
 									</label>
 								</li>
 								<li class="Ctrl">
-									<label for="Checkbox_SettingsUseJapaneseGlyph">
-										<input class="Checkbox" id="Checkbox_SettingsUseJapaneseGlyph" type="checkbox" checked="false" onchange="SetUseJapaneseGlyph()" />
+									<label for="Checkbox_SettingsUseJapaneseOrthography">
+										<input class="Checkbox" id="Checkbox_SettingsUseJapaneseOrthography" type="checkbox" checked="false" onchange="SetUseJapaneseOrthography()" />
 										<span>使用日文字形</span>
 									</label>
 								</li>
@@ -4002,7 +4015,7 @@
 							<h3>音频</h3>
 							<p>警报声音：YouTube 视频 <a href="https://youtube.com/watch?v=H_EdufukKfU">#1</a> <a href="https://youtube.com/watch?v=SJ55cCo9GS4">#2</a> <a href="https://youtube.com/watch?v=H2aidghuxzU">#3</a> <a href="https://youtube.com/watch?v=4YW8Lt7ZPCw">#4</a> <a href="https://youtube.com/watch?v=ruBG_SJuFtQ">#5</a></p>
 							<h3>字体</h3>
-							<p>UI 字体：<a href="https://rsms.me/inter">Inter</a></p>
+							<p>UI 字体：<a href="https://rsms.me/inter">Inter</a>, <a href="https://en.wikipedia.org/wiki/Century_Gothic">Century Gothic</a></p>
 						</fieldset>
 					</li>
 					<li class="Item">
@@ -4010,7 +4023,7 @@
 							<legend>关于</legend>
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>版本 v0.54 (<time datetime="2025-11-25" pubdate="pubdate">2025/11/25</time>) Beta Test<br />
+							<p>版本 v0.55 (<time datetime="2025-11-25" pubdate="pubdate">2025/11/25</time>) Beta Test<br />
 								始于 2024/12/01</p>
 							<p><span class="RedText">注意：</span>测试版本更新迭代时可能会丢失用户数据。</p>
 							<p class="GreenText Hidden" id="Label_HelpPWANewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>

@@ -9,6 +9,20 @@
 	// Repair user data: Solves incompatibility after major version updates. A repairer may get removed if older than 12 months.
 	window.onload = RepairUserData();
 	function RepairUserData() {
+		// Home page
+			// v8.00 (2025/11/25)
+			// Rename variable (Use Japanese orthography)
+			if(localStorage.System != undefined) {
+				let System = JSON.parse(localStorage.getItem("System"));
+				if(System.Dev.UseJapaneseGlyph != undefined) {
+					System.Dev.UseJapaneseOrthography = System.Dev.UseJapaneseGlyph;
+					delete System.Dev.UseJapaneseGlyph;
+					localStorage.setItem("System", JSON.stringify(System));
+					console.info("● User Data Repairer\n" +
+						"Repaired user data \"System\".");
+				}
+			}
+
 		// Timer+Lottery
 			// v3.00 (2024/11/07)
 			// Rename variable (Ringtone volume)
@@ -19,7 +33,7 @@
 					delete Subsystem.Audio.SoundVolume;
 					localStorage.setItem("TimerPlusLottery_Subsystem", JSON.stringify(Subsystem));
 					console.info("● User Data Repairer\n" +
-						"Repaired user data \"TimerPlusLottery Subsystem Audio RingtoneVolume\".");
+						"Repaired user data \"TimerPlusLottery Subsystem\".");
 				}
 			}
 
@@ -35,7 +49,7 @@
 					};
 					localStorage.setItem("KanaMaster_Subsystem", JSON.stringify(Subsystem));
 					console.info("● User Data Repairer\n" +
-						"Repaired user data \"KanaMaster Subsystem Audio\".");
+						"Repaired user data \"KanaMaster Subsystem\".");
 				}
 			}
 
@@ -48,7 +62,7 @@
 					delete Game.Difficulty.TimeLimit.Normal;
 					localStorage.setItem("KanaMaster_Game", JSON.stringify(Game));
 					console.info("● User Data Repairer\n" +
-						"Repaired user data \"KanaMaster Game Difficulty TimeLimit Final\".");
+						"Repaired user data \"KanaMaster Game\".");
 				}
 			}
 
@@ -110,7 +124,7 @@
 					];
 					localStorage.setItem("KanaMaster_Game", JSON.stringify(Game));
 					console.info("● User Data Repairer\n" +
-						"Repaired user data \"KanaMaster Game QuestionRange\".");
+						"Repaired user data \"KanaMaster Game\".");
 				}
 			}
 
@@ -132,7 +146,7 @@
 					Game.Terrain.Data = structuredClone(NewObject);
 					localStorage.setItem("YamanoboRyou_Game", JSON.stringify(Game));
 					console.info("● User Data Repairer\n" +
-						"Repaired user data \"YamanoboRyou Game Terrain Data\".");
+						"Repaired user data \"YamanoboRyou Game\".");
 				}
 			}
 			if(localStorage.YamanoboRyou_Highscore != undefined) {
@@ -166,7 +180,7 @@
 					delete Game.Stats.KeystrokeTimestamp;
 					localStorage.setItem("YamanoboRyou_Game", JSON.stringify(Game));
 					console.info("● User Data Repairer\n" +
-						"Repaired user data \"YamanoboRyou Game Stats Keystroke\".");
+						"Repaired user data \"YamanoboRyou Game\".");
 				}
 			}
 
@@ -316,6 +330,18 @@
 					localStorage.removeItem("GPSPFD_AirportLibrary");
 					console.info("● User Data Repairer\n" +
 						"Deleted user data \"GPSPFD AirportLibrary\".");
+				}
+			}
+
+			// v0.55 (2025/11/25) Beta Test
+			// New feature (Custom PFD font)
+			if(localStorage.GPSPFD_Subsystem != undefined) {
+				let Subsystem = JSON.parse(localStorage.getItem("GPSPFD_Subsystem"));
+				if(Subsystem.Display.PFDFont == undefined) {
+					Subsystem.Display.PFDFont = "Inherit";
+					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
+					console.info("● User Data Repairer\n" +
+						"Repaired user data \"GPSPFD Subsystem\".");
 				}
 			}
 	}

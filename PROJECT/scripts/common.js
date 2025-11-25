@@ -47,7 +47,7 @@
 			Dev: {
 				TryToOptimizePerformance: false,
 				ShowDebugOutlines: false,
-				UseJapaneseGlyph: false,
+				UseJapaneseOrthography: false,
 				Font: ""
 			},
 			Version: {}
@@ -252,9 +252,9 @@
 			document.getElementById(ID).style.fontFamily = Value;
 		}
 		function ChangeFontOverall(Value) {
-			let Elements = document.getElementsByTagName("*");
-			for(let Looper = 0; Looper < Elements.length; Looper++) {
-				Elements[Looper].style.fontFamily = Value;
+			let AllElements = document.getElementsByTagName("*");
+			for(let Looper = 0; Looper < AllElements.length; Looper++) {
+				AllElements[Looper].style.fontFamily = Value;
 			}
 		}
 		function ChangeProgbar(ID, HorizontalOrVertical, Percentage) {
@@ -393,16 +393,16 @@
 		function ChangeAnimOverall(Value) {
 			if(Value > 0) {
 				document.getElementById("Html").style.transition = Value + "ms, z-index 0ms";
-				let Elements = document.getElementsByTagName("*");
-				for(let Looper = 0; Looper < Elements.length; Looper++) {
-					Elements[Looper].style.animation = "";
+				let AllElements = document.getElementsByTagName("*");
+				for(let Looper = 0; Looper < AllElements.length; Looper++) {
+					AllElements[Looper].style.animation = "";
 				}
 				document.getElementById("Html").style.scrollBehavior = "";
 			} else {
 				document.getElementById("Html").style.transition = "none";
-				let Elements = document.getElementsByTagName("*");
-				for(let Looper = 0; Looper < Elements.length; Looper++) {
-					Elements[Looper].style.animation = "none";
+				let AllElements = document.getElementsByTagName("*");
+				for(let Looper = 0; Looper < AllElements.length; Looper++) {
+					AllElements[Looper].style.animation = "none";
 				}
 				document.getElementById("Html").style.scrollBehavior = "auto";
 			}
@@ -428,9 +428,9 @@
 			document.getElementById(ID).style.cursor = Value;
 		}
 		function ChangeCursorOverall(Value) {
-			let Elements = document.getElementsByTagName("*");
-			for(let Looper = 0; Looper < Elements.length; Looper++) {
-				Elements[Looper].style.cursor = Value;
+			let AllElements = document.getElementsByTagName("*");
+			for(let Looper = 0; Looper < AllElements.length; Looper++) {
+				AllElements[Looper].style.cursor = Value;
 			}
 		}
 
@@ -455,9 +455,9 @@
 			document.getElementById(ID).pause();
 		}
 		function StopAllAudio() {
-			let Elements = document.getElementsByClassName("Audio");
-			for(let Looper = 0; Looper < Elements.length; Looper++) {
-				Elements[Looper].pause();
+			let AllAudioElements = document.getElementsByClassName("Audio");
+			for(let Looper = 0; Looper < AllAudioElements.length; Looper++) {
+				AllAudioElements[Looper].pause();
 			}
 		}
 		function ChangeVolume(ID, Percentage) {
@@ -571,8 +571,8 @@
 			System.Dev.ShowDebugOutlines = IsChecked("Checkbox_SettingsShowDebugOutlines");
 			RefreshSystem();
 		}
-		function SetUseJapaneseGlyph() {
-			System.Dev.UseJapaneseGlyph = IsChecked("Checkbox_SettingsUseJapaneseGlyph");
+		function SetUseJapaneseOrthography() {
+			System.Dev.UseJapaneseOrthography = IsChecked("Checkbox_SettingsUseJapaneseOrthography");
 			RefreshSystem();
 		}
 		function SetFont() {
@@ -706,16 +706,16 @@
 
 	// Hide DropctrlGroups
 	function HideDropctrlGroups() {
-		let Elements = document.getElementsByClassName("DropctrlGroup");
-		for(let Looper = 0; Looper < Elements.length; Looper++) {
-			if(Interaction.DoNotHide.includes(Elements[Looper].id) == false) {
-				if(Elements[Looper].id != "DropctrlGroup_Nav") {
-					Elements[Looper].classList.add("HiddenToCorner");
-					Elements[Looper].inert = true;
+		let AllDropctrlGroups = document.getElementsByClassName("DropctrlGroup");
+		for(let Looper = 0; Looper < AllDropctrlGroups.length; Looper++) {
+			if(Interaction.DoNotHide.includes(AllDropctrlGroups[Looper].id) == false) {
+				if(AllDropctrlGroups[Looper].id != "DropctrlGroup_Nav") {
+					AllDropctrlGroups[Looper].classList.add("HiddenToCorner");
+					AllDropctrlGroups[Looper].inert = true;
 				} else {
-					Elements[Looper].classList.add("HiddenInMobileLayout");
+					AllDropctrlGroups[Looper].classList.add("HiddenInMobileLayout");
 					if(IsMobileLayout() == true) {
-						Elements[Looper].inert = true;
+						AllDropctrlGroups[Looper].inert = true;
 					}
 				}
 			}
