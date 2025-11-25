@@ -700,7 +700,6 @@
 		// Refresh
 		HighlightActiveSectionInNav();
 		RefreshSystem();
-		RefreshSubsystem();
 		RefreshPFD();
 		RefreshAirportLibrary();
 		ClockAvgSpeeds();
@@ -989,6 +988,9 @@
 
 		// Save user data
 		localStorage.setItem("System", JSON.stringify(System));
+
+		// Call
+		RefreshSubsystem();
 	}
 	function RefreshSubsystem() {
 		// Settings
