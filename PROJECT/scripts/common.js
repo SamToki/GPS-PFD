@@ -455,9 +455,9 @@
 			document.getElementById(ID).pause();
 		}
 		function StopAllAudio() {
-			let AllAudioElements = document.getElementsByClassName("Audio");
-			for(let Looper = 0; Looper < AllAudioElements.length; Looper++) {
-				AllAudioElements[Looper].pause();
+			let AudioElements = document.getElementsByClassName("Audio");
+			for(let Looper = 0; Looper < AudioElements.length; Looper++) {
+				AudioElements[Looper].pause();
 			}
 		}
 		function ChangeVolume(ID, Percentage) {
@@ -706,16 +706,16 @@
 
 	// Hide DropctrlGroups
 	function HideDropctrlGroups() {
-		let AllDropctrlGroups = document.getElementsByClassName("DropctrlGroup");
-		for(let Looper = 0; Looper < AllDropctrlGroups.length; Looper++) {
-			if(Interaction.DoNotHide.includes(AllDropctrlGroups[Looper].id) == false) {
-				if(AllDropctrlGroups[Looper].id != "DropctrlGroup_Nav") {
-					AllDropctrlGroups[Looper].classList.add("HiddenToCorner");
-					AllDropctrlGroups[Looper].inert = true;
+		let DropctrlGroups = document.getElementsByClassName("DropctrlGroup");
+		for(let Looper = 0; Looper < DropctrlGroups.length; Looper++) {
+			if(Interaction.DoNotHide.includes(DropctrlGroups[Looper].id) == false) {
+				if(DropctrlGroups[Looper].id != "DropctrlGroup_Nav") {
+					DropctrlGroups[Looper].classList.add("HiddenToCorner");
+					DropctrlGroups[Looper].inert = true;
 				} else {
-					AllDropctrlGroups[Looper].classList.add("HiddenInMobileLayout");
+					DropctrlGroups[Looper].classList.add("HiddenInMobileLayout");
 					if(IsMobileLayout() == true) {
-						AllDropctrlGroups[Looper].inert = true;
+						DropctrlGroups[Looper].inert = true;
 					}
 				}
 			}
