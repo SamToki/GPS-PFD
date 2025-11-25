@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 0.53,
+		const CurrentVersion = 0.54,
 		Preset = {
 			Subsystem: {
 				I18n: {
@@ -3857,6 +3857,7 @@
 			}
 			RefreshSubsystem();
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 		function SetSpeedUnit() {
 			Subsystem.I18n.MeasurementUnit.Speed = ReadValue("Combobox_SettingsSpeedUnit");
@@ -3867,11 +3868,13 @@
 			Subsystem.I18n.MeasurementUnit.Distance = ReadValue("Combobox_SettingsDistanceUnit");
 			RefreshSubsystem();
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 		function SetAltitudeUnit() {
 			Subsystem.I18n.MeasurementUnit.Altitude = ReadValue("Combobox_SettingsAltitudeUnit");
 			RefreshSubsystem();
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 		function SetVerticalSpeedUnit() {
 			Subsystem.I18n.MeasurementUnit.VerticalSpeed = ReadValue("Combobox_SettingsVerticalSpeedUnit");
@@ -3882,11 +3885,13 @@
 			Subsystem.I18n.MeasurementUnit.Temperature = ReadValue("Combobox_SettingsTemperatureUnit");
 			RefreshSubsystem();
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 		function SetPressureUnit() {
 			Subsystem.I18n.MeasurementUnit.Pressure = ReadValue("Combobox_SettingsPressureUnit");
 			RefreshSubsystem();
 			RefreshPFD();
+			RefreshAirportLibrary();
 		}
 		function SetWeightUnit() {
 			Subsystem.I18n.MeasurementUnit.Weight = ReadValue("Combobox_SettingsWeightUnit");
