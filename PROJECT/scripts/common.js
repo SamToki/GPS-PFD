@@ -634,6 +634,9 @@
 	// On toggling fullscreen
 	document.addEventListener("fullscreenchange", function() { // Here an anonymous function must be used. Because the function "RefreshSystem" is defined in the "script.js" file, which is after this "common.js" file. Writing "RefreshSystem" straightforwardly will cause an error.
 		RefreshSystem();
+		if(typeof RefreshSubsystem != "undefined") {
+			RefreshSubsystem(); // Some fonts may get reset when toggling fullscreen. Is that a web browser bug?
+		}
 	});
 
 	// Screen wake lock (https://developer.chrome.com/docs/capabilities/web-apis/wake-lock)
