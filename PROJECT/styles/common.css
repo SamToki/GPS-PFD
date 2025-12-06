@@ -49,13 +49,13 @@
 			font-family: "Inter", "Helvetica", "Arial", sans-serif;
 		}
 		*:lang(ja-JP) {
-			font-family: "Inter", "Sarasa UI J", "Source Han Sans", "HiraginoKaku", "Yu Gothic UI", "MS UI Gothic", sans-serif;
+			font-family: "Inter", "Sarasa UI J", "Source Han Sans", "Noto Sans JP", "HiraginoKaku", "Yu Gothic UI", "MS UI Gothic", sans-serif;
 		}
 		*:lang(zh-CN) {
-			font-family: "Inter", "Sarasa UI SC", "Source Han Sans SC", "Hiragino Sans GB", "PingFang SC", "Microsoft YaHei UI", sans-serif;
+			font-family: "Inter", "Sarasa UI SC", "Source Han Sans SC", "Noto Sans SC", "Hiragino Sans GB", "PingFang SC", "Microsoft YaHei UI", sans-serif;
 		}
 		*:lang(zh-TW) {
-			font-family: "Inter", "Sarasa UI TC", "Source Han Sans TC", "Hiragino Sans TC", "PingFang TC", "Microsoft JhengHei UI", sans-serif;
+			font-family: "Inter", "Sarasa UI TC", "Source Han Sans TC", "Noto Sans TC", "Hiragino Sans TC", "PingFang TC", "Microsoft JhengHei UI", sans-serif;
 		}
 		#Html {
 			transform-origin: center center;
@@ -609,7 +609,7 @@
 			font-weight: bold;
 		}
 		.Code {
-			font-family: "Iosevka", "Sarasa Mono J", "Sarasa Mono SC", "LXGW WenKai Mono", "XHei Square Mono", "Consolas", monospace;
+			font-family: "Iosevka", "Sarasa Mono SC", "LXGW WenKai Mono", "XHei Square Mono", "Consolas", monospace;
 			white-space: pre; /* https://stackoverflow.com/a/13446005 */
 		}
 
