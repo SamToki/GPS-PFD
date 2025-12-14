@@ -8,7 +8,7 @@
 	/* Main */
 		/* PFD */
 			/* Panels */
-				/* Default panel */
+				/* Normal panel */
 					/* Attitude */
 						/* Status */
 						.StatusBox {
@@ -16,52 +16,52 @@
 						}
 
 						/* Bg (Artificial horizon) */
-						#PFDDefaultPanelAttitudeSky {
+						#PFDNormalPanelAttitudeSky {
 							background-color: #A0E0FFC0;
 						}
-						#PFDDefaultPanelAttitudeTerrain {
+						#PFDNormalPanelAttitudeTerrain {
 							background-color: #FFE080C0;
 						}
 
 						/* Pitch */
-						#CtrlGroup_PFDDefaultPanelAttitudePitch .AttitudeScale0,
-						#CtrlGroup_PFDDefaultPanelAttitudePitch .AttitudeScale1,
-						#CtrlGroup_PFDDefaultPanelAttitudePitch .AttitudeScale2,
-						#CtrlGroup_PFDDefaultPanelAttitudePitch .AttitudeScale4 {
+						#CtrlGroup_PFDNormalPanelAttitudePitch .AttitudeScale0,
+						#CtrlGroup_PFDNormalPanelAttitudePitch .AttitudeScale1,
+						#CtrlGroup_PFDNormalPanelAttitudePitch .AttitudeScale2,
+						#CtrlGroup_PFDNormalPanelAttitudePitch .AttitudeScale4 {
 							background-color: #291900;
 						}
 
 						/* Roll */
-						#CtrlGroup_PFDDefaultPanelAttitudeRollScale .AttitudeScale0,
-						#CtrlGroup_PFDDefaultPanelAttitudeRollScale .AttitudeScale1,
-						#CtrlGroup_PFDDefaultPanelAttitudeRollScale .AttitudeScale2 {
+						#CtrlGroup_PFDNormalPanelAttitudeRollScale .AttitudeScale0,
+						#CtrlGroup_PFDNormalPanelAttitudeRollScale .AttitudeScale1,
+						#CtrlGroup_PFDNormalPanelAttitudeRollScale .AttitudeScale2 {
 							background-color: #291900;
 						}
-						#ProgringFg_PFDDefaultPanelAttitudeRoll {
+						#ProgringFg_PFDNormalPanelAttitudeRoll {
 							stroke: #291900;
 						}
-						#PFDDefaultPanelAttitudeRollPointer {
+						#PFDNormalPanelAttitudeRollPointer {
 							background-color: #291900;
 						}
 
 						/* Aircraft symbol */
-						#Ctrl_PFDDefaultPanelAttitudeAircraftSymbol .CtrlGroup {
+						#Ctrl_PFDNormalPanelAttitudeAircraftSymbol .CtrlGroup {
 							filter: drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900);
 						}
-						#Ctrl_PFDDefaultPanelAttitudeAircraftSymbol .Ctrl {
+						#Ctrl_PFDNormalPanelAttitudeAircraftSymbol .Ctrl {
 							background-color: #E7DDD1;
 						}
 
 					/* Info bar */
-					#CtrlGroup_PFDDefaultPanelFlaps .Progbar {
+					#CtrlGroup_PFDNormalPanelFlaps .Progbar {
 						border: 1px solid #291900;
 					}
-					#ProgbarFg_PFDDefaultPanelFlaps {
+					#ProgbarFg_PFDNormalPanelFlaps {
 						background-color: #291900;
 					}
 
 					/* FMA 1 */
-					#Ctnr_PFDDefaultPanelFMA1 {
+					#Ctnr_PFDNormalPanelFMA1 {
 						background-color: #E7DDD180;
 					}
 
@@ -79,168 +79,168 @@
 
 						/* Additional indicators */
 							/* Other speeds */
-							#CtrlGroup_PFDDefaultPanelOtherSpeeds #Ctrl_PFDDefaultPanelSpeedLimitMin {
+							#CtrlGroup_PFDNormalPanelOtherSpeeds #Ctrl_PFDNormalPanelSpeedLimitMin {
 								background: repeating-linear-gradient(45deg, transparent, transparent 4px, #FF0000 5px, #FF0000 6px, transparent 7px);
 							}
-							#CtrlGroup_PFDDefaultPanelOtherSpeeds #Ctrl_PFDDefaultPanelSpeedLimitMax {
+							#CtrlGroup_PFDNormalPanelOtherSpeeds #Ctrl_PFDNormalPanelSpeedLimitMax {
 								background: repeating-linear-gradient(135deg, transparent, transparent 4px, #FF0000 5px, #FF0000 6px, transparent 7px);
 							}
-							#CtrlGroup_PFDDefaultPanelOtherSpeeds #Ctrl_PFDDefaultPanelAvgIAS {
+							#CtrlGroup_PFDNormalPanelOtherSpeeds #Ctrl_PFDNormalPanelAvgIAS {
 								background-color: #0090D0;
 							}
-							#CtrlGroup_PFDDefaultPanelOtherSpeeds #Ctrl_PFDDefaultPanelMCPSpeedCircle {
+							#CtrlGroup_PFDNormalPanelOtherSpeeds #Ctrl_PFDNormalPanelMCPSpeedCircle {
 								border: 2px solid #C040C0;
 							}
-							#CtrlGroup_PFDDefaultPanelOtherSpeeds #Ctrl_PFDDefaultPanelV1 div,
-							#CtrlGroup_PFDDefaultPanelOtherSpeeds #Ctrl_PFDDefaultPanelVR div {
+							#CtrlGroup_PFDNormalPanelOtherSpeeds #Ctrl_PFDNormalPanelV1 div,
+							#CtrlGroup_PFDNormalPanelOtherSpeeds #Ctrl_PFDNormalPanelVR div {
 								background-color: #00A000;
 							}
-							#CtrlGroup_PFDDefaultPanelOtherSpeeds #Ctrl_PFDDefaultPanelV1 span,
-							#CtrlGroup_PFDDefaultPanelOtherSpeeds #Ctrl_PFDDefaultPanelVR span {
+							#CtrlGroup_PFDNormalPanelOtherSpeeds #Ctrl_PFDNormalPanelV1 span,
+							#CtrlGroup_PFDNormalPanelOtherSpeeds #Ctrl_PFDNormalPanelVR span {
 								color: #00A000;
 							}
 
 						/* Balloon */
-						#Ctrl_PFDDefaultPanelSpeedBalloon {
+						#Ctrl_PFDNormalPanelSpeedBalloon {
 							filter: drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900);
 						}
-						#Ctrl_PFDDefaultPanelSpeedBalloon > .CtrlGroup > .Ctrl {
+						#Ctrl_PFDNormalPanelSpeedBalloon > .CtrlGroup > .Ctrl {
 							background-color: #E7DDD1;
 						}
 
 						/* MCP */
-						#Label_PFDDefaultPanelMCPSpeed {
+						#Label_PFDNormalPanelMCPSpeed {
 							color: #C040C0;
 						}
 
 					/* Altitude */
 						/* Additional indicators */
 							/* Other altitudes */
-							#CtrlGroup_PFDDefaultPanelOtherAltitudes #Ctrl_PFDDefaultPanelGroundAltitude {
+							#CtrlGroup_PFDNormalPanelOtherAltitudes #Ctrl_PFDNormalPanelGroundAltitude {
 								border-top: 2px solid #29190080;
 								background: repeating-linear-gradient(45deg, transparent, transparent 4px, #29190080 5px, #29190080 6px, transparent 7px);
 							}
-							#CtrlGroup_PFDDefaultPanelOtherAltitudes #Ctrl_PFDDefaultPanelDecisionAltitude {
+							#CtrlGroup_PFDNormalPanelOtherAltitudes #Ctrl_PFDNormalPanelDecisionAltitude {
 								background-color: #00A000;
 							}
-							#CtrlGroup_PFDDefaultPanelOtherAltitudes #Ctrl_PFDDefaultPanelDecisionAltitude.Active {
+							#CtrlGroup_PFDNormalPanelOtherAltitudes #Ctrl_PFDNormalPanelDecisionAltitude.Active {
 								background-color: #E06000;
 							}
-							#CtrlGroup_PFDDefaultPanelOtherAltitudes #Ctrl_PFDDefaultPanelMCPAltitudeCircle {
+							#CtrlGroup_PFDNormalPanelOtherAltitudes #Ctrl_PFDNormalPanelMCPAltitudeCircle {
 								border: 2px solid #C040C0;
 							}
 
 						/* Balloon */
-						#Ctrl_PFDDefaultPanelAltitudeBalloon {
+						#Ctrl_PFDNormalPanelAltitudeBalloon {
 							filter: drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900);
 						}
-						#Ctrl_PFDDefaultPanelAltitudeBalloon > .CtrlGroup > .Ctrl {
+						#Ctrl_PFDNormalPanelAltitudeBalloon > .CtrlGroup > .Ctrl {
 							background-color: #E7DDD1;
 						}
 
 						/* MCP */
-						#Label_PFDDefaultPanelMCPAltitude {
+						#Label_PFDNormalPanelMCPAltitude {
 							color: #C040C0;
 						}
 
 					/* Vertical speed */
 						/* Additional indicators */
 							/* Other vertical speeds */
-							#CtrlGroup_PFDDefaultPanelOtherVerticalSpeeds #Ctrl_PFDDefaultPanelMCPVerticalSpeedCircle {
+							#CtrlGroup_PFDNormalPanelOtherVerticalSpeeds #Ctrl_PFDNormalPanelMCPVerticalSpeedCircle {
 								border: 2px solid #C040C0;
 							}
 
 						/* Balloon */
-						#Ctrl_PFDDefaultPanelVerticalSpeedBalloon {
+						#Ctrl_PFDNormalPanelVerticalSpeedBalloon {
 							background-color: #E7DDD1; filter: drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900);
 						}
 
 						/* MCP */
-						#Label_PFDDefaultPanelMCPVerticalSpeed {
+						#Label_PFDNormalPanelMCPVerticalSpeed {
 							color: #C040C0;
 						}
 
 					/* Heading */
 						/* Additional indicators */
 							/* Other headings */
-							#Ctrl_PFDDefaultPanelBearing div {
+							#Ctrl_PFDNormalPanelBearing div {
 								background-color: #C040C0;
 							}
-							#Ctrl_PFDDefaultPanelMCPHeadingCircle div {
+							#Ctrl_PFDNormalPanelMCPHeadingCircle div {
 								border: 2px solid #C040C0;
 							}
 
 						/* Balloon */
-						#Ctrl_PFDDefaultPanelHeadingBalloon {
+						#Ctrl_PFDNormalPanelHeadingBalloon {
 							filter: drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900) drop-shadow(0 0 0.5px #291900);
 						}
-						#Ctrl_PFDDefaultPanelHeadingBalloon > .CtrlGroup > .Ctrl {
+						#Ctrl_PFDNormalPanelHeadingBalloon > .CtrlGroup > .Ctrl {
 							background-color: #E7DDD1;
 						}
 
 						/* MCP */
-						#Label_PFDDefaultPanelMCPHeading {
+						#Label_PFDNormalPanelMCPHeading {
 							color: #C040C0;
 						}
 
 					/* Localizer */
-					#PFDDefaultPanelLocalizerPointer {
+					#PFDNormalPanelLocalizerPointer {
 						background-color: #C040C0;
 					}
 					.ILSCircle {
 						border: 2px solid #291900;
 					}
-					#Ctnr_PFDDefaultPanelLocalizer .ILSLine div {
+					#Ctnr_PFDNormalPanelLocalizer .ILSLine div {
 						background-color: #291900;
 					}
 
 					/* Glide slope */
-					#PFDDefaultPanelGlideSlopePointer {
+					#PFDNormalPanelGlideSlopePointer {
 						background-color: #C040C0;
 					}
-					#Ctnr_PFDDefaultPanelGlideSlope .ILSLine div {
+					#Ctnr_PFDNormalPanelGlideSlope .ILSLine div {
 						background-color: #291900;
 					}
 
 					/* Marker beacons */
-					#Ctnr_PFDDefaultPanelMarkerBeacon.OuterMarker {
+					#Ctnr_PFDNormalPanelMarkerBeacon.OuterMarker {
 						background-color: #0090D0;
 						color: #FFFFFF;
 					}
-					#Ctnr_PFDDefaultPanelMarkerBeacon.MiddleMarker {
+					#Ctnr_PFDNormalPanelMarkerBeacon.MiddleMarker {
 						background-color: #E06000;
 						color: #FFFFFF;
 					}
-					#Ctnr_PFDDefaultPanelMarkerBeacon.InnerMarker {
+					#Ctnr_PFDNormalPanelMarkerBeacon.InnerMarker {
 						background-color: #000000;
 						color: #FFFFFF;
 					}
 
 					/* Radio altitude */
-					#Ctnr_PFDDefaultPanelRadioAltitude .DialScale {
+					#Ctnr_PFDNormalPanelRadioAltitude .DialScale {
 						background-color: #291900;
 					}
-					#Ctnr_PFDDefaultPanelRadioAltitude .ProgringFg {
+					#Ctnr_PFDNormalPanelRadioAltitude .ProgringFg {
 						stroke: #291900;
 					}
 
 					/* Decision altitude */
-					#Ctnr_PFDDefaultPanelDecisionAltitude.Active {
+					#Ctnr_PFDNormalPanelDecisionAltitude.Active {
 						background-color: #E7DDD1;
 						color: #E06000;
 					}
 
 					/* Warning */
-					#Ctnr_PFDDefaultPanelWarning {
+					#Ctnr_PFDNormalPanelWarning {
 						background-color: #E7DDD1;
 					}
 
 					/* Blink */
-					#Ctnr_PFDDefaultPanel .Reminder {
+					#Ctnr_PFDNormalPanel .Reminder {
 						background-color: #E7DDD1; box-shadow: 0 0 0 3px #00A000;
 						color: #00B400;
 					}
-						@keyframes Anim_PFDDefaultPanelReminder {
+						@keyframes Anim_PFDNormalPanelReminder {
 							0%, 75%, 100% {
 								box-shadow: none;
 							}
@@ -248,10 +248,10 @@
 								box-shadow: 0 0 0 3px #00A000;
 							}
 						}
-					#Ctnr_PFDDefaultPanel .Caution {
+					#Ctnr_PFDNormalPanel .Caution {
 						box-shadow: 0 0 0 3px #E06000;
 					}
-						@keyframes Anim_PFDDefaultPanelCaution {
+						@keyframes Anim_PFDNormalPanelCaution {
 							0%, 75%, 100% {
 								box-shadow: none;
 							}
@@ -259,11 +259,11 @@
 								box-shadow: 0 0 0 3px #E06000;
 							}
 						}
-					#Ctnr_PFDDefaultPanel .Warning {
+					#Ctnr_PFDNormalPanel .Warning {
 						box-shadow: 0 0 0 3px #FF0000;
 						color: #FC5C5C;
 					}
-						@keyframes Anim_PFDDefaultPanelWarning {
+						@keyframes Anim_PFDNormalPanelWarning {
 							0%, 75%, 100% {
 								box-shadow: none;
 							}
@@ -271,11 +271,11 @@
 								box-shadow: 0 0 0 3px #FF0000;
 							}
 						}
-					#Ctnr_PFDDefaultPanel .BankAngleWarning {
+					#Ctnr_PFDNormalPanel .BankAngleWarning {
 						background-color: #FF0000;
 						stroke: #FF0000;
 					}
-						@keyframes Anim_PFDDefaultPanelBankAngleWarning {
+						@keyframes Anim_PFDNormalPanelBankAngleWarning {
 							0%, 75%, 100% {
 								background-color: #291900;
 								stroke: #291900;
@@ -285,11 +285,11 @@
 								stroke: #FF0000;
 							}
 						}
-					#Ctnr_PFDDefaultPanel .GlideSlopeWarning {
+					#Ctnr_PFDNormalPanel .GlideSlopeWarning {
 						background-color: #FF0000;
-						animation: Anim_PFDDefaultPanelGlideSlopeWarning 500ms infinite ease-in-out;
+						animation: Anim_PFDNormalPanelGlideSlopeWarning 500ms infinite ease-in-out;
 					}
-						@keyframes Anim_PFDDefaultPanelGlideSlopeWarning {
+						@keyframes Anim_PFDNormalPanelGlideSlopeWarning {
 							0%, 75%, 100% {
 								background-color: #C040C0;
 							}

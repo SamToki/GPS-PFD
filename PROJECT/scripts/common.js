@@ -32,7 +32,7 @@
 		// Saved
 		var System = {
 			Display: {
-				Theme: "Auto", Cursor: "Default",
+				Theme: "Auto", Cursor: "None",
 				BlurBgImage: true,
 				HotkeyIndicators: "ShowOnAnyKeyPress",
 				Anim: 250
@@ -46,9 +46,7 @@
 			DontShowAgain: [0],
 			Dev: {
 				TryToOptimizePerformance: false,
-				ShowDebugOutlines: false,
-				UseJapaneseOrthography: false,
-				Font: ""
+				ShowDebugOutlines: false
 			},
 			Version: {}
 		};
@@ -250,12 +248,6 @@
 		// Foreground
 		function ChangeFont(ID, Value) {
 			document.getElementById(ID).style.fontFamily = Value;
-		}
-		function ChangeFontOverall(Value) {
-			let AllElements = document.getElementsByTagName("*");
-			for(let Looper = 0; Looper < AllElements.length; Looper++) {
-				AllElements[Looper].style.fontFamily = Value;
-			}
 		}
 		function ChangeProgbar(ID, HorizontalOrVertical, Percentage) {
 			switch(HorizontalOrVertical) {
@@ -571,14 +563,6 @@
 			System.Dev.ShowDebugOutlines = IsChecked("Checkbox_SettingsShowDebugOutlines");
 			RefreshSystem();
 		}
-		function SetUseJapaneseOrthography() {
-			System.Dev.UseJapaneseOrthography = IsChecked("Checkbox_SettingsUseJapaneseOrthography");
-			RefreshSystem();
-		}
-		function SetFont() {
-			System.Dev.Font = ReadValue("Textbox_SettingsFont");
-			RefreshSystem();
-		}
 
 // Listeners
 	// On scroll
@@ -637,9 +621,9 @@
 	});
 
 	// Screen wake lock (https://developer.chrome.com/docs/capabilities/web-apis/wake-lock)
-	document.addEventListener("visibilitychange", async() => {
+	document.addEventListener("visibilitychange", function() {
 		if(Interaction.ScreenWakeLock != null && document.visibilityState == "visible") {
-			await RequestScreenWakeLock();
+			RequestScreenWakeLock();
 		}
 	});
 
@@ -873,9 +857,7 @@
 
 	// Screen wake lock
 	const RequestScreenWakeLock = async() => {
-		if(Interaction.ScreenWakeLock == null) {
-			Interaction.ScreenWakeLock = await navigator.wakeLock.request();
-		}
+		Interaction.ScreenWakeLock = await navigator.wakeLock.request();
 	}
 	function ReleaseScreenWakeLock() {
 		if(Interaction.ScreenWakeLock != null) {

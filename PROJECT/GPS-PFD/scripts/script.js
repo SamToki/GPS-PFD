@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 0.55,
+		const CurrentVersion = 1.00,
 		Preset = {
 			Subsystem: {
 				I18n: {
@@ -221,7 +221,7 @@
 		// Saved
 		var Subsystem = {
 			Display: {
-				PFDStyle: "Default", PFDFont: "Inherit",
+				PFDStyle: "Normal", PFDFont: "Inherit",
 				FlipPFDVertically: false,
 				KeepScreenOn: false
 			},
@@ -700,6 +700,7 @@
 		// Refresh
 		HighlightActiveSectionInNav();
 		RefreshSystem();
+		RefreshSubsystem();
 		RefreshPFD();
 		RefreshAirportLibrary();
 		ClockAvgSpeeds();
@@ -768,11 +769,11 @@
 		// Class
 		function ChangeMarkerBeacon(Value) {
 			switch(Subsystem.Display.PFDStyle) {
-				case "Default":
-					RemoveClass("Ctnr_PFDDefaultPanelMarkerBeacon", "OuterMarker");
-					RemoveClass("Ctnr_PFDDefaultPanelMarkerBeacon", "MiddleMarker");
-					RemoveClass("Ctnr_PFDDefaultPanelMarkerBeacon", "InnerMarker");
-					AddClass("Ctnr_PFDDefaultPanelMarkerBeacon", Value);
+				case "Normal":
+					RemoveClass("Ctnr_PFDNormalPanelMarkerBeacon", "OuterMarker");
+					RemoveClass("Ctnr_PFDNormalPanelMarkerBeacon", "MiddleMarker");
+					RemoveClass("Ctnr_PFDNormalPanelMarkerBeacon", "InnerMarker");
+					AddClass("Ctnr_PFDNormalPanelMarkerBeacon", Value);
 					break;
 				case "HUD":
 					RemoveClass("Ctnr_PFDHUDPanelMarkerBeacon", "OuterMarker");
@@ -869,7 +870,7 @@
 			}
 			ChangeValue("Combobox_SettingsCursor", System.Display.Cursor);
 			switch(System.Display.Cursor) {
-				case "Default":
+				case "None":
 					ChangeCursorOverall("");
 					break;
 				case "BTRAhoge":
@@ -974,42 +975,31 @@
 			} else {
 				RemoveClass("Html", "ShowDebugOutlines");
 			}
-			ChangeChecked("Checkbox_SettingsUseJapaneseOrthography", System.Dev.UseJapaneseOrthography);
-			if(System.Dev.UseJapaneseOrthography == true) {
-				ChangeLanguage("Html", "ja-JP");
-			} else {
-				ChangeLanguage("Html", "zh-CN");
-			}
-			ChangeValue("Textbox_SettingsFont", System.Dev.Font);
-			ChangeFontOverall(System.Dev.Font);
 
 			// User data
 			ChangeValue("Textbox_SettingsUserDataImport", "");
 
 		// Save user data
 		localStorage.setItem("System", JSON.stringify(System));
-
-		// Call
-		RefreshSubsystem();
 	}
 	function RefreshSubsystem() {
 		// Settings
 			// Display
 			ChangeValue("Combobox_SettingsPFDStyle", Subsystem.Display.PFDStyle);
-			HideHorizontally("Ctnr_PFDDefaultPanel");
+			HideHorizontally("Ctnr_PFDNormalPanel");
 			HideHorizontally("Ctnr_PFDHUDPanel");
 			HideHorizontally("Ctnr_PFDBocchi737Panel");
 			HideHorizontally("Ctnr_PFDAnalogGaugesPanel");
 			HideHorizontally("Ctnr_PFDAutomobileSpeedometerPanel");
-			RemoveClass("PFD", "PFDStyleIsDefault");
+			RemoveClass("PFD", "PFDStyleIsNormal");
 			RemoveClass("PFD", "PFDStyleIsHUD");
 			RemoveClass("PFD", "PFDStyleIsBocchi737");
 			RemoveClass("PFD", "PFDStyleIsAnalogGauges");
 			RemoveClass("PFD", "PFDStyleIsAutomobileSpeedometer");
 			switch(Subsystem.Display.PFDStyle) {
-				case "Default":
-					Show("Ctnr_PFDDefaultPanel");
-					AddClass("PFD", "PFDStyleIsDefault");
+				case "Normal":
+					Show("Ctnr_PFDNormalPanel");
+					AddClass("PFD", "PFDStyleIsNormal");
 					break;
 				case "HUD":
 					Show("Ctnr_PFDHUDPanel");
@@ -1032,14 +1022,14 @@
 			switch(Subsystem.Display.PFDFont) {
 				case "Inherit":
 					for(let Looper = 0; Looper < PFDPanels.length; Looper++) {
-						PFDPanels[Looper].style.fontFamily = System.Dev.Font; // Not set as "Inherit" because that would cause wrong display when with specified language like Japanese.
+						PFDPanels[Looper].style.fontFamily = ""; // Not set as "Inherit" because that would cause wrong display when with specified language like Japanese.
 					}
 					break;
 				case "Sans-serif":
 				case "Serif":
 				case "Monospace":
-				case "Inter, sans-serif":
-				case "Century Gothic, sans-serif":
+				case "Inter":
+				case "Century Gothic":
 					for(let Looper = 0; Looper < PFDPanels.length; Looper++) {
 						PFDPanels[Looper].style.fontFamily = Subsystem.Display.PFDFont;
 					}
@@ -1088,17 +1078,17 @@
 				ChangeChecked("Checkbox_SettingsAlwaysUseEnglishTerminologyOnPFD", Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD);
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
 					switch(Subsystem.Display.PFDStyle) {
-						case "Default":
-							ChangeText("Label_PFDDefaultPanelAccelTitle", "加速计");
-							ChangeText("Label_PFDDefaultPanelGSTitle", "地速");
-							ChangeText("Label_PFDDefaultPanelAvgGSTitle", "平均地速");
-							ChangeText("Label_PFDDefaultPanelTASTitle", "真空速");
-							ChangeText("Label_PFDDefaultPanelWindTitle", "风");
-							ChangeText("Label_PFDDefaultPanelFlapsTitle", "襟翼");
-							ChangeText("Label_PFDDefaultPanelSpeedModeTitle", "速度模式");
-							ChangeText("Label_PFDDefaultPanelAltitudeModeTitle", "高度模式");
-							ChangeText("Label_PFDDefaultPanelHeadingModeTitle", "朝向模式");
-							ChangeText("Label_PFDDefaultPanelDecisionAltitudeTitle", "决断高度");
+						case "Normal":
+							ChangeText("Label_PFDNormalPanelAccelTitle", "加速计");
+							ChangeText("Label_PFDNormalPanelGSTitle", "地速");
+							ChangeText("Label_PFDNormalPanelAvgGSTitle", "平均地速");
+							ChangeText("Label_PFDNormalPanelTASTitle", "真空速");
+							ChangeText("Label_PFDNormalPanelWindTitle", "风");
+							ChangeText("Label_PFDNormalPanelFlapsTitle", "襟翼");
+							ChangeText("Label_PFDNormalPanelSpeedModeTitle", "速度模式");
+							ChangeText("Label_PFDNormalPanelAltitudeModeTitle", "高度模式");
+							ChangeText("Label_PFDNormalPanelHeadingModeTitle", "朝向模式");
+							ChangeText("Label_PFDNormalPanelDecisionAltitudeTitle", "决断高度");
 							break;
 						case "HUD":
 							ChangeText("Label_PFDHUDPanelAccelTitle", "加速计");
@@ -1123,17 +1113,17 @@
 					}
 				} else {
 					switch(Subsystem.Display.PFDStyle) {
-						case "Default":
-							ChangeText("Label_PFDDefaultPanelAccelTitle", "ACCEL");
-							ChangeText("Label_PFDDefaultPanelGSTitle", "GS");
-							ChangeText("Label_PFDDefaultPanelAvgGSTitle", "AVG GS");
-							ChangeText("Label_PFDDefaultPanelTASTitle", "TAS");
-							ChangeText("Label_PFDDefaultPanelWindTitle", "WIND");
-							ChangeText("Label_PFDDefaultPanelFlapsTitle", "FLAPS");
-							ChangeText("Label_PFDDefaultPanelSpeedModeTitle", "SPD MODE");
-							ChangeText("Label_PFDDefaultPanelAltitudeModeTitle", "ALT MODE");
-							ChangeText("Label_PFDDefaultPanelHeadingModeTitle", "HDG MODE");
-							ChangeText("Label_PFDDefaultPanelDecisionAltitudeTitle", "DA");
+						case "Normal":
+							ChangeText("Label_PFDNormalPanelAccelTitle", "ACCEL");
+							ChangeText("Label_PFDNormalPanelGSTitle", "GS");
+							ChangeText("Label_PFDNormalPanelAvgGSTitle", "AVG GS");
+							ChangeText("Label_PFDNormalPanelTASTitle", "TAS");
+							ChangeText("Label_PFDNormalPanelWindTitle", "WIND");
+							ChangeText("Label_PFDNormalPanelFlapsTitle", "FLAPS");
+							ChangeText("Label_PFDNormalPanelSpeedModeTitle", "SPD MODE");
+							ChangeText("Label_PFDNormalPanelAltitudeModeTitle", "ALT MODE");
+							ChangeText("Label_PFDNormalPanelHeadingModeTitle", "HDG MODE");
+							ChangeText("Label_PFDNormalPanelDecisionAltitudeTitle", "DA");
 							break;
 						case "HUD":
 							ChangeText("Label_PFDHUDPanelAccelTitle", "ACCEL");
@@ -1932,8 +1922,8 @@
 		}
 		function RefreshPanel() {
 			switch(Subsystem.Display.PFDStyle) {
-				case "Default":
-					RefreshDefaultPanel();
+				case "Normal":
+					RefreshNormalPanel();
 					break;
 				case "HUD":
 					RefreshHUDPanel();

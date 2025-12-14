@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CacheName = "GPS-PFD_v0.55";
+		const CacheName = "GPS-PFD_v1.00";
 
 // Listeners
 	// Service worker (https://learn.microsoft.com/en-us/microsoft-edge/progressive-web-apps-chromium/how-to/#step-5---add-a-service-worker)
@@ -31,7 +31,7 @@
 				// "styles/style_PFD???.css",
 				"../scripts/common.js",
 				"../scripts/common_UserDataRepairer.js",
-				"scripts/script_PFDDefaultPanel.js",
+				"scripts/script_PFDNormalPanel.js",
 				"scripts/script_PFDHUDPanel.js",
 				"scripts/script_PFDAutomobileSpeedometerPanel.js",
 				// "scripts/script_PFD???.js",

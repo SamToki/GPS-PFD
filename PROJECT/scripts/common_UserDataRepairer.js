@@ -10,62 +10,19 @@
 	window.onload = RepairUserData();
 	function RepairUserData() {
 		// Home page
-			// v8.00 (2025/11/25)
-			// Rename variable (Use Japanese orthography)
+			// v9.00 (2025/12/14)
+			// Rename value (Mouse cursor)
 			if(localStorage.System != undefined) {
 				let System = JSON.parse(localStorage.getItem("System"));
-				if(System.Dev.UseJapaneseGlyph != undefined) {
-					System.Dev.UseJapaneseOrthography = System.Dev.UseJapaneseGlyph;
-					delete System.Dev.UseJapaneseGlyph;
+				if(System.Display.Cursor == "Default") {
+					System.Display.Cursor = "None";
 					localStorage.setItem("System", JSON.stringify(System));
 					console.info("● User Data Repairer\n" +
 						"Repaired user data \"System\".");
 				}
 			}
 
-		// Timer+Lottery
-			// v3.00 (2024/11/07)
-			// Rename variable (Ringtone volume)
-			if(localStorage.TimerPlusLottery_Subsystem != undefined) {
-				let Subsystem = JSON.parse(localStorage.getItem("TimerPlusLottery_Subsystem"));
-				if(Subsystem.Audio.RingtoneVolume == undefined) {
-					Subsystem.Audio.RingtoneVolume = Subsystem.Audio.SoundVolume;
-					delete Subsystem.Audio.SoundVolume;
-					localStorage.setItem("TimerPlusLottery_Subsystem", JSON.stringify(Subsystem));
-					console.info("● User Data Repairer\n" +
-						"Repaired user data \"TimerPlusLottery Subsystem\".");
-				}
-			}
-
 		// KanaMaster
-			// v2.00 (2024/10/04)
-			// New feature (Audio)
-			if(localStorage.KanaMaster_Subsystem != undefined) {
-				let Subsystem = JSON.parse(localStorage.getItem("KanaMaster_Subsystem"));
-				if(Subsystem.Audio == undefined) {
-					Subsystem.Audio = {
-						VoiceVolume: 0,
-						AlsoPlayVoiceOnMiss: false
-					};
-					localStorage.setItem("KanaMaster_Subsystem", JSON.stringify(Subsystem));
-					console.info("● User Data Repairer\n" +
-						"Repaired user data \"KanaMaster Subsystem\".");
-				}
-			}
-
-			// v3.00 (2024/10/13)
-			// Rename variable (Final time limit)
-			if(localStorage.KanaMaster_Game != undefined) {
-				let Game = JSON.parse(localStorage.getItem("KanaMaster_Game"));
-				if(Game.Difficulty.TimeLimit.Final == undefined) {
-					Game.Difficulty.TimeLimit.Final = Game.Difficulty.TimeLimit.Normal;
-					delete Game.Difficulty.TimeLimit.Normal;
-					localStorage.setItem("KanaMaster_Game", JSON.stringify(Game));
-					console.info("● User Data Repairer\n" +
-						"Repaired user data \"KanaMaster Game\".");
-				}
-			}
-
 			// v4.00 (2025/01/08)
 			// Optimize user data structure
 			if(localStorage.KanaMaster_Highscore != undefined) {
@@ -129,7 +86,7 @@
 			}
 
 		// Yamanobo-Ryou
-			// v2.00 (2025/01/08)
+			// v2.00 (2025/01/08), v2.02 (2025/01/09)
 			// Optimize user data structure
 			if(localStorage.YamanoboRyou_Game != undefined) {
 				let Game = JSON.parse(localStorage.getItem("YamanoboRyou_Game"));
@@ -144,6 +101,17 @@
 						}
 					}
 					Game.Terrain.Data = structuredClone(NewObject);
+					localStorage.setItem("YamanoboRyou_Game", JSON.stringify(Game));
+					console.info("● User Data Repairer\n" +
+						"Repaired user data \"YamanoboRyou Game\".");
+				}
+				if(Game.Stats.Keystroke == undefined) {
+					Game.Stats.Keystroke = {
+						Count: Game.Stats.KeystrokeCount,
+						Timestamp: Game.Stats.KeystrokeTimestamp
+					};
+					delete Game.Stats.KeystrokeCount;
+					delete Game.Stats.KeystrokeTimestamp;
 					localStorage.setItem("YamanoboRyou_Game", JSON.stringify(Game));
 					console.info("● User Data Repairer\n" +
 						"Repaired user data \"YamanoboRyou Game\".");
@@ -167,36 +135,26 @@
 				}
 			}
 
-			// v2.02 (2025/01/09)
-			// Optimize user data structure
-			if(localStorage.YamanoboRyou_Game != undefined) {
-				let Game = JSON.parse(localStorage.getItem("YamanoboRyou_Game"));
-				if(Game.Stats.Keystroke == undefined) {
-					Game.Stats.Keystroke = {
-						Count: Game.Stats.KeystrokeCount,
-						Timestamp: Game.Stats.KeystrokeTimestamp
-					};
-					delete Game.Stats.KeystrokeCount;
-					delete Game.Stats.KeystrokeTimestamp;
-					localStorage.setItem("YamanoboRyou_Game", JSON.stringify(Game));
-					console.info("● User Data Repairer\n" +
-						"Repaired user data \"YamanoboRyou Game\".");
-				}
-			}
-
-			// v2.14 (2025/10/29)
+			// v3.00 (2025/12/14)
 			// Rename values (Game font)
 			if(localStorage.YamanoboRyou_Subsystem != undefined) {
 				let Subsystem = JSON.parse(localStorage.getItem("YamanoboRyou_Subsystem"));
 				switch(Subsystem.Display.GameFont) {
 					case "Default":
-						Subsystem.Display.GameFont = "Iosevka, monospace";
+					case "Iosevka, monospace":
+						Subsystem.Display.GameFont = "Iosevka";
 						localStorage.setItem("YamanoboRyou_Subsystem", JSON.stringify(Subsystem));
 						console.info("● User Data Repairer\n" +
 							"Repaired user data \"YamanoboRyou Subsystem\".");
 						break;
 					case "Sans":
 						Subsystem.Display.GameFont = "Sans-serif";
+						localStorage.setItem("YamanoboRyou_Subsystem", JSON.stringify(Subsystem));
+						console.info("● User Data Repairer\n" +
+							"Repaired user data \"YamanoboRyou Subsystem\".");
+						break;
+					case "Inter, sans-serif":
+						Subsystem.Display.GameFont = "Inter";
 						localStorage.setItem("YamanoboRyou_Subsystem", JSON.stringify(Subsystem));
 						console.info("● User Data Repairer\n" +
 							"Repaired user data \"YamanoboRyou Subsystem\".");
@@ -342,6 +300,34 @@
 					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
 					console.info("● User Data Repairer\n" +
 						"Repaired user data \"GPSPFD Subsystem\".");
+				}
+			}
+
+			// v1.00 (2025/12/14)
+			// Rename values (PFD style and PFD font)
+			if(localStorage.GPSPFD_Subsystem != undefined) {
+				let Subsystem = JSON.parse(localStorage.getItem("GPSPFD_Subsystem"));
+				if(Subsystem.Display.PFDStyle == "Default") {
+					Subsystem.Display.PFDStyle = "Normal";
+					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
+					console.info("● User Data Repairer\n" +
+						"Repaired user data \"GPSPFD Subsystem\".");
+				}
+				switch(Subsystem.Display.PFDFont) {
+					case "Inter, sans-serif":
+						Subsystem.Display.PFDFont = "Inter";
+						localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
+						console.info("● User Data Repairer\n" +
+							"Repaired user data \"GPSPFD Subsystem\".");
+						break;
+					case "Century Gothic, sans-serif":
+						Subsystem.Display.PFDFont = "Century Gothic";
+						localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
+						console.info("● User Data Repairer\n" +
+							"Repaired user data \"GPSPFD Subsystem\".");
+						break;
+					default:
+						break;
 				}
 			}
 	}

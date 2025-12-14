@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v0.55 (2025/11/25) Beta Test. Since 2024/12/01." />
+		<meta name="version" content="v1.00 (2025/12/14). Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -28,7 +28,7 @@
 		<!-- <link rel="stylesheet" href="styles/style_PFD???.css" /> -->
 		<script defer src="../scripts/common.js"></script>
 		<script defer src="../scripts/common_UserDataRepairer.js"></script>
-		<script defer src="scripts/script_PFDDefaultPanel.js"></script>
+		<script defer src="scripts/script_PFDNormalPanel.js"></script>
 		<script defer src="scripts/script_PFDHUDPanel.js"></script>
 		<script defer src="scripts/script_PFDAutomobileSpeedometerPanel.js"></script>
 		<!-- <script defer src="scripts/script_PFD???.js"></script> -->
@@ -104,21 +104,21 @@
 		</header>
 
 		<main id="Main">
-			<section class="PFDStyleIsDefault" id="PFD">
+			<section class="PFDStyleIsNormal" id="PFD">
 				<h1 class="SectionTitle Hidden" inert="true">PFD</h1>
 				<div class="Viewport" id="PFDViewport">
-					<div class="Ctnr PFDPanel" id="Ctnr_PFDDefaultPanel">
-						<div class="Ctnr" id="Ctnr_PFDDefaultPanelAttitude">
+					<div class="Ctnr PFDPanel" id="Ctnr_PFDNormalPanel">
+						<div class="Ctnr" id="Ctnr_PFDNormalPanelAttitude">
 							<ul class="CtrlGroup">
-								<li class="Ctrl Box StatusBox Faded" id="Ctrl_PFDDefaultPanelAttitudeStatus" inert="true">
-									<span id="Label_PFDDefaultPanelAttitudeStatus">姿态仪状态</span>
+								<li class="Ctrl Box StatusBox Faded" id="Ctrl_PFDNormalPanelAttitudeStatus" inert="true">
+									<span id="Label_PFDNormalPanelAttitudeStatus">姿态仪状态</span>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelAttitudeBg">
-									<div id="PFDDefaultPanelAttitudeSky"></div>
-									<div id="PFDDefaultPanelAttitudeTerrain"></div>
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeBg">
+									<div id="PFDNormalPanelAttitudeSky"></div>
+									<div id="PFDNormalPanelAttitudeTerrain"></div>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelAttitudePitch" title="姿态仪" aria-label="姿态仪">
-									<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelAttitudePitch">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudePitch" title="姿态仪" aria-label="姿态仪">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelAttitudePitch">
 										<li class="Ctrl"><span class="LargerText">90</span><div class="AttitudeScale1"></div><span class="LargerText">90</span></li>
 										<li class="Ctrl"><div class="AttitudeScale4"></div></li>
 										<li class="Ctrl"><div class="AttitudeScale2"></div></li>
@@ -194,8 +194,8 @@
 										<li class="Ctrl"><span class="LargerText">90</span><div class="AttitudeScale1"></div><span class="LargerText">90</span></li>
 									</ul>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelAttitudeRoll">
-									<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelAttitudeRollScale">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeRoll">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelAttitudeRollScale">
 										<li class="Ctrl" style="transform: rotate(-60deg);"><div class="AttitudeScale1"></div></li>
 										<li class="Ctrl" style="transform: rotate(-45deg);"><div class="AttitudeScale2"></div></li>
 										<li class="Ctrl" style="transform: rotate(-30deg);"><div class="AttitudeScale1"></div></li>
@@ -208,93 +208,93 @@
 										<li class="Ctrl" style="transform: rotate(45deg);"><div class="AttitudeScale2"></div></li>
 										<li class="Ctrl" style="transform: rotate(60deg);"><div class="AttitudeScale1"></div></li>
 									</ul>
-									<svg class="Progring" id="Progring_PFDDefaultPanelAttitudeRoll" viewBox="0 0 422 422" aria-hidden="true">
-										<circle class="ProgringFg" id="ProgringFg_PFDDefaultPanelAttitudeRoll" cx="211" cy="211" r="210" />
+									<svg class="Progring" id="Progring_PFDNormalPanelAttitudeRoll" viewBox="0 0 422 422" aria-hidden="true">
+										<circle class="ProgringFg" id="ProgringFg_PFDNormalPanelAttitudeRoll" cx="211" cy="211" r="210" />
 									</svg>
-									<div id="PFDDefaultPanelAttitudeRollPointer" title="横滚指针" aria-label="横滚指针"></div>
+									<div id="PFDNormalPanelAttitudeRollPointer" title="横滚指针" aria-label="横滚指针"></div>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelAttitudeAircraftSymbol" title="姿态仪" aria-label="姿态仪">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbol" title="姿态仪" aria-label="姿态仪">
 									<ul class="CtrlGroup">
-										<li class="Ctrl" id="Ctrl_PFDDefaultPanelAttitudeAircraftSymbolLeft1"></li>
-										<li class="Ctrl" id="Ctrl_PFDDefaultPanelAttitudeAircraftSymbolLeft2"></li>
-										<li class="Ctrl" id="Ctrl_PFDDefaultPanelAttitudeAircraftSymbolCenter"></li>
-										<li class="Ctrl" id="Ctrl_PFDDefaultPanelAttitudeAircraftSymbolRight1"></li>
-										<li class="Ctrl" id="Ctrl_PFDDefaultPanelAttitudeAircraftSymbolRight2"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolLeft1"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolLeft2"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolCenter"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolRight1"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolRight2"></li>
 									</ul>
 								</li>
 							</ul>
 						</div>
-						<div class="Ctnr" id="Ctnr_PFDDefaultPanelInfoBar">
-							<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelHardwareStatus">
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelGPS">
+						<div class="Ctnr" id="Ctnr_PFDNormalPanelInfoBar">
+							<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelHardwareStatus">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelGPS">
 									<span>GPS</span>
-									<span class="InfoBarValue" id="Label_PFDDefaultPanelGPSValue">未知</span>
+									<span class="InfoBarValue" id="Label_PFDNormalPanelGPSValue">未知</span>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelAccel">
-									<span id="Label_PFDDefaultPanelAccelTitle">加速计</span>
-									<span class="InfoBarValue" id="Label_PFDDefaultPanelAccelValue">未知</span>
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelAccel">
+									<span id="Label_PFDNormalPanelAccelTitle">加速计</span>
+									<span class="InfoBarValue" id="Label_PFDNormalPanelAccelValue">未知</span>
 								</li>
 							</ul>
-							<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelInfoBarSpeeds">
+							<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelInfoBarSpeeds">
 								<li class="Ctrl">
-									<span id="Label_PFDDefaultPanelGSTitle">地速</span>
-									<span class="InfoBarValue" id="Label_PFDDefaultPanelGSValue">未知</span>
+									<span id="Label_PFDNormalPanelGSTitle">地速</span>
+									<span class="InfoBarValue" id="Label_PFDNormalPanelGSValue">未知</span>
 								</li>
 								<li class="Ctrl">
-									<span id="Label_PFDDefaultPanelAvgGSTitle">平均地速</span>
-									<span class="InfoBarValue" id="Label_PFDDefaultPanelAvgGSValue">未知</span>
+									<span id="Label_PFDNormalPanelAvgGSTitle">平均地速</span>
+									<span class="InfoBarValue" id="Label_PFDNormalPanelAvgGSValue">未知</span>
 								</li>
 								<li class="Ctrl">
-									<span id="Label_PFDDefaultPanelTASTitle">真空速</span>
-									<span class="InfoBarValue" id="Label_PFDDefaultPanelTASValue">未知</span>
+									<span id="Label_PFDNormalPanelTASTitle">真空速</span>
+									<span class="InfoBarValue" id="Label_PFDNormalPanelTASValue">未知</span>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelWind">
-									<span id="Label_PFDDefaultPanelWindTitle">风</span>
-									<span class="InfoBarValue" id="Label_PFDDefaultPanelWindValue">未知</span>
-									<div class="Faded" id="PFDDefaultPanelWindDirection" inert="true" title="风向 (相对于您的朝向)" aria-label="风向 (相对于您的朝向)">
-										<div class="Needle" id="Needle_PFDDefaultPanelWindDirection">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelWind">
+									<span id="Label_PFDNormalPanelWindTitle">风</span>
+									<span class="InfoBarValue" id="Label_PFDNormalPanelWindValue">未知</span>
+									<div class="Faded" id="PFDNormalPanelWindDirection" inert="true" title="风向 (相对于您的朝向)" aria-label="风向 (相对于您的朝向)">
+										<div class="Needle" id="Needle_PFDNormalPanelWindDirection">
 											<div class="NeedleFg"></div>
 											<div class="NeedleArrow"></div>
 										</div>
 									</div>
 								</li>
 							</ul>
-							<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelFlaps">
+							<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelFlaps">
 								<li class="Ctrl">
-									<span id="Label_PFDDefaultPanelFlapsTitle">襟翼</span>
-									<span class="InfoBarValue" id="Label_PFDDefaultPanelFlapsValue">未知</span>
+									<span id="Label_PFDNormalPanelFlapsTitle">襟翼</span>
+									<span class="InfoBarValue" id="Label_PFDNormalPanelFlapsValue">未知</span>
 									<div class="Progbar" title="襟翼指示器" aria-label="襟翼指示器">
-										<div class="ProgbarFg Vertical" id="ProgbarFg_PFDDefaultPanelFlaps"></div>
+										<div class="ProgbarFg Vertical" id="ProgbarFg_PFDNormalPanelFlaps"></div>
 									</div>
 								</li>
 							</ul>
 						</div>
-						<div class="Ctnr" id="Ctnr_PFDDefaultPanelFMA1">
+						<div class="Ctnr" id="Ctnr_PFDNormalPanelFMA1">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
-									<span id="Label_PFDDefaultPanelSpeedModeTitle">速度模式</span>
-									<span class="FMAValue" id="Label_PFDDefaultPanelSpeedModeValue">未知</span>
+									<span id="Label_PFDNormalPanelSpeedModeTitle">速度模式</span>
+									<span class="FMAValue" id="Label_PFDNormalPanelSpeedModeValue">未知</span>
 								</li>
 								<li class="Ctrl">
-									<span id="Label_PFDDefaultPanelHeadingModeTitle">朝向模式</span>
-									<span class="FMAValue" id="Label_PFDDefaultPanelHeadingModeValue">未知</span>
+									<span id="Label_PFDNormalPanelHeadingModeTitle">朝向模式</span>
+									<span class="FMAValue" id="Label_PFDNormalPanelHeadingModeValue">未知</span>
 								</li>
 								<li class="Ctrl">
-									<span id="Label_PFDDefaultPanelAltitudeModeTitle">高度模式</span>
-									<span class="FMAValue" id="Label_PFDDefaultPanelAltitudeModeValue">未知</span>
+									<span id="Label_PFDNormalPanelAltitudeModeTitle">高度模式</span>
+									<span class="FMAValue" id="Label_PFDNormalPanelAltitudeModeValue">未知</span>
 								</li>
 							</ul>
 						</div>
-						<div class="Ctnr" id="Ctnr_PFDDefaultPanelFMA2">
-							<span id="Label_PFDDefaultPanelFlightMode" title="飞航模式" aria-label="飞航模式">飞航模式</span>
+						<div class="Ctnr" id="Ctnr_PFDNormalPanelFMA2">
+							<span id="Label_PFDNormalPanelFlightMode" title="飞航模式" aria-label="飞航模式">飞航模式</span>
 						</div>
-						<div class="Ctnr" id="Ctnr_PFDDefaultPanelSpeed">
+						<div class="Ctnr" id="Ctnr_PFDNormalPanelSpeed">
 							<ul class="CtrlGroup">
-								<li class="Ctrl Box StatusBox OrangeText Faded" id="Ctrl_PFDDefaultPanelSpeedStatus" inert="true">
-									<span id="Label_PFDDefaultPanelSpeedStatus">空速表状态</span>
+								<li class="Ctrl Box StatusBox OrangeText Faded" id="Ctrl_PFDNormalPanelSpeedStatus" inert="true">
+									<span id="Label_PFDNormalPanelSpeedStatus">空速表状态</span>
 								</li>
-								<li class="Ctrl Tape" id="Ctrl_PFDDefaultPanelSpeedTape" title="空速表" aria-label="空速表">
-									<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelSpeedTape">
+								<li class="Ctrl Tape" id="Ctrl_PFDNormalPanelSpeedTape" title="空速表" aria-label="空速表">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelSpeedTape">
 										<li class="Ctrl"><div class="TapeScale"></div><span class="TapeNumber">1000</span></li>
 										<li class="Ctrl"><div class="TapeScale"></div></li>
 										<li class="Ctrl"><div class="TapeScale"></div><span class="TapeNumber">980</span></li>
@@ -398,42 +398,42 @@
 										<li class="Ctrl"><div class="TapeScale"></div><span class="TapeNumber">0</span></li>
 									</ul>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelSpeedAdditionalIndicators">
-									<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelOtherSpeeds">
-										<li class="Ctrl Hidden" id="Ctrl_PFDDefaultPanelSpeedLimitMin" inert="true" title="最低限速" aria-label="最低限速"></li>
-										<li class="Ctrl" id="Ctrl_PFDDefaultPanelSpeedLimitMax" title="最高限速" aria-label="最高限速"></li>
-										<li class="Ctrl" id="Ctrl_PFDDefaultPanelAvgIAS" title="平均表速" aria-label="平均表速"></li>
-										<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelMCPSpeedCircle" inert="true" title="MCP 速度" aria-label="MCP 速度"></li>
-										<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelV1" inert="true" title="V1 (中断起飞速度)" aria-label="V1 (中断起飞速度)">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelSpeedAdditionalIndicators">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelOtherSpeeds">
+										<li class="Ctrl Hidden" id="Ctrl_PFDNormalPanelSpeedLimitMin" inert="true" title="最低限速" aria-label="最低限速"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelSpeedLimitMax" title="最高限速" aria-label="最高限速"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAvgIAS" title="平均表速" aria-label="平均表速"></li>
+										<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelMCPSpeedCircle" inert="true" title="MCP 速度" aria-label="MCP 速度"></li>
+										<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelV1" inert="true" title="V1 (中断起飞速度)" aria-label="V1 (中断起飞速度)">
 											<div></div>
 											<span>V1</span>
 										</li>
-										<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelVR" inert="true" title="VR (抬头速度)" aria-label="VR (抬头速度)">
+										<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelVR" inert="true" title="VR (抬头速度)" aria-label="VR (抬头速度)">
 											<div></div>
 											<span>R</span>
 										</li>
 									</ul>
-									<div class="Needle Faded" id="Needle_PFDDefaultPanelSpeedTrend" inert="true">
+									<div class="Needle Faded" id="Needle_PFDNormalPanelSpeedTrend" inert="true">
 										<div class="NeedleFg" title="速度趋势" aria-label="速度趋势"></div>
 										<div class="NeedleArrow" title="速度趋势" aria-label="速度趋势"></div>
 									</div>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelSpeedBalloon">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelSpeedBalloon">
 									<ul class="CtrlGroup">
-										<li class="Ctrl Balloon" id="Ctrl_PFDDefaultPanelSpeedBalloonBalloon" title="当前表速" aria-label="当前表速">
+										<li class="Ctrl Balloon" id="Ctrl_PFDNormalPanelSpeedBalloonBalloon" title="当前表速" aria-label="当前表速">
 											<ul class="CtrlGroup">
 												<li class="Ctrl Box">
-													<div class="RollingDigit" id="RollingDigit_PFDDefaultPanelSpeed1">
+													<div class="RollingDigit" id="RollingDigit_PFDNormalPanelSpeed1">
 														<span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span><span> </span>
 													</div>
 												</li>
 												<li class="Ctrl Box">
-													<div class="RollingDigit" id="RollingDigit_PFDDefaultPanelSpeed2">
+													<div class="RollingDigit" id="RollingDigit_PFDNormalPanelSpeed2">
 														<span>0</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span><span>0</span>
 													</div>
 												</li>
 												<li class="Ctrl Box">
-													<div class="RollingDigit" id="RollingDigit_PFDDefaultPanelSpeed3">
+													<div class="RollingDigit" id="RollingDigit_PFDNormalPanelSpeed3">
 														<span>9</span><span>8</span><span>7</span>
 														<span>1</span><span>0</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span><span>0</span><span>9</span>
 														<span>2</span><span>1</span><span>0</span>
@@ -444,21 +444,21 @@
 										<li class="Ctrl BalloonTail" title="当前表速" aria-label="当前表速"></li>
 									</ul>
 								</li>
-								<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelMCPSpeed" inert="true">
-									<span id="Label_PFDDefaultPanelMCPSpeed" title="MCP 速度" aria-label="MCP 速度">速度</span>
+								<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelMCPSpeed" inert="true">
+									<span id="Label_PFDNormalPanelMCPSpeed" title="MCP 速度" aria-label="MCP 速度">速度</span>
 								</li>
-								<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelMachNumber" inert="true">
-									<span id="Label_PFDDefaultPanelMachNumber" title="当前表速 (马赫)" aria-label="当前表速 (马赫)">马赫数</span>
+								<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelMachNumber" inert="true">
+									<span id="Label_PFDNormalPanelMachNumber" title="当前表速 (马赫)" aria-label="当前表速 (马赫)">马赫数</span>
 								</li>
 							</ul>
 						</div>
-						<div class="Ctnr" id="Ctnr_PFDDefaultPanelAltitude">
+						<div class="Ctnr" id="Ctnr_PFDNormalPanelAltitude">
 							<ul class="CtrlGroup">
-								<li class="Ctrl Box StatusBox OrangeText Faded" id="Ctrl_PFDDefaultPanelAltitudeStatus" inert="true">
-									<span id="Label_PFDDefaultPanelAltitudeStatus">高度表状态</span>
+								<li class="Ctrl Box StatusBox OrangeText Faded" id="Ctrl_PFDNormalPanelAltitudeStatus" inert="true">
+									<span id="Label_PFDNormalPanelAltitudeStatus">高度表状态</span>
 								</li>
-								<li class="Ctrl Tape" id="Ctrl_PFDDefaultPanelAltitudeTape" title="高度表" aria-label="高度表">
-									<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelAltitudeTape">
+								<li class="Ctrl Tape" id="Ctrl_PFDNormalPanelAltitudeTape" title="高度表" aria-label="高度表">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelAltitudeTape">
 										<li class="Ctrl"><div class="TapeScale"></div><span class="TapeNumber">500<span class="SmallerText">00</span></span></li>
 										<li class="Ctrl"><div class="TapeScale"></div></li>
 										<li class="Ctrl"><div class="TapeScale"></div><span class="TapeNumber">498<span class="SmallerText">00</span></span></li>
@@ -982,40 +982,40 @@
 										<li class="Ctrl"><div class="TapeScale"></div><span class="TapeNumber">-20<span class="SmallerText">00</span></span></li>
 									</ul>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelAltitudeAdditionalIndicators">
-									<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelOtherAltitudes">
-										<li class="Ctrl" id="Ctrl_PFDDefaultPanelGroundAltitude" title="地面高度" aria-label="地面高度"></li>
-										<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelDecisionAltitude" inert="true" title="决断高度" aria-label="决断高度"></li>
-										<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelMCPAltitudeCircle" inert="true" title="MCP 高度" aria-label="MCP 高度"></li>
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelAltitudeAdditionalIndicators">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelOtherAltitudes">
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelGroundAltitude" title="地面高度" aria-label="地面高度"></li>
+										<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelDecisionAltitude" inert="true" title="决断高度" aria-label="决断高度"></li>
+										<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelMCPAltitudeCircle" inert="true" title="MCP 高度" aria-label="MCP 高度"></li>
 									</ul>
-									<div class="Needle Faded" id="Needle_PFDDefaultPanelAltitudeTrend" inert="true">
+									<div class="Needle Faded" id="Needle_PFDNormalPanelAltitudeTrend" inert="true">
 										<div class="NeedleFg" title="高度趋势" aria-label="高度趋势"></div>
 										<div class="NeedleArrow" title="高度趋势" aria-label="高度趋势"></div>
 									</div>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelAltitudeBalloon">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelAltitudeBalloon">
 									<ul class="CtrlGroup">
-										<li class="Ctrl Balloon" id="Ctrl_PFDDefaultPanelAltitudeBalloonBalloon" title="当前高度" aria-label="当前高度">
+										<li class="Ctrl Balloon" id="Ctrl_PFDNormalPanelAltitudeBalloonBalloon" title="当前高度" aria-label="当前高度">
 											<ul class="CtrlGroup">
 												<li class="Ctrl Box">
-													<div class="RollingDigit" id="RollingDigit_PFDDefaultPanelAltitude1">
+													<div class="RollingDigit" id="RollingDigit_PFDNormalPanelAltitude1">
 														<span>5</span><span>4</span><span>3</span><span>2</span><span>1</span><span> </span><span>-</span>
 													</div>
 												</li>
 												<li class="Ctrl Box">
-													<div class="RollingDigit" id="RollingDigit_PFDDefaultPanelAltitude2">
+													<div class="RollingDigit" id="RollingDigit_PFDNormalPanelAltitude2">
 														<span>0</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span><span>0</span>
 														<span>1</span><span>2</span>
 													</div>
 												</li>
 												<li class="Ctrl Box">
-													<div class="RollingDigit" id="RollingDigit_PFDDefaultPanelAltitude3">
+													<div class="RollingDigit" id="RollingDigit_PFDNormalPanelAltitude3">
 														<span>0</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span><span>0</span>
 														<span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>0</span>
 													</div>
 												</li>
-												<li class="Ctrl Box" id="Ctrl_PFDDefaultPanelAltitude4">
-													<div class="RollingDigit" id="RollingDigit_PFDDefaultPanelAltitude4">
+												<li class="Ctrl Box" id="Ctrl_PFDNormalPanelAltitude4">
+													<div class="RollingDigit" id="RollingDigit_PFDNormalPanelAltitude4">
 														<span>00</span><span>80</span><span>60</span>
 														<span>20</span><span>00</span><span>80</span><span>60</span><span>40</span><span>20</span><span>00</span><span>80</span>
 														<span>40</span><span>20</span><span>00</span><span>20</span><span>40</span>
@@ -1028,20 +1028,20 @@
 										<li class="Ctrl BalloonTail" title="当前高度" aria-label="当前高度"></li>
 									</ul>
 								</li>
-								<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelMCPAltitude" inert="true">
-									<span id="Label_PFDDefaultPanelMCPAltitude" title="MCP 高度" aria-label="MCP 高度">高度</span>
+								<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelMCPAltitude" inert="true">
+									<span id="Label_PFDNormalPanelMCPAltitude" title="MCP 高度" aria-label="MCP 高度">高度</span>
 								</li>
-								<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelMetricAltitude" inert="true">
-									<span id="Label_PFDDefaultPanelMetricAltitude" title="当前高度 (米)" aria-label="当前高度 (米)">米制高度</span>
+								<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelMetricAltitude" inert="true">
+									<span id="Label_PFDNormalPanelMetricAltitude" title="当前高度 (米)" aria-label="当前高度 (米)">米制高度</span>
 								</li>
 							</ul>
 						</div>
-						<div class="Ctnr" id="Ctnr_PFDDefaultPanelVerticalSpeed">
+						<div class="Ctnr" id="Ctnr_PFDNormalPanelVerticalSpeed">
 							<ul class="CtrlGroup">
-								<li class="Ctrl Box StatusBox OrangeText Faded" id="Ctrl_PFDDefaultPanelVerticalSpeedStatus" inert="true">
-									<span id="Label_PFDDefaultPanelVerticalSpeedStatus">垂直速度表状态</span>
+								<li class="Ctrl Box StatusBox OrangeText Faded" id="Ctrl_PFDNormalPanelVerticalSpeedStatus" inert="true">
+									<span id="Label_PFDNormalPanelVerticalSpeedStatus">垂直速度表状态</span>
 								</li>
-								<li class="Ctrl Tape" id="Ctrl_PFDDefaultPanelVerticalSpeedTape" title="垂直速度表" aria-label="垂直速度表">
+								<li class="Ctrl Tape" id="Ctrl_PFDNormalPanelVerticalSpeedTape" title="垂直速度表" aria-label="垂直速度表">
 									<ul class="CtrlGroup">
 										<li class="Ctrl"><div class="TapeScale"></div><span class="TapeNumber">6</span></li>
 										<li class="Ctrl"><div class="TapeScale"></div></li>
@@ -1058,31 +1058,31 @@
 										<li class="Ctrl"><div class="TapeScale"></div><span class="TapeNumber">6</span></li>
 									</ul>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelVerticalSpeedAdditionalIndicators">
-									<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelOtherVerticalSpeeds">
-										<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelMCPVerticalSpeedCircle" inert="true" title="MCP 垂直速度" aria-label="MCP 垂直速度"></li>
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelVerticalSpeedAdditionalIndicators">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelOtherVerticalSpeeds">
+										<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelMCPVerticalSpeedCircle" inert="true" title="MCP 垂直速度" aria-label="MCP 垂直速度"></li>
 									</ul>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelVerticalSpeedNeedle">
-									<div class="Needle" id="Needle_PFDDefaultPanelVerticalSpeed">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelVerticalSpeedNeedle">
+									<div class="Needle" id="Needle_PFDNormalPanelVerticalSpeed">
 										<div class="NeedleFg" title="垂直速度指针" aria-label="垂直速度指针"></div>
 									</div>
 								</li>
-								<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelVerticalSpeedBalloon" inert="true" title="当前垂直速度" aria-label="当前垂直速度">
-									<span id="Label_PFDDefaultPanelVerticalSpeedBalloon"><span class="SmallerText">垂直速度</span></span>
+								<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelVerticalSpeedBalloon" inert="true" title="当前垂直速度" aria-label="当前垂直速度">
+									<span id="Label_PFDNormalPanelVerticalSpeedBalloon"><span class="SmallerText">垂直速度</span></span>
 								</li>
-								<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelMCPVerticalSpeed" inert="true">
-									<span id="Label_PFDDefaultPanelMCPVerticalSpeed" title="MCP 垂直速度" aria-label="MCP 垂直速度"><span class="SmallerText">垂直速度</span></span>
+								<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelMCPVerticalSpeed" inert="true">
+									<span id="Label_PFDNormalPanelMCPVerticalSpeed" title="MCP 垂直速度" aria-label="MCP 垂直速度"><span class="SmallerText">垂直速度</span></span>
 								</li>
 							</ul>
 						</div>
-						<div class="Ctnr" id="Ctnr_PFDDefaultPanelHeading">
+						<div class="Ctnr" id="Ctnr_PFDNormalPanelHeading">
 							<ul class="CtrlGroup">
-								<li class="Ctrl Box StatusBox OrangeText Faded" id="Ctrl_PFDDefaultPanelHeadingStatus" inert="true">
-									<span id="Label_PFDDefaultPanelHeadingStatus">朝向指示器状态</span>
+								<li class="Ctrl Box StatusBox OrangeText Faded" id="Ctrl_PFDNormalPanelHeadingStatus" inert="true">
+									<span id="Label_PFDNormalPanelHeadingStatus">朝向指示器状态</span>
 								</li>
-								<li class="Ctrl Tape" id="Ctrl_PFDDefaultPanelHeadingTape" title="朝向指示器 (指南针)" aria-label="朝向指示器 (指南针)">
-									<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelHeadingTape">
+								<li class="Ctrl Tape" id="Ctrl_PFDNormalPanelHeadingTape" title="朝向指示器 (指南针)" aria-label="朝向指示器 (指南针)">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelHeadingTape">
 										<li class="Ctrl"><div class="TapeScale"></div><span class="TapeNumber">0</span></li>
 										<li class="Ctrl" style="transform: rotate(5deg);"><div class="TapeScale"></div></li>
 										<li class="Ctrl" style="transform: rotate(10deg);"><div class="TapeScale"></div><span class="TapeNumber">1</span></li>
@@ -1157,36 +1157,36 @@
 										<li class="Ctrl" style="transform: rotate(355deg);"><div class="TapeScale"></div></li>
 									</ul>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelHeadingAdditionalIndicators">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelHeadingAdditionalIndicators">
 									<ul class="CtrlGroup">
-										<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelBearing" inert="true">
+										<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelBearing" inert="true">
 											<div title="导航朝向" aria-label="导航朝向"></div>
 										</li>
-										<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelMCPHeadingCircle" inert="true">
+										<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelMCPHeadingCircle" inert="true">
 											<div title="MCP 朝向" aria-label="MCP 朝向"></div>
 										</li>
 									</ul>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDDefaultPanelHeadingBalloon">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelHeadingBalloon">
 									<ul class="CtrlGroup">
 										<li class="Ctrl Balloon" title="当前朝向" aria-label="当前朝向">
-											<span id="Label_PFDDefaultPanelHeadingBalloon"><span class="SmallerText">朝向</span></span>
+											<span id="Label_PFDNormalPanelHeadingBalloon"><span class="SmallerText">朝向</span></span>
 										</li>
 										<li class="Ctrl BalloonTail" title="当前朝向" aria-label="当前朝向"></li>
 									</ul>
 								</li>
-								<li class="Ctrl Faded" id="Ctrl_PFDDefaultPanelMCPHeading" inert="true">
-									<span id="Label_PFDDefaultPanelMCPHeading" title="MCP 朝向" aria-label="MCP 朝向">朝向</span>
+								<li class="Ctrl Faded" id="Ctrl_PFDNormalPanelMCPHeading" inert="true">
+									<span id="Label_PFDNormalPanelMCPHeading" title="MCP 朝向" aria-label="MCP 朝向">朝向</span>
 								</li>
 							</ul>
 						</div>
-						<div class="Ctnr Faded" id="Ctnr_PFDDefaultPanelDME" inert="true">
-							<span id="Label_PFDDefaultPanelDMERunway">跑道</span>
-							<span id="Label_PFDDefaultPanelDMEDistance">距离</span>
-							<span id="Label_PFDDefaultPanelDMEETA"><span class="SmallerText">预计剩余时间</span></span>
+						<div class="Ctnr Faded" id="Ctnr_PFDNormalPanelDME" inert="true">
+							<span id="Label_PFDNormalPanelDMERunway">跑道</span>
+							<span id="Label_PFDNormalPanelDMEDistance">距离</span>
+							<span id="Label_PFDNormalPanelDMEETA"><span class="SmallerText">预计剩余时间</span></span>
 						</div>
-						<div class="Ctnr Faded" id="Ctnr_PFDDefaultPanelLocalizer" inert="true" title="航向台" aria-label="航向台">
-							<div id="PFDDefaultPanelLocalizerPointer" title="航向台指针" aria-label="航向台指针"></div>
+						<div class="Ctnr Faded" id="Ctnr_PFDNormalPanelLocalizer" inert="true" title="航向台" aria-label="航向台">
+							<div id="PFDNormalPanelLocalizerPointer" title="航向台指针" aria-label="航向台指针"></div>
 							<ul class="CtrlGroup">
 								<li class="Ctrl ILSCircle"></li>
 								<li class="Ctrl ILSCircle"></li>
@@ -1195,8 +1195,8 @@
 								<li class="Ctrl ILSCircle"></li>
 							</ul>
 						</div>
-						<div class="Ctnr Faded" id="Ctnr_PFDDefaultPanelGlideSlope" inert="true" title="下滑道" aria-label="下滑道">
-							<div id="PFDDefaultPanelGlideSlopePointer" title="下滑道指针" aria-label="下滑道指针"></div>
+						<div class="Ctnr Faded" id="Ctnr_PFDNormalPanelGlideSlope" inert="true" title="下滑道" aria-label="下滑道">
+							<div id="PFDNormalPanelGlideSlopePointer" title="下滑道指针" aria-label="下滑道指针"></div>
 							<ul class="CtrlGroup">
 								<li class="Ctrl ILSCircle"></li>
 								<li class="Ctrl ILSCircle"></li>
@@ -1205,11 +1205,11 @@
 								<li class="Ctrl ILSCircle"></li>
 							</ul>
 						</div>
-						<div class="Ctnr Faded" id="Ctnr_PFDDefaultPanelMarkerBeacon" inert="true" title="指点标" aria-label="指点标">
-							<span id="Label_PFDDefaultPanelMarkerBeacon">指</span>
+						<div class="Ctnr Faded" id="Ctnr_PFDNormalPanelMarkerBeacon" inert="true" title="指点标" aria-label="指点标">
+							<span id="Label_PFDNormalPanelMarkerBeacon">指</span>
 						</div>
-						<div class="Ctnr" id="Ctnr_PFDDefaultPanelRadioAltitude" title="无线电高度表" aria-label="无线电高度表">
-							<ul class="CtrlGroup" id="CtrlGroup_PFDDefaultPanelRadioAltitudeDialScale">
+						<div class="Ctnr" id="Ctnr_PFDNormalPanelRadioAltitude" title="无线电高度表" aria-label="无线电高度表">
+							<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelRadioAltitudeDialScale">
 								<li class="Ctrl"><div class="DialScale"></div></li>
 								<li class="Ctrl" style="transform: rotate(36deg);"><div class="DialScale"></div></li>
 								<li class="Ctrl" style="transform: rotate(72deg);"><div class="DialScale"></div></li>
@@ -1221,20 +1221,20 @@
 								<li class="Ctrl" style="transform: rotate(288deg);"><div class="DialScale"></div></li>
 								<li class="Ctrl" style="transform: rotate(324deg);"><div class="DialScale"></div></li>
 							</ul>
-							<svg class="Progring" id="Progring_PFDDefaultPanelRadioAltitude" viewBox="0 0 85 85" aria-hidden="true">
-								<circle class="ProgringFg" id="ProgringFg_PFDDefaultPanelRadioAltitude" cx="42.5" cy="42.5" r="41" />
+							<svg class="Progring" id="Progring_PFDNormalPanelRadioAltitude" viewBox="0 0 85 85" aria-hidden="true">
+								<circle class="ProgringFg" id="ProgringFg_PFDNormalPanelRadioAltitude" cx="42.5" cy="42.5" r="41" />
 							</svg>
-							<span class="ProgringText" id="ProgringText_PFDDefaultPanelRadioAltitude">
+							<span class="ProgringText" id="ProgringText_PFDNormalPanelRadioAltitude">
 								<span class="SmallerText">无线电<br />
 									高度</span>
 							</span>
 						</div>
-						<div class="Ctnr Faded" id="Ctnr_PFDDefaultPanelDecisionAltitude" inert="true">
-							<span id="Label_PFDDefaultPanelDecisionAltitudeTitle">决断高度</span>
-							<span id="Label_PFDDefaultPanelDecisionAltitudeValue">未知</span>
+						<div class="Ctnr Faded" id="Ctnr_PFDNormalPanelDecisionAltitude" inert="true">
+							<span id="Label_PFDNormalPanelDecisionAltitudeTitle">决断高度</span>
+							<span id="Label_PFDNormalPanelDecisionAltitudeValue">未知</span>
 						</div>
-						<div class="Ctnr RedText Faded" id="Ctnr_PFDDefaultPanelWarning" inert="true">
-							<span id="Label_PFDDefaultPanelWarning">警告信息</span>
+						<div class="Ctnr RedText Faded" id="Ctnr_PFDNormalPanelWarning" inert="true">
+							<span id="Label_PFDNormalPanelWarning">警告信息</span>
 						</div>
 					</div>
 					<div class="Ctnr PFDPanel HiddenHorizontally" id="Ctnr_PFDHUDPanel">
@@ -3588,12 +3588,12 @@
 									<label for="Combobox_SettingsTheme">
 										<span>主题：</span>
 										<select class="Combobox" id="Combobox_SettingsTheme" onchange="SetTheme()">
-											<option value="Auto" selected>自动 (跟随系统)</option>
+											<option value="Auto" selected>自动</option>
 											<option value="Light">浅色</option>
 											<option value="Dark">深色</option>
 											<option value="AtelierSophie2">苏菲的炼金工房2</option>
 											<option value="Genshin">原神</option>
-											<option value="HighContrast">高对比度 (无障碍)</option>
+											<option value="HighContrast">高对比度</option>
 										</select>
 									</label>
 								</li>
@@ -3601,11 +3601,11 @@
 									<label for="Combobox_SettingsCursor">
 										<span>鼠标指针：</span>
 										<select class="Combobox Width240" id="Combobox_SettingsCursor" onchange="SetCursor()">
-											<option value="Default" selected>默认</option>
+											<option value="None" selected>无</option>
 											<option value="BTRAhoge">孤独摇滚！</option>
 											<option value="Genshin">原神</option>
-											<option value="GenshinFurina">原神-芙宁娜</option>
-											<option value="GenshinNahida">原神-纳西妲</option>
+											<option value="GenshinFurina">原神 芙宁娜</option>
+											<option value="GenshinNahida">原神 纳西妲</option>
 											<option value="SilentWitch">Silent Witch 沉默魔女的秘密</option>
 										</select>
 									</label>
@@ -3631,7 +3631,7 @@
 									<label for="Combobox_SettingsAnim">
 										<span>动画：</span>
 										<select class="Combobox" id="Combobox_SettingsAnim" onchange="SetAnim()">
-											<option value="0">禁用 (无障碍)</option>
+											<option value="0">禁用</option>
 											<option value="100">快速 (100ms)</option>
 											<option value="250" selected>中速 (250ms)</option>
 											<option value="500">慢速 (500ms)</option>
@@ -3639,14 +3639,14 @@
 									</label>
 								</li>
 							</ul>
-							<p>「<a href="https://zh.wikipedia.org/wiki/主飞行显示器">PFD</a> 样式」中，「默认」样式的配色取决于主题。除此之外的样式均不受主题的影响。</p>
+							<p>「<a href="https://zh.wikipedia.org/wiki/主飞行显示器">PFD</a> 样式」中，普通样式的配色取决于主题。除此之外的样式均不受主题的影响。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsPFDStyle">
 										<span>PFD 样式：</span>
 										<select class="Combobox" id="Combobox_SettingsPFDStyle" onchange="SetPFDStyle()">
 											<optgroup label="PFD">
-												<option value="Default" selected>默认</option>
+												<option value="Normal" selected>普通</option>
 												<option value="HUD">HUD</option>
 												<option value="Bocchi737" disabled="true">波奇737 (制作中)</option>
 											</optgroup>
@@ -3665,8 +3665,8 @@
 											<option value="Sans-serif">黑体 (Sans-serif)</option>
 											<option value="Serif">宋体 (Serif)</option>
 											<option value="Monospace">等宽字体 (Monospace)</option>
-											<option value="Inter, sans-serif">Inter</option>
-											<option value="Century Gothic, sans-serif">Century Gothic</option>
+											<option value="Inter">Inter</option>
+											<option value="Century Gothic">Century Gothic</option>
 										</select>
 									</label>
 								</li>
@@ -3873,18 +3873,6 @@
 									</label>
 								</li>
 								<li class="Ctrl">
-									<label for="Checkbox_SettingsUseJapaneseOrthography">
-										<input class="Checkbox" id="Checkbox_SettingsUseJapaneseOrthography" type="checkbox" checked="false" onchange="SetUseJapaneseOrthography()" />
-										<span>使用日文字形</span>
-									</label>
-								</li>
-								<li class="Ctrl">
-									<label for="Textbox_SettingsFont">
-										<span>字体：</span>
-										<input class="Textbox" id="Textbox_SettingsFont" type="text" onchange="SetFont()" />
-									</label>
-								</li>
-								<li class="Ctrl">
 									<label for="Checkbox_SettingsVideoFootageMode">
 										<input class="Checkbox" id="Checkbox_SettingsVideoFootageMode" type="checkbox" checked="false" onchange="SetVideoFootageMode()" />
 										<span>视频素材模式</span>
@@ -4023,9 +4011,8 @@
 							<legend>关于</legend>
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>版本 v0.55 (<time datetime="2025-11-25" pubdate="pubdate">2025/11/25</time>) Beta Test<br />
+							<p>版本 v1.00 (<time datetime="2025-12-14" pubdate="pubdate">2025/12/14</time>)<br />
 								始于 2024/12/01</p>
-							<p><span class="RedText">注意：</span>测试版本更新迭代时可能会丢失用户数据。</p>
 							<p class="GreenText Hidden" id="Label_HelpPWANewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
