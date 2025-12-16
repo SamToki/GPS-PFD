@@ -15,13 +15,12 @@
 		var TheDocument = {
 			NavCtrls: document.getElementsByClassName("Nav"),
 			Sections: document.getElementsByTagName("section"),
-			ActiveSectionID: "",
-			PWAInstallation: null
+			ActiveSectionID: ""
 		},
-		Interaction = {
-			DoNotHide: [0],
-			Dialog: [0],
-			IsPointerDown: false, IsInIMEComposition: false, ScreenWakeLock: null
+		System0 = {
+			IsPointerDown: false, IsInIMEComposition: false,
+			DoNotHide: [0], Dialog: [0],
+			ScreenWakeLock: null, PWAInstallation: null, RepairedUserData: ""
 		},
 		Automation = {
 			ClockRate: 20,
@@ -287,9 +286,9 @@
 			RemoveClass(ID, "HiddenInMobileLayout");
 			RemoveClass(ID, "Faded");
 			ChangeInert(ID, false);
-			Interaction.DoNotHide[Interaction.DoNotHide.length] = ID;
+			System0.DoNotHide[System0.DoNotHide.length] = ID;
 			setTimeout(function() {
-				Interaction.DoNotHide.splice(1, 1);
+				System0.DoNotHide.splice(1, 1);
 			}, 20);
 		}
 		function ShowWithoutProtection(ID) {
@@ -310,22 +309,22 @@
 				Elements[Looper].classList.remove("Faded");
 				Elements[Looper].inert = false;
 			}
-			Interaction.DoNotHide[Interaction.DoNotHide.length] = Class;
+			System0.DoNotHide[System0.DoNotHide.length] = Class;
 			setTimeout(function() {
-				Interaction.DoNotHide.splice(1, 1);
+				System0.DoNotHide.splice(1, 1);
 			}, 20);
 		}
 		function Hide(ID) {
-			if(Interaction.DoNotHide.includes(ID) == false) {
+			if(System0.DoNotHide.includes(ID) == false) {
 				AddClass(ID, "Hidden");
 				ChangeInert(ID, true);
 			}
 		}
 		function HideByClass(Class) {
-			if(Interaction.DoNotHide.includes(Class) == false) {
+			if(System0.DoNotHide.includes(Class) == false) {
 				let Elements = document.getElementsByClassName(Class);
 				for(let Looper = 0; Looper < Elements.length; Looper++) {
-					if(Interaction.DoNotHide.includes(Elements[Looper].id) == false) {
+					if(System0.DoNotHide.includes(Elements[Looper].id) == false) {
 						Elements[Looper].classList.add("Hidden");
 						Elements[Looper].inert = true;
 					}
@@ -333,28 +332,28 @@
 			}
 		}
 		function HideHorizontally(ID) {
-			if(Interaction.DoNotHide.includes(ID) == false) {
+			if(System0.DoNotHide.includes(ID) == false) {
 				AddClass(ID, "HiddenHorizontally");
 				ChangeInert(ID, true);
 			}
 		}
 		function HideToCorner(ID) {
-			if(Interaction.DoNotHide.includes(ID) == false) {
+			if(System0.DoNotHide.includes(ID) == false) {
 				AddClass(ID, "HiddenToCorner");
 				ChangeInert(ID, true);
 			}
 		}
 		function Fade(ID) {
-			if(Interaction.DoNotHide.includes(ID) == false) {
+			if(System0.DoNotHide.includes(ID) == false) {
 				AddClass(ID, "Faded");
 				ChangeInert(ID, true);
 			}
 		}
 		function FadeByClass(Class) {
-			if(Interaction.DoNotHide.includes(Class) == false) {
+			if(System0.DoNotHide.includes(Class) == false) {
 				let Elements = document.getElementsByClassName(Class);
 				for(let Looper = 0; Looper < Elements.length; Looper++) {
-					if(Interaction.DoNotHide.includes(Elements[Looper].id) == false) {
+					if(System0.DoNotHide.includes(Elements[Looper].id) == false) {
 						Elements[Looper].classList.add("Faded");
 						Elements[Looper].inert = true;
 					}
@@ -549,8 +548,8 @@
 
 		// PWA
 		function InstallPWA() {
-			if(TheDocument.PWAInstallation != null) {
-				TheDocument.PWAInstallation.prompt();
+			if(System0.PWAInstallation != null) {
+				System0.PWAInstallation.prompt();
 			}
 		}
 
@@ -571,23 +570,23 @@
 	// On click (mouse left button, Enter key or Space key)
 	document.addEventListener("click", function() {
 		setTimeout(HideDropctrlGroups, 0);
-		Interaction.IsPointerDown = false;
+		System0.IsPointerDown = false;
 	});
 
 	// On mouse button
 	document.addEventListener("pointerdown", function() {
 		FadeHotkeyIndicators();
-		Interaction.IsPointerDown = true;
+		System0.IsPointerDown = true;
 	});
 	document.addEventListener("pointerup", function() {
-		Interaction.IsPointerDown = false;
+		System0.IsPointerDown = false;
 	});
 
 	// On Esc key
 	document.addEventListener("keydown", function(Hotkey) {
 		if(Hotkey.key == "Escape") {
 			HideDropctrlGroups();
-			if(Interaction.Dialog.length > 1) {
+			if(System0.Dialog.length > 1) {
 				setTimeout(function() { // Set a delay for the Esc key event listener in script.js to respond first, so it knows whether a dialog is present, before that dialog gets dismissed.
 					AnswerDialog(3);
 				}, 0);
@@ -597,10 +596,10 @@
 
 	// On IME composition
 	document.addEventListener("compositionstart", function() {
-		Interaction.IsInIMEComposition = true;
+		System0.IsInIMEComposition = true;
 	})
 	document.addEventListener("compositionend", function() {
-		Interaction.IsInIMEComposition = false;
+		System0.IsInIMEComposition = false;
 	})
 
 	// On resizing window
@@ -622,14 +621,14 @@
 
 	// Screen wake lock (https://developer.chrome.com/docs/capabilities/web-apis/wake-lock)
 	document.addEventListener("visibilitychange", function() {
-		if(Interaction.ScreenWakeLock != null && document.visibilityState == "visible") {
+		if(System0.ScreenWakeLock != null && document.visibilityState == "visible") {
 			RequestScreenWakeLock();
 		}
 	});
 
 	// When PWA installation is available
 	window.addEventListener("beforeinstallprompt", function(Event) { // Works on Google Chrome for Android.
-		TheDocument.PWAInstallation = Event;
+		System0.PWAInstallation = Event;
 		ChangeDisabled("Button_SettingsInstallPWA", false);
 	});
 
@@ -692,7 +691,7 @@
 	function HideDropctrlGroups() {
 		let DropctrlGroups = document.getElementsByClassName("DropctrlGroup");
 		for(let Looper = 0; Looper < DropctrlGroups.length; Looper++) {
-			if(Interaction.DoNotHide.includes(DropctrlGroups[Looper].id) == false) {
+			if(System0.DoNotHide.includes(DropctrlGroups[Looper].id) == false) {
 				if(DropctrlGroups[Looper].id != "DropctrlGroup_Nav") {
 					DropctrlGroups[Looper].classList.add("HiddenToCorner");
 					DropctrlGroups[Looper].inert = true;
@@ -775,13 +774,13 @@
 		// Dialog status
 		if(Event != "Previous") {
 			let IsDialogEventAlreadyExisting = false;
-			for(let Looper = 1; Looper < Interaction.Dialog.length; Looper++) {
-				if(Interaction.Dialog[Looper].Event == Event) {
+			for(let Looper = 1; Looper < System0.Dialog.length; Looper++) {
+				if(System0.Dialog[Looper].Event == Event) {
 					IsDialogEventAlreadyExisting = true;
 				}
 			}
 			if(IsDialogEventAlreadyExisting == false) {
-				Interaction.Dialog[Interaction.Dialog.length] = {
+				System0.Dialog[System0.Dialog.length] = {
 					Event: Event,
 					Icon: Icon,
 					Text: Text,
@@ -789,10 +788,10 @@
 				}
 			}
 		} else {
-			if(Interaction.Dialog.length > 1) {
-				Interaction.Dialog.splice(Interaction.Dialog.length - 1, 1);
+			if(System0.Dialog.length > 1) {
+				System0.Dialog.splice(System0.Dialog.length - 1, 1);
 			}
-			if(Interaction.Dialog.length <= 1) {
+			if(System0.Dialog.length <= 1) {
 				Fade("ScreenFilter_Dialog");
 				Hide("Window_Dialog");
 				ChangeInert("Topbar", false);
@@ -806,7 +805,7 @@
 		HideHorizontally("Ctrl_DialogIconQuestion");
 		HideHorizontally("Ctrl_DialogIconCaution");
 		HideHorizontally("Ctrl_DialogIconError");
-		switch(Interaction.Dialog[Interaction.Dialog.length - 1].Icon) {
+		switch(System0.Dialog[System0.Dialog.length - 1].Icon) {
 			case "Info":
 				Show("Ctrl_DialogIconInfo");
 				break;
@@ -820,32 +819,32 @@
 				Show("Ctrl_DialogIconError");
 				break;
 			default:
-				AlertSystemError("The value of Interaction.Dialog[Interaction.Dialog.length - 1].Icon \"" + Interaction.Dialog[Interaction.Dialog.length - 1].Icon + "\" in function ShowDialog is invalid.");
+				AlertSystemError("The value of System0.Dialog[System0.Dialog.length - 1].Icon \"" + System0.Dialog[System0.Dialog.length - 1].Icon + "\" in function ShowDialog is invalid.");
 				break;
 		}
-		ChangeText("Label_DialogText", Interaction.Dialog[Interaction.Dialog.length - 1].Text);
+		ChangeText("Label_DialogText", System0.Dialog[System0.Dialog.length - 1].Text);
 
 		// Options
-		if(Interaction.Dialog[Interaction.Dialog.length - 1].CheckboxOption != "") {
+		if(System0.Dialog[System0.Dialog.length - 1].CheckboxOption != "") {
 			Show("Ctrl_DialogCheckboxOption");
 			ChangeChecked("Checkbox_DialogCheckboxOption", false);
-			ChangeText("Label_DialogCheckboxOption", Interaction.Dialog[Interaction.Dialog.length - 1].CheckboxOption);
+			ChangeText("Label_DialogCheckboxOption", System0.Dialog[System0.Dialog.length - 1].CheckboxOption);
 		} else {
 			HideHorizontally("Ctrl_DialogCheckboxOption");
 		}
-		if(Interaction.Dialog[Interaction.Dialog.length - 1].Option1 != "") {
+		if(System0.Dialog[System0.Dialog.length - 1].Option1 != "") {
 			Show("Ctrl_DialogOption1");
-			ChangeText("Button_DialogOption1", Interaction.Dialog[Interaction.Dialog.length - 1].Option1);
+			ChangeText("Button_DialogOption1", System0.Dialog[System0.Dialog.length - 1].Option1);
 		} else {
 			HideHorizontally("Ctrl_DialogOption1");
 		}
-		if(Interaction.Dialog[Interaction.Dialog.length - 1].Option2 != "") {
+		if(System0.Dialog[System0.Dialog.length - 1].Option2 != "") {
 			Show("Ctrl_DialogOption2");
-			ChangeText("Button_DialogOption2", Interaction.Dialog[Interaction.Dialog.length - 1].Option2);
+			ChangeText("Button_DialogOption2", System0.Dialog[System0.Dialog.length - 1].Option2);
 		} else {
 			HideHorizontally("Ctrl_DialogOption2");
 		}
-		ChangeText("Button_DialogOption3", Interaction.Dialog[Interaction.Dialog.length - 1].Option3); // Option 3 is the default option, will be selected when pressing Esc key. Therefore: When there is a single "OK", put it here. When there are multiple options, put "Cancel" here.
+		ChangeText("Button_DialogOption3", System0.Dialog[System0.Dialog.length - 1].Option3); // Option 3 is the default option, will be selected when pressing Esc key. Therefore: When there is a single "OK", put it here. When there are multiple options, put "Cancel" here.
 
 		// Show dialog and disable other ctrls
 		Show("ScreenFilter_Dialog");
@@ -857,12 +856,12 @@
 
 	// Screen wake lock
 	const RequestScreenWakeLock = async() => {
-		Interaction.ScreenWakeLock = await navigator.wakeLock.request();
+		System0.ScreenWakeLock = await navigator.wakeLock.request();
 	}
 	function ReleaseScreenWakeLock() {
-		if(Interaction.ScreenWakeLock != null) {
-			Interaction.ScreenWakeLock.release();
-			Interaction.ScreenWakeLock = null;
+		if(System0.ScreenWakeLock != null) {
+			System0.ScreenWakeLock.release();
+			System0.ScreenWakeLock = null;
 		}
 	}
 
@@ -877,7 +876,7 @@ function ForceStop() {
 	});
 
 	// Clear dialog events and hide dialog window
-	Interaction.Dialog = [0];
+	System0.Dialog = [0];
 	setTimeout(function() {
 		ShowDialog("Previous");
 	}, 20);

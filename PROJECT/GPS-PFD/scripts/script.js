@@ -215,6 +215,7 @@
 		AirportLibrary0 = {
 			DepartureAirport: 0, ActiveAirport: 0, ActiveRunwayName: ""
 		};
+		System0.Deletion = 0;
 		Automation.ClockPFD = null;
 		Automation.ClockAvgSpeeds = null;
 
@@ -643,6 +644,7 @@
 	window.onload = Load();
 	function Load() {
 		// User data
+		RepairUserData();
 		if(localStorage.System != undefined) {
 			System = JSON.parse(localStorage.getItem("System"));
 		}
@@ -676,17 +678,16 @@
 				AlertSystemError("The value of System.I18n.Language \"" + System.I18n.Language + "\" in function Load is invalid.");
 				break;
 		}
-		if(System.Version.GPSPFD != undefined) {
-			if(Math.trunc(CurrentVersion) - Math.trunc(System.Version.GPSPFD) >= 1) {
-				ShowDialog("System_MajorUpdateDetected",
-					"Info",
-					"检测到大版本更新。若您继续使用旧版本的用户数据，则有可能发生兼容性问题。敬请留意。",
-					"", "", "", "确定");
-				System.Version.GPSPFD = CurrentVersion;
-			}
-		} else {
-			System.Version.GPSPFD = CurrentVersion;
+		if(System.Version.GPSPFD != undefined && System0.RepairedUserData != "") {
+			ShowDialog("System_MajorUpdateDetected",
+				"Info",
+				"检测到影响用户数据的版本更新。若您继续使用旧版本的用户数据，则有可能发生兼容性问题。敬请留意。<br />" +
+				"<br />" +
+				"版本：v" + System.Version.GPSPFD.toFixed(2) + " → v" + CurrentVersion.toFixed(2) + "<br />" +
+				"已修复用户数据：" + System0.RepairedUserData,
+				"", "", "", "确定");
 		}
+		System.Version.GPSPFD = CurrentVersion;
 		if(localStorage.GPSPFD_Subsystem != undefined) {
 			Subsystem = JSON.parse(localStorage.getItem("GPSPFD_Subsystem"));
 		}
@@ -3316,7 +3317,7 @@
 			}
 		}
 		function ConfirmDeleteAirport(Number) {
-			Interaction.Deletion = Number;
+			System0.Deletion = Number;
 			ShowDialog("AirportLibrary_ConfirmDeleteAirport",
 				"Caution",
 				"您确认要删除机场「" + ConvertEmptyName(AirportLibrary.Airport[Number].Name) + "」？",
@@ -3428,7 +3429,7 @@
 			RefreshAirportLibrary();
 		}
 		function ConfirmDeleteRunway(Number) {
-			Interaction.Deletion = Number;
+			System0.Deletion = Number;
 			ShowDialog("AirportLibrary_ConfirmDeleteRunway",
 				"Caution",
 				"您确认要删除跑道 " +
@@ -3974,7 +3975,7 @@
 
 	// Dialog
 	function AnswerDialog(Selector) {
-		let DialogEvent = Interaction.Dialog[Interaction.Dialog.length - 1].Event;
+		let DialogEvent = System0.Dialog[System0.Dialog.length - 1].Event;
 		ShowDialog("Previous");
 		switch(DialogEvent) {
 			case "System_LanguageUnsupported":
@@ -4073,14 +4074,14 @@
 			case "AirportLibrary_ConfirmDeleteAirport":
 				switch(Selector) {
 					case 2:
-						if(AirportLibrary.AirportSelection.Departure >= Interaction.Deletion && AirportLibrary.AirportSelection.Departure > 1) {
+						if(AirportLibrary.AirportSelection.Departure >= System0.Deletion && AirportLibrary.AirportSelection.Departure > 1) {
 							AirportLibrary.AirportSelection.Departure--;
 						}
-						if(AirportLibrary.AirportSelection.Arrival >= Interaction.Deletion && AirportLibrary.AirportSelection.Arrival > 1) {
+						if(AirportLibrary.AirportSelection.Arrival >= System0.Deletion && AirportLibrary.AirportSelection.Arrival > 1) {
 							AirportLibrary.AirportSelection.Arrival--;
 						}
-						AirportLibrary.Airport.splice(Interaction.Deletion, 1);
-						Interaction.Deletion = 0;
+						AirportLibrary.Airport.splice(System0.Deletion, 1);
+						System0.Deletion = 0;
 						RefreshPFD();
 						RefreshAirportLibrary();
 						break;
@@ -4094,12 +4095,12 @@
 			case "AirportLibrary_ConfirmDeleteRunway":
 				switch(Selector) {
 					case 2:
-						if(AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection >= Interaction.Deletion &&
+						if(AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection >= System0.Deletion &&
 						AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection > 1) {
 							AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].RunwaySelection--;
 						}
-						AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway.splice(Interaction.Deletion, 1);
-						Interaction.Deletion = 0;
+						AirportLibrary.Airport[AirportLibrary.AirportSelection.Departure].Runway.splice(System0.Deletion, 1);
+						System0.Deletion = 0;
 						RefreshPFD();
 						RefreshAirportLibrary();
 						break;
