@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v1.01 (2025/12/26). Since 2024/12/01." />
+		<meta name="version" content="v1.02 (2026/01/11). Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -2514,7 +2514,7 @@
 										<li class="Ctrl" style="transform: rotate(116deg);"><div class="DialScale2"></div></li>
 										<li class="Ctrl" style="transform: rotate(120deg);"><div class="DialScale1"></div><span class="DialNumber4" style="transform: rotate(-120deg);">120</span></li>
 									</ul>
-									<span id="Label_PFDAutomobileSpeedometerPanelSpeedUnit">公里/小时</span>
+									<span id="Label_PFDAutomobileSpeedometerPanelSpeedUnit">速度单位</span>
 								</li>
 								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelNeedle">
 									<div class="Needle" id="Needle_PFDAutomobileSpeedometerPanel">
@@ -3288,7 +3288,7 @@
 					<li class="Item">
 						<fieldset>
 							<legend>权限</legend>
-							<p>本应用程序需要使用<a href="https://zh.wikipedia.org/wiki/位置服务">位置服务</a>与<a href="https://zh.wikipedia.org/wiki/加速计">加速计</a>来实现核心功能。请阅读<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('Item_HelpPrivacyStatement')">隐私权声明</a>。</p>
+							<p>本应用程序需要使用位置服务与<a href="https://zh.wikipedia.org/wiki/加速计">加速计</a>来实现核心功能。请阅读<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('Item_HelpPrivacyStatement')">隐私权声明</a>。</p>
 							<p class="Hidden" id="Label_SettingsRequestAccelPermission" inert="true"><a href="https://zh.wikipedia.org/wiki/苹果公司">苹果公司</a>出于加强保护用户隐私的理由，在 <a href="https://zh.wikipedia.org/wiki/iOS">iOS</a> 13+ 环境下，您需要手动允许本应用程序使用加速计。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl Hidden" id="Ctrl_SettingsRequestAccelPermission" inert="true">
@@ -3757,9 +3757,9 @@
 									<label for="Combobox_SettingsSpeedUnit">
 										<span>速度：</span>
 										<select class="Combobox" id="Combobox_SettingsSpeedUnit" onchange="SetSpeedUnit()">
-											<option value="KilometerPerHour">公里/小时 (km/h)</option>
-											<option value="MilePerHour">英里/小时 (mph)</option>
-											<option value="Knot" selected>节，海里/小时 (kt)</option>
+											<option value="KilometerPerHour">公里/时 (km/h)</option>
+											<option value="MilePerHour">英里/时 (mph)</option>
+											<option value="Knot" selected>节，海里/时 (kt)</option>
 										</select>
 									</label>
 								</li>
@@ -3910,8 +3910,8 @@
 					<li class="Item">
 						<fieldset>
 							<legend>简介</legend>
-							<p>GPS-PFD，利用 <a href="https://zh.wikipedia.org/wiki/GPS">GPS</a> 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。</p>
-							<p>备注：这里的「GPS」指的是位置服务，其利用以 GPS 为代表的<a href="https://zh.wikipedia.org/wiki/卫星导航系统">卫星导航系统 (GNSS) </a>来精确定位。卫星导航系统包括美国 GPS、俄罗斯 <a href="https://zh.wikipedia.org/wiki/GLONASS">GLONASS</a>，以及中国<a href="https://zh.wikipedia.org/wiki/北斗卫星导航系统">北斗</a>等。加速计亦称加速度传感器、重力感应器，用于测量姿态、速度与高度。</p>
+							<p>GPS-PFD，利用 GPS 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。</p>
+							<p>备注：这里的「GPS」指的是位置服务，其利用以 GPS 为代表的卫星导航系统来精确定位。卫星导航系统包括美国 GPS、俄罗斯 <a href="https://zh.wikipedia.org/wiki/GLONASS">GLONASS</a>，以及中国<a href="https://zh.wikipedia.org/wiki/北斗卫星导航系统">北斗</a>等。加速计亦称加速度传感器、重力感应器，用于测量姿态、速度与高度。</p>
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_HelpReadBeforeUse">
@@ -3931,7 +3931,7 @@
 					<li class="Item" id="Item_HelpTutorial">
 						<fieldset>
 							<legend>教程</legend>
-							<p>本应用程序的教程以 <a href="https://zh.wikipedia.org/wiki/PDF">PDF</a> 文档的形式提供。这方便您保存至本地，还可以打印出来备用。</p>
+							<p>本应用程序的教程以 PDF 文档的形式提供。这方便您保存至本地，还可以打印出来备用。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl WidthDividedBy2">
 									<a class="Button" href="docs/GPS-PFD%20说明文档.pdf">说明文档</a>
@@ -3985,11 +3985,6 @@
 							<legend>版权说明</legend>
 							<p>本站的源代码遵循 <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL v3 软件开源协议</a>。本站的部分内容为他人作品，版权为原作者所有，本站遵循 <a href="https://zh.wikipedia.org/wiki/fair_use">fair use</a> 原则使用并于 <a href="#Item_HelpCredits" onclick="ShowIAmHere('Item_HelpCredits')">Credits</a> 标注来源。</p>
 							<p>除上述内容之外，本站所有内容以及排版、美术设计均保留版权。</p>
-							<p>「<a href="https://zh.moegirl.org.cn/苏菲的炼金工房2_～不可思议梦的炼金术士～">苏菲的炼金工房</a>」是 <a href="https://zh.moegirl.org.cn/光荣特库摩游戏">KOEI TECMO GAMES</a> CO., LTD. 的作品与商标。<br />
-								「<a href="https://zh.moegirl.org.cn/孤独摇滚！">孤独摇滚！</a>」是 <span lang="ja-JP"><a href="https://zh.moegirl.org.cn/はまじあき">はまじあき</a>／<a href="https://zh.moegirl.org.cn/芳文社">芳文社</a>・<a href="https://zh.moegirl.org.cn/アニプレックス">アニプレックス</a></span> 的作品与商标。<br />
-								「<a href="https://zh.moegirl.org.cn/原神">原神</a>」是 <a href="https://zh.moegirl.org.cn/miHoYo">miHoYo</a> Inc. 的作品与商标。<br />
-								「<a href="https://zh.wikipedia.org/wiki/iOS">iOS</a>」是 <a href="https://zh.wikipedia.org/wiki/苹果公司">Apple</a> Inc. 的商标。<br />
-								「<a href="https://zh.moegirl.org.cn/沉默的魔女">Silent Witch 沉默魔女的秘密</a>」是 <span lang="ja-JP">依空まつり・藤実なんな/<a href="https://zh.moegirl.org.cn/KADOKAWA">KADOKAWA</a>/セレンディア学園広報部</span> 的作品与商标。</p>
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_HelpCredits">
@@ -4011,7 +4006,7 @@
 							<legend>关于</legend>
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>版本 v1.01 (<time datetime="2025-12-26" pubdate="pubdate">2025/12/26</time>)<br />
+							<p>版本 v1.02 (<time datetime="2026-01-11" pubdate="pubdate">2026/01/11</time>)<br />
 								始于 2024/12/01</p>
 							<p class="GreenText Hidden" id="Label_HelpPWANewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
 							<ul class="CtrlGroup BelowParagraph">

@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 1.01,
+		const CurrentVersion = 1.02,
 		Preset = {
 			Subsystem: {
 				I18n: {
@@ -5010,18 +5010,18 @@
 					return "PULL UP!";
 				}
 			case "KilometerPerHour":
-				return "公里/小时";
+				return "公里/时";
 			case "KilometerPerHourOnPFD":
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
-					return "公里/小时";
+					return "公里/时";
 				} else {
 					return "KM/H";
 				}
 			case "MilePerHour":
-				return "英里/小时";
+				return "英里/时";
 			case "MilePerHourOnPFD":
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
-					return "英里/小时";
+					return "英里/时";
 				} else {
 					return "MPH";
 				}
