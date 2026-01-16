@@ -3597,6 +3597,34 @@
 										</select>
 									</label>
 								</li>
+							</ul>
+							<p>「<a href="https://zh.wikipedia.org/wiki/主飞行显示器">PFD</a> 样式」中，普通样式的配色取决于主题。除此之外的样式均不受主题的影响。</p>
+							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl">
+									<label for="Combobox_SettingsPFDStyle">
+										<span>PFD 样式：</span>
+										<select class="Combobox" id="Combobox_SettingsPFDStyle" onchange="SetPFDStyle()">
+											<option value="Normal" selected>普通</option>
+											<option value="HUD">HUD</option>
+											<option value="Bocchi737" disabled="true">波奇737 (制作中)</option>
+											<option value="AnalogGauges" disabled="true">传统仪表 (制作中)</option>
+											<option value="AutomobileSpeedometer">汽车速度表</option>
+										</select>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Combobox_SettingsPFDFont">
+										<span>PFD 字体：</span>
+										<select class="Combobox" id="Combobox_SettingsPFDFont" onchange="SetPFDFont()">
+											<option value="Inherit" selected>继承</option>
+											<option value="Sans-serif">黑体 (Sans-serif)</option>
+											<option value="Serif">宋体 (Serif)</option>
+											<option value="Monospace">等宽字体 (Monospace)</option>
+											<option value="Inter">Inter</option>
+											<option value="Century Gothic">Century Gothic</option>
+										</select>
+									</label>
+								</li>
 								<li class="Ctrl">
 									<label for="Combobox_SettingsCursor">
 										<span>鼠标指针：</span>
@@ -3614,6 +3642,12 @@
 									<label for="Checkbox_SettingsBlurBgImage">
 										<input class="Checkbox" id="Checkbox_SettingsBlurBgImage" type="checkbox" checked="true" onchange="SetBlurBgImage()" />
 										<span>模糊背景图像</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Checkbox_SettingsFlipPFDVertically">
+										<input class="Checkbox" id="Checkbox_SettingsFlipPFDVertically" type="checkbox" checked="false" onchange="SetFlipPFDVertically()" />
+										<span>垂直翻转 PFD</span>
 									</label>
 								</li>
 								<li class="Ctrl">
@@ -3636,44 +3670,6 @@
 											<option value="250" selected>中速 (250ms)</option>
 											<option value="500">慢速 (500ms)</option>
 										</select>
-									</label>
-								</li>
-							</ul>
-							<p>「<a href="https://zh.wikipedia.org/wiki/主飞行显示器">PFD</a> 样式」中，普通样式的配色取决于主题。除此之外的样式均不受主题的影响。</p>
-							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl">
-									<label for="Combobox_SettingsPFDStyle">
-										<span>PFD 样式：</span>
-										<select class="Combobox" id="Combobox_SettingsPFDStyle" onchange="SetPFDStyle()">
-											<optgroup label="PFD">
-												<option value="Normal" selected>普通</option>
-												<option value="HUD">HUD</option>
-												<option value="Bocchi737" disabled="true">波奇737 (制作中)</option>
-											</optgroup>
-											<optgroup label="非 PFD">
-												<option value="AnalogGauges" disabled="true">传统仪表 (制作中)</option>
-												<option value="AutomobileSpeedometer">汽车速度表</option>
-											</optgroup>
-										</select>
-									</label>
-								</li>
-								<li class="Ctrl">
-									<label for="Combobox_SettingsPFDFont">
-										<span>PFD 字体：</span>
-										<select class="Combobox" id="Combobox_SettingsPFDFont" onchange="SetPFDFont()">
-											<option value="Inherit" selected>继承</option>
-											<option value="Sans-serif">黑体 (Sans-serif)</option>
-											<option value="Serif">宋体 (Serif)</option>
-											<option value="Monospace">等宽字体 (Monospace)</option>
-											<option value="Inter">Inter</option>
-											<option value="Century Gothic">Century Gothic</option>
-										</select>
-									</label>
-								</li>
-								<li class="Ctrl">
-									<label for="Checkbox_SettingsFlipPFDVertically">
-										<input class="Checkbox" id="Checkbox_SettingsFlipPFDVertically" type="checkbox" checked="false" onchange="SetFlipPFDVertically()" />
-										<span>垂直翻转 PFD</span>
 									</label>
 								</li>
 								<li class="Ctrl">
