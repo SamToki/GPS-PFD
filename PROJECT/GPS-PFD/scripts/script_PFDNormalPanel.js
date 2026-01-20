@@ -105,16 +105,16 @@
 							ChangeAnim("Ctrl_PFDNormalPanelAttitudePitch", "");
 							ChangeAnim("Ctrl_PFDNormalPanelAttitudeRoll", "");
 						}
-						ChangeTop("Ctrl_PFDNormalPanelAttitudeBg", "calc(50% - 2000px + " + 10 * PFD0.Stats.Attitude.Pitch2 * Math.cos(DegToRad(Math.abs(PFD0.Stats.Attitude.Roll))) + "px)");
-						ChangeLeft("Ctrl_PFDNormalPanelAttitudeBg", "calc(50% - 2000px + " + 10 * PFD0.Stats.Attitude.Pitch2 * Math.sin(DegToRad(PFD0.Stats.Attitude.Roll)) + "px)");
-						ChangeRotate("Ctrl_PFDNormalPanelAttitudeBg", -PFD0.Stats.Attitude.Roll);
-						ChangeTop("CtrlGroup_PFDNormalPanelAttitudePitch", "calc(50% - 900px + " + 10 * PFD0.Stats.Attitude.Pitch + "px)");
-						ChangeRotate("Ctrl_PFDNormalPanelAttitudePitch", -PFD0.Stats.Attitude.Roll);
-						ChangeRotate("CtrlGroup_PFDNormalPanelAttitudeRollScale", -PFD0.Stats.Attitude.Roll);
-						if(PFD0.Stats.Attitude.Roll <= 0) {
-							document.getElementById("ProgringFg_PFDNormalPanelAttitudeRoll").style.strokeDasharray = (Math.PI * 420) * (-PFD0.Stats.Attitude.Roll / 360) + "px, " + (Math.PI * 420) * (1 + PFD0.Stats.Attitude.Roll / 360) + "px";
+						ChangeTop("Ctrl_PFDNormalPanelAttitudeBg", "calc(50% - 2000px + " + 10 * PFD0.Stats.Attitude.PitchDisplay2 * Math.cos(DegToRad(Math.abs(PFD0.Stats.Attitude.RollDisplay))) + "px)");
+						ChangeLeft("Ctrl_PFDNormalPanelAttitudeBg", "calc(50% - 2000px + " + 10 * PFD0.Stats.Attitude.PitchDisplay2 * Math.sin(DegToRad(PFD0.Stats.Attitude.RollDisplay)) + "px)");
+						ChangeRotate("Ctrl_PFDNormalPanelAttitudeBg", -PFD0.Stats.Attitude.RollDisplay);
+						ChangeTop("CtrlGroup_PFDNormalPanelAttitudePitch", "calc(50% - 900px + " + 10 * PFD0.Stats.Attitude.PitchDisplay + "px)");
+						ChangeRotate("Ctrl_PFDNormalPanelAttitudePitch", -PFD0.Stats.Attitude.RollDisplay);
+						ChangeRotate("CtrlGroup_PFDNormalPanelAttitudeRollScale", -PFD0.Stats.Attitude.RollDisplay);
+						if(PFD0.Stats.Attitude.RollDisplay <= 0) {
+							document.getElementById("ProgringFg_PFDNormalPanelAttitudeRoll").style.strokeDasharray = (Math.PI * 420) * (-PFD0.Stats.Attitude.RollDisplay / 360) + "px, " + (Math.PI * 420) * (1 + PFD0.Stats.Attitude.RollDisplay / 360) + "px";
 						} else {
-							document.getElementById("ProgringFg_PFDNormalPanelAttitudeRoll").style.strokeDasharray = "0, " + (Math.PI * 420) * (1 - PFD0.Stats.Attitude.Roll / 360) + "px, " + (Math.PI * 420) * (PFD0.Stats.Attitude.Roll / 360) + "px";
+							document.getElementById("ProgringFg_PFDNormalPanelAttitudeRoll").style.strokeDasharray = "0, " + (Math.PI * 420) * (1 - PFD0.Stats.Attitude.RollDisplay / 360) + "px, " + (Math.PI * 420) * (PFD0.Stats.Attitude.RollDisplay / 360) + "px";
 						}
 						if(PFD0.Alert.Active.AttitudeWarning == "BankAngle") {
 							AddClass("ProgringFg_PFDNormalPanelAttitudeRoll", "BankAngleWarning");
@@ -663,8 +663,8 @@
 				if(PFD.Nav.IsEnabled == true && PFD0.Status.GPS.IsPositionAvailable == true) {
 					Show("Ctnr_PFDNormalPanelDME");
 					ChangeText("Label_PFDNormalPanelDMERunway", Translate("Runway") + " " + AirportLibrary0.ActiveRunwayName);
-					if(PFD0.Stats.Nav.Distance < 10000000) { // Max 10000 kilometers.
-						ChangeText("Label_PFDNormalPanelDMEDistance", ConvertUnit(PFD0.Stats.Nav.Distance, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Distance + "OnPFD") + "</span>");
+					if(PFD0.Stats.Nav.DistanceDisplay < 10000000) { // Max 10000 kilometers.
+						ChangeText("Label_PFDNormalPanelDMEDistance", ConvertUnit(PFD0.Stats.Nav.DistanceDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Distance + "OnPFD") + "</span>");
 						if(PFD0.Stats.Speed.GSDisplay > 0 && PFD0.Stats.Nav.ETA < 360000000) { // Max 100 hours.
 							ChangeText("Label_PFDNormalPanelDMEETA",
 								Math.trunc(PFD0.Stats.Nav.ETA / 3600000) + "<span class=\"SmallerText\">" + Translate("Hour") + "</span>" +

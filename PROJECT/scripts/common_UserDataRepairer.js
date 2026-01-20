@@ -306,6 +306,30 @@
 						break;
 				}
 			}
+
+			// v1.03 (2026/01/19)
+			// New features
+			if(localStorage.GPSPFD_Subsystem != undefined) {
+				let Subsystem = JSON.parse(localStorage.getItem("GPSPFD_Subsystem"));
+				if(Subsystem.Display.PFDStyle == "AutomobileSpeedometer") {
+					Subsystem.Display.PFDStyle = "Normal";
+					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
+					LogRepairedUserData("GPS-PFD automobile speedometer panel removal");
+				}
+				if(Subsystem.Display.HideTopbarWhenNotScrolling == undefined) {
+					Subsystem.Display.HideTopbarWhenNotScrolling = false;
+					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
+					LogRepairedUserData("GPS-PFD auto hide topbar");
+				}
+			}
+			if(localStorage.GPSPFD_PFD != undefined) {
+				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
+				if(PFD.Attitude.Sensitivity == undefined) {
+					PFD.Attitude.Sensitivity = 5;
+					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
+					LogRepairedUserData("GPS-PFD attitude indicator sensitivity");
+				}
+			}
 	}
 	function LogRepairedUserData(Name) {
 		if(System0.RepairedUserData == "") {

@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 		// Unsaved
-		const CurrentVersion = 1.02,
+		const CurrentVersion = 1.03,
 		Preset = {
 			Subsystem: {
 				I18n: {
@@ -169,7 +169,8 @@
 				ClockTime: 0, PreviousClockTime: Date.now(),
 				FlightModeTimestamp: 0,
 				Attitude: {
-					Pitch: 0, Pitch2: 0, Roll: 0
+					Pitch: 0, PitchDisplay: 0, PitchDisplay2: 0,
+					Roll: 0, RollDisplay: 0
 				},
 				Speed: {
 					SampleCount: 0,
@@ -199,8 +200,8 @@
 				},
 				Nav: {
 					Lat: 0, Lon: 0,
-					Distance: 0, Bearing: 0,
-					ETA: 0, LocalizerDeviation: 0, GlideSlopeDeviation: 0, MarkerBeacon: ""
+					Distance: 0, DistanceDisplay: 0, Bearing: 0, ETA: 0,
+					LocalizerDeviation: 0, GlideSlopeDeviation: 0, MarkerBeacon: ""
 				}
 			},
 			Alert: {
@@ -216,6 +217,7 @@
 			DepartureAirport: 0, ActiveAirport: 0, ActiveRunwayName: ""
 		};
 		System0.Deletion = 0;
+		Automation.HideTopbar = null;
 		Automation.ClockPFD = null;
 		Automation.ClockAvgSpeeds = null;
 
@@ -223,7 +225,7 @@
 		var Subsystem = {
 			Display: {
 				PFDStyle: "Normal", PFDFont: "Inherit",
-				FlipPFDVertically: false,
+				HideTopbarWhenNotScrolling: false, FlipPFDVertically: false,
 				KeepScreenOn: false
 			},
 			Audio: {
@@ -245,7 +247,7 @@
 			},
 			Attitude: {
 				IsEnabled: true,
-				Mode: "Accel",
+				Mode: "Accel", Sensitivity: 5,
 				Offset: {
 					Pitch: 0, Roll: 0
 				}
@@ -699,6 +701,7 @@
 		}
 
 		// Refresh
+		ShowTopbar();
 		HighlightActiveSectionInNav();
 		RefreshSystem();
 		RefreshSubsystem();
@@ -812,10 +815,12 @@
 
 		// Fullscreen
 		if(IsFullscreen() == false) {
-			Show("Topbar");
+			if(Subsystem.Display.HideTopbarWhenNotScrolling == false) {
+				ShowTopbar();
+			}
 			ChangeText("Button_PFDToggleFullscreen", "全屏");
 		} else {
-			Hide("Topbar");
+			HideTopbar();
 			ChangeText("Button_PFDToggleFullscreen", "退出全屏");
 		}
 
@@ -991,12 +996,10 @@
 			HideHorizontally("Ctnr_PFDHUDPanel");
 			HideHorizontally("Ctnr_PFDBocchi737Panel");
 			HideHorizontally("Ctnr_PFDAnalogGaugesPanel");
-			HideHorizontally("Ctnr_PFDAutomobileSpeedometerPanel");
 			RemoveClass("PFD", "PFDStyleIsNormal");
 			RemoveClass("PFD", "PFDStyleIsHUD");
 			RemoveClass("PFD", "PFDStyleIsBocchi737");
 			RemoveClass("PFD", "PFDStyleIsAnalogGauges");
-			RemoveClass("PFD", "PFDStyleIsAutomobileSpeedometer");
 			switch(Subsystem.Display.PFDStyle) {
 				case "Normal":
 					Show("Ctnr_PFDNormalPanel");
@@ -1009,10 +1012,6 @@
 				case "Bocchi737":
 				case "AnalogGauges":
 					AlertSystemError("A PFD style which is still under construction was selected.");
-					break;
-				case "AutomobileSpeedometer":
-					Show("Ctnr_PFDAutomobileSpeedometerPanel");
-					AddClass("PFD", "PFDStyleIsAutomobileSpeedometer");
 					break;
 				default:
 					AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshSubsystem is invalid.");
@@ -1038,6 +1037,10 @@
 				default:
 					AlertSystemError("The value of Subsystem.Display.PFDFont \"" + Subsystem.Display.PFDFont + "\" in function RefreshSubsystem is invalid.");
 					break;
+			}
+			ChangeChecked("Checkbox_SettingsHideTopbarWhenNotScrolling", Subsystem.Display.HideTopbarWhenNotScrolling);
+			if(Subsystem.Display.HideTopbarWhenNotScrolling == false) {
+				ShowTopbar();
 			}
 			ChangeChecked("Checkbox_SettingsFlipPFDVertically", Subsystem.Display.FlipPFDVertically);
 			ChangeChecked("Checkbox_PFDOptionsKeepScreenOn", Subsystem.Display.KeepScreenOn);
@@ -1103,11 +1106,6 @@
 						case "AnalogGauges":
 							AlertSystemError("A PFD style which is still under construction was selected.");
 							break;
-						case "AutomobileSpeedometer":
-							ChangeText("Label_PFDAutomobileSpeedometerPanelSpeedUnit", Translate(Subsystem.I18n.MeasurementUnit.Speed + "OnPFD"));
-							ChangeText("Label_PFDAutomobileSpeedometerPanelDMETitle", "测距仪");
-							ChangeText("Label_PFDAutomobileSpeedometerPanelAltitudeTitle", "高度");
-							break;
 						default:
 							AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshSubsystem is invalid.");
 							break;
@@ -1137,11 +1135,6 @@
 						case "Bocchi737":
 						case "AnalogGauges":
 							AlertSystemError("A PFD style which is still under construction was selected.");
-							break;
-						case "AutomobileSpeedometer":
-							ChangeText("Label_PFDAutomobileSpeedometerPanelSpeedUnit", Translate(Subsystem.I18n.MeasurementUnit.Speed + "OnPFD"));
-							ChangeText("Label_PFDAutomobileSpeedometerPanelDMETitle", "DME");
-							ChangeText("Label_PFDAutomobileSpeedometerPanelAltitudeTitle", "ALT");
 							break;
 						default:
 							AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshSubsystem is invalid.");
@@ -1503,7 +1496,9 @@
 					default:
 						break;
 				}
-				PFD0.Stats.Attitude.Pitch2 = CheckRangeAndCorrect(PFD0.Stats.Attitude.Pitch, -20, 20);
+				PFD0.Stats.Attitude.PitchDisplay += (PFD0.Stats.Attitude.Pitch - PFD0.Stats.Attitude.PitchDisplay) / PFD.Attitude.Sensitivity;
+				PFD0.Stats.Attitude.PitchDisplay2 = CheckRangeAndCorrect(PFD0.Stats.Attitude.PitchDisplay, -20, 20);
+				PFD0.Stats.Attitude.RollDisplay += (PFD0.Stats.Attitude.Roll - PFD0.Stats.Attitude.RollDisplay) / PFD.Attitude.Sensitivity;
 			}
 
 			// Altitude (Updated before speed because speed data relies on altitude variation)
@@ -1611,7 +1606,7 @@
 				// IAS
 				PFD0.Stats.Speed.IAS = CalcIAS(PFD.Speed.IASAlgorithm, PFD0.Stats.Speed.TAS, PFD0.Stats.Altitude.TapeDisplay,
 					PFD0.Stats.Altitude.Ground, AirportLibrary0.ActiveAirport.Temperature, AirportLibrary0.ActiveAirport.RelativeHumidity, AirportLibrary0.ActiveAirport.QNH,
-					PFD.Attitude.IsEnabled, Math.abs(PFD0.Stats.Attitude.Pitch - PFD0.Stats.Speed.Pitch));
+					PFD.Attitude.IsEnabled, Math.abs(PFD0.Stats.Attitude.PitchDisplay - PFD0.Stats.Speed.Pitch));
 					// Tape
 					PFD0.Stats.Speed.TapeDisplay += (PFD0.Stats.Speed.IAS - PFD0.Stats.Speed.TapeDisplay) / 50 * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 30);
 					PFD0.Stats.Speed.TapeDisplay = CheckRangeAndCorrect(PFD0.Stats.Speed.TapeDisplay, 0, 277.5);
@@ -1684,6 +1679,7 @@
 				// Distance and bearing
 				PFD0.Stats.Nav.Distance = CalcDistance(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon,
 					AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Lat, AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Lon);
+				PFD0.Stats.Nav.DistanceDisplay += (PFD0.Stats.Nav.Distance - PFD0.Stats.Nav.DistanceDisplay) / 50 * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 30);
 				PFD0.Stats.Nav.Bearing = CalcBearing(PFD0.Stats.Nav.Lat, PFD0.Stats.Nav.Lon,
 					AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Lat, AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Lon);
 
@@ -1692,12 +1688,12 @@
 				switch(PFD.Nav.ETACalcMethod) {
 					case "UseRealTimeGS":
 						if(PFD0.Stats.Speed.GSDisplay > 0) {
-							PFD0.Stats.Nav.ETA = PFD0.Stats.Nav.Distance / PFD0.Stats.Speed.GSDisplay * 1000; // (Meter / meter per sec) = sec, sec * 1000 = millisec.
+							PFD0.Stats.Nav.ETA = PFD0.Stats.Nav.DistanceDisplay / PFD0.Stats.Speed.GSDisplay * 1000; // (Meter / meter per sec) = sec, sec * 1000 = millisec.
 						}
 						break;
 					case "UseAvgGS":
 						if(PFD0.Stats.Speed.AvgGSDisplay > 0) {
-							PFD0.Stats.Nav.ETA = PFD0.Stats.Nav.Distance / PFD0.Stats.Speed.AvgGSDisplay * 1000;
+							PFD0.Stats.Nav.ETA = PFD0.Stats.Nav.DistanceDisplay / PFD0.Stats.Speed.AvgGSDisplay * 1000;
 						}
 						break;
 					default:
@@ -1715,8 +1711,8 @@
 				}
 
 				// Glide slope
-				if(PFD0.Stats.Nav.Distance > 0) {
-					PFD0.Stats.Nav.GlideSlopeDeviation = RadToDeg(Math.atan(PFD0.Stats.Altitude.RadioDisplay / PFD0.Stats.Nav.Distance)) - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].GlideSlopeAngle;
+				if(PFD0.Stats.Nav.DistanceDisplay > 0) {
+					PFD0.Stats.Nav.GlideSlopeDeviation = RadToDeg(Math.atan(PFD0.Stats.Altitude.RadioDisplay / PFD0.Stats.Nav.DistanceDisplay)) - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].GlideSlopeAngle;
 				} else {
 					PFD0.Stats.Nav.GlideSlopeDeviation = -AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].GlideSlopeAngle;
 				}
@@ -1725,13 +1721,13 @@
 				PFD0.Stats.Nav.MarkerBeacon = "";
 				if(Math.abs(PFD0.Stats.Nav.LocalizerDeviation) <= 2) {
 					switch(true) {
-						case Math.abs(PFD0.Stats.Nav.Distance - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].MarkerBeaconDistance.Outer) <= PFD0.Stats.Altitude.RadioDisplay * 2:
+						case Math.abs(PFD0.Stats.Nav.DistanceDisplay - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].MarkerBeaconDistance.Outer) <= PFD0.Stats.Altitude.RadioDisplay * 2:
 							PFD0.Stats.Nav.MarkerBeacon = "OuterMarker";
 							break;
-						case Math.abs(PFD0.Stats.Nav.Distance - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].MarkerBeaconDistance.Middle) <= PFD0.Stats.Altitude.RadioDisplay * 2:
+						case Math.abs(PFD0.Stats.Nav.DistanceDisplay - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].MarkerBeaconDistance.Middle) <= PFD0.Stats.Altitude.RadioDisplay * 2:
 							PFD0.Stats.Nav.MarkerBeacon = "MiddleMarker";
 							break;
-						case Math.abs(PFD0.Stats.Nav.Distance - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].MarkerBeaconDistance.Inner) <= PFD0.Stats.Altitude.RadioDisplay * 2:
+						case Math.abs(PFD0.Stats.Nav.DistanceDisplay - AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].MarkerBeaconDistance.Inner) <= PFD0.Stats.Altitude.RadioDisplay * 2:
 							PFD0.Stats.Nav.MarkerBeacon = "InnerMarker";
 							break;
 						default:
@@ -1932,9 +1928,6 @@
 				case "Bocchi737":
 				case "AnalogGauges":
 					AlertSystemError("A PFD style which is still under construction was selected.");
-					break;
-				case "AutomobileSpeedometer":
-					RefreshAutomobileSpeedometerPanel();
 					break;
 				default:
 					AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshPanel is invalid.");
@@ -2448,7 +2441,7 @@
 		}
 		PFD0.Stats.Altitude.Ground = AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Elevation + PFD.Altitude.SeatHeight;
 
-		// PFD
+		// PFD (1)
 			// Menu
 				// Runways
 					// Airport name
@@ -2617,7 +2610,11 @@
 			ChangeChecked("Checkbox_SettingsEnableAttitudeIndicator", PFD.Attitude.IsEnabled);
 			if(PFD.Attitude.IsEnabled == true) {
 				Show("Ctrl_SettingsAttitudeMode");
+				Show("Label_SettingsAttitudeSensitivityInfo");
+				Show("Ctrl_SettingsAttitudeSensitivity");
 				ChangeValue("Combobox_SettingsAttitudeMode", PFD.Attitude.Mode);
+				ChangeValue("Slider_SettingsAttitudeSensitivity", PFD.Attitude.Sensitivity);
+				ChangeText("Label_SettingsAttitudeSensitivity", PFD.Attitude.Sensitivity);
 				switch(PFD.Attitude.Mode) {
 					case "Accel":
 						Show("Label_SettingsAttitudeOffset");
@@ -2641,6 +2638,8 @@
 				}
 			} else {
 				Hide("Ctrl_SettingsAttitudeMode");
+				Hide("Label_SettingsAttitudeSensitivityInfo");
+				Hide("Ctrl_SettingsAttitudeSensitivity");
 				Hide("Label_SettingsAttitudeOffset");
 				Hide("Label_SettingsAttitudeOffsetInfo");
 				Hide("Ctrl_SettingsAttitudeOffsetPitch");
@@ -3662,6 +3661,10 @@
 			PFD.Attitude.Mode = ReadValue("Combobox_SettingsAttitudeMode");
 			RefreshPFD();
 		}
+		function SetAttitudeSensitivity() {
+			PFD.Attitude.Sensitivity = ReadValue("Slider_SettingsAttitudeSensitivity");
+			RefreshPFD();
+		}
 		function SetAttitudeOffsetPitch() {
 			PFD.Attitude.Offset.Pitch = CheckRangeAndCorrect(Math.trunc(ReadValue("Textbox_SettingsAttitudeOffsetPitch")), -90, 90);
 			RefreshPFD();
@@ -3817,6 +3820,11 @@
 			Subsystem.Display.PFDFont = ReadValue("Combobox_SettingsPFDFont");
 			RefreshSubsystem();
 			RefreshPFD();
+		}
+		function SetHideTopbarWhenNotScrolling() {
+			Subsystem.Display.HideTopbarWhenNotScrolling = IsChecked("Checkbox_SettingsHideTopbarWhenNotScrolling");
+			RefreshSubsystem();
+			ShowTopbar();
 		}
 		function SetFlipPFDVertically() {
 			Subsystem.Display.FlipPFDVertically = IsChecked("Checkbox_SettingsFlipPFDVertically");
@@ -4131,6 +4139,9 @@
 	}
 
 // Listeners
+	// On scroll
+	document.addEventListener("scroll", ShowTopbar);
+
 	// On click (mouse left button, Enter key or Space key)
 	document.addEventListener("click", function() {
 		setTimeout(function() {
@@ -5243,6 +5254,21 @@
 			Bearing += 360;
 		}
 		return Bearing;
+	}
+
+	// Topbar
+	function ShowTopbar() {
+		Show("Topbar");
+		clearTimeout(Automation.HideTopbar);
+		if(Subsystem.Display.HideTopbarWhenNotScrolling == true) {
+			Automation.HideTopbar = setTimeout(function() {
+				Hide("Topbar");
+			}, System.Display.Anim + 5000);
+		}
+	}
+	function HideTopbar() {
+		Hide("Topbar");
+		clearTimeout(Automation.HideTopbar);
 	}
 
 	// Alerts

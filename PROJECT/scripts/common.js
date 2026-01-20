@@ -493,8 +493,14 @@
 				RemoveClass(ID, "IAmHere");
 			}, 1310);
 			setTimeout(function() {
-				ChangeAnim(ID, "");
+				AddClass(ID, "IAmHere");
 			}, 1580);
+			setTimeout(function() {
+				RemoveClass(ID, "IAmHere");
+			}, 1850);
+			setTimeout(function() {
+				ChangeAnim(ID, "");
+			}, 2120);
 		} else {
 			setTimeout(function() {
 				AddClass(ID, "IAmHere");
@@ -508,6 +514,12 @@
 			setTimeout(function() {
 				RemoveClass(ID, "IAmHere");
 			}, 1000);
+			setTimeout(function() {
+				AddClass(ID, "IAmHere");
+			}, 1250);
+			setTimeout(function() {
+				RemoveClass(ID, "IAmHere");
+			}, 1500);
 		}
 	}
 

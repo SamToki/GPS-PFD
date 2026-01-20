@@ -141,9 +141,6 @@
 		.Button.Shaped.Active .Shape {
 			fill: #C8EC86;
 		}
-		.IAmHere {
-			background-color: #618A16;
-		}
 		.Glow {
 			box-shadow: unset; filter: drop-shadow(0 0 5px #DEB76C);
 		}
@@ -155,6 +152,9 @@
 					filter: drop-shadow(0 0 5px #DEB76C);
 				}
 			}
+		.IAmHere {
+			box-shadow: 0 0 4px 2px #DEB76C;
+		}
 
 		/* Foreground */
 		.RedText {

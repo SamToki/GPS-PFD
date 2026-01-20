@@ -124,23 +124,26 @@
 		.Box {
 			background-color: #202020E0;
 		}
-		.Active, .IAmHere {
+		.Active {
 			background-color: #004000;
 		}
 		.Button.Shaped.Active .Shape {
 			fill: #004000;
 		}
 		.Glow {
-			box-shadow: 0 0 10px 5px #583868;
+			box-shadow: 0 0 4px 2px #D090F0;
 		}
 			@keyframes Anim_Glow {
 				0%, 100% {
 					box-shadow: none;
 				}
 				50% {
-					box-shadow: 0 0 10px 5px #583868;
+					box-shadow: 0 0 4px 2px #D090F0;
 				}
 			}
+		.IAmHere {
+			box-shadow: 0 0 4px 2px #D090F0;
+		}
 
 		/* Foreground */
 		.RedText {

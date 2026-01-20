@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v1.02 (2026/01/11). Since 2024/12/01." />
+		<meta name="version" content="v1.03 (2026/01/19). Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与加速计，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -24,13 +24,11 @@
 		<link id="ThemeVariant_Style" rel="stylesheet" href="styles/style_Dark.css" media="(prefers-color-scheme: dark)" />
 		<link id="ThemeVariant_Style_HighContrast" rel="stylesheet" href="styles/style_HighContrast.css" media="(prefers-contrast: more)" />
 		<link rel="stylesheet" href="styles/style_PFDHUDPanel.css" />
-		<link rel="stylesheet" href="styles/style_PFDAutomobileSpeedometerPanel.css" />
 		<!-- <link rel="stylesheet" href="styles/style_PFD???.css" /> -->
 		<script defer src="../scripts/common.js"></script>
 		<script defer src="../scripts/common_UserDataRepairer.js"></script>
 		<script defer src="scripts/script_PFDNormalPanel.js"></script>
 		<script defer src="scripts/script_PFDHUDPanel.js"></script>
-		<script defer src="scripts/script_PFDAutomobileSpeedometerPanel.js"></script>
 		<!-- <script defer src="scripts/script_PFD???.js"></script> -->
 		<script defer src="scripts/script.js"></script>
 
@@ -2413,185 +2411,6 @@
 					<div class="Ctnr PFDPanel HiddenHorizontally" id="Ctnr_PFDAnalogGaugesPanel">
 						???
 					</div>
-					<div class="Ctnr PFDPanel HiddenHorizontally" id="Ctnr_PFDAutomobileSpeedometerPanel">
-						<div class="Ctnr" id="Ctnr_PFDAutomobileSpeedometerPanelHardwareStatus">
-							<ul class="CtrlGroup">
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelGPS" title="GPS 状态" aria-label="GPS 状态">
-									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-										<path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
-										<path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-									</svg>
-								</li>
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelAccel" title="加速计状态" aria-label="加速计状态">
-									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-										<path d="M7.646.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 1.707V5.5a.5.5 0 0 1-1 0V1.707L6.354 2.854a.5.5 0 1 1-.708-.708zM8 10a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 14.293V10.5A.5.5 0 0 1 8 10M.146 8.354a.5.5 0 0 1 0-.708l2-2a.5.5 0 1 1 .708.708L1.707 7.5H5.5a.5.5 0 0 1 0 1H1.707l1.147 1.146a.5.5 0 0 1-.708.708zM10 8a.5.5 0 0 1 .5-.5h3.793l-1.147-1.146a.5.5 0 0 1 .708-.708l2 2a.5.5 0 0 1 0 .708l-2 2a.5.5 0 0 1-.708-.708L14.293 8.5H10.5A.5.5 0 0 1 10 8"/>
-									</svg>
-								</li>
-							</ul>
-						</div>
-						<div class="Ctnr" id="Ctnr_PFDAutomobileSpeedometerPanelSpeed">
-							<ul class="CtrlGroup">
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelAdditionalIndicators">
-									<ul class="CtrlGroup">
-										<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelSpeedLimits">
-											<svg class="Progring" viewBox="0 0 400 400" aria-hidden="true">
-												<circle class="ProgringFg" id="ProgringFg_PFDAutomobileSpeedometerPanelSpeedLimitMin" cx="200" cy="200" r="197.5" title="最低限速" aria-label="最低限速" />
-												<circle class="ProgringFg" id="ProgringFg_PFDAutomobileSpeedometerPanelSpeedLimitMax" cx="200" cy="200" r="197.5" title="最高限速" aria-label="最高限速" />
-											</svg>
-										</li>
-										<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelAvgIAS">
-											<div title="平均表速" aria-label="平均表速"></div>
-										</li>
-										<li class="Ctrl Faded" id="Ctrl_PFDAutomobileSpeedometerPanelMCPSpeedCircle" inert="true">
-											<div title="MCP 速度" aria-label="MCP 速度"></div>
-										</li>
-									</ul>
-								</li>
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelDial">
-									<svg class="Progring" viewBox="0 0 400 400" aria-hidden="true">
-										<circle class="ProgringFg" cx="200" cy="200" r="199.5" />
-									</svg>
-									<ul class="CtrlGroup">
-										<li class="Ctrl" style="transform: rotate(-120deg);"><div class="DialScale1"></div><span class="DialNumber1" style="transform: rotate(120deg);">0</span></li>
-										<li class="Ctrl" style="transform: rotate(-116deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-112deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-108deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-104deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-100deg);"><div class="DialScale1"></div></li>
-										<li class="Ctrl" style="transform: rotate(-96deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-92deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-88deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-84deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-80deg);"><div class="DialScale1"></div><span class="DialNumber2" style="transform: rotate(80deg);">20</span></li>
-										<li class="Ctrl" style="transform: rotate(-76deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-72deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-68deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-64deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-60deg);"><div class="DialScale1"></div></li>
-										<li class="Ctrl" style="transform: rotate(-56deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-52deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-48deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-44deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-40deg);"><div class="DialScale1"></div><span class="DialNumber3" style="transform: rotate(40deg);">40</span></li>
-										<li class="Ctrl" style="transform: rotate(-36deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-32deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-28deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-24deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-20deg);"><div class="DialScale1"></div></li>
-										<li class="Ctrl" style="transform: rotate(-16deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-12deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-8deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(-4deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl"><div class="DialScale1"></div><span class="DialNumber1">60</span></li>
-										<li class="Ctrl" style="transform: rotate(4deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(8deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(12deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(16deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(20deg);"><div class="DialScale1"></div></li>
-										<li class="Ctrl" style="transform: rotate(24deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(28deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(32deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(36deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(40deg);"><div class="DialScale1"></div><span class="DialNumber3" style="transform: rotate(-40deg);">80</span></li>
-										<li class="Ctrl" style="transform: rotate(44deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(48deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(52deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(56deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(60deg);"><div class="DialScale1"></div></li>
-										<li class="Ctrl" style="transform: rotate(64deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(68deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(72deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(76deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(80deg);"><div class="DialScale1"></div><span class="DialNumber4" style="transform: rotate(-80deg);">100</span></li>
-										<li class="Ctrl" style="transform: rotate(84deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(88deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(92deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(96deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(100deg);"><div class="DialScale1"></div></li>
-										<li class="Ctrl" style="transform: rotate(104deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(108deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(112deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(116deg);"><div class="DialScale2"></div></li>
-										<li class="Ctrl" style="transform: rotate(120deg);"><div class="DialScale1"></div><span class="DialNumber4" style="transform: rotate(-120deg);">120</span></li>
-									</ul>
-									<span id="Label_PFDAutomobileSpeedometerPanelSpeedUnit">速度单位</span>
-								</li>
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelNeedle">
-									<div class="Needle" id="Needle_PFDAutomobileSpeedometerPanel">
-										<div class="NeedleFg" title="表速指针" aria-label="表速指针"></div>
-									</div>
-									<div class="CenterDot" title="表速指针" aria-label="表速指针"></div>
-								</li>
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelDrum" title="当前表速" aria-label="当前表速">
-									<ul class="CtrlGroup">
-										<li class="Ctrl Box">
-											<div class="RollingDigit" id="RollingDigit_PFDAutomobileSpeedometerPanel1">
-												<span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span><span> </span>
-											</div>
-										</li>
-										<li class="Ctrl Box">
-											<div class="RollingDigit" id="RollingDigit_PFDAutomobileSpeedometerPanel2">
-												<span>0</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span><span>0</span>
-											</div>
-										</li>
-										<li class="Ctrl Box">
-											<div class="RollingDigit" id="RollingDigit_PFDAutomobileSpeedometerPanel3">
-												<span>9</span><span>8</span><span>7</span>
-												<span>1</span><span>0</span><span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span><span>0</span><span>9</span>
-												<span>2</span><span>1</span><span>0</span>
-											</div>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</div>
-						<div class="Ctnr" id="Ctnr_PFDAutomobileSpeedometerPanelSpeedTrend" title="速度趋势" aria-label="速度趋势">
-							<ul class="CtrlGroup">
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend1">
-									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-										<path d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894z"/>
-									</svg>
-								</li>
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend2">
-									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-										<path d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894z"/>
-									</svg>
-								</li>
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend3">
-									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-										<path d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894z"/>
-									</svg>
-								</li>
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend4">
-									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-										<path d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"/>
-									</svg>
-								</li>
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend5">
-									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-										<path d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"/>
-									</svg>
-								</li>
-								<li class="Ctrl" id="Ctrl_PFDAutomobileSpeedometerPanelSpeedTrend6">
-									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-										<path d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"/>
-									</svg>
-								</li>
-							</ul>
-						</div>
-						<div class="Ctnr Faded" id="Ctnr_PFDAutomobileSpeedometerPanelDME" inert="true">
-							<span id="Label_PFDAutomobileSpeedometerPanelDMETitle">测距仪</span>
-							<span id="Label_PFDAutomobileSpeedometerPanelDMEDistance">距离</span>
-							<span id="Label_PFDAutomobileSpeedometerPanelDMEETA">预计剩余时间</span>
-						</div>
-						<div class="Ctnr" id="Ctnr_PFDAutomobileSpeedometerPanelAltitude">
-							<span id="Label_PFDAutomobileSpeedometerPanelAltitudeTitle">高度</span>
-							<span id="Label_PFDAutomobileSpeedometerPanelAltitudeValue">未知</span>
-						</div>
-						<div class="Ctnr Faded" id="Ctnr_PFDAutomobileSpeedometerPanelInfo" inert="true">
-							<span id="Label_PFDAutomobileSpeedometerPanelInfo">信息</span>
-						</div>
-					</div>
 					<div class="Ctnr" id="Ctnr_PFDMenu">
 						<ul class="CtrlGroup">
 							<li class="Ctrl">
@@ -3346,6 +3165,16 @@
 									</label>
 								</li>
 							</ul>
+							<p id="Label_SettingsAttitudeSensitivityInfo">敏感度设定的数值越小，姿态仪越敏感。</p>
+							<ul class="CtrlGroup BelowParagraph">
+								<li class="Ctrl" id="Ctrl_SettingsAttitudeSensitivity">
+									<label for="Slider_SettingsAttitudeSensitivity">
+										<span>敏感度：</span>
+										<input class="Slider Width200" id="Slider_SettingsAttitudeSensitivity" type="range" min="1" max="20" step="1" value="5" oninput="SetAttitudeSensitivity()" />
+										<span id="Label_SettingsAttitudeSensitivity">敏感度</span>
+									</label>
+								</li>
+							</ul>
 							<h3 id="Label_SettingsAttitudeOffset">姿态偏移</h3>
 							<p id="Label_SettingsAttitudeOffsetInfo"><a href="https://zh.wikipedia.org/wiki/航空器三主轴">俯仰 (pitch) </a>抬头是正值，低头是负值。<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚 (roll) </a>右倾是正值，左倾是负值。</p>
 							<ul class="CtrlGroup BelowParagraph">
@@ -3608,7 +3437,6 @@
 											<option value="HUD">HUD</option>
 											<option value="Bocchi737" disabled="true">波奇737 (制作中)</option>
 											<option value="AnalogGauges" disabled="true">传统仪表 (制作中)</option>
-											<option value="AutomobileSpeedometer">汽车速度表</option>
 										</select>
 									</label>
 								</li>
@@ -3642,6 +3470,12 @@
 									<label for="Checkbox_SettingsBlurBgImage">
 										<input class="Checkbox" id="Checkbox_SettingsBlurBgImage" type="checkbox" checked="true" onchange="SetBlurBgImage()" />
 										<span>模糊背景图像</span>
+									</label>
+								</li>
+								<li class="Ctrl">
+									<label for="Checkbox_SettingsHideTopbarWhenNotScrolling">
+										<input class="Checkbox" id="Checkbox_SettingsHideTopbarWhenNotScrolling" type="checkbox" checked="false" onchange="SetHideTopbarWhenNotScrolling()" />
+										<span>未滚动网页时隐藏顶栏</span>
 									</label>
 								</li>
 								<li class="Ctrl">
@@ -4002,7 +3836,7 @@
 							<legend>关于</legend>
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>版本 v1.02 (<time datetime="2026-01-11" pubdate="pubdate">2026/01/11</time>)<br />
+							<p>版本 v1.03 (<time datetime="2026-01-19" pubdate="pubdate">2026/01/19</time>)<br />
 								始于 2024/12/01</p>
 							<p class="GreenText Hidden" id="Label_HelpPWANewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
 							<ul class="CtrlGroup BelowParagraph">

@@ -533,7 +533,7 @@
 			background-color: #F0F0F0E0;
 			overflow: hidden;
 		}
-		.Active, .IAmHere {
+		.Active {
 			background-color: #D0FFD0;
 		}
 		.Button.Shaped.Active .Shape {
@@ -571,7 +571,7 @@
 			box-shadow: 0 0 4px 2px #00000040;
 		}
 		.Glow {
-			box-shadow: 0 0 10px 5px #F0D0FF;
+			box-shadow: 0 0 4px 2px #8040A0;
 			animation: Anim_Glow 1500ms infinite ease-in-out;
 		}
 			@keyframes Anim_Glow {
@@ -579,9 +579,12 @@
 					box-shadow: none;
 				}
 				50% {
-					box-shadow: 0 0 10px 5px #F0D0FF;
+					box-shadow: 0 0 4px 2px #8040A0;
 				}
 			}
+		.IAmHere {
+			box-shadow: 0 0 4px 2px #8040A0;
+		}
 
 		/* Foreground */
 		.RedText {

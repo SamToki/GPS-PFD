@@ -64,13 +64,13 @@
 							ChangeAnim("Ctrl_PFDHUDPanelAttitudePitch", "");
 							ChangeAnim("Ctrl_PFDHUDPanelAttitudeRoll", "");
 						}
-						ChangeTop("CtrlGroup_PFDHUDPanelAttitudePitch", "calc(50% - 1800px + " + 20 * PFD0.Stats.Attitude.Pitch + "px)");
-						ChangeRotate("Ctrl_PFDHUDPanelAttitudePitch", -PFD0.Stats.Attitude.Roll);
-						ChangeRotate("CtrlGroup_PFDHUDPanelAttitudeRollScale", -PFD0.Stats.Attitude.Roll);
-						if(PFD0.Stats.Attitude.Roll <= 0) {
-							document.getElementById("ProgringFg_PFDHUDPanelAttitudeRoll").style.strokeDasharray = (Math.PI * 620) * (-PFD0.Stats.Attitude.Roll / 360) + "px, " + (Math.PI * 620) * (1 + PFD0.Stats.Attitude.Roll / 360) + "px";
+						ChangeTop("CtrlGroup_PFDHUDPanelAttitudePitch", "calc(50% - 1800px + " + 20 * PFD0.Stats.Attitude.PitchDisplay + "px)");
+						ChangeRotate("Ctrl_PFDHUDPanelAttitudePitch", -PFD0.Stats.Attitude.RollDisplay);
+						ChangeRotate("CtrlGroup_PFDHUDPanelAttitudeRollScale", -PFD0.Stats.Attitude.RollDisplay);
+						if(PFD0.Stats.Attitude.RollDisplay <= 0) {
+							document.getElementById("ProgringFg_PFDHUDPanelAttitudeRoll").style.strokeDasharray = (Math.PI * 620) * (-PFD0.Stats.Attitude.RollDisplay / 360) + "px, " + (Math.PI * 620) * (1 + PFD0.Stats.Attitude.RollDisplay / 360) + "px";
 						} else {
-							document.getElementById("ProgringFg_PFDHUDPanelAttitudeRoll").style.strokeDasharray = "0, " + (Math.PI * 620) * (1 - PFD0.Stats.Attitude.Roll / 360) + "px, " + (Math.PI * 620) * (PFD0.Stats.Attitude.Roll / 360) + "px";
+							document.getElementById("ProgringFg_PFDHUDPanelAttitudeRoll").style.strokeDasharray = "0, " + (Math.PI * 620) * (1 - PFD0.Stats.Attitude.RollDisplay / 360) + "px, " + (Math.PI * 620) * (PFD0.Stats.Attitude.RollDisplay / 360) + "px";
 						}
 						if(PFD0.Alert.Active.AttitudeWarning == "BankAngle") {
 							AddClass("PFDHUDPanelAttitudeRollScaleInner", "BankAngleWarning");
@@ -470,8 +470,8 @@
 				if(PFD.Nav.IsEnabled == true && PFD0.Status.GPS.IsPositionAvailable == true) {
 					Show("Ctnr_PFDHUDPanelDME");
 					ChangeText("Label_PFDHUDPanelDMERunway", Translate("Runway") + " " + AirportLibrary0.ActiveRunwayName);
-					if(PFD0.Stats.Nav.Distance < 10000000) { // Max 10000 kilometers.
-						ChangeText("Label_PFDHUDPanelDMEDistance", ConvertUnit(PFD0.Stats.Nav.Distance, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Distance + "OnPFD") + "</span>");
+					if(PFD0.Stats.Nav.DistanceDisplay < 10000000) { // Max 10000 kilometers.
+						ChangeText("Label_PFDHUDPanelDMEDistance", ConvertUnit(PFD0.Stats.Nav.DistanceDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Distance).toFixed(1) + "<span class=\"SmallerText\">" + Translate(Subsystem.I18n.MeasurementUnit.Distance + "OnPFD") + "</span>");
 						if(PFD0.Stats.Speed.GSDisplay > 0 && PFD0.Stats.Nav.ETA < 360000000) { // Max 100 hours.
 							ChangeText("Label_PFDHUDPanelDMEETA",
 								Math.trunc(PFD0.Stats.Nav.ETA / 3600000) + "<span class=\"SmallerText\">" + Translate("Hour") + "</span>" +
