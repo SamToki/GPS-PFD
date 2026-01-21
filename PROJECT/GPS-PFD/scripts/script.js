@@ -891,7 +891,7 @@
 					break;
 			}
 			ChangeChecked("Checkbox_SettingsBlurBgImage", System.Display.BlurBgImage);
-			if(System.Display.BlurBgImage == true) {
+			if(System.Display.BlurBgImage) {
 				AddClass("BgImage", "Blur");
 			} else {
 				RemoveClass("BgImage", "Blur");
@@ -922,7 +922,7 @@
 
 			// Audio
 			ChangeChecked("Checkbox_SettingsPlayAudio", System.Audio.PlayAudio);
-			if(System.Audio.PlayAudio == true) {
+			if(System.Audio.PlayAudio) {
 				Show("Ctrl_SettingsAudioScheme");
 				Show("Label_SettingsAudio");
 				Show("Ctrl_SettingsAttitudeAlertVolume");
@@ -960,7 +960,7 @@
 			}
 
 			// PWA
-			if(window.matchMedia("(display-mode: standalone)").matches == true) {
+			if(window.matchMedia("(display-mode: standalone)").matches) {
 				ChangeText("Label_SettingsPWAStandaloneDisplay", "是");
 			} else {
 				ChangeText("Label_SettingsPWAStandaloneDisplay", "否");
@@ -968,7 +968,7 @@
 
 			// Dev
 			ChangeChecked("Checkbox_SettingsTryToOptimizePerformance", System.Dev.TryToOptimizePerformance);
-			if(System.Dev.TryToOptimizePerformance == true) {
+			if(System.Dev.TryToOptimizePerformance) {
 				AddClass("Html", "TryToOptimizePerformance");
 				Automation.ClockRate = 40;
 			} else {
@@ -976,7 +976,7 @@
 				Automation.ClockRate = 20;
 			}
 			ChangeChecked("Checkbox_SettingsShowDebugOutlines", System.Dev.ShowDebugOutlines);
-			if(System.Dev.ShowDebugOutlines == true) {
+			if(System.Dev.ShowDebugOutlines) {
 				AddClass("Html", "ShowDebugOutlines");
 			} else {
 				RemoveClass("Html", "ShowDebugOutlines");
@@ -1045,14 +1045,14 @@
 			ChangeChecked("Checkbox_SettingsFlipPFDVertically", Subsystem.Display.FlipPFDVertically);
 			ChangeChecked("Checkbox_PFDOptionsKeepScreenOn", Subsystem.Display.KeepScreenOn);
 			ChangeChecked("Checkbox_SettingsKeepScreenOn", Subsystem.Display.KeepScreenOn);
-			if(Subsystem.Display.KeepScreenOn == true) {
+			if(Subsystem.Display.KeepScreenOn) {
 				RequestScreenWakeLock();
 			} else {
 				ReleaseScreenWakeLock();
 			}
 
 			// Audio
-			if(System.Audio.PlayAudio == true) {
+			if(System.Audio.PlayAudio) {
 				ChangeValue("Combobox_SettingsAudioScheme", Subsystem.Audio.Scheme);
 				ChangeValue("Slider_SettingsAttitudeAlertVolume", Subsystem.Audio.AttitudeAlertVolume);
 				if(Subsystem.Audio.AttitudeAlertVolume > 0) {
@@ -1351,7 +1351,7 @@
 
 			// Dev
 			ChangeChecked("Checkbox_SettingsVideoFootageMode", Subsystem.Dev.VideoFootageMode);
-			if(Subsystem.Dev.VideoFootageMode == true) {
+			if(Subsystem.Dev.VideoFootageMode) {
 				AddClass("Html", "VideoFootageMode");
 			} else {
 				RemoveClass("Html", "VideoFootageMode");
@@ -1443,7 +1443,7 @@
 		}
 		function RefreshManualData() {
 			// Attitude
-			if(PFD.Attitude.IsEnabled == true && PFD.Attitude.Mode == "Manual") {
+			if(PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") {
 				PFD0.RawData.Manual.Attitude.Pitch = CheckRangeAndCorrect(PFD0.RawData.Manual.Attitude.Pitch + PFD0.RawData.Manual.Attitude.PitchTrend * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 1000), -90, 90);
 				PFD0.RawData.Manual.Attitude.Roll += PFD0.RawData.Manual.Attitude.RollTrend * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 1000);
 				if(PFD0.RawData.Manual.Attitude.Roll < -180) {
@@ -1477,9 +1477,9 @@
 		}
 		function RefreshPFDData() {
 			// Attitude
-			if(PFD.Attitude.IsEnabled == true) {
+			if(PFD.Attitude.IsEnabled) {
 				switch(true) {
-					case PFD.Attitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true:
+					case PFD.Attitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable:
 						PFD0.Stats.Attitude.Pitch = CheckRangeAndCorrect(PFD0.RawData.Accel.Attitude.Aligned.Pitch, -90, 90);
 						PFD0.Stats.Attitude.Roll = PFD0.RawData.Accel.Attitude.Aligned.Roll;
 						if(PFD0.Stats.Attitude.Roll < -180) {
@@ -1503,11 +1503,11 @@
 
 			// Altitude (Updated before speed because speed data relies on altitude variation)
 			switch(true) {
-				case PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true:
+				case PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable:
 					PFD0.Stats.Altitude.Altitude = PFD0.RawData.GPS.Altitude.Altitude;
 					break;
-				case PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true:
-				case PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true):
+				case PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable:
+				case PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable || PFD0.Status.Accel.IsAvailable):
 					PFD0.Stats.Altitude.Altitude = PFD0.RawData.Accel.Altitude;
 					break;
 				case PFD.Altitude.Mode == "Manual":
@@ -1543,13 +1543,13 @@
 				}
 
 				// Altitude beep
-				if(IsApproachingMCPAltitude() == true) {
+				if(IsApproachingMCPAltitude()) {
 					PFD0.Stats.Altitude.BeepTimestamp = PFD0.Stats.ClockTime;
 				}
 
 			// Heading (Updated before speed because speed data relies on heading)
 			switch(true) {
-				case PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable == true:
+				case PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable:
 					PFD0.Stats.Heading.Heading = PFD0.RawData.GPS.Heading;
 					break;
 				case PFD.Heading.Mode == "Manual":
@@ -1562,11 +1562,11 @@
 
 			// Speed
 			switch(true) {
-				case PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true:
+				case PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable:
 					PFD0.Stats.Speed.Speed = PFD0.RawData.GPS.Speed;
 					break;
-				case PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true:
-				case PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true):
+				case PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable:
+				case PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable || PFD0.Status.Accel.IsAvailable):
 					PFD0.Stats.Speed.Speed = PFD0.RawData.Accel.Speed.Speed;
 					break;
 				case PFD.Speed.Mode == "Manual":
@@ -1590,7 +1590,7 @@
 				PFD0.Stats.Speed.AvgGSDisplay += (PFD0.Stats.Speed.AvgGS - PFD0.Stats.Speed.AvgGSDisplay) / 50 * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 30);
 
 				// TAS
-				if((PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable == true) ||
+				if((PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable) ||
 				PFD.Heading.Mode == "Manual") {
 					PFD0.Stats.Speed.Wind.Heading = PFD.Speed.Wind.Direction + 180;
 					if(PFD0.Stats.Speed.Wind.Heading >= 360) {
@@ -1618,7 +1618,7 @@
 
 						// Other speeds
 							// Speed limits
-							if(PFD.Speed.CalcStallSpeed == true) {
+							if(PFD.Speed.CalcStallSpeed) {
 								let StallSpeed = CalcStallSpeed(PFD0.Stats.Altitude.TapeDisplay,
 									PFD0.Stats.Altitude.Ground, AirportLibrary0.ActiveAirport.Temperature, AirportLibrary0.ActiveAirport.RelativeHumidity, AirportLibrary0.ActiveAirport.QNH,
 									PFD.Attitude.IsEnabled, PFD0.Stats.Attitude.Roll,
@@ -1671,7 +1671,7 @@
 				}
 
 			// Nav
-			if(PFD.Nav.IsEnabled == true && PFD0.Status.GPS.IsPositionAvailable == true) {
+			if(PFD.Nav.IsEnabled && PFD0.Status.GPS.IsPositionAvailable) {
 				// Position
 				PFD0.Stats.Nav.Lat = PFD0.RawData.GPS.Position.Lat;
 				PFD0.Stats.Nav.Lon = PFD0.RawData.GPS.Position.Lon;
@@ -1769,21 +1769,21 @@
 
 				// Callouts
 					// Speed callout
-					if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-					(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
-					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
+					if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable) ||
+					(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
+					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable || PFD0.Status.Accel.IsAvailable)) ||
 					PFD.Speed.Mode == "Manual") {
-						if(IsV1() == true) {
+						if(IsV1()) {
 							PFD0.Alert.Active.SpeedCallout = "V1";
 						}
 					}
 
 					// Altitude callout
-					if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
-					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
+					if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable) ||
+					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
+					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable || PFD0.Status.Accel.IsAvailable)) ||
 					PFD.Altitude.Mode == "Manual") {
-						if(IsApproachingMCPAltitude() == true) {
+						if(IsApproachingMCPAltitude()) {
 							PFD0.Alert.Active.AltitudeCallout = "AltitudeBeep";
 						}
 						switch(PFD.FlightMode.FlightMode) {
@@ -1853,47 +1853,47 @@
 					}
 
 				// Warnings
-				if(PFD.WarningSystem.IsEnabled == true) {
+				if(PFD.WarningSystem.IsEnabled) {
 					// Attitude warning
-					if(PFD.Attitude.IsEnabled == true) {
-						if((PFD.Attitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
+					if(PFD.Attitude.IsEnabled) {
+						if((PFD.Attitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
 						PFD.Attitude.Mode == "Manual") {
-							if(IsExcessiveBankAngle() == true) {
+							if(IsExcessiveBankAngle()) {
 								PFD0.Alert.Active.AttitudeWarning = "BankAngle";
 							}
 						}
 					}
 
 					// Speed warning
-					if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-					(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
-					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
+					if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable) ||
+					(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
+					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable || PFD0.Status.Accel.IsAvailable)) ||
 					PFD.Speed.Mode == "Manual") {
-						if(IsAirspeedLow() == true) {
+						if(IsAirspeedLow()) {
 							PFD0.Alert.Active.SpeedWarning = "AirspeedLow";
 						}
-						if(IsOverspeed() == true) {
+						if(IsOverspeed()) {
 							PFD0.Alert.Active.SpeedWarning = "Overspeed";
 						}
 					}
 
 					// Altitude warning
-					if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable == true) ||
-					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
-					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
+					if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable) ||
+					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
+					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable || PFD0.Status.Accel.IsAvailable)) ||
 					PFD.Altitude.Mode == "Manual") {
-						if(IsDontSink() == true) {
+						if(IsDontSink()) {
 							PFD0.Alert.Active.AltitudeWarning = "DontSink";
 						}
-						if(PFD.Nav.IsEnabled == true && PFD0.Status.GPS.IsPositionAvailable == true) {
-							if(IsExcessivelyBelowGlideSlope() == true) {
+						if(PFD.Nav.IsEnabled && PFD0.Status.GPS.IsPositionAvailable) {
+							if(IsExcessivelyBelowGlideSlope()) {
 								PFD0.Alert.Active.AltitudeWarning = "GlideSlope";
 							}
 						}
-						if(IsSinkRate() == true) {
+						if(IsSinkRate()) {
 							PFD0.Alert.Active.AltitudeWarning = "SinkRate";
 						}
-						if(IsSinkRatePullUp() == true) {
+						if(IsSinkRatePullUp()) {
 							PFD0.Alert.Active.AltitudeWarning = "PullUp";
 						}
 					}
@@ -2159,8 +2159,8 @@
 			}
 
 		function RefreshRunways() {
-			if(PFD.Nav.IsEnabled == true && PFD0.Status.GPS.IsPositionAvailable == true &&
-			((PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable == true) || PFD.Heading.Mode == "Manual")) {
+			if(PFD.Nav.IsEnabled && PFD0.Status.GPS.IsPositionAvailable &&
+			((PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable) || PFD.Heading.Mode == "Manual")) {
 				// Initialization
 				let HeadingDeviation = 0, Distance = [0], RunwayAhead = [0], RecommendedRunway = 0;
 
@@ -2218,7 +2218,7 @@
 				}
 
 				// Auto switch or glow
-				if(PFD.Nav.AutoSwitchRunwayWhenLanding == true && PFD.FlightMode.FlightMode == "Land" && PFD0.Stats.Altitude.RadioDisplay >= 60.96 && PFD0.Stats.Altitude.RadioDisplay <= 914.4) {
+				if(PFD.Nav.AutoSwitchRunwayWhenLanding && PFD.FlightMode.FlightMode == "Land" && PFD0.Stats.Altitude.RadioDisplay >= 60.96 && PFD0.Stats.Altitude.RadioDisplay <= 914.4) {
 					Show("Ctrl_PFDAutoSwitchRunwayActive");
 					Show("Label_AirportLibraryAutoSwitchRunwayActive");
 					for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length; Looper++) {
@@ -2362,7 +2362,7 @@
 			ChangeText("Label_PFDTechInfoManualHeadingTrend", PFD0.RawData.Manual.HeadingTrend.toFixed(2) + "度/秒");
 		}
 		function AutoSwitchFlightModeAndSwapAirports() {
-			if(PFD.FlightMode.AutoSwitchFlightModeAndSwapAirports == true) {
+			if(PFD.FlightMode.AutoSwitchFlightModeAndSwapAirports) {
 				switch(PFD.FlightMode.FlightMode) {
 					case "DepartureGround":
 						if(PFD0.Stats.Speed.TapeDisplay >= PFD.Speed.TakeOff.VR &&
@@ -2479,9 +2479,9 @@
 			// Menu
 				// Ctrl
 					// Manual maneuver
-					if((PFD.Attitude.IsEnabled == true && PFD.Attitude.Mode == "Manual") || PFD.Speed.Mode == "Manual" || PFD.Altitude.Mode == "Manual" || PFD.Heading.Mode == "Manual") {
+					if((PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") || PFD.Speed.Mode == "Manual" || PFD.Altitude.Mode == "Manual" || PFD.Heading.Mode == "Manual") {
 						Show("Ctrl_PFDManualManeuver");
-						if(PFD.Attitude.IsEnabled == true && PFD.Attitude.Mode == "Manual") {
+						if(PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") {
 							ChangeDisabled("Button_PFDPitchDown", false);
 							ChangeDisabled("Button_PFDPitchUp", false);
 							ChangeDisabled("Button_PFDRollLeft", false);
@@ -2583,7 +2583,7 @@
 
 				// Options
 				ChangeChecked("Checkbox_PFDOptionsEnableAttitudeIndicator", PFD.Attitude.IsEnabled);
-				if(PFD.Attitude.IsEnabled == true) {
+				if(PFD.Attitude.IsEnabled) {
 					Show("Ctrl_PFDOptionsAttitudeMode");
 				} else {
 					Hide("Ctrl_PFDOptionsAttitudeMode");
@@ -2608,7 +2608,7 @@
 
 			// Attitude
 			ChangeChecked("Checkbox_SettingsEnableAttitudeIndicator", PFD.Attitude.IsEnabled);
-			if(PFD.Attitude.IsEnabled == true) {
+			if(PFD.Attitude.IsEnabled) {
 				Show("Ctrl_SettingsAttitudeMode");
 				Show("Label_SettingsAttitudeSensitivityInfo");
 				Show("Ctrl_SettingsAttitudeSensitivity");
@@ -2665,7 +2665,7 @@
 			ChangeValue("Textbox_SettingsVR", ConvertUnit(PFD.Speed.TakeOff.VR, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0));
 			ChangeValue("Textbox_SettingsSpeedLimitMin", ConvertUnit(PFD.Speed.Limit.Min, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0));
 			ChangeChecked("Checkbox_SettingsCalcStallSpeed", PFD.Speed.CalcStallSpeed);
-			if(PFD.Speed.CalcStallSpeed == true) {
+			if(PFD.Speed.CalcStallSpeed) {
 				Show("Ctrl_SettingsWeight");
 				Show("Ctrl_SettingsWingArea");
 				Show("Ctrl_SettingsMaxLiftCoefficientOnFlapsUp");
@@ -2693,7 +2693,7 @@
 
 			// Nav
 			ChangeChecked("Checkbox_SettingsEnableNav", PFD.Nav.IsEnabled);
-			if(PFD.Nav.IsEnabled == true) {
+			if(PFD.Nav.IsEnabled) {
 				Show("Ctrl_SettingsETACalcMethod");
 				Show("Ctrl_SettingsAutoSwitchRunwayWhenLanding");
 				ChangeValue("Combobox_SettingsETACalcMethod", PFD.Nav.ETACalcMethod);
@@ -2894,9 +2894,9 @@
 		Automation.ClockAvgSpeeds = setTimeout(ClockAvgSpeeds, Automation.ClockRate);
 
 		// Main
-		if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable == true) ||
-		(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable == true) ||
-		(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable == true || PFD0.Status.Accel.IsAvailable == true)) ||
+		if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable) ||
+		(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
+		(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable || PFD0.Status.Accel.IsAvailable)) ||
 		PFD.Speed.Mode == "Manual") {
 			PFD0.Stats.Speed.SampleCount++;
 			PFD0.Stats.Speed.AvgGS = (PFD0.Stats.Speed.AvgGS * (PFD0.Stats.Speed.SampleCount - 1) + PFD0.Stats.Speed.GS) / PFD0.Stats.Speed.SampleCount;
@@ -3066,7 +3066,7 @@
 			}, 40);
 		}
 		function TogglePFDMenuCollapse(Name) {
-			if(IsClassContained("CtrlGroup_PFD" + Name, "Hidden") == true) {
+			if(IsClassContained("CtrlGroup_PFD" + Name, "Hidden")) {
 				Show("CtrlGroup_PFD" + Name);
 			} else {
 				Hide("CtrlGroup_PFD" + Name);
@@ -3269,9 +3269,9 @@
 		function FilterAirports() {
 			let Counter = 0, Counter2 = 0;
 			for(let Looper = 1; Looper < AirportLibrary.Airport.length; Looper++) {
-				if(AirportLibrary.Airport[Looper].Name.toLowerCase().includes(ReadValue("Textbox_AirportLibraryFilter").toLowerCase()) == true ||
-				AirportLibrary.Airport[Looper].Region.toLowerCase().includes(ReadValue("Textbox_AirportLibraryFilter").toLowerCase()) == true ||
-				AirportLibrary.Airport[Looper].Code.toLowerCase().includes(ReadValue("Textbox_AirportLibraryFilter").toLowerCase()) == true) {
+				if(AirportLibrary.Airport[Looper].Name.toLowerCase().includes(ReadValue("Textbox_AirportLibraryFilter").toLowerCase()) ||
+				AirportLibrary.Airport[Looper].Region.toLowerCase().includes(ReadValue("Textbox_AirportLibraryFilter").toLowerCase()) ||
+				AirportLibrary.Airport[Looper].Code.toLowerCase().includes(ReadValue("Textbox_AirportLibraryFilter").toLowerCase())) {
 					Show("Ctrl_AirportLibraryAirport" + Looper);
 					Counter++;
 				} else {
@@ -3552,13 +3552,13 @@
 			for(let Looper = 0; Looper < Objects.length; Looper++) {
 				switch(true) {
 					// Airport
-					case Objects[Looper].startsWith("{\"Name\":") == true:
+					case Objects[Looper].startsWith("{\"Name\":"):
 						AirportLibrary.Airport[AirportLibrary.Airport.length] = JSON.parse(Objects[Looper]);
 						Counter++;
 						break;
 
 					// Whole airport library
-					case Objects[Looper].startsWith("{\"AirportSelection\":{\"Departure\":") == true:
+					case Objects[Looper].startsWith("{\"AirportSelection\":{\"Departure\":"):
 						AirportLibrary = JSON.parse(Objects[Looper]);
 						Counter++;
 						break;
@@ -3947,7 +3947,7 @@
 		// User data
 		function ImportUserData() {
 			if(ReadValue("Textbox_SettingsUserDataImport") != "") {
-				if(ReadValue("Textbox_SettingsUserDataImport").startsWith("{\"System\":{\"Display\":{\"Theme\":") == true) {
+				if(ReadValue("Textbox_SettingsUserDataImport").startsWith("{\"System\":{\"Display\":{\"Theme\":")) {
 					let UserData = JSON.parse(ReadValue("Textbox_SettingsUserDataImport"));
 					Object.keys(UserData).forEach(function(SubobjectName) {
 						localStorage.setItem(SubobjectName, JSON.stringify(UserData[SubobjectName]));
@@ -4006,7 +4006,7 @@
 			case "System_Welcome":
 				switch(Selector) {
 					case 2:
-						if(IsChecked("Checkbox_DialogCheckboxOption") == true) {
+						if(IsChecked("Checkbox_DialogCheckboxOption")) {
 							System.DontShowAgain[System.DontShowAgain.length] = "GPSPFD_System_Welcome";
 							RefreshSystem();
 						}
@@ -4014,7 +4014,7 @@
 						ShowIAmHere("Item_HelpReadBeforeUse");
 						break;
 					case 3:
-						if(IsChecked("Checkbox_DialogCheckboxOption") == true) {
+						if(IsChecked("Checkbox_DialogCheckboxOption")) {
 							System.DontShowAgain[System.DontShowAgain.length] = "GPSPFD_System_Welcome";
 							RefreshSystem();
 						}
@@ -4069,7 +4069,7 @@
 			case "AirportLibrary_AirportExported":
 				switch(Selector) {
 					case 3:
-						if(IsChecked("Checkbox_DialogCheckboxOption") == true) {
+						if(IsChecked("Checkbox_DialogCheckboxOption")) {
 							System.DontShowAgain[System.DontShowAgain.length] = "GPSPFD_AirportLibrary_AirportExported";
 							RefreshSystem();
 						}
@@ -4183,7 +4183,7 @@
 
 				// Manual maneuver
 				case "W":
-					if(PFD.Attitude.IsEnabled == true && PFD.Attitude.Mode == "Manual") {
+					if(PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") {
 						PitchDown();
 					}
 					if(System.Display.HotkeyIndicators == "ShowOnAnyKeyPress" || System.Display.HotkeyIndicators == "AlwaysShow") {
@@ -4191,7 +4191,7 @@
 					}
 					break;
 				case "S":
-					if(PFD.Attitude.IsEnabled == true && PFD.Attitude.Mode == "Manual") {
+					if(PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") {
 						PitchUp();
 					}
 					if(System.Display.HotkeyIndicators == "ShowOnAnyKeyPress" || System.Display.HotkeyIndicators == "AlwaysShow") {
@@ -4199,7 +4199,7 @@
 					}
 					break;
 				case "A":
-					if(PFD.Attitude.IsEnabled == true && PFD.Attitude.Mode == "Manual") {
+					if(PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") {
 						RollLeft();
 					}
 					if(System.Display.HotkeyIndicators == "ShowOnAnyKeyPress" || System.Display.HotkeyIndicators == "AlwaysShow") {
@@ -4207,7 +4207,7 @@
 					}
 					break;
 				case "D":
-					if(PFD.Attitude.IsEnabled == true && PFD.Attitude.Mode == "Manual") {
+					if(PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") {
 						RollRight();
 					}
 					if(System.Display.HotkeyIndicators == "ShowOnAnyKeyPress" || System.Display.HotkeyIndicators == "AlwaysShow") {
@@ -4215,7 +4215,7 @@
 					}
 					break;
 				case "E":
-					if(PFD.Attitude.IsEnabled == true && PFD.Attitude.Mode == "Manual") {
+					if(PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") {
 						MaintainAttitude();
 					}
 					if(System.Display.HotkeyIndicators == "ShowOnAnyKeyPress" || System.Display.HotkeyIndicators == "AlwaysShow") {
@@ -4223,7 +4223,7 @@
 					}
 					break;
 				case "Q":
-					if(PFD.Attitude.IsEnabled == true && PFD.Attitude.Mode == "Manual") {
+					if(PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") {
 						ResetAttitude();
 					}
 					if(System.Display.HotkeyIndicators == "ShowOnAnyKeyPress" || System.Display.HotkeyIndicators == "AlwaysShow") {
@@ -4305,7 +4305,7 @@
 
 				// MCP
 				case "Z":
-					if(PFD.MCP.Speed.IsEnabled == true) {
+					if(PFD.MCP.Speed.IsEnabled) {
 						switch(PFD.MCP.Speed.Mode) {
 							case "IAS":
 								PFD.MCP.Speed.IAS = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_PFDMCPSpeed")) - 1, Subsystem.I18n.MeasurementUnit.Speed, "MeterPerSec"), 0, 277.5);
@@ -4324,7 +4324,7 @@
 					}
 					break;
 				case "X":
-					if(PFD.MCP.Speed.IsEnabled == true) {
+					if(PFD.MCP.Speed.IsEnabled) {
 						switch(PFD.MCP.Speed.Mode) {
 							case "IAS":
 								PFD.MCP.Speed.IAS = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_PFDMCPSpeed")) + 1, Subsystem.I18n.MeasurementUnit.Speed, "MeterPerSec"), 0, 277.5);
@@ -4343,7 +4343,7 @@
 					}
 					break;
 				case "B":
-					if(PFD.MCP.Altitude.IsEnabled == true) {
+					if(PFD.MCP.Altitude.IsEnabled) {
 						switch(Subsystem.I18n.MeasurementUnit.Altitude) {
 							case "Meter":
 								PFD.MCP.Altitude.Value = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_PFDMCPAltitude")) - 50, Subsystem.I18n.MeasurementUnit.Altitude, "Meter"), -609.6, 15240);
@@ -4363,7 +4363,7 @@
 					}
 					break;
 				case "N":
-					if(PFD.MCP.Altitude.IsEnabled == true) {
+					if(PFD.MCP.Altitude.IsEnabled) {
 						switch(Subsystem.I18n.MeasurementUnit.Altitude) {
 							case "Meter":
 								PFD.MCP.Altitude.Value = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_PFDMCPAltitude")) + 50, Subsystem.I18n.MeasurementUnit.Altitude, "Meter"), -609.6, 15240);
@@ -4383,7 +4383,7 @@
 					}
 					break;
 				case "K":
-					if(PFD.MCP.VerticalSpeed.IsEnabled == true) {
+					if(PFD.MCP.VerticalSpeed.IsEnabled) {
 						switch(Subsystem.I18n.MeasurementUnit.VerticalSpeed) {
 							case "MeterPerSec":
 								PFD.MCP.VerticalSpeed.Value = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_PFDMCPVerticalSpeed") * 10) / 10 - 1, Subsystem.I18n.MeasurementUnit.VerticalSpeed, "MeterPerSec"), -30.48, 30.48);
@@ -4402,7 +4402,7 @@
 					}
 					break;
 				case ",":
-					if(PFD.MCP.VerticalSpeed.IsEnabled == true) {
+					if(PFD.MCP.VerticalSpeed.IsEnabled) {
 						switch(Subsystem.I18n.MeasurementUnit.VerticalSpeed) {
 							case "MeterPerSec":
 								PFD.MCP.VerticalSpeed.Value = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_PFDMCPVerticalSpeed") * 10) / 10 + 1, Subsystem.I18n.MeasurementUnit.VerticalSpeed, "MeterPerSec"), -30.48, 30.48);
@@ -4421,7 +4421,7 @@
 					}
 					break;
 				case "C":
-					if(PFD.MCP.Heading.IsEnabled == true) {
+					if(PFD.MCP.Heading.IsEnabled) {
 						PFD.MCP.Heading.Value = Math.trunc(ReadValue("Textbox_PFDMCPHeading")) - 1;
 						if(PFD.MCP.Heading.Value < 0) {
 							PFD.MCP.Heading.Value += 360;
@@ -4436,7 +4436,7 @@
 					}
 					break;
 				case "V":
-					if(PFD.MCP.Heading.IsEnabled == true) {
+					if(PFD.MCP.Heading.IsEnabled) {
 						PFD.MCP.Heading.Value = Math.trunc(ReadValue("Textbox_PFDMCPHeading")) + 1;
 						if(PFD.MCP.Heading.Value < 0) {
 							PFD.MCP.Heading.Value += 360;
@@ -5175,7 +5175,7 @@
 				AlertSystemError("The value of Algorithm \"" + Algorithm + "\" in function CalcIAS is invalid.");
 				break;
 		}
-		if(IsAttitudeConsidered == true) {
+		if(IsAttitudeConsidered) {
 			return IAS * Math.cos(DegToRad(RelativePitch));
 		} else {
 			return IAS;
@@ -5227,7 +5227,7 @@
 		OutsideAirPressure = CalcOutsideAirPressure(Altitude, QNH, OutsideAirTemperature);
 		OutsideAirDensity = CalcOutsideAirDensity(OutsideAirTemperature, OutsideAirPressure, RelativeHumidity);
 		StallSpeed = Math.sqrt((2 * Weight * 9.80665) / (OutsideAirDensity * WingArea * MaxLiftCoefficient));
-		if(IsAttitudeConsidered == true) {
+		if(IsAttitudeConsidered) {
 			return StallSpeed * Math.sqrt(1 / Math.cos(DegToRad(CheckRangeAndCorrect(Math.abs(Roll), 0, 89.99999))));
 		} else {
 			return StallSpeed;
@@ -5260,7 +5260,7 @@
 	function ShowTopbar() {
 		Show("Topbar");
 		clearTimeout(Automation.HideTopbar);
-		if(Subsystem.Display.HideTopbarWhenNotScrolling == true) {
+		if(Subsystem.Display.HideTopbarWhenNotScrolling) {
 			Automation.HideTopbar = setTimeout(function() {
 				Hide("Topbar");
 			}, System.Display.Anim + 5000);
@@ -5317,7 +5317,7 @@
 		return PFD0.Stats.Speed.TapeDisplay >= PFD0.Stats.Speed.Limit.Max;
 	}
 	function IsApproachingMCPAltitude() {
-		if(PFD.MCP.Altitude.IsEnabled == true) {
+		if(PFD.MCP.Altitude.IsEnabled) {
 			switch(PFD.FlightMode.FlightMode) {
 				case "DepartureGround":
 				case "ArrivalGround":

@@ -142,7 +142,7 @@
 			}
 		}
 		function ChangeIndicatorLight(ID, Value) {
-			if(IsClassContained(ID, "IndicatorLight") == true) {
+			if(IsClassContained(ID, "IndicatorLight")) {
 				RemoveClass(ID, "Off");
 				RemoveClass(ID, "Red");
 				RemoveClass(ID, "Orange");
@@ -428,14 +428,14 @@
 		// Audio
 		function LoadAudio(ID, Value) { // Value example: "audio/Beep.mp3"
 			StopAudio(ID);
-			if(System.Audio.PlayAudio == true && document.getElementById(ID).volume > 0 && Value != "") {
+			if(System.Audio.PlayAudio && document.getElementById(ID).volume > 0 && Value != "") {
 				ChangeText(ID, "<source src=\"" + Value + "\" />");
 				document.getElementById(ID).load();
 			}
 		}
 		function PlayAudio(ID, Value) {
 			StopAudio(ID);
-			if(System.Audio.PlayAudio == true && document.getElementById(ID).volume > 0) {
+			if(System.Audio.PlayAudio && document.getElementById(ID).volume > 0) {
 				ChangeText(ID, "<source src=\"" + Value + "\" />");
 				document.getElementById(ID).load();
 				document.getElementById(ID).currentTime = 0;
@@ -709,7 +709,7 @@
 					DropctrlGroups[Looper].inert = true;
 				} else {
 					DropctrlGroups[Looper].classList.add("HiddenInMobileLayout");
-					if(IsMobileLayout() == true) {
+					if(IsMobileLayout()) {
 						DropctrlGroups[Looper].inert = true;
 					}
 				}
