@@ -6,7 +6,7 @@
 	// Declare variables
 	"use strict";
 
-	// Repair user data: Solves incompatibility after major version updates. A repairer may get removed if older than 12 months.
+	// Repair user data: Solves incompatibility after version updates. A repairer may get removed if older than 24 months.
 	function RepairUserData() {
 		// Home page
 			// v9.00 (2025/12/14)
@@ -16,7 +16,6 @@
 				if(System.Display.Cursor == "Default") {
 					System.Display.Cursor = "None";
 					localStorage.setItem("System", JSON.stringify(System));
-					LogRepairedUserData("Cursor");
 				}
 			}
 
@@ -36,7 +35,6 @@
 						{Sequence: Highscore[6][1], Date: Highscore[6][2], Score: Highscore[6][3], MaxCombo: Highscore[6][4], Accuracy: Highscore[6][5], AvgReactionTime: Highscore[6][6]}
 					];
 					localStorage.setItem("KanaMaster_Highscore", JSON.stringify(NewObject));
-					LogRepairedUserData("KanaMaster highscore");
 				}
 			}
 
@@ -48,12 +46,10 @@
 					case "Default":
 						Subsystem.Display.GameFont = "Inherit";
 						localStorage.setItem("KanaMaster_Subsystem", JSON.stringify(Subsystem));
-						LogRepairedUserData("KanaMaster game font");
 						break;
 					case "Sans":
 						Subsystem.Display.GameFont = "Sans-serif";
 						localStorage.setItem("KanaMaster_Subsystem", JSON.stringify(Subsystem));
-						LogRepairedUserData("KanaMaster game font");
 						break;
 					default:
 						break;
@@ -75,7 +71,6 @@
 						false, false
 					];
 					localStorage.setItem("KanaMaster_Game", JSON.stringify(Game));
-					LogRepairedUserData("KanaMaster question range");
 				}
 			}
 
@@ -96,7 +91,6 @@
 					}
 					Game.Terrain.Data = structuredClone(NewObject);
 					localStorage.setItem("YamanoboRyou_Game", JSON.stringify(Game));
-					LogRepairedUserData("Yamanobo-Ryou terrain data");
 				}
 				if(Game.Stats.Keystroke == undefined) {
 					Game.Stats.Keystroke = {
@@ -106,7 +100,6 @@
 					delete Game.Stats.KeystrokeCount;
 					delete Game.Stats.KeystrokeTimestamp;
 					localStorage.setItem("YamanoboRyou_Game", JSON.stringify(Game));
-					LogRepairedUserData("Yamanobo-Ryou keystroke stats");
 				}
 			}
 			if(localStorage.YamanoboRyou_Highscore != undefined) {
@@ -122,7 +115,6 @@
 						{Sequence: Highscore[6][1], Date: Highscore[6][2], Score: Highscore[6][3], AvgSpeed: Highscore[6][4], AvgKeystrokeSpeed: Highscore[6][5], Accuracy: Highscore[6][6]}
 					];
 					localStorage.setItem("YamanoboRyou_Highscore", JSON.stringify(NewObject));
-					LogRepairedUserData("Yamanobo-Ryou highscore");
 				}
 			}
 
@@ -135,17 +127,14 @@
 					case "Iosevka, monospace":
 						Subsystem.Display.GameFont = "Iosevka";
 						localStorage.setItem("YamanoboRyou_Subsystem", JSON.stringify(Subsystem));
-						LogRepairedUserData("Yamanobo-Ryou game font");
 						break;
 					case "Sans":
 						Subsystem.Display.GameFont = "Sans-serif";
 						localStorage.setItem("YamanoboRyou_Subsystem", JSON.stringify(Subsystem));
-						LogRepairedUserData("Yamanobo-Ryou game font");
 						break;
 					case "Inter, sans-serif":
 						Subsystem.Display.GameFont = "Inter";
 						localStorage.setItem("YamanoboRyou_Subsystem", JSON.stringify(Subsystem));
-						LogRepairedUserData("Yamanobo-Ryou game font");
 						break;
 					default:
 						break;
@@ -176,7 +165,6 @@
 						}
 					};
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
-					LogRepairedUserData("GPS-PFD takeoff speeds and more");
 				}
 			}
 
@@ -190,7 +178,6 @@
 					PFD.MCP.Speed.MachNumber = 0;
 					delete PFD.MCP.Speed.Value;
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
-					LogRepairedUserData("GPS-PFD MCP");
 				}
 			}
 
@@ -203,7 +190,6 @@
 						IsEnabled: false, Value: 0
 					};
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
-					LogRepairedUserData("GPS-PFD MCP vertical speed");
 				}
 			}
 
@@ -219,7 +205,6 @@
 						IsEnabled: false
 					};
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
-					LogRepairedUserData("GPS-PFD seat height");
 				}
 			}
 
@@ -233,7 +218,6 @@
 						Temperature: "Celsius", Pressure: "Hectopascal", Weight: "Kilogram", Area: "SquareMeter"
 					};
 					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
-					LogRepairedUserData("GPS-PFD measurement units");
 				}
 			}
 			if(localStorage.GPSPFD_PFD != undefined) {
@@ -249,7 +233,6 @@
 					};
 					delete PFD.Speed.SpeedLimit;
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
-					LogRepairedUserData("GPS-PFD speed limits");
 				}
 			}
 
@@ -260,14 +243,12 @@
 				if(PFD.Nav.AutoSwitchRunwayWhenLanding == undefined) {
 					PFD.Nav.AutoSwitchRunwayWhenLanding = true;
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
-					LogRepairedUserData("GPS-PFD auto switch runway when landing");
 				}
 			}
 			if(localStorage.GPSPFD_AirportLibrary != undefined) {
 				let AirportLibrary = JSON.parse(localStorage.getItem("GPSPFD_AirportLibrary"));
 				if(AirportLibrary.AirportSelection == undefined) {
 					localStorage.removeItem("GPSPFD_AirportLibrary");
-					LogRepairedUserData("GPS-PFD airport library");
 				}
 			}
 
@@ -278,7 +259,6 @@
 				if(Subsystem.Display.PFDFont == undefined) {
 					Subsystem.Display.PFDFont = "Inherit";
 					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
-					LogRepairedUserData("GPS-PFD PFD font");
 				}
 			}
 
@@ -289,18 +269,15 @@
 				if(Subsystem.Display.PFDStyle == "Default") {
 					Subsystem.Display.PFDStyle = "Normal";
 					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
-					LogRepairedUserData("GPS-PFD PFD style");
 				}
 				switch(Subsystem.Display.PFDFont) {
 					case "Inter, sans-serif":
 						Subsystem.Display.PFDFont = "Inter";
 						localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
-						LogRepairedUserData("GPS-PFD PFD font");
 						break;
 					case "Century Gothic, sans-serif":
 						Subsystem.Display.PFDFont = "Century Gothic";
 						localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
-						LogRepairedUserData("GPS-PFD PFD font");
 						break;
 					default:
 						break;
@@ -314,12 +291,10 @@
 				if(Subsystem.Display.PFDStyle == "AutomobileSpeedometer") {
 					Subsystem.Display.PFDStyle = "Normal";
 					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
-					LogRepairedUserData("GPS-PFD automobile speedometer panel removal");
 				}
 				if(Subsystem.Display.HideTopbarWhenNotScrolling == undefined) {
 					Subsystem.Display.HideTopbarWhenNotScrolling = false;
 					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
-					LogRepairedUserData("GPS-PFD auto hide topbar");
 				}
 			}
 			if(localStorage.GPSPFD_PFD != undefined) {
@@ -327,14 +302,6 @@
 				if(PFD.Attitude.Sensitivity == undefined) {
 					PFD.Attitude.Sensitivity = 5;
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
-					LogRepairedUserData("GPS-PFD attitude indicator sensitivity");
 				}
 			}
-	}
-	function LogRepairedUserData(Name) {
-		if(System0.RepairedUserData == "") {
-			System0.RepairedUserData += Name;
-		} else {
-			System0.RepairedUserData += ", " + Name;
-		}
 	}

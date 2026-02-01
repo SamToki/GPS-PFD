@@ -7,7 +7,7 @@
 		/* Web fonts */
 		@font-face {
 			font-family: "Century Gothic";
-			src: local("Century Gothic"), url(../fonts/Century%20Gothic.ttf);
+			src: local("Century Gothic"), url(../fonts/Century%20Gothic.ttf); font-display: swap;
 		}
 
 /* Area specific */

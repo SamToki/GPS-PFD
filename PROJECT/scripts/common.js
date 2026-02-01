@@ -20,7 +20,7 @@
 		System0 = {
 			IsPointerDown: false, IsInIMEComposition: false,
 			DoNotHide: [0], Dialog: [0],
-			ScreenWakeLock: null, PWAInstallation: null, RepairedUserData: ""
+			ScreenWakeLock: null, PWAInstallation: null
 		},
 		Automation = {
 			ClockRate: 20,
@@ -46,8 +46,7 @@
 			Dev: {
 				TryToOptimizePerformance: false,
 				ShowDebugOutlines: false
-			},
-			Version: {}
+			}
 		};
 
 // Simplifications
