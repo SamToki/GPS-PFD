@@ -304,4 +304,22 @@
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
 				}
 			}
+
+			// v2.00 (2026/01/28)
+			// Rename values and remove useless features
+			if(localStorage.GPSPFD_PFD != undefined) {
+				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
+				if(PFD.Attitude.Mode == "Accel") {
+					PFD.Attitude.Mode = "Sensor";
+					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
+				}
+				if(PFD.Speed.Mode == "Accel" || PFD.Speed.Mode == "DualChannel") {
+					PFD.Speed.Mode = "GPS";
+					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
+				}
+				if(PFD.Altitude.Mode == "Accel" || PFD.Altitude.Mode == "DualChannel") {
+					PFD.Altitude.Mode = "GPS";
+					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
+				}
+			}
 	}

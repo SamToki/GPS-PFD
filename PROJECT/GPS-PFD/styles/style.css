@@ -1071,7 +1071,7 @@
 				/* Area specific */
 					/* Ctrls */
 						/* Fullscreen etc. */
-						#Ctrl_PFDToggleFullscreen, #Ctrl_PFDResetAccelSpeed, #Ctrl_PFDResetAvgSpeeds, #Ctrl_PFDHotkeyList {
+						#Ctrl_PFDToggleFullscreen, #Ctrl_PFDResetAvgSpeeds, #Ctrl_PFDHotkeyList {
 							height: 35px;
 						}
 
@@ -1251,25 +1251,6 @@
 					}
 					#CtrlGroup_PFDOptions .Combobox {
 						width: 160px;
-					}
-
-					/* Tech info */
-					#PFDTechInfoSpeedVectorGraph {
-						position: relative;
-						width: 100px; height: 100px; border-radius: 5px;
-						background-color: #00000020;
-						overflow: hidden;
-					}
-					#Needle_PFDTechInfoSpeedVectorGraph {
-						position: absolute; top: unset; left: calc(50% - 2.5px);
-						width: 5px; height: 0;
-					}
-					#Needle_PFDTechInfoSpeedVectorGraph .NeedleFg {
-						position: absolute; top: 5px; left: calc(50% - 0.5px);
-						width: 1px; height: calc(50% - 5px); border-radius: 0.5px;
-					}
-					#Needle_PFDTechInfoSpeedVectorGraph .NeedleArrow {
-						height: 10px;
 					}
 
 		/* Airport Library */

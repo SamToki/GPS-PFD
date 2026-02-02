@@ -106,23 +106,17 @@
 					Heading: null,
 					Timestamp: 0
 				},
-				Accel: {
-					Accel: {
+				Sensor: {
+					Gravity: {
 						Absolute: {
-							X: null, Y: null, Z: null
-						},
-						AbsoluteWithGravity: {
 							X: null, Y: null, Z: null
 						},
 						Relative: {
 							Forward: 0, Right: 0, Upward: 0
-						},
-						RelativeWithGravity: {
-							Forward: 0, Right: 0, Upward: 0
-						},
-						Aligned: {
-							Forward: 0, Right: 0, Upward: 0
 						}
+					},
+					Compass: {
+						Alpha: null, IsAbsolute: false
 					},
 					Attitude: {
 						Original: {
@@ -132,14 +126,7 @@
 							Pitch: 0, Roll: 0
 						}
 					},
-					Speed: {
-						Vector: {
-							Forward: 0, Right: 0, Upward: 0
-						},
-						Speed: 0
-					},
-					Altitude: 0,
-					Interval: null,
+					Heading: 0,
 					Timestamp: 0
 				},
 				Manual: {
@@ -154,13 +141,13 @@
 			},
 			Status: {
 				GPS: {
-					PermissionStatus: "Unknown",
+					PermissionStatus: "Unknown", IsActive: false,
 					IsPositionAvailable: false, IsPositionAccurate: false,
 					IsSpeedAvailable: false, IsAltitudeAvailable: false, IsAltitudeAccurate: false, IsHeadingAvailable: false
 				},
-				Accel: {
-					PermissionStatus: "Unknown",
-					IsAvailable: false
+				Sensor: {
+					PermissionStatus: "Unknown", IsActive: false,
+					IsAttitudeAvailable: false, IsHeadingAvailable: false
 				},
 				IsDecisionAltitudeActive: false
 			},
@@ -168,10 +155,12 @@
 				ClockTime: 0, PreviousClockTime: Date.now(),
 				FlightModeTimestamp: 0,
 				Attitude: {
+					IsValid: false,
 					Pitch: 0, PitchDisplay: 0, PitchDisplay2: 0,
 					Roll: 0, RollDisplay: 0
 				},
 				Speed: {
+					IsValid: false,
 					SampleCount: 0,
 					Speed: 0, Vertical: 0, Pitch: 0,
 					GS: 0, GSDisplay: 0,
@@ -189,15 +178,18 @@
 					MachNumber: 0
 				},
 				Altitude: {
+					IsValid: false,
 					Altitude: 0, TapeDisplay: 0, PreviousTapeDisplay: 0, BalloonDisplay: [0, 0, 0, 0, 0],
 					Trend: 0, TrendDisplay: 0,
 					BeepTimestamp: 0,
 					Ground: 0, RadioDisplay: 0, DecisionTimestamp: 0
 				},
 				Heading: {
+					IsValid: false,
 					Heading: 0, Display: 0
 				},
 				Nav: {
+					IsValid: false,
 					Lat: 0, Lon: 0,
 					Distance: 0, DistanceDisplay: 0, Bearing: 0, ETA: 0,
 					LocalizerDeviation: 0, GlideSlopeDeviation: 0, MarkerBeacon: ""
@@ -219,6 +211,7 @@
 		Automation.HideTopbar = null;
 		Automation.ClockPFD = null;
 		Automation.ClockAvgSpeeds = null;
+		Automation.GPS = null;
 
 		// Saved
 		var Subsystem = {
@@ -246,7 +239,7 @@
 			},
 			Attitude: {
 				IsEnabled: true,
-				Mode: "Accel", Sensitivity: 5,
+				Mode: "Sensor", Sensitivity: 5,
 				Offset: {
 					Pitch: 0, Roll: 0
 				}
@@ -1072,7 +1065,7 @@
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
 					switch(Subsystem.Display.PFDStyle) {
 						case "Normal":
-							ChangeText("Label_PFDNormalPanelAccelTitle", "加速计");
+							ChangeText("Label_PFDNormalPanelSensorTitle", "传感器");
 							ChangeText("Label_PFDNormalPanelGSTitle", "地速");
 							ChangeText("Label_PFDNormalPanelAvgGSTitle", "平均地速");
 							ChangeText("Label_PFDNormalPanelTASTitle", "真空速");
@@ -1084,7 +1077,7 @@
 							ChangeText("Label_PFDNormalPanelDecisionAltitudeTitle", "决断高度");
 							break;
 						case "HUD":
-							ChangeText("Label_PFDHUDPanelAccelTitle", "加速计");
+							ChangeText("Label_PFDHUDPanelSensorTitle", "传感器");
 							ChangeText("Label_PFDHUDPanelSpeedModeTitle", "速度模式");
 							ChangeText("Label_PFDHUDPanelAltitudeModeTitle", "高度模式");
 							ChangeText("Label_PFDHUDPanelHeadingModeTitle", "朝向模式");
@@ -1102,7 +1095,7 @@
 				} else {
 					switch(Subsystem.Display.PFDStyle) {
 						case "Normal":
-							ChangeText("Label_PFDNormalPanelAccelTitle", "ACCEL");
+							ChangeText("Label_PFDNormalPanelSensorTitle", "SENSOR");
 							ChangeText("Label_PFDNormalPanelGSTitle", "GS");
 							ChangeText("Label_PFDNormalPanelAvgGSTitle", "AVG GS");
 							ChangeText("Label_PFDNormalPanelTASTitle", "TAS");
@@ -1114,7 +1107,7 @@
 							ChangeText("Label_PFDNormalPanelDecisionAltitudeTitle", "DA");
 							break;
 						case "HUD":
-							ChangeText("Label_PFDHUDPanelAccelTitle", "ACCEL");
+							ChangeText("Label_PFDHUDPanelSensorTitle", "SENSOR");
 							ChangeText("Label_PFDHUDPanelSpeedModeTitle", "SPD MODE");
 							ChangeText("Label_PFDHUDPanelAltitudeModeTitle", "ALT MODE");
 							ChangeText("Label_PFDHUDPanelHeadingModeTitle", "HDG MODE");
@@ -1361,7 +1354,7 @@
 
 		// Call
 		RefreshGPSStatus();
-		RefreshAccelStatus();
+		RefreshSensorStatus();
 		RefreshManualData();
 		RefreshPFDData();
 		RefreshScale();
@@ -1379,7 +1372,7 @@
 		// Sub-functions
 		function RefreshGPSStatus() {
 			PFD0.Status.GPS = {
-				PermissionStatus: "Unknown",
+				PermissionStatus: "Unknown", IsActive: false,
 				IsPositionAvailable: false, IsPositionAccurate: false,
 				IsSpeedAvailable: false, IsAltitudeAvailable: false, IsAltitudeAccurate: false, IsHeadingAvailable: false
 			};
@@ -1401,33 +1394,56 @@
 						break;
 				}
 			});
-			if(PFD0.Stats.ClockTime - PFD0.RawData.GPS.Timestamp < 3000) {
-				if(PFD0.RawData.GPS.Position.Lat != null && PFD0.RawData.GPS.Position.Lon != null) {
-					PFD0.Status.GPS.IsPositionAvailable = true;
-					if(PFD0.RawData.GPS.Position.Accuracy <= 10) {
-						PFD0.Status.GPS.IsPositionAccurate = true;
+			if((PFD.Speed.Mode == "GPS" || PFD.Altitude.Mode == "GPS" || (PFD.Heading.Mode == "Auto" || PFD.Heading.Mode == "GPS")) &&
+			PFD0.Status.GPS.PermissionStatus != "Denied") {
+				PFD0.Status.GPS.IsActive = true;
+				if(Automation.GPS == null) {
+					Automation.GPS = navigator.geolocation.watchPosition(RefreshGPSData, null, GeolocationAPIOptions);
+				}
+				if(PFD0.Stats.ClockTime - PFD0.RawData.GPS.Timestamp < 3000) {
+					if(PFD0.RawData.GPS.Position.Lat != null && PFD0.RawData.GPS.Position.Lon != null) {
+						PFD0.Status.GPS.IsPositionAvailable = true;
+						if(PFD0.RawData.GPS.Position.Accuracy <= 10) {
+							PFD0.Status.GPS.IsPositionAccurate = true;
+						}
+					}
+					if(PFD0.RawData.GPS.Speed != null) {
+						PFD0.Status.GPS.IsSpeedAvailable = true;
+					}
+					if(PFD0.RawData.GPS.Altitude.Altitude != null) {
+						PFD0.Status.GPS.IsAltitudeAvailable = true;
+						if(PFD0.RawData.GPS.Altitude.Accuracy <= 20) {
+							PFD0.Status.GPS.IsAltitudeAccurate = true;
+						}
+					}
+					if(PFD0.RawData.GPS.Heading != null) {
+						PFD0.Status.GPS.IsHeadingAvailable = true;
 					}
 				}
-				if(PFD0.RawData.GPS.Speed != null) {
-					PFD0.Status.GPS.IsSpeedAvailable = true;
-				}
-				if(PFD0.RawData.GPS.Altitude.Altitude != null) {
-					PFD0.Status.GPS.IsAltitudeAvailable = true;
-					if(PFD0.RawData.GPS.Altitude.Accuracy <= 20) {
-						PFD0.Status.GPS.IsAltitudeAccurate = true;
-					}
-				}
-				if(PFD0.RawData.GPS.Heading != null) {
-					PFD0.Status.GPS.IsHeadingAvailable = true;
-				}
+			} else {
+				navigator.geolocation.clearWatch(Automation.GPS);
 			}
 		}
-		function RefreshAccelStatus() {
-			if(PFD0.Stats.ClockTime - PFD0.RawData.Accel.Timestamp < 1000 &&
-			PFD0.RawData.Accel.Accel.Absolute.X != null && PFD0.RawData.Accel.Accel.AbsoluteWithGravity.X != null) {
-				PFD0.Status.Accel.IsAvailable = true;
+		function RefreshSensorStatus() {
+			PFD0.Status.Sensor.IsActive = false;
+			PFD0.Status.Sensor.IsAttitudeAvailable = false;
+			PFD0.Status.Sensor.IsHeadingAvailable = false;
+			if(((PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Sensor") || (PFD.Heading.Mode == "Auto" || PFD.Heading.Mode == "Sensor")) &&
+			PFD0.Status.Sensor.PermissionStatus != "Denied") {
+				PFD0.Status.Sensor.IsActive = true;
+				window.addEventListener("devicemotion", RefreshGravityData);
+				window.addEventListener("deviceorientation", RefreshCompassData);
+				if(PFD0.Stats.ClockTime - PFD0.RawData.Sensor.Timestamp < 1000) {
+					if(PFD0.RawData.Sensor.Gravity.Absolute.X != null) {
+						PFD0.Status.Sensor.IsAttitudeAvailable = true;
+					}
+					if(PFD0.RawData.Sensor.Compass.Alpha != null) {
+						PFD0.Status.Sensor.IsHeadingAvailable = true;
+					}
+				}
 			} else {
-				PFD0.Status.Accel.IsAvailable = false;
+				window.removeEventListener("devicemotion", RefreshGravityData);
+				window.removeEventListener("deviceorientation", RefreshCompassData);
 			}
 		}
 		function RefreshManualData() {
@@ -1468,9 +1484,10 @@
 			// Attitude
 			if(PFD.Attitude.IsEnabled) {
 				switch(true) {
-					case PFD.Attitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable:
-						PFD0.Stats.Attitude.Pitch = CheckRangeAndCorrect(PFD0.RawData.Accel.Attitude.Aligned.Pitch, -90, 90);
-						PFD0.Stats.Attitude.Roll = PFD0.RawData.Accel.Attitude.Aligned.Roll;
+					case PFD.Attitude.Mode == "Sensor" && PFD0.Status.Sensor.IsAttitudeAvailable:
+						PFD0.Stats.Attitude.IsValid = true;
+						PFD0.Stats.Attitude.Pitch = CheckRangeAndCorrect(PFD0.RawData.Sensor.Attitude.Aligned.Pitch, -90, 90);
+						PFD0.Stats.Attitude.Roll = PFD0.RawData.Sensor.Attitude.Aligned.Roll;
 						if(PFD0.Stats.Attitude.Roll < -180) {
 							PFD0.Stats.Attitude.Roll += 360;
 						}
@@ -1479,10 +1496,12 @@
 						}
 						break;
 					case PFD.Attitude.Mode == "Manual":
+						PFD0.Stats.Attitude.IsValid = true;
 						PFD0.Stats.Attitude.Pitch = PFD0.RawData.Manual.Attitude.Pitch;
 						PFD0.Stats.Attitude.Roll = PFD0.RawData.Manual.Attitude.Roll;
 						break;
 					default:
+						PFD0.Stats.Attitude.IsValid = false;
 						break;
 				}
 				PFD0.Stats.Attitude.PitchDisplay += (PFD0.Stats.Attitude.Pitch - PFD0.Stats.Attitude.PitchDisplay) / PFD.Attitude.Sensitivity;
@@ -1493,16 +1512,15 @@
 			// Altitude (Updated before speed because speed data relies on altitude variation)
 			switch(true) {
 				case PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable:
+					PFD0.Stats.Altitude.IsValid = true;
 					PFD0.Stats.Altitude.Altitude = PFD0.RawData.GPS.Altitude.Altitude;
 					break;
-				case PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable:
-				case PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable || PFD0.Status.Accel.IsAvailable):
-					PFD0.Stats.Altitude.Altitude = PFD0.RawData.Accel.Altitude;
-					break;
 				case PFD.Altitude.Mode == "Manual":
+					PFD0.Stats.Altitude.IsValid = true;
 					PFD0.Stats.Altitude.Altitude = PFD0.RawData.Manual.Altitude;
 					break;
 				default:
+					PFD0.Stats.Altitude.IsValid = false;
 					break;
 			}
 				// Tape
@@ -1538,13 +1556,33 @@
 
 			// Heading (Updated before speed because speed data relies on heading)
 			switch(true) {
+				case PFD.Heading.Mode == "Auto":
+					if(PFD0.Status.GPS.IsHeadingAvailable && PFD0.Stats.Speed.GSDisplay >= 2.572) {
+						PFD0.Stats.Heading.IsValid = true;
+						PFD0.Stats.Heading.Heading = PFD0.RawData.GPS.Heading;
+					} else {
+						if(PFD0.Status.Sensor.IsHeadingAvailable) {
+							PFD0.Stats.Heading.IsValid = true;
+							PFD0.Stats.Heading.Heading = PFD0.RawData.Sensor.Heading;
+						} else {
+							PFD0.Stats.Heading.IsValid = false;
+						}
+					}
+					break;
 				case PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable:
+					PFD0.Stats.Heading.IsValid = true;
 					PFD0.Stats.Heading.Heading = PFD0.RawData.GPS.Heading;
 					break;
+				case PFD.Heading.Mode == "Sensor" && PFD0.Status.Sensor.IsHeadingAvailable:
+					PFD0.Stats.Heading.IsValid = true;
+					PFD0.Stats.Heading.Heading = PFD0.RawData.Sensor.Heading;
+					break;
 				case PFD.Heading.Mode == "Manual":
+					PFD0.Stats.Heading.IsValid = true;
 					PFD0.Stats.Heading.Heading = PFD0.RawData.Manual.Heading;
 					break;
 				default:
+					PFD0.Stats.Heading.IsValid = false;
 					break;
 			}
 			PFD0.Stats.Heading.Display += (PFD0.Stats.Heading.Heading - PFD0.Stats.Heading.Display) / 50;
@@ -1552,16 +1590,15 @@
 			// Speed
 			switch(true) {
 				case PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable:
+					PFD0.Stats.Speed.IsValid = true;
 					PFD0.Stats.Speed.Speed = PFD0.RawData.GPS.Speed;
 					break;
-				case PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable:
-				case PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable || PFD0.Status.Accel.IsAvailable):
-					PFD0.Stats.Speed.Speed = PFD0.RawData.Accel.Speed.Speed;
-					break;
 				case PFD.Speed.Mode == "Manual":
+					PFD0.Stats.Speed.IsValid = true;
 					PFD0.Stats.Speed.Speed = PFD0.RawData.Manual.Speed;
 					break;
 				default:
+					PFD0.Stats.Speed.IsValid = false;
 					break;
 			}
 				// Pitch
@@ -1579,8 +1616,7 @@
 				PFD0.Stats.Speed.AvgGSDisplay += (PFD0.Stats.Speed.AvgGS - PFD0.Stats.Speed.AvgGSDisplay) / 50 * ((PFD0.Stats.ClockTime - PFD0.Stats.PreviousClockTime) / 30);
 
 				// TAS
-				if((PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable) ||
-				PFD.Heading.Mode == "Manual") {
+				if(PFD0.Stats.Heading.IsValid) {
 					PFD0.Stats.Speed.Wind.Heading = PFD.Speed.Wind.Direction + 180;
 					if(PFD0.Stats.Speed.Wind.Heading >= 360) {
 						PFD0.Stats.Speed.Wind.Heading -= 360;
@@ -1661,6 +1697,9 @@
 
 			// Nav
 			if(PFD.Nav.IsEnabled && PFD0.Status.GPS.IsPositionAvailable) {
+				// Validity
+				PFD0.Stats.Nav.IsValid = true;
+
 				// Position
 				PFD0.Stats.Nav.Lat = PFD0.RawData.GPS.Position.Lat;
 				PFD0.Stats.Nav.Lon = PFD0.RawData.GPS.Position.Lon;
@@ -1673,7 +1712,8 @@
 					AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Lat, AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Lon);
 
 				// DME
-				AirportLibrary0.ActiveRunwayName = AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Heading.toString().padStart(2, "0") + AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Suffix;
+				AirportLibrary0.ActiveRunwayName = AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Heading.toString().padStart(2, "0") +
+					AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].Suffix;
 				switch(PFD.Nav.ETACalcMethod) {
 					case "UseRealTimeGS":
 						if(PFD0.Stats.Speed.GSDisplay > 0) {
@@ -1723,6 +1763,8 @@
 							break;
 					}
 				}
+			} else {
+				PFD0.Stats.Nav.IsValid = false;
 			}
 
 			// Radio altitude
@@ -1758,20 +1800,14 @@
 
 				// Callouts
 					// Speed callout
-					if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable) ||
-					(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
-					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable || PFD0.Status.Accel.IsAvailable)) ||
-					PFD.Speed.Mode == "Manual") {
+					if(PFD0.Stats.Speed.IsValid) {
 						if(IsV1()) {
 							PFD0.Alert.Active.SpeedCallout = "V1";
 						}
 					}
 
 					// Altitude callout
-					if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable) ||
-					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
-					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable || PFD0.Status.Accel.IsAvailable)) ||
-					PFD.Altitude.Mode == "Manual") {
+					if(PFD0.Stats.Altitude.IsValid) {
 						if(IsApproachingMCPAltitude()) {
 							PFD0.Alert.Active.AltitudeCallout = "AltitudeBeep";
 						}
@@ -1845,8 +1881,7 @@
 				if(PFD.WarningSystem.IsEnabled) {
 					// Attitude warning
 					if(PFD.Attitude.IsEnabled) {
-						if((PFD.Attitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
-						PFD.Attitude.Mode == "Manual") {
+						if(PFD0.Stats.Attitude.IsValid) {
 							if(IsExcessiveBankAngle()) {
 								PFD0.Alert.Active.AttitudeWarning = "BankAngle";
 							}
@@ -1854,10 +1889,7 @@
 					}
 
 					// Speed warning
-					if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable) ||
-					(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
-					(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable || PFD0.Status.Accel.IsAvailable)) ||
-					PFD.Speed.Mode == "Manual") {
+					if(PFD0.Stats.Speed.IsValid) {
 						if(IsAirspeedLow()) {
 							PFD0.Alert.Active.SpeedWarning = "AirspeedLow";
 						}
@@ -1867,14 +1899,11 @@
 					}
 
 					// Altitude warning
-					if((PFD.Altitude.Mode == "GPS" && PFD0.Status.GPS.IsAltitudeAvailable) ||
-					(PFD.Altitude.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
-					(PFD.Altitude.Mode == "DualChannel" && (PFD0.Status.GPS.IsAltitudeAvailable || PFD0.Status.Accel.IsAvailable)) ||
-					PFD.Altitude.Mode == "Manual") {
+					if(PFD0.Stats.Altitude.IsValid) {
 						if(IsDontSink()) {
 							PFD0.Alert.Active.AltitudeWarning = "DontSink";
 						}
-						if(PFD.Nav.IsEnabled && PFD0.Status.GPS.IsPositionAvailable) {
+						if(PFD0.Stats.Nav.IsValid) {
 							if(IsExcessivelyBelowGlideSlope()) {
 								PFD0.Alert.Active.AltitudeWarning = "GlideSlope";
 							}
@@ -2148,8 +2177,7 @@
 			}
 
 		function RefreshRunways() {
-			if(PFD.Nav.IsEnabled && PFD0.Status.GPS.IsPositionAvailable &&
-			((PFD.Heading.Mode == "GPS" && PFD0.Status.GPS.IsHeadingAvailable) || PFD.Heading.Mode == "Manual")) {
+			if(PFD0.Stats.Heading.IsValid && PFD0.Stats.Nav.IsValid) {
 				// Initialization
 				let HeadingDeviation = 0, Distance = [0], RunwayAhead = [0], RecommendedRunway = 0;
 
@@ -2269,74 +2297,44 @@
 				ChangeText("Label_PFDTechInfoAltitudeAccuracy", "N/A");
 			}
 			if(PFD0.RawData.GPS.Heading != null) {
-				ChangeText("Label_PFDTechInfoHeading", PFD0.RawData.GPS.Heading.toFixed(2) + "度");
+				ChangeText("Label_PFDTechInfoGPSHeading", PFD0.RawData.GPS.Heading.toFixed(2) + "度");
 			} else {
-				ChangeText("Label_PFDTechInfoHeading", "N/A");
+				ChangeText("Label_PFDTechInfoGPSHeading", "N/A");
 			}
 			ChangeText("Label_PFDTechInfoGPSTimestamp", PFD0.RawData.GPS.Timestamp + " (+" + (PFD0.Stats.ClockTime - PFD0.RawData.GPS.Timestamp) + ")");
 
-			// Accel
-			if(PFD0.RawData.Accel.Accel.Absolute.X != null) {
-				ChangeText("Label_PFDTechInfoAbsoluteXAxis", PFD0.RawData.Accel.Accel.Absolute.X.toFixed(2) + "m/s²");
+			// Sensor
+			if(PFD0.RawData.Sensor.Gravity.Absolute.X != null) {
+				ChangeText("Label_PFDTechInfoXAxis", PFD0.RawData.Sensor.Gravity.Absolute.X.toFixed(2) + "m/s²");
 			} else {
-				ChangeText("Label_PFDTechInfoAbsoluteXAxis", "N/A");
+				ChangeText("Label_PFDTechInfoXAxis", "N/A");
 			}
-			if(PFD0.RawData.Accel.Accel.Absolute.Y != null) {
-				ChangeText("Label_PFDTechInfoAbsoluteYAxis", PFD0.RawData.Accel.Accel.Absolute.Y.toFixed(2) + "m/s²");
+			if(PFD0.RawData.Sensor.Gravity.Absolute.Y != null) {
+				ChangeText("Label_PFDTechInfoYAxis", PFD0.RawData.Sensor.Gravity.Absolute.Y.toFixed(2) + "m/s²");
 			} else {
-				ChangeText("Label_PFDTechInfoAbsoluteYAxis", "N/A");
+				ChangeText("Label_PFDTechInfoYAxis", "N/A");
 			}
-			if(PFD0.RawData.Accel.Accel.Absolute.Z != null) {
-				ChangeText("Label_PFDTechInfoAbsoluteZAxis", PFD0.RawData.Accel.Accel.Absolute.Z.toFixed(2) + "m/s²");
+			if(PFD0.RawData.Sensor.Gravity.Absolute.Z != null) {
+				ChangeText("Label_PFDTechInfoZAxis", PFD0.RawData.Sensor.Gravity.Absolute.Z.toFixed(2) + "m/s²");
 			} else {
-				ChangeText("Label_PFDTechInfoAbsoluteZAxis", "N/A");
+				ChangeText("Label_PFDTechInfoZAxis", "N/A");
 			}
-			if(PFD0.RawData.Accel.Accel.AbsoluteWithGravity.X != null) {
-				ChangeText("Label_PFDTechInfoAbsoluteXAxisWithGravity", PFD0.RawData.Accel.Accel.AbsoluteWithGravity.X.toFixed(2) + "m/s²");
+			if(PFD0.RawData.Sensor.Compass.Alpha != null) {
+				ChangeText("Label_PFDTechInfoAlphaAxis", PFD0.RawData.Sensor.Compass.Alpha.toFixed(2) + "度");
 			} else {
-				ChangeText("Label_PFDTechInfoAbsoluteXAxisWithGravity", "N/A");
+				ChangeText("Label_PFDTechInfoAlphaAxis", "N/A");
 			}
-			if(PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Y != null) {
-				ChangeText("Label_PFDTechInfoAbsoluteYAxisWithGravity", PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Y.toFixed(2) + "m/s²");
-			} else {
-				ChangeText("Label_PFDTechInfoAbsoluteYAxisWithGravity", "N/A");
-			}
-			if(PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Z != null) {
-				ChangeText("Label_PFDTechInfoAbsoluteZAxisWithGravity", PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Z.toFixed(2) + "m/s²");
-			} else {
-				ChangeText("Label_PFDTechInfoAbsoluteZAxisWithGravity", "N/A");
-			}
+			ChangeText("Label_PFDTechInfoIsCompassAbsolute", PFD0.RawData.Sensor.Compass.IsAbsolute);
 			ChangeText("Label_PFDTechInfoScreenOrientation", screen.orientation.type);
-			ChangeText("Label_PFDTechInfoRelativeForward", PFD0.RawData.Accel.Accel.Relative.Forward.toFixed(2) + "m/s²");
-			ChangeText("Label_PFDTechInfoRelativeRight", PFD0.RawData.Accel.Accel.Relative.Right.toFixed(2) + "m/s²");
-			ChangeText("Label_PFDTechInfoRelativeUpward", PFD0.RawData.Accel.Accel.Relative.Upward.toFixed(2) + "m/s²");
-			ChangeText("Label_PFDTechInfoRelativeForwardWithGravity", PFD0.RawData.Accel.Accel.RelativeWithGravity.Forward.toFixed(2) + "m/s²");
-			ChangeText("Label_PFDTechInfoRelativeRightWithGravity", PFD0.RawData.Accel.Accel.RelativeWithGravity.Right.toFixed(2) + "m/s²");
-			ChangeText("Label_PFDTechInfoRelativeUpwardWithGravity", PFD0.RawData.Accel.Accel.RelativeWithGravity.Upward.toFixed(2) + "m/s²");
-			ChangeText("Label_PFDTechInfoAlignedForward", PFD0.RawData.Accel.Accel.Aligned.Forward.toFixed(2) + "m/s²");
-			ChangeText("Label_PFDTechInfoAlignedRight", PFD0.RawData.Accel.Accel.Aligned.Right.toFixed(2) + "m/s²");
-			ChangeText("Label_PFDTechInfoAlignedUpward", PFD0.RawData.Accel.Accel.Aligned.Upward.toFixed(2) + "m/s²");
-			ChangeText("Label_PFDTechInfoAccelPitch", PFD0.RawData.Accel.Attitude.Original.Pitch.toFixed(2) + "度");
-			ChangeText("Label_PFDTechInfoAccelRoll", PFD0.RawData.Accel.Attitude.Original.Roll.toFixed(2) + "度");
-			ChangeText("Label_PFDTechInfoAlignedPitch", PFD0.RawData.Accel.Attitude.Aligned.Pitch.toFixed(2) + "度");
-			ChangeText("Label_PFDTechInfoAlignedRoll", PFD0.RawData.Accel.Attitude.Aligned.Roll.toFixed(2) + "度");
-			ChangeText("Label_PFDTechInfoSpeedVectorForward", PFD0.RawData.Accel.Speed.Vector.Forward.toFixed(2) + "米/秒");
-			ChangeText("Label_PFDTechInfoSpeedVectorRight", PFD0.RawData.Accel.Speed.Vector.Right.toFixed(2) + "米/秒");
-			ChangeText("Label_PFDTechInfoSpeedVectorUpward", PFD0.RawData.Accel.Speed.Vector.Upward.toFixed(2) + "米/秒");
-			let NeedleAngle = 0, NeedleLength = 0;
-			NeedleAngle = RadToDeg(Math.atan2(PFD0.RawData.Accel.Speed.Vector.Forward, PFD0.RawData.Accel.Speed.Vector.Right));
-			NeedleLength = Math.sqrt(Math.pow(PFD0.RawData.Accel.Speed.Vector.Right, 2) + Math.pow(PFD0.RawData.Accel.Speed.Vector.Forward, 2)) * 5;
-			ChangeTop("Needle_PFDTechInfoSpeedVectorGraph", "calc(50% - " + NeedleLength + "px)");
-			ChangeRotate("Needle_PFDTechInfoSpeedVectorGraph", 90 - NeedleAngle);
-			ChangeHeight("Needle_PFDTechInfoSpeedVectorGraph", NeedleLength * 2 + "px");
-			ChangeText("Label_PFDTechInfoAccelSpeed", PFD0.RawData.Accel.Speed.Speed.toFixed(2) + "米/秒");
-			ChangeText("Label_PFDTechInfoAccelAltitude", PFD0.RawData.Accel.Altitude.toFixed(2) + "米");
-			if(PFD0.RawData.Accel.Interval != null) {
-				ChangeText("Label_PFDTechInfoAccelInterval", PFD0.RawData.Accel.Interval + "毫秒");
-			} else {
-				ChangeText("Label_PFDTechInfoAccelInterval", "N/A");
-			}
-			ChangeText("Label_PFDTechInfoAccelTimestamp", PFD0.RawData.Accel.Timestamp + " (+" + (PFD0.Stats.ClockTime - PFD0.RawData.Accel.Timestamp) + ")");
+			ChangeText("Label_PFDTechInfoForward", PFD0.RawData.Sensor.Gravity.Relative.Forward.toFixed(2) + "m/s²");
+			ChangeText("Label_PFDTechInfoRight", PFD0.RawData.Sensor.Gravity.Relative.Right.toFixed(2) + "m/s²");
+			ChangeText("Label_PFDTechInfoUpward", PFD0.RawData.Sensor.Gravity.Relative.Upward.toFixed(2) + "m/s²");
+			ChangeText("Label_PFDTechInfoSensorPitch", PFD0.RawData.Sensor.Attitude.Original.Pitch.toFixed(2) + "度");
+			ChangeText("Label_PFDTechInfoSensorRoll", PFD0.RawData.Sensor.Attitude.Original.Roll.toFixed(2) + "度");
+			ChangeText("Label_PFDTechInfoAlignedPitch", PFD0.RawData.Sensor.Attitude.Aligned.Pitch.toFixed(2) + "度");
+			ChangeText("Label_PFDTechInfoAlignedRoll", PFD0.RawData.Sensor.Attitude.Aligned.Roll.toFixed(2) + "度");
+			ChangeText("Label_PFDTechInfoSensorHeading", PFD0.RawData.Sensor.Heading.toFixed(2) + "度");
+			ChangeText("Label_PFDTechInfoSensorTimestamp", PFD0.RawData.Sensor.Timestamp + " (+" + (PFD0.Stats.ClockTime - PFD0.RawData.Sensor.Timestamp) + ")");
 
 			// Manual
 			ChangeText("Label_PFDTechInfoManualPitch", PFD0.RawData.Manual.Attitude.Pitch.toFixed(2) + "度");
@@ -2588,11 +2586,11 @@
 		// Settings
 			// Permissions
 			if(typeof DeviceMotionEvent.requestPermission == "function") {
-				Show("Label_SettingsRequestAccelPermission");
-				Show("Ctrl_SettingsRequestAccelPermission");
+				Show("Label_SettingsRequestSensorPermission");
+				Show("Ctrl_SettingsRequestSensorPermission");
 			} else {
-				Hide("Label_SettingsRequestAccelPermission");
-				Hide("Ctrl_SettingsRequestAccelPermission");
+				Hide("Label_SettingsRequestSensorPermission");
+				Hide("Ctrl_SettingsRequestSensorPermission");
 			}
 
 			// Attitude
@@ -2605,7 +2603,7 @@
 				ChangeValue("Slider_SettingsAttitudeSensitivity", PFD.Attitude.Sensitivity);
 				ChangeText("Label_SettingsAttitudeSensitivity", PFD.Attitude.Sensitivity);
 				switch(PFD.Attitude.Mode) {
-					case "Accel":
+					case "Sensor":
 						Show("Label_SettingsAttitudeOffset");
 						Show("Label_SettingsAttitudeOffsetInfo");
 						Show("Ctrl_SettingsAttitudeOffsetPitch");
@@ -2703,7 +2701,6 @@
 		localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
 	}
 	function RefreshGPSData(GeolocationAPIData) { // https://www.freecodecamp.org/news/how-to-use-the-javascript-geolocation-api/
-		// GPS data
 		PFD0.RawData.GPS = {
 			Position: {
 				Lat: GeolocationAPIData.coords.latitude,
@@ -2718,164 +2715,86 @@
 			Heading: GeolocationAPIData.coords.heading,
 			Timestamp: GeolocationAPIData.timestamp
 		};
-
-		// Replace accel data
-		switch(PFD.Speed.Mode) {
-			case "GPS":
-			case "Accel":
-			case "Manual":
-				break;
-			case "DualChannel":
-				if(PFD0.RawData.GPS.Speed != null) {
-					let ProportionVertor = 0;
-					if(PFD0.RawData.Accel.Speed.Speed > 0) {
-						ProportionVertor = {
-							Forward: PFD0.RawData.Accel.Speed.Vector.Forward / PFD0.RawData.Accel.Speed.Speed,
-							Right: PFD0.RawData.Accel.Speed.Vector.Right / PFD0.RawData.Accel.Speed.Speed,
-							Upward: PFD0.RawData.Accel.Speed.Vector.Upward / PFD0.RawData.Accel.Speed.Speed
-						};
-					} else {
-						ProportionVertor = {
-							Forward: 0, Right: 0, Upward: 0
-						};
-					}
-					PFD0.RawData.Accel.Speed.Speed = PFD0.RawData.GPS.Speed;
-					PFD0.RawData.Accel.Speed.Vector = {
-						Forward: PFD0.RawData.Accel.Speed.Speed * ProportionVertor.Forward,
-						Right: PFD0.RawData.Accel.Speed.Speed * ProportionVertor.Right,
-						Upward: PFD0.RawData.Accel.Speed.Speed * ProportionVertor.Upward
-					};
-				}
-				break;
-			default:
-				AlertSystemError("The value of PFD.Speed.Mode \"" + PFD.Speed.Mode + "\" in function RefreshGPSData is invalid.");
-				break;
-		}
-		switch(PFD.Altitude.Mode) {
-			case "GPS":
-			case "Accel":
-			case "Manual":
-				break;
-			case "DualChannel":
-				if(PFD0.RawData.GPS.Altitude.Altitude != null) {
-					PFD0.RawData.Accel.Altitude = PFD0.RawData.GPS.Altitude.Altitude;
-				}
-				break;
-			default:
-				AlertSystemError("The value of PFD.Altitude.Mode \"" + PFD.Altitude.Mode + "\" in function RefreshGPSData is invalid.");
-				break;
-		}
 	}
-	function RefreshAccelData(DeviceMotionAPIData) { // https://medium.com/@kamresh485/understanding-the-device-motion-event-api-0ce5b3e252f1
-		// Absolute accel
-		PFD0.RawData.Accel.Accel.Absolute = {
-			X: DeviceMotionAPIData.acceleration.x,
-			Y: DeviceMotionAPIData.acceleration.y,
-			Z: DeviceMotionAPIData.acceleration.z
-		};
-		PFD0.RawData.Accel.Accel.AbsoluteWithGravity = {
-			X: DeviceMotionAPIData.accelerationIncludingGravity.x,
-			Y: DeviceMotionAPIData.accelerationIncludingGravity.y,
-			Z: DeviceMotionAPIData.accelerationIncludingGravity.z
+	function RefreshGravityData(DeviceMotionAPIData) { // https://medium.com/@kamresh485/understanding-the-device-motion-event-api-0ce5b3e252f1
+		// Absolute
+		PFD0.RawData.Sensor.Gravity.Absolute = {
+			X: DeviceMotionAPIData.accelerationIncludingGravity.x - DeviceMotionAPIData.acceleration.x,
+			Y: DeviceMotionAPIData.accelerationIncludingGravity.y - DeviceMotionAPIData.acceleration.y,
+			Z: DeviceMotionAPIData.accelerationIncludingGravity.z - DeviceMotionAPIData.acceleration.z
 		};
 
-		// Interval
-		PFD0.RawData.Accel.Interval = DeviceMotionAPIData.interval;
-
-		// Relative accel
-		if(IsNullInObject(PFD0.RawData.Accel.Accel.Absolute) == false && IsNullInObject(PFD0.RawData.Accel.Accel.AbsoluteWithGravity) == false) {
+		// Relative
+		if(IsNullInObject(PFD0.RawData.Sensor.Gravity.Absolute) == false) {
 			switch(screen.orientation.type) {
 				case "landscape-primary":
-					PFD0.RawData.Accel.Accel.Relative = {
-						Forward: PFD0.RawData.Accel.Accel.Absolute.Z,
-						Right: PFD0.RawData.Accel.Accel.Absolute.Y,
-						Upward: -PFD0.RawData.Accel.Accel.Absolute.X
-					};
-					PFD0.RawData.Accel.Accel.RelativeWithGravity = {
-						Forward: PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Z,
-						Right: PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Y,
-						Upward: -PFD0.RawData.Accel.Accel.AbsoluteWithGravity.X
+					PFD0.RawData.Sensor.Gravity.Relative = {
+						Forward: PFD0.RawData.Sensor.Gravity.Absolute.Z,
+						Right: PFD0.RawData.Sensor.Gravity.Absolute.Y,
+						Upward: -PFD0.RawData.Sensor.Gravity.Absolute.X
 					};
 					break;
 				case "landscape-secondary":
-					PFD0.RawData.Accel.Accel.Relative = {
-						Forward: PFD0.RawData.Accel.Accel.Absolute.Z,
-						Right: -PFD0.RawData.Accel.Accel.Absolute.Y,
-						Upward: PFD0.RawData.Accel.Accel.Absolute.X
-					};
-					PFD0.RawData.Accel.Accel.RelativeWithGravity = {
-						Forward: PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Z,
-						Right: -PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Y,
-						Upward: PFD0.RawData.Accel.Accel.AbsoluteWithGravity.X
+					PFD0.RawData.Sensor.Gravity.Relative = {
+						Forward: PFD0.RawData.Sensor.Gravity.Absolute.Z,
+						Right: -PFD0.RawData.Sensor.Gravity.Absolute.Y,
+						Upward: PFD0.RawData.Sensor.Gravity.Absolute.X
 					};
 					break;
 				case "portrait-primary":
-					PFD0.RawData.Accel.Accel.Relative = {
-						Forward: PFD0.RawData.Accel.Accel.Absolute.Z,
-						Right: -PFD0.RawData.Accel.Accel.Absolute.X,
-						Upward: -PFD0.RawData.Accel.Accel.Absolute.Y
-					};
-					PFD0.RawData.Accel.Accel.RelativeWithGravity = {
-						Forward: PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Z,
-						Right: -PFD0.RawData.Accel.Accel.AbsoluteWithGravity.X,
-						Upward: -PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Y
+					PFD0.RawData.Sensor.Gravity.Relative = {
+						Forward: PFD0.RawData.Sensor.Gravity.Absolute.Z,
+						Right: -PFD0.RawData.Sensor.Gravity.Absolute.X,
+						Upward: -PFD0.RawData.Sensor.Gravity.Absolute.Y
 					};
 					break;
 				case "portrait-secondary":
-					PFD0.RawData.Accel.Accel.Relative = {
-						Forward: PFD0.RawData.Accel.Accel.Absolute.Z,
-						Right: PFD0.RawData.Accel.Accel.Absolute.X,
-						Upward: PFD0.RawData.Accel.Accel.Absolute.Y
-					};
-					PFD0.RawData.Accel.Accel.RelativeWithGravity = {
-						Forward: PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Z,
-						Right: PFD0.RawData.Accel.Accel.AbsoluteWithGravity.X,
-						Upward: PFD0.RawData.Accel.Accel.AbsoluteWithGravity.Y
+					PFD0.RawData.Sensor.Gravity.Relative = {
+						Forward: PFD0.RawData.Sensor.Gravity.Absolute.Z,
+						Right: PFD0.RawData.Sensor.Gravity.Absolute.X,
+						Upward: PFD0.RawData.Sensor.Gravity.Absolute.Y
 					};
 					break;
 				default:
-					AlertSystemError("The value of screen.orientation.type \"" + screen.orientation.type + "\" in function RefreshAccelData is invalid.");
+					AlertSystemError("The value of screen.orientation.type \"" + screen.orientation.type + "\" in function RefreshGravityData is invalid.");
 					break;
 			}
 		}
 
 		// Attitude
-		PFD0.RawData.Accel.Attitude.Original = CalcAttitude(PFD0.RawData.Accel.Accel.Relative, PFD0.RawData.Accel.Accel.RelativeWithGravity);
-		PFD0.RawData.Accel.Attitude.Aligned = {
-			Pitch: PFD0.RawData.Accel.Attitude.Original.Pitch + PFD.Attitude.Offset.Pitch,
-			Roll: PFD0.RawData.Accel.Attitude.Original.Roll + PFD.Attitude.Offset.Roll
+		PFD0.RawData.Sensor.Attitude.Original = CalcAttitude(PFD0.RawData.Sensor.Gravity.Relative);
+		PFD0.RawData.Sensor.Attitude.Aligned = {
+			Pitch: PFD0.RawData.Sensor.Attitude.Original.Pitch + PFD.Attitude.Offset.Pitch,
+			Roll: PFD0.RawData.Sensor.Attitude.Original.Roll + PFD.Attitude.Offset.Roll
 		};
 
-		// Aligned accel
-			// Convert to opposite and align orientation
-			PFD0.RawData.Accel.Accel.Aligned = {
-				Forward: -PFD0.RawData.Accel.Accel.Relative.Forward * Math.cos(DegToRad(Math.abs(PFD0.RawData.Accel.Attitude.Original.Pitch))),
-				Right: -PFD0.RawData.Accel.Accel.Relative.Right * Math.cos(DegToRad(Math.abs(PFD0.RawData.Accel.Attitude.Original.Roll))),
-				Upward: -PFD0.RawData.Accel.Accel.Relative.Upward * Math.cos(DegToRad(Math.abs(PFD0.RawData.Accel.Attitude.Original.Roll))) * Math.cos(DegToRad(Math.abs(PFD0.RawData.Accel.Attitude.Original.Pitch)))
-			};
-
-			// Reduce sensitivity to prevent incorrect speed inflation
-			if(Math.abs(PFD0.RawData.Accel.Accel.Aligned.Forward) < 0.3) {
-				PFD0.RawData.Accel.Accel.Aligned.Forward = 0;
-			}
-			if(Math.abs(PFD0.RawData.Accel.Accel.Aligned.Right) < 0.3) {
-				PFD0.RawData.Accel.Accel.Aligned.Right = 0;
-			}
-			if(Math.abs(PFD0.RawData.Accel.Accel.Aligned.Upward) < 0.3) {
-				PFD0.RawData.Accel.Accel.Aligned.Upward = 0;
-			}
-
-		// Speed and altitude
-		PFD0.RawData.Accel.Speed.Vector = {
-			Forward: PFD0.RawData.Accel.Speed.Vector.Forward + PFD0.RawData.Accel.Accel.Aligned.Forward * (PFD0.RawData.Accel.Interval / 1000),
-			Right: PFD0.RawData.Accel.Speed.Vector.Right + PFD0.RawData.Accel.Accel.Aligned.Right * (PFD0.RawData.Accel.Interval / 1000),
-			Upward: PFD0.RawData.Accel.Speed.Vector.Upward + PFD0.RawData.Accel.Accel.Aligned.Upward * (PFD0.RawData.Accel.Interval / 1000)
-		}
-		PFD0.RawData.Accel.Speed.Speed = Math.sqrt(Math.pow(PFD0.RawData.Accel.Speed.Vector.Forward, 2) + Math.pow(PFD0.RawData.Accel.Speed.Vector.Right, 2) + Math.pow(PFD0.RawData.Accel.Speed.Vector.Upward, 2));
-		PFD0.RawData.Accel.Altitude += PFD0.RawData.Accel.Speed.Vector.Upward * (PFD0.RawData.Accel.Interval / 1000);
-
 		// Timestamp
-		PFD0.RawData.Accel.Timestamp = Date.now();
+		PFD0.RawData.Sensor.Timestamp = Date.now();
+	}
+	function RefreshCompassData(DeviceOrientationAPIData) {
+		PFD0.RawData.Sensor.Compass = {
+			Alpha: DeviceOrientationAPIData.alpha,
+			IsAbsolute: DeviceOrientationAPIData.absolute
+		};
+		if(PFD0.RawData.Sensor.Compass.Alpha != null) {
+			switch(screen.orientation.type) {
+				case "landscape-primary":
+					PFD0.RawData.Sensor.Heading = (360 - PFD0.RawData.Sensor.Compass.Alpha + 90) % 360;
+					break;
+				case "landscape-secondary":
+					PFD0.RawData.Sensor.Heading = (360 - PFD0.RawData.Sensor.Compass.Alpha - 90) % 360;
+					break;
+				case "portrait-primary":
+					PFD0.RawData.Sensor.Heading = (360 - PFD0.RawData.Sensor.Compass.Alpha) % 360;
+					break;
+				case "portrait-secondary":
+					PFD0.RawData.Sensor.Heading = (360 - PFD0.RawData.Sensor.Compass.Alpha + 180) % 360;
+					break;
+				default:
+					AlertSystemError("The value of screen.orientation.type \"" + screen.orientation.type + "\" in function RefreshCompassData is invalid.");
+					break;
+			}
+		}
 	}
 	function ClockAvgSpeeds() {
 		// Automation
@@ -2883,10 +2802,7 @@
 		Automation.ClockAvgSpeeds = setTimeout(ClockAvgSpeeds, Automation.ClockRate);
 
 		// Main
-		if((PFD.Speed.Mode == "GPS" && PFD0.Status.GPS.IsSpeedAvailable) ||
-		(PFD.Speed.Mode == "Accel" && PFD0.Status.Accel.IsAvailable) ||
-		(PFD.Speed.Mode == "DualChannel" && (PFD0.Status.GPS.IsSpeedAvailable || PFD0.Status.Accel.IsAvailable)) ||
-		PFD.Speed.Mode == "Manual") {
+		if(PFD0.Stats.Speed.IsValid) {
 			PFD0.Stats.Speed.SampleCount++;
 			PFD0.Stats.Speed.AvgGS = (PFD0.Stats.Speed.AvgGS * (PFD0.Stats.Speed.SampleCount - 1) + PFD0.Stats.Speed.GS) / PFD0.Stats.Speed.SampleCount;
 			PFD0.Stats.Speed.AvgIAS = (PFD0.Stats.Speed.AvgIAS * (PFD0.Stats.Speed.SampleCount - 1) + PFD0.Stats.Speed.IAS) / PFD0.Stats.Speed.SampleCount;
@@ -3184,12 +3100,6 @@
 				}
 
 				// Reset speeds
-				function ResetAccelSpeed() {
-					PFD0.RawData.Accel.Speed.Vector = {
-						Forward: 0, Right: 0, Upward: 0
-					};
-					RefreshPFD();
-				}
 				function ResetAvgSpeeds() {
 					PFD0.Stats.Speed.SampleCount = 0;
 					PFD0.Stats.Speed.AvgGS = 0;
@@ -3607,24 +3517,23 @@
 
 	// Settings
 		// Permissions
-		function RequestAccelPermission() {
+		function RequestSensorPermission() {
 			DeviceMotionEvent.requestPermission().then(function(PermissionStatus) {
 				switch(PermissionStatus) {
 					case "granted":
-						PFD0.Status.Accel.PermissionStatus = "Allowed";
-						ChangeText("Label_SettingsPermissionsAccel", "已被允许");
-						RemoveClass("Label_SettingsPermissionsAccel", "RedText");
-						window.addEventListener("devicemotion", RefreshAccelData);
+						PFD0.Status.Sensor.PermissionStatus = "Allowed";
+						ChangeText("Label_SettingsPermissionsSensor", "已被允许");
+						RemoveClass("Label_SettingsPermissionsSensor", "RedText");
 						break;
 					case "denied":
-						PFD0.Status.Accel.PermissionStatus = "Denied";
-						ChangeText("Label_SettingsPermissionsAccel", "已被禁止");
-						AddClass("Label_SettingsPermissionsAccel", "RedText");
+						PFD0.Status.Sensor.PermissionStatus = "Denied";
+						ChangeText("Label_SettingsPermissionsSensor", "已被禁止");
+						AddClass("Label_SettingsPermissionsSensor", "RedText");
 						break;
 					default:
-						PFD0.Status.Accel.PermissionStatus = "Unknown";
-						ChangeText("Label_SettingsPermissionsAccel", "未知");
-						RemoveClass("Label_SettingsPermissionsAccel", "RedText");
+						PFD0.Status.Sensor.PermissionStatus = "Unknown";
+						ChangeText("Label_SettingsPermissionsSensor", "未知");
+						RemoveClass("Label_SettingsPermissionsSensor", "RedText");
 						break;
 				}
 			});
@@ -3663,8 +3572,8 @@
 			RefreshPFD();
 		}
 		function CalibrateAttitudeToZero() {
-			PFD.Attitude.Offset.Pitch = CheckRangeAndCorrect(-PFD0.RawData.Accel.Attitude.Original.Pitch, -90, 90);
-			PFD.Attitude.Offset.Roll = CheckRangeAndCorrect(-PFD0.RawData.Accel.Attitude.Original.Roll, -90, 90);
+			PFD.Attitude.Offset.Pitch = CheckRangeAndCorrect(-PFD0.RawData.Sensor.Attitude.Original.Pitch, -90, 90);
+			PFD.Attitude.Offset.Roll = CheckRangeAndCorrect(-PFD0.RawData.Sensor.Attitude.Original.Roll, -90, 90);
 			RefreshPFD();
 		}
 
@@ -4469,12 +4378,6 @@
 	// On resizing window
 	window.addEventListener("resize", ClockPFD);
 
-	// Geolocation API
-	navigator.geolocation.watchPosition(RefreshGPSData, null, GeolocationAPIOptions);
-
-	// Device motion API
-	window.addEventListener("devicemotion", RefreshAccelData);
-
 // Features
 	// Converters
 	function ConvertEmptyName(Value) {
@@ -4814,6 +4717,12 @@
 				} else {
 					return "N/A";
 				}
+			case "Inactive":
+				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
+					return "非活动";
+				} else {
+					return "OFF";
+				}
 			case "Denied":
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
 					return "被禁止";
@@ -4834,17 +4743,11 @@
 				}
 			case "GPS":
 				return "GPS";
-			case "Accel":
+			case "Sensor":
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
-					return "加速计";
+					return "传感器";
 				} else {
-					return "ACCEL";
-				}
-			case "DualChannel":
-				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
-					return "双通道";
-				} else {
-					return "DUAL CH";
+					return "SENSOR";
 				}
 			case "Manual":
 				if(Subsystem.I18n.AlwaysUseEnglishTerminologyOnPFD == false) {
@@ -5101,10 +5004,10 @@
 	}
 
 	// Maths
-	function CalcAttitude(AccelVector, AccelVectorWithGravity) { // https://youtube.com/watch?v=p7tjtLkIlFo
+	function CalcAttitude(GravityVector) { // https://youtube.com/watch?v=p7tjtLkIlFo
 		return {
-			Pitch: -RadToDeg(Math.asin(CheckRangeAndCorrect((AccelVectorWithGravity.Forward - AccelVector.Forward) / 9.80665, -1, 1))),
-			Roll: RadToDeg(Math.atan2(AccelVectorWithGravity.Right - AccelVector.Right, AccelVector.Upward - AccelVectorWithGravity.Upward))
+			Pitch: -RadToDeg(Math.asin(CheckRangeAndCorrect((GravityVector.Forward) / 9.80665, -1, 1))),
+			Roll: RadToDeg(Math.atan2(GravityVector.Right, -GravityVector.Upward))
 		};
 	}
 	function CalcTAS(GS, WindRelativeHeading, WindSpeed, VerticalSpeed) {

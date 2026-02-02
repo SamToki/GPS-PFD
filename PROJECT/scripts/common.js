@@ -860,7 +860,7 @@
 		// Show dialog and disable other ctrls
 		Show("ScreenFilter_Dialog");
 		Show("Window_Dialog");
-		ScrollToTop("Ctrl_DialogText");
+		// ScrollToTop("Ctrl_DialogText");
 		ChangeInert("Topbar", true);
 		ChangeInert("Main", true);
 	}
