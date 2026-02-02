@@ -1,12 +1,12 @@
 # 简介 Description
 
-GPS-PFD，利用 GPS 与[加速计](https://zh.wikipedia.org/wiki/加速计)，在移动设备上模拟飞机驾驶舱的 [PFD](https://zh.wikipedia.org/wiki/主飞行显示器)。<br>
-GPS-PFD simulates the cockpit [PFD (Primary Flight Display)](https://en.wikipedia.org/wiki/Primary_flight_display) on mobile devices, by using GPS and [accelerometer](https://en.wikipedia.org/wiki/Accelerometer).
+GPS-PFD，利用 GPS 与传感器，在移动设备上模拟飞机驾驶舱的 [PFD](https://zh.wikipedia.org/wiki/主飞行显示器)。<br>
+GPS-PFD simulates the cockpit [PFD (Primary Flight Display)](https://en.wikipedia.org/wiki/Primary_flight_display) on mobile devices, by using GPS and sensors.
 
 ![封面 Cover](/PREVIEW/封面%20Cover.png)
 
-备注：这里的「GPS」指的是位置服务，其利用以 GPS 为代表的卫星导航系统来精确定位。卫星导航系统包括美国 GPS、俄罗斯 [GLONASS](https://zh.wikipedia.org/wiki/GLONASS)，以及中国[北斗](https://zh.wikipedia.org/wiki/北斗卫星导航系统)等。加速计亦称加速度传感器、重力感应器，用于测量姿态、速度与高度。<br>
-Note: The "GPS" here stands for location services. Location services use [GNSSes](https://en.wikipedia.org/wiki/GNSS) such as GPS to precisely locate your position. The most widely used GNSSes include GPS from the US, [GLONASS](https://en.wikipedia.org/wiki/GLONASS) from Russia, [Beidou](https://en.wikipedia.org/wiki/BeiDou) from China, etc. Accelerometer is used to measure attitude, speed and altitude.
+备注：这里的「GPS」指的是位置服务，其利用以 GPS 为代表的卫星导航系统来精确定位。卫星导航系统包括美国 GPS、俄罗斯 [GLONASS](https://zh.wikipedia.org/wiki/GLONASS)，以及中国[北斗](https://zh.wikipedia.org/wiki/北斗卫星导航系统)等。传感器包括重力感应器与电子罗盘，用于测量姿态与朝向。<br>
+Note: The "GPS" here stands for location services. Location services use [GNSSes](https://en.wikipedia.org/wiki/GNSS) such as GPS to precisely locate your position. The most widely used GNSSes include GPS from the US, [GLONASS](https://en.wikipedia.org/wiki/GLONASS) from Russia, [Beidou](https://en.wikipedia.org/wiki/BeiDou) from China, etc. Sensors, including gravity sensor and digital compass, are used to measure attitude and heading.
 
 # 预览 Preview
 
