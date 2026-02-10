@@ -308,11 +308,11 @@
 						}
 
 			/* Menu */
-				/* Sections */
-				#CtrlGroup_PFDMenuCloseButton, #CtrlGroup_PFDMenuContents {
+				/* General */
+				#CtrlGroup_PFDMenuCloseButton, #CtrlGroup_PFDMenuContent {
 					width: 318px;
 				}
-				.PFDMenuContent {
+				.PFDMenuItem fieldset {
 					border-bottom: 1px solid #FFFFFF;
 				}
 

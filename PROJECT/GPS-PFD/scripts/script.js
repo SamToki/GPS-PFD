@@ -259,7 +259,7 @@
 				SeatHeight: 3.9624
 			},
 			Heading: {
-				Mode: "GPS"
+				Mode: "Auto"
 			},
 			Nav: {
 				IsEnabled: false,
@@ -795,6 +795,19 @@
 			ChangeInert("DropctrlGroup_Nav", true);
 		}
 
+		// Fieldsets
+		let Elements = document.getElementsByTagName("fieldset");
+		for(let Looper = 0; Looper < Elements.length; Looper++) {
+			if(Elements[Looper].id != "") {
+				if(System.CollapsedFieldset.includes(Elements[Looper].id.replace("Fieldset_", "")) == false) {
+					console.log(Elements[Looper].id);
+					Show(Elements[Looper].id);
+				} else {
+					Hide(Elements[Looper].id);
+				}
+			}
+		}
+
 		// Fullscreen
 		if(IsFullscreen() == false) {
 			if(Subsystem.Display.HideTopbarWhenNotScrolling == false) {
@@ -1025,7 +1038,7 @@
 				ShowTopbar();
 			}
 			ChangeChecked("Checkbox_SettingsFlipPFDVertically", Subsystem.Display.FlipPFDVertically);
-			ChangeChecked("Checkbox_PFDOptionsKeepScreenOn", Subsystem.Display.KeepScreenOn);
+			ChangeChecked("Checkbox_PFDQuickSettingsKeepScreenOn", Subsystem.Display.KeepScreenOn);
 			ChangeChecked("Checkbox_SettingsKeepScreenOn", Subsystem.Display.KeepScreenOn);
 			if(Subsystem.Display.KeepScreenOn) {
 				RequestScreenWakeLock();
@@ -2568,20 +2581,20 @@
 					}
 					ChangeValue("Slider_PFDFlaps", PFD.Flaps);
 
-				// Options
-				ChangeChecked("Checkbox_PFDOptionsEnableAttitudeIndicator", PFD.Attitude.IsEnabled);
+				// Quick settings
+				ChangeChecked("Checkbox_PFDQuickSettingsEnableAttitudeIndicator", PFD.Attitude.IsEnabled);
 				if(PFD.Attitude.IsEnabled) {
-					Show("Ctrl_PFDOptionsAttitudeMode");
+					Show("Ctrl_PFDQuickSettingsAttitudeMode");
 				} else {
-					Hide("Ctrl_PFDOptionsAttitudeMode");
+					Hide("Ctrl_PFDQuickSettingsAttitudeMode");
 				}
-				ChangeValue("Combobox_PFDOptionsAttitudeMode", PFD.Attitude.Mode);
-				ChangeValue("Combobox_PFDOptionsSpeedMode", PFD.Speed.Mode);
-				ChangeValue("Combobox_PFDOptionsAltitudeMode", PFD.Altitude.Mode);
-				ChangeValue("Combobox_PFDOptionsHeadingMode", PFD.Heading.Mode);
-				ChangeChecked("Checkbox_PFDOptionsEnableNav", PFD.Nav.IsEnabled);
-				ChangeValue("Combobox_PFDOptionsFlightMode", PFD.FlightMode.FlightMode);
-				ChangeChecked("Checkbox_PFDOptionsKeepScreenOn", Subsystem.Display.KeepScreenOn);
+				ChangeValue("Combobox_PFDQuickSettingsAttitudeMode", PFD.Attitude.Mode);
+				ChangeValue("Combobox_PFDQuickSettingsSpeedMode", PFD.Speed.Mode);
+				ChangeValue("Combobox_PFDQuickSettingsAltitudeMode", PFD.Altitude.Mode);
+				ChangeValue("Combobox_PFDQuickSettingsHeadingMode", PFD.Heading.Mode);
+				ChangeChecked("Checkbox_PFDQuickSettingsEnableNav", PFD.Nav.IsEnabled);
+				ChangeValue("Combobox_PFDQuickSettingsFlightMode", PFD.FlightMode.FlightMode);
+				ChangeChecked("Checkbox_PFDQuickSettingsKeepScreenOn", Subsystem.Display.KeepScreenOn);
 
 		// Settings
 			// Permissions
@@ -2970,13 +2983,6 @@
 				HideToCorner("Window_PFDMenu");
 			}, 40);
 		}
-		function TogglePFDMenuCollapse(Name) {
-			if(IsClassContained("CtrlGroup_PFD" + Name, "Hidden")) {
-				Show("CtrlGroup_PFD" + Name);
-			} else {
-				Hide("CtrlGroup_PFD" + Name);
-			}
-		}
 			// Ctrl
 				// Manual maneuver
 				function PitchDown() {
@@ -3128,38 +3134,38 @@
 				RefreshAirportLibrary();
 			}
 
-			// Options
+			// Quick settings
 			function SetEnableAttitudeIndicatorAtPFD() {
-				PFD.Attitude.IsEnabled = IsChecked("Checkbox_PFDOptionsEnableAttitudeIndicator");
+				PFD.Attitude.IsEnabled = IsChecked("Checkbox_PFDQuickSettingsEnableAttitudeIndicator");
 				RefreshPFD();
 			}
 			function SetAttitudeModeAtPFD() {
-				PFD.Attitude.Mode = ReadValue("Combobox_PFDOptionsAttitudeMode");
+				PFD.Attitude.Mode = ReadValue("Combobox_PFDQuickSettingsAttitudeMode");
 				RefreshPFD();
 			}
 			function SetSpeedModeAtPFD() {
-				PFD.Speed.Mode = ReadValue("Combobox_PFDOptionsSpeedMode");
+				PFD.Speed.Mode = ReadValue("Combobox_PFDQuickSettingsSpeedMode");
 				RefreshPFD();
 			}
 			function SetAltitudeModeAtPFD() {
-				PFD.Altitude.Mode = ReadValue("Combobox_PFDOptionsAltitudeMode");
+				PFD.Altitude.Mode = ReadValue("Combobox_PFDQuickSettingsAltitudeMode");
 				RefreshPFD();
 			}
 			function SetHeadingModeAtPFD() {
-				PFD.Heading.Mode = ReadValue("Combobox_PFDOptionsHeadingMode");
+				PFD.Heading.Mode = ReadValue("Combobox_PFDQuickSettingsHeadingMode");
 				RefreshPFD();
 			}
 			function SetEnableNavAtPFD() {
-				PFD.Nav.IsEnabled = IsChecked("Checkbox_PFDOptionsEnableNav");
+				PFD.Nav.IsEnabled = IsChecked("Checkbox_PFDQuickSettingsEnableNav");
 				RefreshPFD();
 			}
 			function SetFlightModeAtPFD() {
-				PFD.FlightMode.FlightMode = ReadValue("Combobox_PFDOptionsFlightMode");
+				PFD.FlightMode.FlightMode = ReadValue("Combobox_PFDQuickSettingsFlightMode");
 				PFD0.Stats.FlightModeTimestamp = Date.now();
 				RefreshPFD();
 			}
 			function SetKeepScreenOnAtPFD() {
-				Subsystem.Display.KeepScreenOn = IsChecked("Checkbox_PFDOptionsKeepScreenOn");
+				Subsystem.Display.KeepScreenOn = IsChecked("Checkbox_PFDQuickSettingsKeepScreenOn");
 				RefreshSubsystem();
 			}
 
@@ -3829,13 +3835,6 @@
 			RefreshPFD();
 		}
 
-		// Misc
-		function ResetAllDontShowAgainDialogs() {
-			System.DontShowAgain = [0];
-			RefreshSystem();
-			ShowToast("已重置");
-		}
-
 		// Dev
 		function SetVideoFootageMode() {
 			Subsystem.Dev.VideoFootageMode = IsChecked("Checkbox_SettingsVideoFootageMode");
@@ -3908,7 +3907,7 @@
 							RefreshSystem();
 						}
 						ScrollIntoView("Item_HelpReadBeforeUse");
-						ShowIAmHere("Item_HelpReadBeforeUse");
+						ShowIAmHere("HelpReadBeforeUse");
 						break;
 					case 3:
 						if(IsChecked("Checkbox_DialogCheckboxOption")) {
@@ -3925,7 +3924,7 @@
 				switch(Selector) {
 					case 2:
 						ScrollIntoView("Item_HelpTutorial");
-						ShowIAmHere("Item_HelpTutorial");
+						ShowIAmHere("HelpTutorial");
 						break;
 					case 3:
 						break;
@@ -3951,7 +3950,7 @@
 				switch(Selector) {
 					case 1:
 						ScrollIntoView("Item_HelpGetInvolved");
-						ShowIAmHere("Item_HelpGetInvolved");
+						ShowIAmHere("HelpGetInvolved");
 						break;
 					case 2:
 						ForceStop();

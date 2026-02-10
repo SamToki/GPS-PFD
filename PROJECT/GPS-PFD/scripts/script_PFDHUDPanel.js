@@ -32,15 +32,15 @@
 				if(PFD0.Status.Sensor.PermissionStatus != "Denied") {
 					if(PFD0.Status.Sensor.IsActive) {
 						if(PFD0.Status.Sensor.IsAttitudeAvailable || PFD0.Status.Sensor.IsHeadingAvailable) {
-							ChangeText("Label_PFDHUDPanelAccelValue", Translate("Normal"));
+							ChangeText("Label_PFDHUDPanelSensorValue", Translate("Normal"));
 						} else {
-							ChangeText("Label_PFDHUDPanelAccelValue", Translate("Unavailable"));
+							ChangeText("Label_PFDHUDPanelSensorValue", Translate("Unavailable"));
 						}
 					} else {
-						ChangeText("Label_PFDHUDPanelAccelValue", Translate("Inactive"));
+						ChangeText("Label_PFDHUDPanelSensorValue", Translate("Inactive"));
 					}
 				} else {
-					ChangeText("Label_PFDHUDPanelAccelValue", Translate("Denied"));
+					ChangeText("Label_PFDHUDPanelSensorValue", Translate("Denied"));
 				}
 
 				// FMA

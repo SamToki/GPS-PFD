@@ -19,6 +19,16 @@
 				}
 			}
 
+			// v10.00 (2026/02/08)
+			// New feature (Fieldset collapsing)
+			if(localStorage.System != undefined) {
+				let System = JSON.parse(localStorage.getItem("System"));
+				if(System.CollapsedFieldset == undefined) {
+					System.CollapsedFieldset = [0];
+					localStorage.setItem("System", JSON.stringify(System));
+				}
+			}
+
 		// KanaMaster
 			// v4.00 (2025/01/08)
 			// Optimize user data structure

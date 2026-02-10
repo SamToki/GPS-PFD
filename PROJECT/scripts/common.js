@@ -42,7 +42,7 @@
 			I18n: {
 				Language: "Auto"
 			},
-			DontShowAgain: [0],
+			CollapsedFieldset: [0], DontShowAgain: [0],
 			Dev: {
 				TryToOptimizePerformance: false,
 				ShowDebugOutlines: false
@@ -90,7 +90,7 @@
 
 		// Layout
 		function IsMobileLayout() {
-			return window.innerWidth <= 880;
+			return window.innerWidth <= 920;
 		}
 		function IsFullscreen() {
 			return document.fullscreenElement != null;
@@ -476,7 +476,22 @@
 
 // Cmd
 	// General
-	function ShowIAmHere(ID) {
+	function ToggleFieldsetCollapsing(Name) {
+		let IsFieldsetCollapsed = false;
+		for(let Looper = 1; Looper < System.CollapsedFieldset.length; Looper++) {
+			if(System.CollapsedFieldset[Looper] == Name) {
+				IsFieldsetCollapsed = true;
+				System.CollapsedFieldset.splice(Looper, 1);
+				break;
+			}
+		}
+		if(IsFieldsetCollapsed == false) {
+			System.CollapsedFieldset[System.CollapsedFieldset.length] = Name;
+		}
+		RefreshSystem();
+	}
+	function ShowIAmHere(Name) {
+		let ID = "Item_" + Name;
 		if(System.Display.Anim > 0) {
 			setTimeout(function() {
 				ChangeAnim(ID, "250ms");
@@ -520,6 +535,32 @@
 				RemoveClass(ID, "IAmHere");
 			}, 1500);
 		}
+		if(System.CollapsedFieldset.includes(Name)) {
+			ToggleFieldsetCollapsing(Name);
+		}
+	}
+	function ForceStop() {
+		// Stop all automations
+		Object.keys(Automation).forEach(function(SubobjectName) {
+			clearTimeout(Automation[SubobjectName]);
+		});
+
+		// Clear dialog events and hide dialog window
+		System0.Dialog = [0];
+		setTimeout(function() {
+			ShowDialog("Previous");
+		}, 20);
+	}
+
+	// Topbar
+	function CollapseAllFieldsets() {
+		let Elements = document.getElementsByTagName("fieldset");
+		for(let Looper = 0; Looper < Elements.length; Looper++) {
+			if(System.CollapsedFieldset.includes(Elements[Looper].id.replace("Fieldset_", "")) == false && Elements[Looper].id != "") {
+				System.CollapsedFieldset[System.CollapsedFieldset.length] = Elements[Looper].id.replace("Fieldset_", "");
+			}
+		}
+		RefreshSystem();
 	}
 
 	// Settings
@@ -562,6 +603,18 @@
 			if(System0.PWAInstallation != null) {
 				System0.PWAInstallation.prompt();
 			}
+		}
+
+		// Misc
+		function ResetFieldsetCollapsing() {
+			System.CollapsedFieldset = [0];
+			RefreshSystem();
+			ShowToast("已重置");
+		}
+		function ResetAllDontShowAgainDialogs() {
+			System.DontShowAgain = [0];
+			RefreshSystem();
+			ShowToast("已重置");
 		}
 
 		// Dev
@@ -880,15 +933,3 @@
 window.addEventListener("error", function(ErrorEvent) {
 	AlertSystemError(ErrorEvent.message);
 });
-function ForceStop() {
-	// Stop all automations
-	Object.keys(Automation).forEach(function(SubobjectName) {
-		clearTimeout(Automation[SubobjectName]);
-	});
-
-	// Clear dialog events and hide dialog window
-	System0.Dialog = [0];
-	setTimeout(function() {
-		ShowDialog("Previous");
-	}, 20);
-}

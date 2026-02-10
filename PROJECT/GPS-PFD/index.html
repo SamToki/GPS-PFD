@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v2.00 (2026/01/28). Since 2024/12/01." />
+		<meta name="version" content="v2.01 (2026/02/08). Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与传感器，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -90,6 +90,13 @@
 							<li class="Ctrl" id="Ctrl_NavUnderline" inert="true"></li>
 						</ul>
 					</nav>
+				</li>
+				<li class="Ctrl" id="Ctrl_CollapseAllFieldsets">
+					<button class="Button" id="Button_CollapseAllFieldsets" onclick="CollapseAllFieldsets()" title="折叠所有 fieldset" aria-label="折叠所有 fieldset">
+						<svg class="Icon Larger" viewBox="0 0 16 16" aria-hidden="true">
+							<path d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8m7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0m-.5 11.707-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0z"/>
+						</svg>
+					</button>
 				</li>
 				<li class="Ctrl" id="Ctrl_HomePage">
 					<a class="Button" href=".." title="主页" aria-label="主页">
@@ -2430,11 +2437,11 @@
 											</button>
 										</li>
 									</ul>
-									<ul class="CtrlGroup" id="CtrlGroup_PFDMenuContents">
-										<li class="Ctrl PFDMenuSection">
-											<ul class="CtrlGroup PFDMenuTitle">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDMenuContent">
+										<li class="Ctrl PFDMenuItem">
+											<ul class="CtrlGroup">
 												<li class="Ctrl">
-													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('Ctrls')">
+													<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('PFDMenuCtrls')">
 														<h2>控制</h2>
 														<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
 															<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
@@ -2442,247 +2449,249 @@
 													</button>
 												</li>
 											</ul>
-											<ul class="CtrlGroup PFDMenuContent" id="CtrlGroup_PFDCtrls">
-												<li class="Ctrl" id="Ctrl_PFDToggleFullscreen">
-													<button class="Button" id="Button_PFDToggleFullscreen" onclick="ToggleFullscreen()">全屏</button>
-													<span class="HotkeyIndicator Faded" inert="true">T</span>
-												</li>
-												<li class="Ctrl Hidden" id="Ctrl_PFDManualManeuver" inert="true">
-													<h3>手动操作</h3>
-													<ul class="CtrlGroup BelowParagraph">
-														<li class="Ctrl" id="Ctrl_PFDAttitudeManeuver">
-															<span>姿态</span>
-															<ul class="CtrlGroup" id="CtrlGroup_PFDAttitudeManeuver">
-																<li class="Ctrl" id="Ctrl_PFDPitchDown">
-																	<button class="Button" id="Button_PFDPitchDown" disabled="true" onclick="PitchDown()" title="推杆" aria-label="推杆">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M14 13.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1 0-1h4.793L2.146 2.854a.5.5 0 1 1 .708-.708L13 12.293V7.5a.5.5 0 0 1 1 0z"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">W</span>
-																</li>
-																<li class="Ctrl" id="Ctrl_PFDPitchUp">
-																	<button class="Button" id="Button_PFDPitchUp" disabled="true" onclick="PitchUp()" title="拉杆" aria-label="拉杆">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0z"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">S</span>
-																</li>
-																<li class="Ctrl" id="Ctrl_PFDRollLeft">
-																	<button class="Button" id="Button_PFDRollLeft" disabled="true" onclick="RollLeft()" title="向左横滚" aria-label="向左横滚">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">A</span>
-																</li>
-																<li class="Ctrl" id="Ctrl_PFDRollRight">
-																	<button class="Button" id="Button_PFDRollRight" disabled="true" onclick="RollRight()" title="向右横滚" aria-label="向右横滚">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">D</span>
-																</li>
-																<li class="Ctrl" id="Ctrl_PFDMaintainAttitude">
-																	<button class="Button" id="Button_PFDMaintainAttitude" disabled="true" onclick="MaintainAttitude()" title="保持" aria-label="保持">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">E</span>
-																</li>
-																<li class="Ctrl" id="Ctrl_PFDResetAttitude">
-																	<button class="Button" id="Button_PFDResetAttitude" disabled="true" onclick="ResetAttitude()" title="重置" aria-label="重置">
-																		<svg class="Icon Larger" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
-																			<path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">Q</span>
-																</li>
-															</ul>
-														</li>
-														<li class="Ctrl" id="Ctrl_PFDSpeedManeuver">
-															<span>速度</span>
-															<ul class="CtrlGroup" id="CtrlGroup_PFDSpeedManeuver">
-																<li class="Ctrl">
-																	<button class="Button" id="Button_PFDSpeedUp" disabled="true" onclick="SpeedUp()" title="加速" aria-label="加速">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">U</span>
-																</li>
-																<li class="Ctrl" id="Ctrl_PFDMaintainSpeed">
-																	<button class="Button" id="Button_PFDMaintainSpeed" disabled="true" onclick="MaintainSpeed()" title="保持" aria-label="保持">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">I</span>
-																</li>
-																<li class="Ctrl">
-																	<button class="Button" id="Button_PFDSpeedDown" disabled="true" onclick="SpeedDown()" title="减速" aria-label="减速">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">J</span>
-																</li>
-															</ul>
-														</li>
-														<li class="Ctrl" id="Ctrl_PFDAltitudeManeuver">
-															<span>高度</span>
-															<ul class="CtrlGroup" id="CtrlGroup_PFDAltitudeManeuver">
-																<li class="Ctrl">
-																	<button class="Button" id="Button_PFDAltitudeUp" disabled="true" onclick="AltitudeUp()" title="上升" aria-label="上升">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">O</span>
-																</li>
-																<li class="Ctrl" id="Ctrl_PFDMaintainAltitude">
-																	<button class="Button" id="Button_PFDMaintainAltitude" disabled="true" onclick="MaintainAltitude()" title="保持" aria-label="保持">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">P</span>
-																</li>
-																<li class="Ctrl">
-																	<button class="Button" id="Button_PFDAltitudeDown" disabled="true" onclick="AltitudeDown()" title="下降" aria-label="下降">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">L</span>
-																</li>
-															</ul>
-														</li>
-														<li class="Ctrl" id="Ctrl_PFDHeadingManeuver">
-															<span>朝向</span>
-															<ul class="CtrlGroup" id="CtrlGroup_PFDHeadingManeuver">
-																<li class="Ctrl">
-																	<button class="Button" id="Button_PFDHeadingLeft" disabled="true" onclick="HeadingLeft()" title="左转" aria-label="左转">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">G</span>
-																</li>
-																<li class="Ctrl" id="Ctrl_PFDMaintainHeading">
-																	<button class="Button" id="Button_PFDMaintainHeading" disabled="true" onclick="MaintainHeading()" title="保持" aria-label="保持">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">Y</span>
-																</li>
-																<li class="Ctrl">
-																	<button class="Button" id="Button_PFDHeadingRight" disabled="true" onclick="HeadingRight()" title="右转" aria-label="右转">
-																		<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
-																			<path d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-																		</svg>
-																	</button>
-																	<span class="HotkeyIndicator Faded" inert="true">H</span>
-																</li>
-															</ul>
-														</li>
-													</ul>
-												</li>
-												<li class="Ctrl" id="Ctrl_PFDMCP">
-													<h3>MCP</h3>
-													<ul class="CtrlGroup BelowParagraph">
-														<li class="Ctrl">
-															<label for="Checkbox_PFDMCPSpeed">
-																<input class="Checkbox" id="Checkbox_PFDMCPSpeed" type="checkbox" checked="false" onchange="SetEnableMCPSpeed()" />
-																<span>速度：</span>
-																<input class="Textbox Width80" id="Textbox_PFDMCPSpeed" type="number" min="0" max="539" step="1" value="0" onclick="SelectText('Textbox_PFDMCPSpeed')" onchange="SetMCPSpeed()" placeholder="0~539" title="0~539" />
-																<select class="Combobox Width100" id="Combobox_PFDMCPSpeedMode" onchange="SetMCPSpeedMode()">
-																	<option id="ComboboxOption_PFDMCPSpeedModeIAS" value="IAS" selected>节</option>
-																	<option value="MachNumber">马赫</option>
-																</select>
-															</label>
-															<span class="HotkeyIndicator Faded" inert="true">Z↔X</span>
-														</li>
-														<li class="Ctrl">
-															<label for="Checkbox_PFDMCPAltitude">
-																<input class="Checkbox" id="Checkbox_PFDMCPAltitude" type="checkbox" checked="false" onchange="SetEnableMCPAltitude()" />
-																<span>高度：</span>
-																<input class="Textbox Width120" id="Textbox_PFDMCPAltitude" type="number" min="-2000" max="50000" step="100" value="0" onclick="SelectText('Textbox_PFDMCPAltitude')" onchange="SetMCPAltitude()" placeholder="-2000~50000" title="-2000~50000" />
-																<span id="Label_PFDMCPAltitudeUnit">英尺</span>
-															</label>
-															<span class="HotkeyIndicator Faded" inert="true">B↔N</span>
-														</li>
-														<li class="Ctrl">
-															<label for="Checkbox_PFDMCPVerticalSpeed">
-																<input class="Checkbox" id="Checkbox_PFDMCPVerticalSpeed" type="checkbox" checked="false" onchange="SetEnableMCPVerticalSpeed()" />
-																<span>垂直速度：</span>
-																<input class="Textbox Width100" id="Textbox_PFDMCPVerticalSpeed" type="number" min="-6000" max="6000" step="100" value="0" onclick="SelectText('Textbox_PFDMCPVerticalSpeed')" onchange="SetMCPVerticalSpeed()" placeholder="-6000~6000" title="-6000~6000" />
-																<span id="Label_PFDMCPVerticalSpeedUnit">英尺/分钟</span>
-															</label>
-															<span class="HotkeyIndicator Faded" inert="true">K↔,</span>
-														</li>
-														<li class="Ctrl">
-															<label for="Checkbox_PFDMCPHeading">
-																<input class="Checkbox" id="Checkbox_PFDMCPHeading" type="checkbox" checked="false" onchange="SetEnableMCPHeading()" />
-																<span>朝向：</span>
-																<input class="Textbox Width120" id="Textbox_PFDMCPHeading" type="number" min="0" max="359" step="1" value="0" onclick="SelectText('Textbox_PFDMCPHeading')" onchange="SetMCPHeading()" placeholder="0~359" title="0~359" />
-																<span>度</span>
-															</label>
-															<span class="HotkeyIndicator Faded" inert="true">C↔V</span>
-														</li>
-													</ul>
-												</li>
-												<li class="Ctrl" id="Ctrl_PFDFlaps">
-													<h3>襟翼</h3>
-													<ul class="CtrlGroup BelowParagraph">
-														<li class="Ctrl" id="Ctrl_PFDFlapsSlider">
-															<label for="Slider_PFDFlaps">
-																<span id="Label_PFDFlaps">未知</span>
-																<input class="Slider" id="Slider_PFDFlaps" type="range" min="0" max="100" step="1" value="0" oninput="SetFlaps()" />
-															</label>
-															<span class="HotkeyIndicator RightAligned Faded" inert="true">R<br />
-																↕<br />
-																F</span>
-														</li>
-														<li class="Ctrl" id="Ctrl_PFDFlapsReference" title="襟翼参考标尺" aria-label="襟翼参考标尺">
-															<span>B738</span><span>A320</span>
-															<ul class="CtrlGroup">
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale0"><div class="FlapsScale"></div><span class="FlapsLabel">UP</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale1To5"><div class="FlapsScale"></div><span class="FlapsLabel">1~5</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale10"><div class="FlapsScale"></div><span class="FlapsLabel">10</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale15"><div class="FlapsScale"></div><span class="FlapsLabel">15</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale25"><div class="FlapsScale"></div><span class="FlapsLabel">25</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale30"><div class="FlapsScale"></div><span class="FlapsLabel">30</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale40"><div class="FlapsScale"></div><span class="FlapsLabel">40</span></li>
-															</ul>
-															<ul class="CtrlGroup">
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320Scale0"><div class="FlapsScale"></div><span class="FlapsLabel">0</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320Scale1"><div class="FlapsScale"></div><span class="FlapsLabel">1</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320Scale1PlusF"><div class="FlapsScale"></div><span class="FlapsLabel">1+F</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320Scale2"><div class="FlapsScale"></div><span class="FlapsLabel">2</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320Scale3"><div class="FlapsScale"></div><span class="FlapsLabel">3</span></li>
-																<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320ScaleFULL"><div class="FlapsScale"></div><span class="FlapsLabel">FULL</span></li>
-															</ul>
-														</li>
-													</ul>
-												</li>
-												<li class="Ctrl" id="Ctrl_PFDResetAvgSpeeds">
-													<button class="Button" onclick="ResetAvgSpeeds()">重置平均速度</button>
-												</li>
-												<li class="Ctrl" id="Ctrl_PFDHotkeyList">
-													<a class="Button" href="images/快捷键一览.jpg">快捷键一览</a>
-												</li>
-											</ul>
+											<fieldset id="Fieldset_PFDMenuCtrls">
+												<ul class="CtrlGroup">
+													<li class="Ctrl" id="Ctrl_PFDToggleFullscreen">
+														<button class="Button" id="Button_PFDToggleFullscreen" onclick="ToggleFullscreen()">全屏</button>
+														<span class="HotkeyIndicator Faded" inert="true">T</span>
+													</li>
+													<li class="Ctrl Hidden" id="Ctrl_PFDManualManeuver" inert="true">
+														<h3>手动操作</h3>
+														<ul class="CtrlGroup BelowParagraph">
+															<li class="Ctrl" id="Ctrl_PFDAttitudeManeuver">
+																<span>姿态</span>
+																<ul class="CtrlGroup" id="CtrlGroup_PFDAttitudeManeuver">
+																	<li class="Ctrl" id="Ctrl_PFDPitchDown">
+																		<button class="Button" id="Button_PFDPitchDown" disabled="true" onclick="PitchDown()" title="推杆" aria-label="推杆">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M14 13.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1 0-1h4.793L2.146 2.854a.5.5 0 1 1 .708-.708L13 12.293V7.5a.5.5 0 0 1 1 0z"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">W</span>
+																	</li>
+																	<li class="Ctrl" id="Ctrl_PFDPitchUp">
+																		<button class="Button" id="Button_PFDPitchUp" disabled="true" onclick="PitchUp()" title="拉杆" aria-label="拉杆">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0z"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">S</span>
+																	</li>
+																	<li class="Ctrl" id="Ctrl_PFDRollLeft">
+																		<button class="Button" id="Button_PFDRollLeft" disabled="true" onclick="RollLeft()" title="向左横滚" aria-label="向左横滚">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">A</span>
+																	</li>
+																	<li class="Ctrl" id="Ctrl_PFDRollRight">
+																		<button class="Button" id="Button_PFDRollRight" disabled="true" onclick="RollRight()" title="向右横滚" aria-label="向右横滚">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">D</span>
+																	</li>
+																	<li class="Ctrl" id="Ctrl_PFDMaintainAttitude">
+																		<button class="Button" id="Button_PFDMaintainAttitude" disabled="true" onclick="MaintainAttitude()" title="保持" aria-label="保持">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">E</span>
+																	</li>
+																	<li class="Ctrl" id="Ctrl_PFDResetAttitude">
+																		<button class="Button" id="Button_PFDResetAttitude" disabled="true" onclick="ResetAttitude()" title="重置" aria-label="重置">
+																			<svg class="Icon Larger" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
+																				<path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">Q</span>
+																	</li>
+																</ul>
+															</li>
+															<li class="Ctrl" id="Ctrl_PFDSpeedManeuver">
+																<span>速度</span>
+																<ul class="CtrlGroup" id="CtrlGroup_PFDSpeedManeuver">
+																	<li class="Ctrl">
+																		<button class="Button" id="Button_PFDSpeedUp" disabled="true" onclick="SpeedUp()" title="加速" aria-label="加速">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">U</span>
+																	</li>
+																	<li class="Ctrl" id="Ctrl_PFDMaintainSpeed">
+																		<button class="Button" id="Button_PFDMaintainSpeed" disabled="true" onclick="MaintainSpeed()" title="保持" aria-label="保持">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">I</span>
+																	</li>
+																	<li class="Ctrl">
+																		<button class="Button" id="Button_PFDSpeedDown" disabled="true" onclick="SpeedDown()" title="减速" aria-label="减速">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">J</span>
+																	</li>
+																</ul>
+															</li>
+															<li class="Ctrl" id="Ctrl_PFDAltitudeManeuver">
+																<span>高度</span>
+																<ul class="CtrlGroup" id="CtrlGroup_PFDAltitudeManeuver">
+																	<li class="Ctrl">
+																		<button class="Button" id="Button_PFDAltitudeUp" disabled="true" onclick="AltitudeUp()" title="上升" aria-label="上升">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">O</span>
+																	</li>
+																	<li class="Ctrl" id="Ctrl_PFDMaintainAltitude">
+																		<button class="Button" id="Button_PFDMaintainAltitude" disabled="true" onclick="MaintainAltitude()" title="保持" aria-label="保持">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">P</span>
+																	</li>
+																	<li class="Ctrl">
+																		<button class="Button" id="Button_PFDAltitudeDown" disabled="true" onclick="AltitudeDown()" title="下降" aria-label="下降">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">L</span>
+																	</li>
+																</ul>
+															</li>
+															<li class="Ctrl" id="Ctrl_PFDHeadingManeuver">
+																<span>朝向</span>
+																<ul class="CtrlGroup" id="CtrlGroup_PFDHeadingManeuver">
+																	<li class="Ctrl">
+																		<button class="Button" id="Button_PFDHeadingLeft" disabled="true" onclick="HeadingLeft()" title="左转" aria-label="左转">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">G</span>
+																	</li>
+																	<li class="Ctrl" id="Ctrl_PFDMaintainHeading">
+																		<button class="Button" id="Button_PFDMaintainHeading" disabled="true" onclick="MaintainHeading()" title="保持" aria-label="保持">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">Y</span>
+																	</li>
+																	<li class="Ctrl">
+																		<button class="Button" id="Button_PFDHeadingRight" disabled="true" onclick="HeadingRight()" title="右转" aria-label="右转">
+																			<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
+																				<path d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+																			</svg>
+																		</button>
+																		<span class="HotkeyIndicator Faded" inert="true">H</span>
+																	</li>
+																</ul>
+															</li>
+														</ul>
+													</li>
+													<li class="Ctrl" id="Ctrl_PFDMCP">
+														<h3>MCP</h3>
+														<ul class="CtrlGroup BelowParagraph">
+															<li class="Ctrl">
+																<label for="Checkbox_PFDMCPSpeed">
+																	<input class="Checkbox" id="Checkbox_PFDMCPSpeed" type="checkbox" checked="false" onchange="SetEnableMCPSpeed()" />
+																	<span>速度：</span>
+																	<input class="Textbox Width80" id="Textbox_PFDMCPSpeed" type="number" min="0" max="539" step="1" value="0" onclick="SelectText('Textbox_PFDMCPSpeed')" onchange="SetMCPSpeed()" placeholder="0~539" title="0~539" />
+																	<select class="Combobox Width100" id="Combobox_PFDMCPSpeedMode" onchange="SetMCPSpeedMode()">
+																		<option id="ComboboxOption_PFDMCPSpeedModeIAS" value="IAS" selected>节</option>
+																		<option value="MachNumber">马赫</option>
+																	</select>
+																</label>
+																<span class="HotkeyIndicator Faded" inert="true">Z↔X</span>
+															</li>
+															<li class="Ctrl">
+																<label for="Checkbox_PFDMCPAltitude">
+																	<input class="Checkbox" id="Checkbox_PFDMCPAltitude" type="checkbox" checked="false" onchange="SetEnableMCPAltitude()" />
+																	<span>高度：</span>
+																	<input class="Textbox Width120" id="Textbox_PFDMCPAltitude" type="number" min="-2000" max="50000" step="100" value="0" onclick="SelectText('Textbox_PFDMCPAltitude')" onchange="SetMCPAltitude()" placeholder="-2000~50000" title="-2000~50000" />
+																	<span id="Label_PFDMCPAltitudeUnit">英尺</span>
+																</label>
+																<span class="HotkeyIndicator Faded" inert="true">B↔N</span>
+															</li>
+															<li class="Ctrl">
+																<label for="Checkbox_PFDMCPVerticalSpeed">
+																	<input class="Checkbox" id="Checkbox_PFDMCPVerticalSpeed" type="checkbox" checked="false" onchange="SetEnableMCPVerticalSpeed()" />
+																	<span>垂直速度：</span>
+																	<input class="Textbox Width100" id="Textbox_PFDMCPVerticalSpeed" type="number" min="-6000" max="6000" step="100" value="0" onclick="SelectText('Textbox_PFDMCPVerticalSpeed')" onchange="SetMCPVerticalSpeed()" placeholder="-6000~6000" title="-6000~6000" />
+																	<span id="Label_PFDMCPVerticalSpeedUnit">英尺/分钟</span>
+																</label>
+																<span class="HotkeyIndicator Faded" inert="true">K↔,</span>
+															</li>
+															<li class="Ctrl">
+																<label for="Checkbox_PFDMCPHeading">
+																	<input class="Checkbox" id="Checkbox_PFDMCPHeading" type="checkbox" checked="false" onchange="SetEnableMCPHeading()" />
+																	<span>朝向：</span>
+																	<input class="Textbox Width120" id="Textbox_PFDMCPHeading" type="number" min="0" max="359" step="1" value="0" onclick="SelectText('Textbox_PFDMCPHeading')" onchange="SetMCPHeading()" placeholder="0~359" title="0~359" />
+																	<span>度</span>
+																</label>
+																<span class="HotkeyIndicator Faded" inert="true">C↔V</span>
+															</li>
+														</ul>
+													</li>
+													<li class="Ctrl" id="Ctrl_PFDFlaps">
+														<h3>襟翼</h3>
+														<ul class="CtrlGroup BelowParagraph">
+															<li class="Ctrl" id="Ctrl_PFDFlapsSlider">
+																<label for="Slider_PFDFlaps">
+																	<span id="Label_PFDFlaps">未知</span>
+																	<input class="Slider" id="Slider_PFDFlaps" type="range" min="0" max="100" step="1" value="0" oninput="SetFlaps()" />
+																</label>
+																<span class="HotkeyIndicator RightAligned Faded" inert="true">R<br />
+																	↕<br />
+																	F</span>
+															</li>
+															<li class="Ctrl" id="Ctrl_PFDFlapsReference" title="襟翼参考标尺" aria-label="襟翼参考标尺">
+																<span>B738</span><span>A320</span>
+																<ul class="CtrlGroup">
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale0"><div class="FlapsScale"></div><span class="FlapsLabel">UP</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale1To5"><div class="FlapsScale"></div><span class="FlapsLabel">1~5</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale10"><div class="FlapsScale"></div><span class="FlapsLabel">10</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale15"><div class="FlapsScale"></div><span class="FlapsLabel">15</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale25"><div class="FlapsScale"></div><span class="FlapsLabel">25</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale30"><div class="FlapsScale"></div><span class="FlapsLabel">30</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceB738Scale40"><div class="FlapsScale"></div><span class="FlapsLabel">40</span></li>
+																</ul>
+																<ul class="CtrlGroup">
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320Scale0"><div class="FlapsScale"></div><span class="FlapsLabel">0</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320Scale1"><div class="FlapsScale"></div><span class="FlapsLabel">1</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320Scale1PlusF"><div class="FlapsScale"></div><span class="FlapsLabel">1+F</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320Scale2"><div class="FlapsScale"></div><span class="FlapsLabel">2</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320Scale3"><div class="FlapsScale"></div><span class="FlapsLabel">3</span></li>
+																	<li class="Ctrl" id="Ctrl_PFDFlapsReferenceA320ScaleFULL"><div class="FlapsScale"></div><span class="FlapsLabel">FULL</span></li>
+																</ul>
+															</li>
+														</ul>
+													</li>
+													<li class="Ctrl" id="Ctrl_PFDResetAvgSpeeds">
+														<button class="Button" onclick="ResetAvgSpeeds()">重置平均速度</button>
+													</li>
+													<li class="Ctrl" id="Ctrl_PFDHotkeyList">
+														<a class="Button" href="images/快捷键一览.jpg">快捷键一览</a>
+													</li>
+												</ul>
+											</fieldset>
 										</li>
-										<li class="Ctrl PFDMenuSection">
-											<ul class="CtrlGroup PFDMenuTitle">
+										<li class="Ctrl PFDMenuItem">
+											<ul class="CtrlGroup">
 												<li class="Ctrl">
-													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('Runways')">
+													<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('PFDMenuRunways')">
 														<h2>跑道</h2>
 														<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
 															<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
@@ -2690,107 +2699,111 @@
 													</button>
 												</li>
 											</ul>
-											<ul class="CtrlGroup PFDMenuContent" id="CtrlGroup_PFDRunways">
-												<li class="Ctrl Hidden" id="Ctrl_PFDAutoSwitchRunwayActive" inert="true">
-													<span class="GreenText">「自动切换跑道」工作中。</span>
-												</li>
-												<li class="Ctrl">
-													<span id="Label_PFDAirportName">机场名称</span>
-												</li>
-												<li class="Ctrl ScrollableList">
-													<ul class="CtrlGroup" id="CtrlGroup_PFDRunwayList">
-														<!-- Content will be inserted using script. -->
-													</ul>
-												</li>
-											</ul>
+											<fieldset id="Fieldset_PFDMenuRunways">
+												<ul class="CtrlGroup">
+													<li class="Ctrl Hidden" id="Ctrl_PFDAutoSwitchRunwayActive" inert="true">
+														<span class="GreenText">「自动切换跑道」工作中。</span>
+													</li>
+													<li class="Ctrl">
+														<span id="Label_PFDAirportName">机场名称</span>
+													</li>
+													<li class="Ctrl ScrollableList">
+														<ul class="CtrlGroup" id="CtrlGroup_PFDRunwayList">
+															<!-- Content will be inserted using script. -->
+														</ul>
+													</li>
+												</ul>
+											</fieldset>
 										</li>
-										<li class="Ctrl PFDMenuSection">
-											<ul class="CtrlGroup PFDMenuTitle">
+										<li class="Ctrl PFDMenuItem">
+											<ul class="CtrlGroup">
 												<li class="Ctrl">
-													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('Options')">
-														<h2>选项</h2>
+													<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('PFDMenuQuickSettings')">
+														<h2>快捷设定</h2>
 														<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
 															<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
 														</svg>
 													</button>
 												</li>
 											</ul>
-											<ul class="CtrlGroup PFDMenuContent" id="CtrlGroup_PFDOptions">
-												<li class="Ctrl">
-													<label for="Combobox_PFDOptionsFlightMode">
-														<span>飞航模式：</span>
-														<select class="Combobox" id="Combobox_PFDOptionsFlightMode" onchange="SetFlightModeAtPFD()">
-															<option value="DepartureGround" selected>出发地面</option>
-															<option value="TakeOff">起飞</option>
-															<option value="Cruise">巡航</option>
-															<option value="Land">降落</option>
-															<option value="ArrivalGround">到达地面</option>
-															<option value="EmergencyReturn">紧急返航</option>
-														</select>
-													</label>
-												</li>
-												<li class="Ctrl">
-													<label for="Checkbox_PFDOptionsEnableAttitudeIndicator">
-														<input class="Checkbox" id="Checkbox_PFDOptionsEnableAttitudeIndicator" type="checkbox" checked="true" onchange="SetEnableAttitudeIndicatorAtPFD()" />
-														<span>启用<a href="https://zh.wikipedia.org/wiki/姿态指引仪">姿态仪</a></span>
-													</label>
-												</li>
-												<li class="Ctrl" id="Ctrl_PFDOptionsAttitudeMode">
-													<label for="Combobox_PFDOptionsAttitudeMode">
-														<span>姿态模式：</span>
-														<select class="Combobox" id="Combobox_PFDOptionsAttitudeMode" onchange="SetAttitudeModeAtPFD()">
-															<option value="Sensor" selected>传感器</option>
-															<option value="Manual">手动</option>
-														</select>
-													</label>
-												</li>
-												<li class="Ctrl">
-													<label for="Combobox_PFDOptionsSpeedMode">
-														<span>速度模式：</span>
-														<select class="Combobox" id="Combobox_PFDOptionsSpeedMode" onchange="SetSpeedModeAtPFD()">
-															<option value="GPS" selected>GPS</option>
-															<option value="Manual">手动</option>
-														</select>
-													</label>
-												</li>
-												<li class="Ctrl">
-													<label for="Combobox_PFDOptionsAltitudeMode">
-														<span>高度模式：</span>
-														<select class="Combobox" id="Combobox_PFDOptionsAltitudeMode" onchange="SetAltitudeModeAtPFD()">
-															<option value="GPS" selected>GPS</option>
-															<option value="Manual">手动</option>
-														</select>
-													</label>
-												</li>
-												<li class="Ctrl">
-													<label for="Combobox_PFDOptionsHeadingMode">
-														<span>朝向模式：</span>
-														<select class="Combobox" id="Combobox_PFDOptionsHeadingMode" onchange="SetHeadingModeAtPFD()">
-															<option value="Auto">自动 (Beta)</option>
-															<option value="GPS" selected>GPS</option>
-															<option value="Sensor">传感器 (Beta)</option>
-															<option value="Manual">手动</option>
-														</select>
-													</label>
-												</li>
-												<li class="Ctrl">
-													<label for="Checkbox_PFDOptionsEnableNav">
-														<input class="Checkbox" id="Checkbox_PFDOptionsEnableNav" type="checkbox" checked="true" onchange="SetEnableNavAtPFD()" />
-														<span>启用导航</span>
-													</label>
-												</li>
-												<li class="Ctrl">
-													<label for="Checkbox_PFDOptionsKeepScreenOn">
-														<input class="Checkbox" id="Checkbox_PFDOptionsKeepScreenOn" type="checkbox" checked="false" onchange="SetKeepScreenOnAtPFD()" />
-														<span>保持屏幕常亮</span>
-													</label>
-												</li>
-											</ul>
+											<fieldset id="Fieldset_PFDMenuQuickSettings">
+												<ul class="CtrlGroup">
+													<li class="Ctrl">
+														<label for="Combobox_PFDQuickSettingsFlightMode">
+															<span>飞航模式：</span>
+															<select class="Combobox" id="Combobox_PFDQuickSettingsFlightMode" onchange="SetFlightModeAtPFD()">
+																<option value="DepartureGround" selected>出发地面</option>
+																<option value="TakeOff">起飞</option>
+																<option value="Cruise">巡航</option>
+																<option value="Land">降落</option>
+																<option value="ArrivalGround">到达地面</option>
+																<option value="EmergencyReturn">紧急返航</option>
+															</select>
+														</label>
+													</li>
+													<li class="Ctrl">
+														<label for="Checkbox_PFDQuickSettingsEnableAttitudeIndicator">
+															<input class="Checkbox" id="Checkbox_PFDQuickSettingsEnableAttitudeIndicator" type="checkbox" checked="true" onchange="SetEnableAttitudeIndicatorAtPFD()" />
+															<span>启用<a href="https://zh.wikipedia.org/wiki/姿态指引仪">姿态仪</a></span>
+														</label>
+													</li>
+													<li class="Ctrl" id="Ctrl_PFDQuickSettingsAttitudeMode">
+														<label for="Combobox_PFDQuickSettingsAttitudeMode">
+															<span>姿态模式：</span>
+															<select class="Combobox" id="Combobox_PFDQuickSettingsAttitudeMode" onchange="SetAttitudeModeAtPFD()">
+																<option value="Sensor" selected>传感器</option>
+																<option value="Manual">手动</option>
+															</select>
+														</label>
+													</li>
+													<li class="Ctrl">
+														<label for="Combobox_PFDQuickSettingsSpeedMode">
+															<span>速度模式：</span>
+															<select class="Combobox" id="Combobox_PFDQuickSettingsSpeedMode" onchange="SetSpeedModeAtPFD()">
+																<option value="GPS" selected>GPS</option>
+																<option value="Manual">手动</option>
+															</select>
+														</label>
+													</li>
+													<li class="Ctrl">
+														<label for="Combobox_PFDQuickSettingsAltitudeMode">
+															<span>高度模式：</span>
+															<select class="Combobox" id="Combobox_PFDQuickSettingsAltitudeMode" onchange="SetAltitudeModeAtPFD()">
+																<option value="GPS" selected>GPS</option>
+																<option value="Manual">手动</option>
+															</select>
+														</label>
+													</li>
+													<li class="Ctrl">
+														<label for="Combobox_PFDQuickSettingsHeadingMode">
+															<span>朝向模式：</span>
+															<select class="Combobox" id="Combobox_PFDQuickSettingsHeadingMode" onchange="SetHeadingModeAtPFD()">
+																<option value="Auto" selected>自动</option>
+																<option value="GPS">GPS</option>
+																<option value="Sensor">传感器</option>
+																<option value="Manual">手动</option>
+															</select>
+														</label>
+													</li>
+													<li class="Ctrl">
+														<label for="Checkbox_PFDQuickSettingsEnableNav">
+															<input class="Checkbox" id="Checkbox_PFDQuickSettingsEnableNav" type="checkbox" checked="true" onchange="SetEnableNavAtPFD()" />
+															<span>启用导航</span>
+														</label>
+													</li>
+													<li class="Ctrl">
+														<label for="Checkbox_PFDQuickSettingsKeepScreenOn">
+															<input class="Checkbox" id="Checkbox_PFDQuickSettingsKeepScreenOn" type="checkbox" checked="false" onchange="SetKeepScreenOnAtPFD()" />
+															<span>保持屏幕常亮</span>
+														</label>
+													</li>
+												</ul>
+											</fieldset>
 										</li>
-										<li class="Ctrl PFDMenuSection">
-											<ul class="CtrlGroup PFDMenuTitle">
+										<li class="Ctrl PFDMenuItem">
+											<ul class="CtrlGroup">
 												<li class="Ctrl">
-													<button class="Button ShownAsLabel" onclick="TogglePFDMenuCollapse('TechInfo')">
+													<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('PFDMenuTechInfo')">
 														<h2>技术信息</h2>
 														<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
 															<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
@@ -2798,47 +2811,49 @@
 													</button>
 												</li>
 											</ul>
-											<ul class="CtrlGroup PFDMenuContent Hidden" id="CtrlGroup_PFDTechInfo" inert="true">
-												<li class="Ctrl">
-													<h3>GPS</h3>
-													<p>纬度：<span id="Label_PFDTechInfoLat">未知</span><br />
-														经度：<span id="Label_PFDTechInfoLon">未知</span><br />
-														位置精度：<span id="Label_PFDTechInfoPositionAccuracy">未知</span></p>
-													<p>速度：<span id="Label_PFDTechInfoGPSSpeed">未知</span><br />
-														高度：<span id="Label_PFDTechInfoGPSAltitude">未知</span><br />
-														高度精度：<span id="Label_PFDTechInfoAltitudeAccuracy">未知</span><br />
-														朝向：<span id="Label_PFDTechInfoGPSHeading">未知</span></p>
-													<p>时间戳：<span id="Label_PFDTechInfoGPSTimestamp">未知</span></p>
-													<h3>传感器</h3>
-													<p>重力感应器提供 XYZ 轴重力加速度值，电子罗盘提供α轴朝向值。将手机抬起并逆时针旋转90度。X轴向下是正值，向上是负值。Y轴向右是正值，向左是负值。Z轴向前是正值，向后是负值。</p>
-													<p>X轴：<span id="Label_PFDTechInfoXAxis">未知</span><br />
-														Y轴：<span id="Label_PFDTechInfoYAxis">未知</span><br />
-														Z轴：<span id="Label_PFDTechInfoZAxis">未知</span><br />
-														α轴：<span id="Label_PFDTechInfoAlphaAxis">未知</span><br />
-														电子罗盘是否绝对：<span id="Label_PFDTechInfoIsCompassAbsolute">未知</span></p>
-													<p>屏幕方向：<span id="Label_PFDTechInfoScreenOrientation">未知</span></p>
-													<p>向前：<span id="Label_PFDTechInfoForward">未知</span><br />
-														向右：<span id="Label_PFDTechInfoRight">未知</span><br />
-														向上：<span id="Label_PFDTechInfoUpward">未知</span><br />
-														<a href="https://zh.wikipedia.org/wiki/航空器三主轴">俯仰</a>：<span id="Label_PFDTechInfoSensorPitch">未知</span><br />
-														<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚</a>：<span id="Label_PFDTechInfoSensorRoll">未知</span><br />
-														对齐后俯仰：<span id="Label_PFDTechInfoAlignedPitch">未知</span><br />
-														对齐后横滚：<span id="Label_PFDTechInfoAlignedRoll">未知</span><br />
-														朝向：<span id="Label_PFDTechInfoSensorHeading">未知</span></p>
-													<p>时间戳：<span id="Label_PFDTechInfoSensorTimestamp">未知</span></p>
-													<h3>手动</h3>
-													<p>俯仰：<span id="Label_PFDTechInfoManualPitch">未知</span><br />
-														俯仰趋势：<span id="Label_PFDTechInfoManualPitchTrend">未知</span><br />
-														横滚：<span id="Label_PFDTechInfoManualRoll">未知</span><br />
-														横滚趋势：<span id="Label_PFDTechInfoManualRollTrend">未知</span><br />
-														速度：<span id="Label_PFDTechInfoManualSpeed">未知</span><br />
-														速度趋势：<span id="Label_PFDTechInfoManualSpeedTrend">未知</span><br />
-														高度：<span id="Label_PFDTechInfoManualAltitude">未知</span><br />
-														高度趋势：<span id="Label_PFDTechInfoManualAltitudeTrend">未知</span><br />
-														朝向：<span id="Label_PFDTechInfoManualHeading">未知</span><br />
-														朝向趋势：<span id="Label_PFDTechInfoManualHeadingTrend">未知</span></p>
-												</li>
-											</ul>
+											<fieldset id="Fieldset_PFDMenuTechInfo">
+												<ul class="CtrlGroup">
+													<li class="Ctrl">
+														<h3>GPS</h3>
+														<p>纬度：<span id="Label_PFDTechInfoLat">未知</span><br />
+															经度：<span id="Label_PFDTechInfoLon">未知</span><br />
+															位置精度：<span id="Label_PFDTechInfoPositionAccuracy">未知</span></p>
+														<p>速度：<span id="Label_PFDTechInfoGPSSpeed">未知</span><br />
+															高度：<span id="Label_PFDTechInfoGPSAltitude">未知</span><br />
+															高度精度：<span id="Label_PFDTechInfoAltitudeAccuracy">未知</span><br />
+															朝向：<span id="Label_PFDTechInfoGPSHeading">未知</span></p>
+														<p>时间戳：<span id="Label_PFDTechInfoGPSTimestamp">未知</span></p>
+														<h3>传感器</h3>
+														<p>重力感应器提供 XYZ 轴重力加速度值，电子罗盘提供α轴朝向值。将手机抬起并逆时针旋转90度。X轴向下是正值，向上是负值。Y轴向右是正值，向左是负值。Z轴向前是正值，向后是负值。</p>
+														<p>X轴：<span id="Label_PFDTechInfoXAxis">未知</span><br />
+															Y轴：<span id="Label_PFDTechInfoYAxis">未知</span><br />
+															Z轴：<span id="Label_PFDTechInfoZAxis">未知</span><br />
+															α轴：<span id="Label_PFDTechInfoAlphaAxis">未知</span><br />
+															电子罗盘是否绝对：<span id="Label_PFDTechInfoIsCompassAbsolute">未知</span></p>
+														<p>屏幕方向：<span id="Label_PFDTechInfoScreenOrientation">未知</span></p>
+														<p>向前：<span id="Label_PFDTechInfoForward">未知</span><br />
+															向右：<span id="Label_PFDTechInfoRight">未知</span><br />
+															向上：<span id="Label_PFDTechInfoUpward">未知</span><br />
+															<a href="https://zh.wikipedia.org/wiki/航空器三主轴">俯仰</a>：<span id="Label_PFDTechInfoSensorPitch">未知</span><br />
+															<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚</a>：<span id="Label_PFDTechInfoSensorRoll">未知</span><br />
+															对齐后俯仰：<span id="Label_PFDTechInfoAlignedPitch">未知</span><br />
+															对齐后横滚：<span id="Label_PFDTechInfoAlignedRoll">未知</span><br />
+															朝向：<span id="Label_PFDTechInfoSensorHeading">未知</span></p>
+														<p>时间戳：<span id="Label_PFDTechInfoSensorTimestamp">未知</span></p>
+														<h3>手动</h3>
+														<p>俯仰：<span id="Label_PFDTechInfoManualPitch">未知</span><br />
+															俯仰趋势：<span id="Label_PFDTechInfoManualPitchTrend">未知</span><br />
+															横滚：<span id="Label_PFDTechInfoManualRoll">未知</span><br />
+															横滚趋势：<span id="Label_PFDTechInfoManualRollTrend">未知</span><br />
+															速度：<span id="Label_PFDTechInfoManualSpeed">未知</span><br />
+															速度趋势：<span id="Label_PFDTechInfoManualSpeedTrend">未知</span><br />
+															高度：<span id="Label_PFDTechInfoManualAltitude">未知</span><br />
+															高度趋势：<span id="Label_PFDTechInfoManualAltitudeTrend">未知</span><br />
+															朝向：<span id="Label_PFDTechInfoManualHeading">未知</span><br />
+															朝向趋势：<span id="Label_PFDTechInfoManualHeadingTrend">未知</span></p>
+													</li>
+												</ul>
+											</fieldset>
 										</li>
 									</ul>
 								</div>
@@ -2852,8 +2867,17 @@
 				<h1 class="SectionTitle">机场库</h1>
 				<ul class="ItemGroup">
 					<li class="Item">
-						<fieldset>
-							<legend>机场</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('AirportLibraryAirports')">
+									<h2>机场</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_AirportLibraryAirports">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryFilter">
@@ -2862,8 +2886,8 @@
 									</label>
 								</li>
 								<li class="Ctrl ListHeader">
-									<span id="Label_AirportLibraryItemCount">项目数</span>
 									<span>出发 | 到达</span>
+									<span id="Label_AirportLibraryItemCount">项目数</span>
 								</li>
 								<li class="Ctrl ScrollableList">
 									<ul class="CtrlGroup" id="CtrlGroup_AirportLibraryAirportList">
@@ -2883,8 +2907,17 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>机场属性</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('AirportLibraryAirportProperties')">
+									<h2>机场属性</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_AirportLibraryAirportProperties">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryName">
@@ -2929,15 +2962,24 @@
 									</label>
 								</li>
 								<li class="Ctrl">
-									<a class="Button" href="#Item_SettingsI18n" onclick="ShowIAmHere('Item_SettingsI18n')">切换计量单位...</a>
+									<a class="Button" href="#Item_SettingsI18n" onclick="ShowIAmHere('SettingsI18n')">切换计量单位...</a>
 								</li>
 							</ul>
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>跑道</legend>
-							<p class="Hidden" id="Label_AirportLibraryAutoSwitchRunwayActive" inert="true"><span class="RedText">注意：</span>「<a href="#Item_SettingsNav" onclick="ShowIAmHere('Item_SettingsNav')">自动切换跑道</a>」工作中。这里可能无法操作。</p>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('AirportLibraryRunways')">
+									<h2>跑道</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_AirportLibraryRunways">
+							<p class="Hidden" id="Label_AirportLibraryAutoSwitchRunwayActive" inert="true"><span class="RedText">注意：</span>「<a href="#Item_SettingsNav" onclick="ShowIAmHere('SettingsNav')">自动切换跑道</a>」工作中。这里可能无法操作。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl ScrollableList">
 									<ul class="CtrlGroup" id="CtrlGroup_AirportLibraryRunwayList">
@@ -2951,8 +2993,17 @@
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_AirportLibraryRunwayProperties">
-						<fieldset>
-							<legend>跑道属性</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('AirportLibraryRunwayProperties')">
+									<h2>跑道属性</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_AirportLibraryRunwayProperties">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryRunwayHeading">
@@ -3037,7 +3088,7 @@
 									</label>
 								</li>
 							</ul>
-							<p>跑道高度＋<a href="#Item_SettingsAltitude" onclick="ShowIAmHere('Item_SettingsAltitude')">座位高度</a>＝地面高度。地面高度＋相对决断高度 (decision height)＝<a href="https://en.wikipedia.org/wiki/Instrument_approach#Decision_height_or_altitude">决断高度 (decision altitude)</a>。</p>
+							<p>跑道高度＋<a href="#Item_SettingsAltitude" onclick="ShowIAmHere('SettingsAltitude')">座位高度</a>＝地面高度。地面高度＋相对决断高度 (decision height)＝<a href="https://en.wikipedia.org/wiki/Instrument_approach#Decision_height_or_altitude">决断高度 (decision altitude)</a>。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryDecisionHeight">
@@ -3050,8 +3101,17 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>管理</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('AirportLibraryManagement')">
+									<h2>管理</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_AirportLibraryManagement">
 							<p>「导入」功能可导入机场或整个机场库。支持批量导入，每行一个对象。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl" id="Ctrl_AirportLibraryImport">
@@ -3079,9 +3139,18 @@
 				<h1 class="SectionTitle">设定</h1>
 				<ul class="ItemGroup">
 					<li class="Item">
-						<fieldset>
-							<legend>权限</legend>
-							<p>本应用程序需要使用位置服务与传感器来实现核心功能。请阅读<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('Item_HelpPrivacyStatement')">隐私权声明</a>。</p>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsPermissions')">
+									<h2>权限</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsPermissions">
+							<p>本应用程序需要使用位置服务与传感器来实现核心功能。请阅读<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('HelpPrivacyStatement')">隐私权声明</a>。</p>
 							<p class="Hidden" id="Label_SettingsRequestSensorPermission" inert="true"><a href="https://zh.wikipedia.org/wiki/苹果公司">苹果公司</a>出于加强保护用户隐私的理由，在 <a href="https://zh.wikipedia.org/wiki/iOS">iOS</a> 13+ 环境下，您需要手动允许本应用程序使用传感器。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl Hidden" id="Ctrl_SettingsRequestSensorPermission" inert="true">
@@ -3094,8 +3163,17 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>飞航模式</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsFlightMode')">
+									<h2>飞航模式</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsFlightMode">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsFlightMode">
@@ -3120,8 +3198,17 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>姿态仪</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsAttitudeIndicator')">
+									<h2>姿态仪</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsAttitudeIndicator">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsEnableAttitudeIndicator">
@@ -3173,8 +3260,17 @@
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_SettingsSpeed">
-						<fieldset>
-							<legend>速度</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsSpeed')">
+									<h2>速度</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsSpeed">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsSpeedMode">
@@ -3299,8 +3395,17 @@
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_SettingsAltitude">
-						<fieldset>
-							<legend>高度</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsAltitude')">
+									<h2>高度</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsAltitude">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsAltitudeMode">
@@ -3322,16 +3427,25 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>朝向</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsHeading')">
+									<h2>朝向</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsHeading">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsHeadingMode">
 										<span>模式：</span>
 										<select class="Combobox" id="Combobox_SettingsHeadingMode" onchange="SetHeadingMode()">
-											<option value="Auto">自动 (Beta)</option>
-											<option value="GPS" selected>GPS</option>
-											<option value="Sensor">传感器 (Beta)</option>
+											<option value="Auto" selected>自动</option>
+											<option value="GPS">GPS</option>
+											<option value="Sensor">传感器</option>
 											<option value="Manual">手动</option>
 										</select>
 									</label>
@@ -3340,8 +3454,17 @@
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_SettingsNav">
-						<fieldset>
-							<legend>导航</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsNav')">
+									<h2>导航</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsNav">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsEnableNav">
@@ -3368,9 +3491,18 @@
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_SettingsWarningSystem">
-						<fieldset>
-							<legend>警告系统</legend>
-							<p><span class="RedText">注意：</span>启用警告系统前请先阅读<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('Item_HelpDisclaimer')">免责声明</a>。</p>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsWarningSystem')">
+									<h2>警告系统</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsWarningSystem">
+							<p><span class="RedText">注意：</span>启用警告系统前请先阅读<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('HelpDisclaimer')">免责声明</a>。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsEnableWarningSystem">
@@ -3382,8 +3514,17 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>显示</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsDisplay')">
+									<h2>显示</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsDisplay">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsTheme">
@@ -3488,8 +3629,17 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>声音</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsAudio')">
+									<h2>声音</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsAudio">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsPlayAudio">
@@ -3507,7 +3657,7 @@
 									</label>
 								</li>
 							</ul>
-							<p id="Label_SettingsAudio">请注意区分「警报」(alert) 与「<a href="#Item_SettingsWarningSystem" onclick="ShowIAmHere('Item_SettingsWarningSystem')">警告</a>」(warning)。「警报」包括「播报」(callout) 与「警告」。</p>
+							<p id="Label_SettingsAudio">请注意区分「警报」(alert) 与「<a href="#Item_SettingsWarningSystem" onclick="ShowIAmHere('SettingsWarningSystem')">警告</a>」(warning)。「警报」包括「播报」(callout) 与「警告」。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl" id="Ctrl_SettingsAttitudeAlertVolume">
 									<label for="Slider_SettingsAttitudeAlertVolume">
@@ -3534,8 +3684,17 @@
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_SettingsI18n">
-						<fieldset>
-							<legend>国际化</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsI18n')">
+									<h2>国际化</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsI18n">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsAlwaysUseEnglishTerminologyOnPFD">
@@ -3634,8 +3793,17 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>PWA</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsPWA')">
+									<h2>PWA</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsPWA">
 							<p>您可将本应用程序安装至桌面，以 <a href="https://zh.wikipedia.org/wiki/progressive_web_app">PWA</a> (俗称小程序) 的形式更方便地使用。若下面的按钮不可用，请尝试前往浏览器的菜单来安装。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
@@ -3649,9 +3817,21 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>其他</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsMisc')">
+									<h2>其他</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsMisc">
 							<ul class="CtrlGroup">
+								<li class="Ctrl">
+									<button class="Button" onclick="ResetFieldsetCollapsing()">重置 fieldset 折叠</button>
+								</li>
 								<li class="Ctrl">
 									<button class="Button" onclick="ResetAllDontShowAgainDialogs()">重置所有「不再显示」的对话框</button>
 								</li>
@@ -3659,8 +3839,17 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>开发者选项</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsDev')">
+									<h2>开发者选项</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsDev">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsTryToOptimizePerformance">
@@ -3684,8 +3873,17 @@
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_SettingsUserData">
-						<fieldset>
-							<legend>用户数据</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsUserData')">
+									<h2>用户数据</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsUserData">
 							<p>本功能可快速更改整个网站的用户数据。若要分享导出的数据，请注意其中是否包含个人信息。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl">
@@ -3710,15 +3908,33 @@
 				<h1 class="SectionTitle">帮助</h1>
 				<ul class="ItemGroup">
 					<li class="Item">
-						<fieldset>
-							<legend>简介</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('HelpDescription')">
+									<h2>简介</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_HelpDescription">
 							<p>GPS-PFD，利用 GPS 与传感器，在移动设备上模拟飞机驾驶舱的 PFD。</p>
 							<p>备注：这里的「GPS」指的是位置服务，其利用以 GPS 为代表的卫星导航系统来精确定位。卫星导航系统包括美国 GPS、俄罗斯 <a href="https://zh.wikipedia.org/wiki/GLONASS">GLONASS</a>，以及中国<a href="https://zh.wikipedia.org/wiki/北斗卫星导航系统">北斗</a>等。传感器包括重力感应器与电子罗盘，用于测量姿态与朝向。</p>
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_HelpReadBeforeUse">
-						<fieldset>
-							<legend>使用前须知</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('HelpReadBeforeUse')">
+									<h2>使用前须知</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_HelpReadBeforeUse">
 							<h3>使用环境</h3>
 							<p>建议在搭载了 GPS 芯片与传感器的移动设备 (智能手机或平板电脑) 上使用本应用程序。否则核心功能可能不可用。在交通工具上可能需要靠窗才能接收到 GPS 信号。GPS 可能会非常耗电，因此建议使用时连接移动电源 (充电宝)。</p>
 							<h3>离线使用</h3>
@@ -3727,12 +3943,21 @@
 								・下载资源至本地，在本地运行网页。<br />
 								详见<a href="docs/GPS-PFD%20说明文档.pdf">说明文档</a>中的「使用方式」。</p>
 							<h3>安全与隐私</h3>
-							<p>详见<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('Item_HelpDisclaimer')">免责声明</a>与<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('Item_HelpPrivacyStatement')">隐私权声明</a>。</p>
+							<p>详见<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('HelpDisclaimer')">免责声明</a>与<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('HelpPrivacyStatement')">隐私权声明</a>。</p>
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_HelpTutorial">
-						<fieldset>
-							<legend>教程</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('HelpTutorial')">
+									<h2>教程</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_HelpTutorial">
 							<p>本应用程序的教程以 PDF 文档的形式提供。这方便您保存至本地，还可以打印出来备用。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl WidthDividedBy2">
@@ -3745,8 +3970,17 @@
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_HelpGetInvolved">
-						<fieldset>
-							<legend>参与进来</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('HelpGetInvolved')">
+									<h2>参与进来</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_HelpGetInvolved">
 							<h3>反馈</h3>
 							<p>您可通过以下渠道向我提供反馈：</p>
 							<ul class="CtrlGroup BelowParagraph">
@@ -3765,8 +3999,17 @@
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_HelpDisclaimer">
-						<fieldset>
-							<legend>免责声明</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('HelpDisclaimer')">
+									<h2>免责声明</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_HelpDisclaimer">
 							<p>本应用程序仅供娱乐用途，不能替代飞机驾驶舱仪表。</p>
 							<p>首先，系统能够测量的数据有限。<a href="https://zh.wikipedia.org/wiki/空速">空速</a>、风、<a href="https://en.wikipedia.org/wiki/Radio_altimeter">无线电高度</a>、<a href="https://zh.wikipedia.org/wiki/航空器三主轴">偏航 (yaw) </a>等无法测量。因此这些数据或是依赖算法转换，或是依赖手动设定，抑或是直接被忽略。其次，数据不保证准确。GPS 只能测量地速，GPS 高度也不如<a href="https://zh.wikipedia.org/wiki/高度计#氣壓高度計">气压高度计</a>可靠。移动设备的传感器能力有限，加减速时姿态仪可能不准确。其三，数据更新可能有延迟。一方面系统为了显示流畅而设计了显示延迟，另一方面 GPS 信号也会有延迟。</p>
 							<p>鉴于上述原因，您尤其需要注意，警告系统可能出现误报。请勿在公共场合外放警告系统的警报声音。</p>
@@ -3775,23 +4018,50 @@
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_HelpPrivacyStatement">
-						<fieldset>
-							<legend>隐私权声明</legend>
-							<p>本站为 <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages">GitHub Pages</a> 静态网站，只使用浏览器的 Local Storage 功能在本地存储<a href="#Item_SettingsUserData" onclick="ShowIAmHere('Item_SettingsUserData')">用户数据</a>。您可随时手动删除。本站不使用 <a href="https://zh.wikipedia.org/wiki/Cookie">Cookies</a>，不收集任何个人信息。</p>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('HelpPrivacyStatement')">
+									<h2>隐私权声明</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_HelpPrivacyStatement">
+							<p>本站为 <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages">GitHub Pages</a> 静态网站，只使用浏览器的 Local Storage 功能在本地存储<a href="#Item_SettingsUserData" onclick="ShowIAmHere('SettingsUserData')">用户数据</a>。您可随时手动删除。本站不使用 <a href="https://zh.wikipedia.org/wiki/Cookie">Cookies</a>，不收集任何个人信息。</p>
 							<p>出于安全考虑，<a href="https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages#data-collection">GitHub 的服务器可能会记录您的 IP 地址</a>。SAM TOKI STUDIO 无法访问这些数据。</p>
 							<p>本应用程序使用的位置服务与传感器涉及敏感数据。系统不会 (且没有必要) 保存这些数据。关闭网页时这些数据立即丢失。</p>
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>版权说明</legend>
-							<p>本站的源代码遵循 <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL v3 软件开源协议</a>。本站的部分内容为他人作品，版权为原作者所有，本站遵循 <a href="https://zh.wikipedia.org/wiki/fair_use">fair use</a> 原则使用并于 <a href="#Item_HelpCredits" onclick="ShowIAmHere('Item_HelpCredits')">Credits</a> 标注来源。</p>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('HelpCopyrightInfo')">
+									<h2>版权说明</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_HelpCopyrightInfo">
+							<p>本站的源代码遵循 <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU GPL v3 软件开源协议</a>。本站的部分内容为他人作品，版权为原作者所有，本站遵循 <a href="https://zh.wikipedia.org/wiki/fair_use">fair use</a> 原则使用并于 <a href="#Item_HelpCredits" onclick="ShowIAmHere('HelpCredits')">Credits</a> 标注来源。</p>
 							<p>除上述内容之外，本站所有内容以及排版、美术设计均保留版权。</p>
 						</fieldset>
 					</li>
 					<li class="Item" id="Item_HelpCredits">
-						<fieldset>
-							<legend>Credits</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('HelpCredits')">
+									<h2>Credits</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_HelpCredits">
 							<h3>图像</h3>
 							<p>背景图像：Pixiv ID <a href="https://pixiv.net/en/artworks/137560555">137560555</a> by <a href="https://pixiv.net/en/users/40849544">@猫まんぢう</a><br />
 								背景图像会不定期更换。</p>
@@ -3804,11 +4074,20 @@
 						</fieldset>
 					</li>
 					<li class="Item">
-						<fieldset>
-							<legend>关于</legend>
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('HelpAbout')">
+									<h2>关于</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_HelpAbout">
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>版本 v2.00 (<time datetime="2026-01-28" pubdate="pubdate">2026/01/28</time>)<br />
+							<p>版本 v2.01 (<time datetime="2026-02-08" pubdate="pubdate">2026/02/08</time>)<br />
 								始于 2024/12/01</p>
 							<p class="GreenText Hidden" id="Label_HelpNewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
 							<ul class="CtrlGroup BelowParagraph">
