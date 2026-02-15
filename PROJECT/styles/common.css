@@ -325,7 +325,7 @@
 		}
 		.Button.Shaped, .Button.ShownAsLabel {
 			border: none; padding: 0;
-			background-color: transparent !important;
+			background-color: transparent;
 		}
 		.Button.Shaped .Shape {
 			position: absolute; top: 0; left: 0;
@@ -670,9 +670,6 @@
 		.Button.Shaped.Active:enabled:hover .Shape {
 			fill: #B8E8B8;
 		}
-		.Button.ShownAsLabel:enabled:hover {
-			color: #8040A0;
-		}
 		.Textbox.ShownAsLabel:enabled:hover, .Textbox.ShownAsLabel:focus-visible {
 			background-color: #FFFFE8;
 		}
@@ -686,9 +683,6 @@
 		}
 		.Button.Shaped:enabled:active .Shape, .Button.Shaped.Active:enabled:active .Shape {
 			fill: #8040A0;
-		}
-		.Button.ShownAsLabel:enabled:active {
-			color: #D090F0;
 		}
 		/* *:active {
 			transition: none; // Disabled due to SVG icon incompatibility.

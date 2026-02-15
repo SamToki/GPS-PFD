@@ -176,9 +176,6 @@
 		.Button.Shaped.Active:enabled:hover .Shape {
 			fill: #00E000;
 		}
-		.Button.ShownAsLabel:enabled:hover {
-			color: #00C0FF;
-		}
 		.Textbox.ShownAsLabel:enabled:hover, .Textbox.ShownAsLabel:focus-visible {
 			background-color: #202008;
 		}
@@ -192,9 +189,6 @@
 		}
 		.Button.Shaped:enabled:active .Shape, .Button.Shaped.Active:enabled:active .Shape {
 			fill: #00FFFF;
-		}
-		.Button.ShownAsLabel:enabled:active {
-			color: #00FFFF;
 		}
 
 		/* Focus */

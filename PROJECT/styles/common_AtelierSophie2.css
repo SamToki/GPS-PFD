@@ -177,9 +177,6 @@
 			fill: #B8F088;
 			stroke: #FEF3C3;
 		}
-		.Button.ShownAsLabel:enabled:hover {
-			color: #904738;
-		}
 		.Textbox.ShownAsLabel:enabled:hover, .Textbox.ShownAsLabel:focus-visible {
 			background-color: #FFE8CE;
 		}
@@ -197,9 +194,6 @@
 		.Button.Shaped:enabled:active .Shape, .Button.Shaped.Active:enabled:active .Shape {
 			fill: #FDD969;
 			stroke: #FEF3C3;
-		}
-		.Button.ShownAsLabel:enabled:active {
-			color: #C06E5E;
 		}
 
 		/* Focus */

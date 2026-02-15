@@ -186,10 +186,6 @@
 		.Button.Shaped.Active:enabled:hover .Shape {
 			fill: #C8EC86;
 		}
-		.Button.ShownAsLabel:enabled:hover {
-			box-shadow: none;
-			color: #DEB76C;
-		}
 		.Dropctrl a:hover, .Dropctrl .Button:enabled:hover, .ScrollableList label:not(:has(:disabled:not(option))):hover {
 			box-shadow: 0 0 0 3px inset #DEB76C;
 		}
@@ -207,9 +203,6 @@
 		}
 		.Button.Shaped:enabled:active .Shape, .Button.Shaped.Active:enabled:active .Shape {
 			fill: #D0C6BD;
-		}
-		.Button.ShownAsLabel:enabled:active {
-			color: #CC972E;
 		}
 
 		/* Focus */
