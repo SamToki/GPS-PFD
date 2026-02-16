@@ -1044,9 +1044,6 @@
 				.PFDMenuItem {
 					width: 100%; margin: 0 0 15px 0;
 				}
-				.PFDMenuItem .Ctrl:has(h2) {
-					width: calc(100% - 35px);
-				}
 				.PFDMenuItem:has(fieldset.Hidden) .CollapseCaret {
 					transform: rotate(-90deg);
 				}
@@ -1304,12 +1301,12 @@
 		#Item_AirportLibraryRunwayProperties, #Item_SettingsSpeed {
 			width: 800px;
 		}
-		#Item_AirportLibraryRunwayProperties .Ctrl, #Item_SettingsSpeed .Ctrl { /* .WidthDividedBy2 */
+		#Fieldset_AirportLibraryRunwayProperties .Ctrl, #Fieldset_SettingsSpeed .Ctrl { /* .WidthDividedBy2 */
 			width: calc((100% - 10px) / 2);
 		}
-		#Item_AirportLibraryRunwayProperties #Ctrl_AirportLibraryLat,
-		#Item_AirportLibraryRunwayProperties #Ctrl_AirportLibraryLon,
-		#Item_AirportLibraryRunwayProperties #Ctrl_AirportLibraryReplaceRunwayCoordinatesWithCurrent { /* .WidthDividedBy3 */
+		#Fieldset_AirportLibraryRunwayProperties #Ctrl_AirportLibraryLat,
+		#Fieldset_AirportLibraryRunwayProperties #Ctrl_AirportLibraryLon,
+		#Fieldset_AirportLibraryRunwayProperties #Ctrl_AirportLibraryReplaceRunwayCoordinatesWithCurrent { /* .WidthDividedBy3 */
 			width: calc((100% - 20px) / 3);
 		}
 }
