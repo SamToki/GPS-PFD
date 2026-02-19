@@ -60,7 +60,7 @@
 		#Html {
 			transform-origin: center center;
 			box-sizing: border-box;
-			color: #000000; font-variant-numeric: tabular-nums; font-size: 14px; line-height: 1.2;
+			color: #000000; accent-color: #8040A0; font-variant-numeric: tabular-nums; font-size: 14px; line-height: 1.2;
 			scroll-padding-top: 60px;
 			transition: 250ms, z-index 0ms; scroll-behavior: smooth;
 		}
