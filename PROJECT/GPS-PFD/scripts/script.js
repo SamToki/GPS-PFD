@@ -2795,7 +2795,7 @@
 					PFD0.RawData.Sensor.Heading = (360 - PFD0.RawData.Sensor.Compass.Alpha + 90) % 360;
 					break;
 				case "landscape-secondary":
-					PFD0.RawData.Sensor.Heading = (360 - PFD0.RawData.Sensor.Compass.Alpha - 90) % 360;
+					PFD0.RawData.Sensor.Heading = (360 - PFD0.RawData.Sensor.Compass.Alpha + 270) % 360;
 					break;
 				case "portrait-primary":
 					PFD0.RawData.Sensor.Heading = (360 - PFD0.RawData.Sensor.Compass.Alpha) % 360;
