@@ -800,7 +800,6 @@
 		for(let Looper = 0; Looper < Elements.length; Looper++) {
 			if(Elements[Looper].id != "") {
 				if(System.CollapsedFieldset.includes(Elements[Looper].id.replace("Fieldset_", "")) == false) {
-					console.log(Elements[Looper].id);
 					Show(Elements[Looper].id);
 				} else {
 					Hide(Elements[Looper].id);

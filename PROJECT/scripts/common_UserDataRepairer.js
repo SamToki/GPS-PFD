@@ -151,6 +151,16 @@
 				}
 			}
 
+			// v3.02 (2026/06/13)
+			// Rename values (Game font)
+			if(localStorage.YamanoboRyou_Subsystem != undefined) {
+				let Subsystem = JSON.parse(localStorage.getItem("YamanoboRyou_Subsystem"));
+				if(Subsystem.Display.GameFont == "Iosevka") {
+					Subsystem.Display.GameFont = "Victor Mono";
+					localStorage.setItem("YamanoboRyou_Subsystem", JSON.stringify(Subsystem));
+				}
+			}
+
 		// GPS-PFD
 			// v0.31 (2025/06/08) Beta Test
 			// New feature

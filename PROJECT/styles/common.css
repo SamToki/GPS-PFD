@@ -34,8 +34,8 @@
 			src: local("Inter"), url(../fonts/Inter-BoldItalic.woff2); font-display: swap;
 		}
 		@font-face {
-			font-family: "Iosevka";
-			src: local("Iosevka"), url(../fonts/Iosevka-Regular.woff2); font-display: swap;
+			font-family: "Victor Mono";
+			src: local("Victor Mono Medium"), url(../fonts/VictorMono-Medium.woff2); font-display: swap;
 		}
 
 		/* Overall */
@@ -617,7 +617,7 @@
 			font-weight: bold;
 		}
 		.Code {
-			font-family: "Iosevka", "Sarasa Mono SC", "LXGW WenKai Mono", "XHei Square Mono", "Consolas", monospace;
+			font-family: "Victor Mono", "Iosevka", "Sarasa Mono SC", "LXGW WenKai Mono", "XHei Square Mono", "Consolas", monospace;
 			white-space: pre; /* https://stackoverflow.com/a/13446005 */
 		}
 
