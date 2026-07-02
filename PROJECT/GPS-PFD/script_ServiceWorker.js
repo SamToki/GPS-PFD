@@ -29,7 +29,7 @@
 				"styles/style_PFDHUDPanel.css",
 				// "styles/style_PFD???.css",
 				"../scripts/common.js",
-				"../scripts/common_UserDataRepairer.js",
+				"scripts/script_UserDataRepairer.js",
 				"scripts/script_PFDNormalPanel.js",
 				"scripts/script_PFDHUDPanel.js",
 				// "scripts/script_PFD???.js",
