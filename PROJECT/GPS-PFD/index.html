@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v2.02 (2026/03/22). Since 2024/12/01." />
+		<meta name="version" content="v2.03 (2026/07/26). Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与传感器，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -109,11 +109,11 @@
 		</header>
 
 		<main id="Main">
-			<section class="PFDStyleIsNormal" id="PFD">
+			<section id="PFD">
 				<h1 class="SectionTitle Hidden" inert="true">PFD</h1>
 				<div class="Viewport" id="PFDViewport">
 					<div class="Ctnr PFDPanel" id="Ctnr_PFDNormalPanel">
-						<div class="Ctnr" id="Ctnr_PFDNormalPanelAttitude">
+						<div class="Ctnr BgFillEntirePFD" id="Ctnr_PFDNormalPanelAttitude">
 							<ul class="CtrlGroup">
 								<li class="Ctrl Box StatusBox Faded" id="Ctrl_PFDNormalPanelAttitudeStatus" inert="true">
 									<span id="Label_PFDNormalPanelAttitudeStatus">姿态仪状态</span>
@@ -122,7 +122,7 @@
 									<div id="PFDNormalPanelAttitudeSky"></div>
 									<div id="PFDNormalPanelAttitudeTerrain"></div>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudePitch" title="姿态仪" aria-label="姿态仪">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudePitch">
 									<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelAttitudePitch">
 										<li class="Ctrl"><span class="LargerText">90</span><div class="AttitudeScale1"></div><span class="LargerText">90</span></li>
 										<li class="Ctrl"><div class="AttitudeScale4"></div></li>
@@ -218,13 +218,21 @@
 									</svg>
 									<div id="PFDNormalPanelAttitudeRollPointer" title="横滚指针" aria-label="横滚指针"></div>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbol" title="姿态仪" aria-label="姿态仪">
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeSpeedPitch" title="姿态仪" aria-label="姿态仪">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDNormalPanelAttitudeSpeedPitch" title="飞行路径俯仰角" aria-label="飞行路径俯仰角">
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeSpeedPitchLeft"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeSpeedPitchCenter"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeSpeedPitchRight"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeSpeedPitchCircle"></li>
+									</ul>
+								</li>
+								<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbol">
 									<ul class="CtrlGroup">
-										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolLeft1"></li>
-										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolLeft2"></li>
-										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolCenter"></li>
-										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolRight1"></li>
-										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolRight2"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolLeft1" title="姿态仪" aria-label="姿态仪"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolLeft2" title="姿态仪" aria-label="姿态仪"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolCenter" title="姿态仪" aria-label="姿态仪"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolRight1" title="姿态仪" aria-label="姿态仪"></li>
+										<li class="Ctrl" id="Ctrl_PFDNormalPanelAttitudeAircraftSymbolRight2" title="姿态仪" aria-label="姿态仪"></li>
 									</ul>
 								</li>
 							</ul>
@@ -1281,7 +1289,7 @@
 								<li class="Ctrl Box StatusBox Faded" id="Ctrl_PFDHUDPanelAttitudeStatus" inert="true">
 									<span id="Label_PFDHUDPanelAttitudeStatus">姿态仪状态</span>
 								</li>
-								<li class="Ctrl" id="Ctrl_PFDHUDPanelAttitudePitch" title="姿态仪" aria-label="姿态仪">
+								<li class="Ctrl" id="Ctrl_PFDHUDPanelAttitudePitch">
 									<ul class="CtrlGroup" id="CtrlGroup_PFDHUDPanelAttitudePitch">
 										<li class="Ctrl">
 											<span class="LargerText">90</span><div class="AttitudeScale3"></div><div class="AttitudeScale1"></div>
@@ -1486,6 +1494,14 @@
 									<div id="PFDHUDPanelAttitudeRollPointer">
 										<div id="PFDHUDPanelAttitudeRollPointerInner" title="横滚指针" aria-label="横滚指针"></div>
 									</div>
+								</li>
+								<li class="Ctrl" id="Ctrl_PFDHUDPanelAttitudeSpeedPitch" title="姿态仪" aria-label="姿态仪">
+									<ul class="CtrlGroup" id="CtrlGroup_PFDHUDPanelAttitudeSpeedPitch" title="飞行路径俯仰角" aria-label="飞行路径俯仰角">
+										<li class="Ctrl" id="Ctrl_PFDHUDPanelAttitudeSpeedPitchLeft"></li>
+										<li class="Ctrl" id="Ctrl_PFDHUDPanelAttitudeSpeedPitchCenter"></li>
+										<li class="Ctrl" id="Ctrl_PFDHUDPanelAttitudeSpeedPitchRight"></li>
+										<li class="Ctrl" id="Ctrl_PFDHUDPanelAttitudeSpeedPitchCircle"></li>
+									</ul>
 								</li>
 								<li class="Ctrl" id="Ctrl_PFDHUDPanelAttitudeAircraftSymbol">
 									<div title="姿态仪" aria-label="姿态仪"></div>
@@ -3294,10 +3310,10 @@
 								</li>
 								<li class="Ctrl">
 									<label for="Textbox_SettingsWindDirection">
-										<span>风：</span>
-										<input class="Textbox Width100" id="Textbox_SettingsWindDirection" type="number" min="0" max="359" step="5" value="0" onclick="SelectText('Textbox_SettingsWindDirection')" onchange="SetWindDirection()" placeholder="0~359" title="0~359" />
+										<span>风 (水平)：</span>
+										<input class="Textbox Width80" id="Textbox_SettingsWindDirection" type="number" min="0" max="359" step="5" value="0" onclick="SelectText('Textbox_SettingsWindDirection')" onchange="SetWindDirection()" placeholder="0~359" title="0~359" />
 										<span>度，</span>
-										<input class="Textbox Width100" id="Textbox_SettingsWindSpeed" type="number" min="0" max="539" step="5" value="0" onclick="SelectText('Textbox_SettingsWindSpeed')" onchange="SetWindSpeed()" placeholder="0~539" title="0~539" />
+										<input class="Textbox Width80" id="Textbox_SettingsWindSpeed" type="number" min="0" max="539" step="5" value="0" onclick="SelectText('Textbox_SettingsWindSpeed')" onchange="SetWindSpeed()" placeholder="0~539" title="0~539" />
 										<span id="Label_SettingsWindSpeedUnit">节</span>
 									</label>
 								</li>
@@ -3372,15 +3388,15 @@
 								</li>
 								<li class="Ctrl">
 									<label for="Textbox_SettingsVMO">
-										<span>V<sub>MO</sub> <span class="SmallerText">(<a href="https://zh.wikipedia.org/wiki/襟翼">襟翼</a>收起时最大表速)</span>：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsVMO" type="number" min="10" max="539" step="5" value="340" onclick="SelectText('Textbox_SettingsVMO')" onchange="SetVMO()" placeholder="11~539" title="11~539" />
+										<span>V<sub>MO</sub> (<a href="https://zh.wikipedia.org/wiki/襟翼">襟翼</a>收起时最大表速)：</span>
+										<input class="Textbox Width80" id="Textbox_SettingsVMO" type="number" min="10" max="539" step="5" value="340" onclick="SelectText('Textbox_SettingsVMO')" onchange="SetVMO()" placeholder="11~539" title="11~539" />
 										<span id="Label_SettingsVMOUnit">节</span>
 									</label>
 								</li>
 								<li class="Ctrl">
 									<label for="Textbox_SettingsVFE">
-										<span>V<sub>FE</sub> <span class="SmallerText">(襟翼全开时最大表速)</span>：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsVFE" type="number" min="10" max="539" step="5" value="162" onclick="SelectText('Textbox_SettingsVFE')" onchange="SetVFE()" placeholder="11~539" title="11~539" />
+										<span>V<sub>FE</sub> (襟翼全开时最大表速)：</span>
+										<input class="Textbox Width80" id="Textbox_SettingsVFE" type="number" min="10" max="539" step="5" value="162" onclick="SelectText('Textbox_SettingsVFE')" onchange="SetVFE()" placeholder="11~539" title="11~539" />
 										<span id="Label_SettingsVFEUnit">节</span>
 									</label>
 								</li>
@@ -3513,7 +3529,7 @@
 							</ul>
 						</fieldset>
 					</li>
-					<li class="Item">
+					<li class="Item" id="Item_SettingsDisplay">
 						<ul class="CtrlGroup">
 							<li class="Ctrl">
 								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsDisplay')">
@@ -3551,6 +3567,13 @@
 											<option value="Bocchi737" disabled="true">波奇737 (敬请期待)</option>
 											<option value="AnalogGauges" disabled="true">传统仪表 (敬请期待)</option>
 										</select>
+									</label>
+								</li>
+								<li class="Ctrl" id="Ctrl_SettingsAttitudeBgFillEntirePFD">
+									<label for="Checkbox_SettingsAttitudeBgFillEntirePFD">
+										<input class="Checkbox" id="Checkbox_SettingsAttitudeBgFillEntirePFD" type="checkbox" checked="true" onchange="SetAttitudeBgFillEntirePFD()" />
+										<span>姿态仪背景填满整个 PFD</span>
+										<span class="NewFeatureLabel">新</span>
 									</label>
 								</li>
 								<li class="Ctrl">
@@ -3863,12 +3886,6 @@
 										<span>显示调试用描边</span>
 									</label>
 								</li>
-								<li class="Ctrl">
-									<label for="Checkbox_SettingsVideoFootageMode">
-										<input class="Checkbox" id="Checkbox_SettingsVideoFootageMode" type="checkbox" checked="false" onchange="SetVideoFootageMode()" />
-										<span>视频素材模式</span>
-									</label>
-								</li>
 							</ul>
 						</fieldset>
 					</li>
@@ -4087,7 +4104,7 @@
 						<fieldset id="Fieldset_HelpAbout">
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>v2.02 (<time datetime="2026-03-22" pubdate="pubdate">2026/03/22</time>)<br />
+							<p>v2.03 (<time datetime="2026-07-26" pubdate="pubdate">2026/07/26</time>)<br />
 								始于 2024/12/01</p>
 							<p class="GreenText Hidden" id="Label_HelpNewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
 							<ul class="CtrlGroup BelowParagraph">

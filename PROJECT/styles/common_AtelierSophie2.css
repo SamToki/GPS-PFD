@@ -20,6 +20,10 @@
 		a {
 			color: #904738;
 		}
+		.NewFeatureLabel {
+			background-color: #00A000;
+			color: #FFFFFF;
+		}
 
 		/* Shapes */
 		.Shape {

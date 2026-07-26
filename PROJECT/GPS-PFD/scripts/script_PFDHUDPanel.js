@@ -74,6 +74,7 @@
 				Fade("Ctrl_PFDHUDPanelAttitudeStatus");
 				Fade("Ctrl_PFDHUDPanelAttitudePitch");
 				Fade("Ctrl_PFDHUDPanelAttitudeRoll");
+				Fade("Ctrl_PFDHUDPanelAttitudeSpeedPitch");
 				Fade("Ctrl_PFDHUDPanelAttitudeAircraftSymbol");
 				if(PFD.Attitude.IsEnabled) {
 					if(PFD0.Stats.Attitude.IsValid) {
@@ -101,6 +102,16 @@
 						} else {
 							RemoveClass("PFDHUDPanelAttitudeRollScaleInner", "BankAngleWarning");
 							RemoveClass("PFDHUDPanelAttitudeRollPointerInner", "BankAngleWarning");
+						}
+						if(PFD0.Stats.Speed.IsValid && PFD0.Stats.Altitude.IsValid) {
+							Show("Ctrl_PFDHUDPanelAttitudeSpeedPitch");
+							if(System.Display.Anim > 0) {
+								ChangeAnim("Ctrl_PFDHUDPanelAttitudeSpeedPitch", "100ms");
+							} else {
+								ChangeAnim("Ctrl_PFDHUDPanelAttitudeSpeedPitch", "");
+							}
+							ChangeTop("CtrlGroup_PFDHUDPanelAttitudeSpeedPitch", "calc(50% - 22.5px + " + 20 * (PFD0.Stats.Attitude.PitchDisplay - PFD0.Stats.Speed.Pitch) * Math.cos(DegToRad(Math.abs(PFD0.Stats.Attitude.RollDisplay))) + "px)");
+							ChangeLeft("CtrlGroup_PFDHUDPanelAttitudeSpeedPitch", "calc(50% - 32.5px + " + 20 * (PFD0.Stats.Attitude.PitchDisplay - PFD0.Stats.Speed.Pitch) * Math.sin(DegToRad(PFD0.Stats.Attitude.RollDisplay)) + "px)");
 						}
 					} else {
 						Show("Ctrl_PFDHUDPanelAttitudeStatus");

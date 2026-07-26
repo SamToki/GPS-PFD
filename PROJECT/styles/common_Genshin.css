@@ -23,6 +23,10 @@
 		label:not(:has(:disabled:not(option))):hover a, label:not(:has(:disabled:not(option))):active a {
 			color: #485267;
 		}
+		.NewFeatureLabel {
+			background-color: #00E000;
+			color: #000000;
+		}
 
 		/* Shapes */
 		.Shape {

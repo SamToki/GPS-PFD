@@ -210,4 +210,14 @@
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
 				}
 			}
+
+			// v2.03 (2026/07/26)
+			// New feature
+			if(localStorage.GPSPFD_Subsystem != undefined) {
+				let Subsystem = JSON.parse(localStorage.getItem("GPSPFD_Subsystem"));
+				if(Subsystem.Display.AttitudeBgFillEntirePFD == undefined) {
+					Subsystem.Display.AttitudeBgFillEntirePFD = true;
+					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
+				}
+			}
 	}

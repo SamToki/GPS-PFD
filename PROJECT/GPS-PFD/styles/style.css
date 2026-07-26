@@ -39,6 +39,9 @@
 						position: absolute; top: calc(50% - 225px); left: calc(50% - 225px);
 						width: 450px; height: 450px; border-radius: 25px;
 					}
+					#Ctnr_PFDNormalPanelAttitude:not(.BgFillEntirePFD) {
+						overflow: hidden;
+					}
 					#Ctnr_PFDNormalPanelAttitude > .CtrlGroup {
 						width: 100%; height: 100%;
 					}
@@ -141,6 +144,38 @@
 							width: 20px; height: 20px; clip-path: polygon(50% 0, 100% 100%, 0 100%);
 							background-color: #000000;
 							pointer-events: auto;
+						}
+
+						/* Speed pitch */
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch {
+							position: absolute; top: 40px; left: 40px;
+							width: 370px; height: 370px; border-radius: 185px;
+							overflow: hidden;
+						}
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch .CtrlGroup {
+							position: absolute; top: calc(50% - 22.5px); left: calc(50% - 32.5px);
+							width: 65px; height: 35px;
+						}
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch .Ctrl {
+							position: absolute; top: unset; left: unset;
+							background-color: #00A000;
+						}
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch #Ctrl_PFDNormalPanelAttitudeSpeedPitchLeft {
+							top: 21.5px; left: 0;
+							width: 22px; height: 2px; border-radius: 1px;
+						}
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch #Ctrl_PFDNormalPanelAttitudeSpeedPitchCenter {
+							top: 0; left: calc(50% - 1px);
+							width: 2px; height: 12px; border-radius: 1px;
+						}
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch #Ctrl_PFDNormalPanelAttitudeSpeedPitchRight {
+							top: 21.5px; right: 0;
+							width: 22px; height: 2px; border-radius: 1px;
+						}
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch #Ctrl_PFDNormalPanelAttitudeSpeedPitchCircle {
+							top: 10px; left: calc(50% - 12.5px);
+							width: 25px; height: 25px; border: 2px solid #00A000; border-radius: 12.5px;
+							background-color: transparent;
 						}
 
 						/* Aircraft symbol */
@@ -1298,10 +1333,10 @@
 @media (min-width: 830px) { /* Optimization for long fieldsets exceeding 600px height. */
 	/* Area specific */
 		/* Main */
-		#Item_AirportLibraryRunwayProperties, #Item_SettingsSpeed {
+		#Item_AirportLibraryRunwayProperties, #Item_SettingsSpeed, #Item_SettingsDisplay {
 			width: 800px;
 		}
-		#Fieldset_AirportLibraryRunwayProperties .Ctrl, #Fieldset_SettingsSpeed .Ctrl { /* .WidthDividedBy2 */
+		#Fieldset_AirportLibraryRunwayProperties .Ctrl, #Fieldset_SettingsSpeed .Ctrl, #Fieldset_SettingsDisplay .Ctrl { /* .WidthDividedBy2 */
 			width: calc((100% - 10px) / 2);
 		}
 		#Fieldset_AirportLibraryRunwayProperties #Ctrl_AirportLibraryLat,

@@ -216,7 +216,7 @@
 		// Saved
 		var Subsystem = {
 			Display: {
-				PFDStyle: "Normal", PFDFont: "Inherit",
+				PFDStyle: "Normal", AttitudeBgFillEntirePFD: true, PFDFont: "Inherit",
 				HideTopbarWhenNotScrolling: false, FlipPFDVertically: false,
 				KeepScreenOn: false
 			},
@@ -227,9 +227,6 @@
 			I18n: {
 				AlwaysUseEnglishTerminologyOnPFD: false,
 				MeasurementUnit: structuredClone(Preset.Subsystem.I18n.MeasurementUnit[2].Content)
-			},
-			Dev: {
-				VideoFootageMode: false
 			}
 		},
 		PFD = {
@@ -868,6 +865,17 @@
 					AlertSystemError("The value of System.Display.Theme \"" + System.Display.Theme + "\" in function RefreshSystem is invalid.");
 					break;
 			}
+			if(System.Display.Theme != "HighContrast" && Subsystem.Display.PFDStyle == "Normal") {
+				Show("Ctrl_SettingsAttitudeBgFillEntirePFD");
+				ChangeChecked("Checkbox_SettingsAttitudeBgFillEntirePFD", Subsystem.Display.AttitudeBgFillEntirePFD);
+				if(Subsystem.Display.AttitudeBgFillEntirePFD) {
+					AddClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
+				} else {
+					RemoveClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
+				}
+			} else {
+				Hide("Ctrl_SettingsAttitudeBgFillEntirePFD");
+			}
 			ChangeValue("Combobox_SettingsCursor", System.Display.Cursor);
 			switch(System.Display.Cursor) {
 				case "None":
@@ -990,14 +998,19 @@
 			HideHorizontally("Ctnr_PFDHUDPanel");
 			HideHorizontally("Ctnr_PFDBocchi737Panel");
 			HideHorizontally("Ctnr_PFDAnalogGaugesPanel");
-			RemoveClass("PFD", "PFDStyleIsNormal");
 			RemoveClass("PFD", "PFDStyleIsHUD");
-			RemoveClass("PFD", "PFDStyleIsBocchi737");
-			RemoveClass("PFD", "PFDStyleIsAnalogGauges");
+			RemoveClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
+			Hide("Ctrl_SettingsAttitudeBgFillEntirePFD");
 			switch(Subsystem.Display.PFDStyle) {
 				case "Normal":
 					Show("Ctnr_PFDNormalPanel");
-					AddClass("PFD", "PFDStyleIsNormal");
+					if(System.Display.Theme != "HighContrast") {
+						Show("Ctrl_SettingsAttitudeBgFillEntirePFD");
+						ChangeChecked("Checkbox_SettingsAttitudeBgFillEntirePFD", Subsystem.Display.AttitudeBgFillEntirePFD);
+						if(Subsystem.Display.AttitudeBgFillEntirePFD) {
+							AddClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
+						}
+					}
 					break;
 				case "HUD":
 					Show("Ctnr_PFDHUDPanel");
@@ -1342,14 +1355,6 @@
 							break;
 					}
 					ChangeText("Label_SettingsWingAreaUnit", Translate(Subsystem.I18n.MeasurementUnit.Area));
-
-			// Dev
-			ChangeChecked("Checkbox_SettingsVideoFootageMode", Subsystem.Dev.VideoFootageMode);
-			if(Subsystem.Dev.VideoFootageMode) {
-				AddClass("Html", "VideoFootageMode");
-			} else {
-				RemoveClass("Html", "VideoFootageMode");
-			}
 
 		// Save user data
 		localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
@@ -3719,6 +3724,11 @@
 			RefreshSubsystem();
 			RefreshPFD();
 		}
+		function SetAttitudeBgFillEntirePFD() {
+			Subsystem.Display.AttitudeBgFillEntirePFD = IsChecked("Checkbox_SettingsAttitudeBgFillEntirePFD");
+			RefreshSubsystem();
+			RefreshPFD();
+		}
 		function SetPFDFont() {
 			Subsystem.Display.PFDFont = ReadValue("Combobox_SettingsPFDFont");
 			RefreshSubsystem();
@@ -3832,12 +3842,6 @@
 			Subsystem.I18n.MeasurementUnit.Area = ReadValue("Combobox_SettingsAreaUnit");
 			RefreshSubsystem();
 			RefreshPFD();
-		}
-
-		// Dev
-		function SetVideoFootageMode() {
-			Subsystem.Dev.VideoFootageMode = IsChecked("Checkbox_SettingsVideoFootageMode");
-			RefreshSubsystem();
 		}
 
 		// User data
@@ -5036,7 +5040,7 @@
 		Calc2 = (WaterVaporPressure * 100) / (461.495 * OutsideAirTemperature);
 		return Calc + Calc2;
 	}
-	function CalcIAS(Algorithm, TAS, Altitude, GroundAltitude, GroundTemperature, RelativeHumidity, QNH, IsAttitudeConsidered, RelativePitch) { // https://aerotoolbox.com/airspeed-conversions/, https://aviation.stackexchange.com/a/25811
+	function CalcIAS(Algorithm, TAS, Altitude, GroundAltitude, GroundTemperature, RelativeHumidity, QNH, IsAttitudeConsidered, AOA) { // https://aerotoolbox.com/airspeed-conversions/, https://aviation.stackexchange.com/a/25811
 		let OutsideAirTemperature = 0, OutsideAirPressure = 0, OutsideAirDensity = 0, IAS = 0;
 		switch(Algorithm) {
 			case "SimpleAlgorithm":
@@ -5065,7 +5069,7 @@
 				break;
 		}
 		if(IsAttitudeConsidered) {
-			return IAS * Math.cos(DegToRad(RelativePitch));
+			return IAS * Math.cos(DegToRad(AOA));
 		} else {
 			return IAS;
 		}

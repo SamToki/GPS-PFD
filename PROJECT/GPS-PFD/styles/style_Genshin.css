@@ -44,6 +44,14 @@
 							background-color: #EEE4D9;
 						}
 
+						/* Speed pitch */
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch .Ctrl {
+							background-color: #00C000;
+						}
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch #Ctrl_PFDNormalPanelAttitudeSpeedPitchCircle {
+							border: 2px solid #00C000;
+						}
+
 						/* Aircraft symbol */
 						#Ctrl_PFDNormalPanelAttitudeAircraftSymbol .CtrlGroup {
 							filter: drop-shadow(0 0 0.5px #EEE4D9) drop-shadow(0 0 0.5px #EEE4D9) drop-shadow(0 0 0.5px #EEE4D9) drop-shadow(0 0 0.5px #EEE4D9);

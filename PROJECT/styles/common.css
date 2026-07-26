@@ -73,7 +73,7 @@
 			background-color: #808080; background-image: url(../images/Background.jpg); background-attachment: fixed; background-position: top center; background-size: cover; background-repeat: no-repeat;
 		}
 		#BgImage.Blur {
-			filter: blur(10px);
+			filter: blur(50px);
 		}
 
 		/* Containers */
@@ -184,6 +184,11 @@
 		}
 		i {
 			font-style: italic;
+		}
+		.NewFeatureLabel {
+			height: 18px; border-radius: 5px; padding: 3px;
+			background-color: #00A000;
+			color: #FFFFFF; font-size: 12px; line-height: 1;
 		}
 
 		/* Images */

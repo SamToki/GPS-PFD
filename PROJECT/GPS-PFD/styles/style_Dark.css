@@ -14,6 +14,10 @@
 						.StatusBox {
 							background-color: #20202080;
 						}
+						#PFD:has(#Ctnr_PFDNormalPanelAttitude:not(.BgFillEntirePFD)) #Ctnr_PFDNormalPanel .StatusBox,
+						#PFD:has(#Ctrl_PFDNormalPanelAttitudeBg.Faded) #Ctnr_PFDNormalPanel .StatusBox {
+							background-color: #40404080;
+						}
 
 						/* Bg (Artificial horizon) */
 						#PFDNormalPanelAttitudeSky {
@@ -44,6 +48,14 @@
 							background-color: #FFFFFF;
 						}
 
+						/* Speed pitch */
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch .Ctrl {
+							background-color: #00C000;
+						}
+						#Ctrl_PFDNormalPanelAttitudeSpeedPitch #Ctrl_PFDNormalPanelAttitudeSpeedPitchCircle {
+							border: 2px solid #00C000;
+						}
+
 						/* Aircraft symbol */
 						#Ctrl_PFDNormalPanelAttitudeAircraftSymbol .CtrlGroup {
 							filter: drop-shadow(0 0 0.5px #FFFFFF) drop-shadow(0 0 0.5px #FFFFFF) drop-shadow(0 0 0.5px #FFFFFF) drop-shadow(0 0 0.5px #FFFFFF);
@@ -64,11 +76,19 @@
 					#Ctnr_PFDNormalPanelFMA1 {
 						background-color: #20202080;
 					}
+					#PFD:has(#Ctnr_PFDNormalPanelAttitude:not(.BgFillEntirePFD)) #Ctnr_PFDNormalPanelFMA1,
+					#PFD:has(#Ctrl_PFDNormalPanelAttitudeBg.Faded) #Ctnr_PFDNormalPanelFMA1 {
+						background-color: #40404080;
+					}
 
 					/* Speed */
 						/* Tape */
 						.Tape {
 							background-color: #20202080;
+						}
+						#PFD:has(#Ctnr_PFDNormalPanelAttitude:not(.BgFillEntirePFD)) #Ctnr_PFDNormalPanel .Tape,
+						#PFD:has(#Ctrl_PFDNormalPanelAttitudeBg.Faded) #Ctnr_PFDNormalPanel .Tape {
+							background-color: #40404080;
 						}
 						.TapeScale {
 							background-color: #FFFFFF80;
