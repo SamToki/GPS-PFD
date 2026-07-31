@@ -216,7 +216,7 @@
 		// Saved
 		var Subsystem = {
 			Display: {
-				PFDStyle: "Normal", AttitudeBgFillEntirePFD: true, PFDFont: "Inherit",
+				PFDStyle: "Normal", AttitudeBgFillEntirePFD: false, PFDFont: "Inherit",
 				HideTopbarWhenNotScrolling: false, FlipPFDVertically: false,
 				KeepScreenOn: false
 			},
@@ -236,7 +236,7 @@
 			},
 			Attitude: {
 				IsEnabled: true,
-				Mode: "Sensor", Sensitivity: 5,
+				Mode: "Sensor", Sensitivity: 10,
 				Offset: {
 					Pitch: 0, Roll: 0
 				}

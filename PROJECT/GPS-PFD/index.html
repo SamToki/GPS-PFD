@@ -10,7 +10,7 @@
 		<link rel="icon" type="image/png" href="images/Icon_Small.png" />
 		<title>GPS-PFD</title>
 		<meta name="author" content="SAM TOKI STUDIO" />
-		<meta name="version" content="v2.03 (2026/07/26). Since 2024/12/01." />
+		<meta name="version" content="v2.04 (2026/07/31). Since 2024/12/01." />
 		<meta name="description" content="利用 GPS 与传感器，在移动设备上模拟飞机驾驶舱的 PFD。" />
 		<meta name="copyright" content="© 2025 SAM TOKI STUDIO" />
 
@@ -113,7 +113,7 @@
 				<h1 class="SectionTitle Hidden" inert="true">PFD</h1>
 				<div class="Viewport" id="PFDViewport">
 					<div class="Ctnr PFDPanel" id="Ctnr_PFDNormalPanel">
-						<div class="Ctnr BgFillEntirePFD" id="Ctnr_PFDNormalPanelAttitude">
+						<div class="Ctnr" id="Ctnr_PFDNormalPanelAttitude">
 							<ul class="CtrlGroup">
 								<li class="Ctrl Box StatusBox Faded" id="Ctrl_PFDNormalPanelAttitudeStatus" inert="true">
 									<span id="Label_PFDNormalPanelAttitudeStatus">姿态仪状态</span>
@@ -3247,7 +3247,7 @@
 								<li class="Ctrl" id="Ctrl_SettingsAttitudeSensitivity">
 									<label for="Slider_SettingsAttitudeSensitivity">
 										<span>敏感度：</span>
-										<input class="Slider Width200" id="Slider_SettingsAttitudeSensitivity" type="range" min="1" max="20" step="1" value="5" oninput="SetAttitudeSensitivity()" />
+										<input class="Slider Width200" id="Slider_SettingsAttitudeSensitivity" type="range" min="1" max="50" step="1" value="10" oninput="SetAttitudeSensitivity()" />
 										<span id="Label_SettingsAttitudeSensitivity">敏感度</span>
 									</label>
 								</li>
@@ -3571,7 +3571,7 @@
 								</li>
 								<li class="Ctrl" id="Ctrl_SettingsAttitudeBgFillEntirePFD">
 									<label for="Checkbox_SettingsAttitudeBgFillEntirePFD">
-										<input class="Checkbox" id="Checkbox_SettingsAttitudeBgFillEntirePFD" type="checkbox" checked="true" onchange="SetAttitudeBgFillEntirePFD()" />
+										<input class="Checkbox" id="Checkbox_SettingsAttitudeBgFillEntirePFD" type="checkbox" checked="false" onchange="SetAttitudeBgFillEntirePFD()" />
 										<span>姿态仪背景填满整个 PFD</span>
 										<span class="NewFeatureLabel">新</span>
 									</label>
@@ -4103,7 +4103,7 @@
 						<fieldset id="Fieldset_HelpAbout">
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>v2.03 (<time datetime="2026-07-26" pubdate="pubdate">2026/07/26</time>)<br />
+							<p>v2.04 (<time datetime="2026-07-31" pubdate="pubdate">2026/07/31</time>)<br />
 								始于 2024/12/01</p>
 							<p class="GreenText Hidden" id="Label_HelpNewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
 							<ul class="CtrlGroup BelowParagraph">

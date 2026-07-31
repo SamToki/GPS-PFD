@@ -961,8 +961,11 @@
 						display: flex; flex-direction: column; align-items: end;
 					}
 					#Ctnr_PFDNormalPanelDecisionAltitude.Active {
-						background-color: #FFFFFF;
+						background-color: transparent;
 						color: #D05000;
+					}
+					#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) #Ctnr_PFDNormalPanelDecisionAltitude.Active {
+						background-color: #FFFFFF;
 					}
 					#Label_PFDNormalPanelDecisionAltitudeValue {
 						font-size: 1.50em;
@@ -982,9 +985,12 @@
 
 					/* Blink */
 					#Ctnr_PFDNormalPanel .Reminder {
-						background-color: #FFFFFF; box-shadow: 0 0 0 3px #00A000;
+						box-shadow: 0 0 0 3px #00A000;
 						color: #008000;
 						animation: Anim_PFDNormalPanelReminder 1000ms infinite ease-in-out;
+					}
+					#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) .Reminder {
+						background-color: #FFFFFF;
 					}
 						@keyframes Anim_PFDNormalPanelReminder {
 							0%, 75%, 100% {

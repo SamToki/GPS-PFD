@@ -243,8 +243,10 @@
 
 					/* Decision altitude */
 					#Ctnr_PFDNormalPanelDecisionAltitude.Active {
-						background-color: #000000;
 						color: #FFC000;
+					}
+					#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) #Ctnr_PFDNormalPanelDecisionAltitude.Active {
+						background-color: #000000;
 					}
 
 					/* Warning */
@@ -254,8 +256,11 @@
 
 					/* Blink */
 					#Ctnr_PFDNormalPanel .Reminder {
-						background-color: #000000; box-shadow: 0 0 0 3px #00FF00;
+						box-shadow: 0 0 0 3px #00FF00;
 						color: #00FF00;
+					}
+					#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) .Reminder {
+						background-color: #000000;
 					}
 						@keyframes Anim_PFDNormalPanelReminder {
 							0%, 75%, 100% {

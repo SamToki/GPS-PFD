@@ -12,11 +12,10 @@
 					/* Attitude */
 						/* Status */
 						.StatusBox {
-							background-color: #20202080;
-						}
-						#PFD:has(#Ctnr_PFDNormalPanelAttitude:not(.BgFillEntirePFD)) #Ctnr_PFDNormalPanel .StatusBox,
-						#PFD:has(#Ctrl_PFDNormalPanelAttitudeBg.Faded) #Ctnr_PFDNormalPanel .StatusBox {
 							background-color: #40404080;
+						}
+						#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) .StatusBox {
+							background-color: #20202080;
 						}
 
 						/* Bg (Artificial horizon) */
@@ -74,21 +73,19 @@
 
 					/* FMA 1 */
 					#Ctnr_PFDNormalPanelFMA1 {
-						background-color: #20202080;
-					}
-					#PFD:has(#Ctnr_PFDNormalPanelAttitude:not(.BgFillEntirePFD)) #Ctnr_PFDNormalPanelFMA1,
-					#PFD:has(#Ctrl_PFDNormalPanelAttitudeBg.Faded) #Ctnr_PFDNormalPanelFMA1 {
 						background-color: #40404080;
+					}
+					#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) #Ctnr_PFDNormalPanelFMA1 {
+						background-color: #20202080;
 					}
 
 					/* Speed */
 						/* Tape */
 						.Tape {
-							background-color: #20202080;
-						}
-						#PFD:has(#Ctnr_PFDNormalPanelAttitude:not(.BgFillEntirePFD)) #Ctnr_PFDNormalPanel .Tape,
-						#PFD:has(#Ctrl_PFDNormalPanelAttitudeBg.Faded) #Ctnr_PFDNormalPanel .Tape {
 							background-color: #40404080;
+						}
+						#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) .Tape {
+							background-color: #20202080;
 						}
 						.TapeScale {
 							background-color: #FFFFFF80;
@@ -246,8 +243,10 @@
 
 					/* Decision altitude */
 					#Ctnr_PFDNormalPanelDecisionAltitude.Active {
-						background-color: #202020;
 						color: #FFA000;
+					}
+					#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) #Ctnr_PFDNormalPanelDecisionAltitude.Active {
+						background-color: #202020;
 					}
 
 					/* Warning */
@@ -257,8 +256,11 @@
 
 					/* Blink */
 					#Ctnr_PFDNormalPanel .Reminder {
-						background-color: #202020; box-shadow: 0 0 0 3px #00C000;
+						box-shadow: 0 0 0 3px #00C000;
 						color: #00E000;
+					}
+					#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) .Reminder {
+						background-color: #202020;
 					}
 						@keyframes Anim_PFDNormalPanelReminder {
 							0%, 75%, 100% {

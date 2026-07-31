@@ -188,7 +188,7 @@
 			if(localStorage.GPSPFD_PFD != undefined) {
 				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
 				if(PFD.Attitude.Sensitivity == undefined) {
-					PFD.Attitude.Sensitivity = 5;
+					PFD.Attitude.Sensitivity = 10;
 					localStorage.setItem("GPSPFD_PFD", JSON.stringify(PFD));
 				}
 			}
@@ -216,7 +216,7 @@
 			if(localStorage.GPSPFD_Subsystem != undefined) {
 				let Subsystem = JSON.parse(localStorage.getItem("GPSPFD_Subsystem"));
 				if(Subsystem.Display.AttitudeBgFillEntirePFD == undefined) {
-					Subsystem.Display.AttitudeBgFillEntirePFD = true;
+					Subsystem.Display.AttitudeBgFillEntirePFD = false;
 					localStorage.setItem("GPSPFD_Subsystem", JSON.stringify(Subsystem));
 				}
 			}
