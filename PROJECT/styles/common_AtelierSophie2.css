@@ -167,7 +167,7 @@
 		a:hover, label:not(:has(:disabled:not(option))):hover, .Button:enabled:hover /* .Combobox:enabled:hover, .Textbox:enabled:hover */ {
 			background-color: #FFE77D;
 		}
-		a.Button:hover, .Button:not(.ShownAsLabel):enabled:hover {
+		a.Button:hover, .Button:enabled:hover {
 			border: 1px solid #FEF3C3;
 		}
 		.Active:enabled:hover, .Active:not(:has(:disabled:not(option))):hover {
@@ -192,7 +192,7 @@
 			background-color: #FDD969;
 			color: #291900;
 		}
-		a.Button:active, .Button:not(.ShownAsLabel):enabled:active, .Combobox:enabled:active, .Textbox:not(.ShownAsLabel):enabled:active {
+		a.Button:active, .Button:enabled:active, .Combobox:enabled:active, .Textbox:enabled:active {
 			border: 1px solid #FEF3C3;
 		}
 		.Button.Shaped:enabled:active .Shape, .Button.Shaped.Active:enabled:active .Shape {

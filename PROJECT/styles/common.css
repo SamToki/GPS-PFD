@@ -336,7 +336,7 @@
 			position: absolute; top: 0; left: 0;
 		}
 		.Button.ShownAsLabel {
-			border: none; padding: 0;
+			border: none !important; padding: 0;
 			background-color: transparent;
 			text-align: start; text-wrap: wrap;
 			justify-content: start;
@@ -369,7 +369,7 @@
 			color: #000000;
 		}
 		.Textbox.ShownAsLabel {
-			border: none;
+			border: none !important;
 			background-color: transparent;
 		}
 		fieldset .Textbox {
@@ -879,7 +879,7 @@
 /* Dev */
 #Html.TryToOptimizePerformance * {
 	backdrop-filter: none !important;
-	transition: unset;
+	transition: none !important;
 }
 #Html.ShowDebugOutlines * {
 	outline: 1px solid #00C000;
