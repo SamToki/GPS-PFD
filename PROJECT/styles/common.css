@@ -328,14 +328,16 @@
 			color: #000000; text-align: center; text-wrap: nowrap;
 			display: flex; justify-content: center; align-items: center; overflow: hidden;
 		}
-		.Button.Shaped, .Button.ShownAsLabel {
-			border: none; padding: 0;
-			background-color: transparent;
+		.Button.Shaped {
+			border: none !important; padding: 0;
+			background-color: transparent !important;
 		}
 		.Button.Shaped .Shape {
 			position: absolute; top: 0; left: 0;
 		}
 		.Button.ShownAsLabel {
+			border: none; padding: 0;
+			background-color: transparent;
 			text-align: start; text-wrap: wrap;
 			justify-content: start;
 		}

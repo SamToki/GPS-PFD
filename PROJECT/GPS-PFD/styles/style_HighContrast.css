@@ -245,9 +245,6 @@
 					#Ctnr_PFDNormalPanelDecisionAltitude.Active {
 						color: #FFC000;
 					}
-					#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) #Ctnr_PFDNormalPanelDecisionAltitude.Active {
-						background-color: #000000;
-					}
 
 					/* Warning */
 					#Ctnr_PFDNormalPanelWarning {
@@ -258,9 +255,6 @@
 					#Ctnr_PFDNormalPanel .Reminder {
 						box-shadow: 0 0 0 3px #00FF00;
 						color: #00FF00;
-					}
-					#Ctnr_PFDNormalPanel:has(#Ctnr_PFDNormalPanelAttitude.BgFillEntirePFD #Ctrl_PFDNormalPanelAttitudeBg:not(.Faded)) .Reminder {
-						background-color: #000000;
 					}
 						@keyframes Anim_PFDNormalPanelReminder {
 							0%, 75%, 100% {
@@ -283,7 +277,7 @@
 						}
 					#Ctnr_PFDNormalPanel .Warning {
 						box-shadow: 0 0 0 3px #FF4040;
-						color: #FF8080;
+						color: #FF4040;
 					}
 						@keyframes Anim_PFDNormalPanelWarning {
 							0%, 75%, 100% {
