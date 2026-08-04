@@ -21,7 +21,7 @@
 		}
 	],
 
-	"description": "利用 GPS 与传感器，在移动设备上模拟飞机驾驶舱的 PFD。这是一个试验性项目。",
+	"description": "利用 GPS 与传感器，在移动设备上模拟飞机驾驶舱的 PFD。",
 	"screenshots": [
 		{
 			"src": "../images/Preview.jpg",
