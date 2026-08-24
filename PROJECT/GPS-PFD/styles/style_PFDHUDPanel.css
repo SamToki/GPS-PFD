@@ -165,7 +165,7 @@
 							width: 622px; height: 622px;
 						}
 						#ProgringFg_PFDHUDPanelAttitudeRoll {
-							stroke: #00FF00; stroke-width: 2; stroke-linecap: unset; stroke-dasharray: 0, calc((622px - 2px) * 3.1415926);
+							stroke: #00FF00; stroke-width: 2; stroke-dasharray: 0, calc((622px - 2px) * pi);
 						}
 						#PFDHUDPanelAttitudeRollPointer {
 							position: absolute; top: 15px; left: calc(50% - 10px);
@@ -854,11 +854,11 @@
 								box-shadow: 0 0 0 3px #00FF00;
 							}
 						}
-					#Ctnr_PFDHUDPanel .Warning {
+					#Ctnr_PFDHUDPanel .CautionOrWarning {
 						box-shadow: 0 0 0 3px #00FF00;
-						animation: Anim_PFDHUDPanelWarning 500ms infinite ease-in-out;
+						animation: Anim_PFDHUDPanelCautionOrWarning 500ms infinite ease-in-out;
 					}
-						@keyframes Anim_PFDHUDPanelWarning {
+						@keyframes Anim_PFDHUDPanelCautionOrWarning {
 							0%, 75%, 100% {
 								box-shadow: none;
 							}

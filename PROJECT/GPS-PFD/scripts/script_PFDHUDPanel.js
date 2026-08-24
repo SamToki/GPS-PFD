@@ -230,9 +230,9 @@
 							break;
 					}
 					if(PFD0.Alert.Active.SpeedWarning != "") {
-						AddClass("Ctrl_PFDHUDPanelSpeedBalloonBalloon", "Warning");
+						AddClass("Ctrl_PFDHUDPanelSpeedBalloonBalloon", "CautionOrWarning");
 					} else {
-						RemoveClass("Ctrl_PFDHUDPanelSpeedBalloonBalloon", "Warning");
+						RemoveClass("Ctrl_PFDHUDPanelSpeedBalloonBalloon", "CautionOrWarning");
 					}
 
 					// MCP
@@ -375,9 +375,9 @@
 						RemoveClass("Ctrl_PFDHUDPanelAltitudeBalloonBalloon", "Reminder");
 					}
 					if(PFD0.Alert.Active.AltitudeWarning != "" && PFD0.Alert.Active.AltitudeWarning != "GlideSlope") {
-						AddClass("Ctrl_PFDHUDPanelAltitudeBalloonBalloon", "Warning");
+						AddClass("Ctrl_PFDHUDPanelAltitudeBalloonBalloon", "CautionOrWarning");
 					} else {
-						RemoveClass("Ctrl_PFDHUDPanelAltitudeBalloonBalloon", "Warning");
+						RemoveClass("Ctrl_PFDHUDPanelAltitudeBalloonBalloon", "CautionOrWarning");
 					}
 
 					// MCP
@@ -692,12 +692,12 @@
 							ChangeText("Label_PFDHUDPanelDecisionAltitudeValue", Math.trunc(ConvertUnit(PFD0.Stats.Altitude.Ground + AirportLibrary0.ActiveAirport.Runway[AirportLibrary0.ActiveAirport.RunwaySelection].DecisionHeight, "Meter", Subsystem.I18n.MeasurementUnit.Altitude)));
 							if(PFD0.Status.IsDecisionAltitudeActive) {
 								if(PFD0.Stats.ClockTime - PFD0.Stats.Altitude.DecisionTimestamp < 3000) {
-									AddClass("Ctnr_PFDHUDPanelDecisionAltitude", "Warning");
+									AddClass("Ctnr_PFDHUDPanelDecisionAltitude", "CautionOrWarning");
 								} else {
-									RemoveClass("Ctnr_PFDHUDPanelDecisionAltitude", "Warning");
+									RemoveClass("Ctnr_PFDHUDPanelDecisionAltitude", "CautionOrWarning");
 								}
 							} else {
-								RemoveClass("Ctnr_PFDHUDPanelDecisionAltitude", "Warning");
+								RemoveClass("Ctnr_PFDHUDPanelDecisionAltitude", "CautionOrWarning");
 							}
 							break;
 						default:

@@ -294,7 +294,6 @@
 						}
 					#Ctnr_PFDNormalPanel .GlideSlopeWarning {
 						background-color: #FF4040;
-						animation: Anim_PFDNormalPanelGlideSlopeWarning 500ms infinite ease-in-out;
 					}
 						@keyframes Anim_PFDNormalPanelGlideSlopeWarning {
 							0%, 75%, 100% {

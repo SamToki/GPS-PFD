@@ -240,6 +240,7 @@
 			position: relative;
 			width: 100%; height: 100%; border-radius: 5px;
 			background-color: #00000020;
+			overflow: hidden;
 		}
 		.Progbar.Shaped {
 			border: none;
@@ -253,12 +254,12 @@
 		}
 		.ProgbarFg {
 			position: absolute; top: 0; left: 0;
-			width: 10px; height: 100%; border-radius: 5px;
+			width: 0; height: 100%; border-radius: 5px;
 			background-color: #8040A0;
 		}
 		.ProgbarFg.Vertical {
 			bottom: 0; top: unset;
-			width: 100%; height: 10px;
+			width: 100%; height: 0;
 		}
 		.ProgbarFg.Shaped {
 			width: 100%; height: 100%; clip-path: inset(0 100% 0 0);
@@ -280,7 +281,7 @@
 		.ProgringFg {
 			transform: rotate(-90deg);
 			fill: transparent;
-			stroke: #8040A0; stroke-width: 5; stroke-linecap: round;
+			stroke: #8040A0; stroke-width: 5;
 		}
 		.ProgringText {
 			position: absolute; top: 0; left: 0;

@@ -250,10 +250,10 @@
 		function ChangeProgbar(ID, HorizontalOrVertical, Percentage) {
 			switch(HorizontalOrVertical) {
 				case "Horizontal":
-					ChangeWidth(ID, "calc(10px + (100% - 10px) * " + (Percentage / 100) + ")");
+					ChangeWidth(ID, Percentage + "%");
 					break;
 				case "Vertical":
-					ChangeHeight(ID, "calc(10px + (100% - 10px) * " + (Percentage / 100) + ")");
+					ChangeHeight(ID, Percentage + "%");
 					break;
 				default:
 					AlertSystemError("The value of HorizontalOrVertical \"" + HorizontalOrVertical + "\" in function ChangeProgbar is invalid.");
