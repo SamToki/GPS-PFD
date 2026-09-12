@@ -2471,7 +2471,7 @@
 														<button class="Button" id="Button_PFDToggleFullscreen" onclick="ToggleFullscreen()">全屏</button>
 														<span class="HotkeyIndicator Faded" inert="true">T</span>
 													</li>
-													<li class="Ctrl Hidden" id="Ctrl_PFDManualManeuver" inert="true">
+													<li class="Ctrl" id="Ctrl_PFDManualManeuver">
 														<h3>手动操作</h3>
 														<ul class="CtrlGroup BelowParagraph">
 															<li class="Ctrl" id="Ctrl_PFDAttitudeManeuver">
@@ -2763,7 +2763,7 @@
 															<span>启用<a href="https://zh.wikipedia.org/wiki/姿态指引仪">姿态仪</a></span>
 														</label>
 													</li>
-													<li class="Ctrl" id="Ctrl_PFDQuickSettingsAttitudeMode">
+													<li class="Ctrl">
 														<label for="Combobox_PFDQuickSettingsAttitudeMode">
 															<span>姿态模式：</span>
 															<select class="Combobox" id="Combobox_PFDQuickSettingsAttitudeMode" onchange="SetAttitudeModeAtPFD()">
@@ -3232,7 +3232,7 @@
 										<span>启用<a href="https://zh.wikipedia.org/wiki/姿态指引仪">姿态仪</a></span>
 									</label>
 								</li>
-								<li class="Ctrl" id="Ctrl_SettingsAttitudeMode">
+								<li class="Ctrl">
 									<label for="Combobox_SettingsAttitudeMode">
 										<span>模式：</span>
 										<select class="Combobox" id="Combobox_SettingsAttitudeMode" onchange="SetAttitudeMode()">
@@ -3242,9 +3242,9 @@
 									</label>
 								</li>
 							</ul>
-							<p id="Label_SettingsAttitudeSensitivityInfo">敏感度设定的数值越小，姿态仪越敏感。</p>
+							<p>敏感度设定的数值越小，姿态仪越敏感。</p>
 							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl" id="Ctrl_SettingsAttitudeSensitivity">
+								<li class="Ctrl">
 									<label for="Slider_SettingsAttitudeSensitivity">
 										<span>敏感度：</span>
 										<input class="Slider Width200" id="Slider_SettingsAttitudeSensitivity" type="range" min="1" max="50" step="1" value="10" oninput="SetAttitudeSensitivity()" />
@@ -3252,25 +3252,25 @@
 									</label>
 								</li>
 							</ul>
-							<h3 id="Label_SettingsAttitudeOffset">姿态偏移</h3>
-							<p id="Label_SettingsAttitudeOffsetInfo"><a href="https://zh.wikipedia.org/wiki/航空器三主轴">俯仰 (pitch) </a>抬头是正值，低头是负值。<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚 (roll) </a>右倾是正值，左倾是负值。</p>
+							<h3>姿态偏移</h3>
+							<p><a href="https://zh.wikipedia.org/wiki/航空器三主轴">俯仰 (pitch) </a>抬头是正值，低头是负值。<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚 (roll) </a>右倾是正值，左倾是负值。</p>
 							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl" id="Ctrl_SettingsAttitudeOffsetPitch">
+								<li class="Ctrl">
 									<label for="Textbox_SettingsAttitudeOffsetPitch">
 										<span>俯仰：</span>
 										<input class="Textbox Width120" id="Textbox_SettingsAttitudeOffsetPitch" type="number" min="-90" max="90" step="5" value="0" onclick="SelectText('Textbox_SettingsAttitudeOffsetPitch')" onchange="SetAttitudeOffsetPitch()" placeholder="-90~90" title="-90~90" />
 										<span>度</span>
 									</label>
 								</li>
-								<li class="Ctrl" id="Ctrl_SettingsAttitudeOffsetRoll">
+								<li class="Ctrl">
 									<label for="Textbox_SettingsAttitudeOffsetRoll">
 										<span>横滚：</span>
 										<input class="Textbox Width120" id="Textbox_SettingsAttitudeOffsetRoll" type="number" min="-90" max="90" step="5" value="0" onclick="SelectText('Textbox_SettingsAttitudeOffsetRoll')" onchange="SetAttitudeOffsetRoll()" placeholder="-90~90" title="-90~90" />
 										<span>度</span>
 									</label>
 								</li>
-								<li class="Ctrl" id="Ctrl_SettingsCalibrateAttitudeToZero">
-									<button class="Button" onclick="CalibrateAttitudeToZero()">校零 (将当前姿态作为端正姿态)</button>
+								<li class="Ctrl">
+									<button class="Button" id="Button_SettingsCalibrateAttitudeToZero" onclick="CalibrateAttitudeToZero()">校零 (将当前姿态作为端正姿态)</button>
 								</li>
 							</ul>
 						</fieldset>
@@ -3360,27 +3360,27 @@
 										<span>计算<a href="https://zh.wikipedia.org/wiki/失速">失速</a>速度</span>
 									</label>
 								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsWeight">
+								<li class="Ctrl">
 									<label for="Textbox_SettingsWeight">
 										<span>重量：</span>
 										<input class="Textbox Width120" id="Textbox_SettingsWeight" type="number" min="0" max="100000" step="100" value="60000" onclick="SelectText('Textbox_SettingsWeight')" onchange="SetWeight()" placeholder="0~100000" title="0~100000" />
 										<span id="Label_SettingsWeightUnit">公斤</span>
 									</label>
 								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsWingArea">
+								<li class="Ctrl">
 									<label for="Textbox_SettingsWingArea">
 										<span>机翼面积：</span>
 										<input class="Textbox Width120" id="Textbox_SettingsWingArea" type="number" min="1" max="1000" step="1" value="125" onclick="SelectText('Textbox_SettingsWingArea')" onchange="SetWingArea()" placeholder="1~1000" title="1~1000" />
 										<span id="Label_SettingsWingAreaUnit">平方米</span>
 									</label>
 								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsMaxLiftCoefficientOnFlapsUp">
+								<li class="Ctrl">
 									<label for="Textbox_SettingsMaxLiftCoefficientOnFlapsUp">
 										<span><a href="https://zh.wikipedia.org/wiki/襟翼">襟翼</a>收起时最大升力系数：</span>
 										<input class="Textbox Width120" id="Textbox_SettingsMaxLiftCoefficientOnFlapsUp" type="number" min="0.1" max="10" step="0.1" value="1.4" onclick="SelectText('Textbox_SettingsMaxLiftCoefficientOnFlapsUp')" onchange="SetMaxLiftCoefficientOnFlapsUp()" placeholder="0.1~10" title="0.1~10" />
 									</label>
 								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsMaxLiftCoefficientOnFlapsFull">
+								<li class="Ctrl">
 									<label for="Textbox_SettingsMaxLiftCoefficientOnFlapsFull">
 										<span>襟翼全开时最大升力系数：</span>
 										<input class="Textbox Width120" id="Textbox_SettingsMaxLiftCoefficientOnFlapsFull" type="number" min="0.1" max="10" step="0.1" value="2.7" onclick="SelectText('Textbox_SettingsMaxLiftCoefficientOnFlapsFull')" onchange="SetMaxLiftCoefficientOnFlapsFull()" placeholder="0.1~10" title="0.1~10" />
@@ -3488,7 +3488,7 @@
 										<span>启用导航</span>
 									</label>
 								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsETACalcMethod" inert="true">
+								<li class="Ctrl">
 									<label for="Combobox_SettingsETACalcMethod">
 										<span>预计剩余时间的计算方法：</span>
 										<select class="Combobox Width160" id="Combobox_SettingsETACalcMethod" onchange="SetETACalcMethod()">
@@ -3497,7 +3497,7 @@
 										</select>
 									</label>
 								</li>
-								<li class="Ctrl Hidden" id="Ctrl_SettingsAutoSwitchRunwayWhenLanding" inert="true">
+								<li class="Ctrl">
 									<label for="Checkbox_SettingsAutoSwitchRunwayWhenLanding">
 										<input class="Checkbox" id="Checkbox_SettingsAutoSwitchRunwayWhenLanding" type="checkbox" checked="true" onchange="SetAutoSwitchRunwayWhenLanding()" />
 										<span>降落时自动切换跑道</span>
@@ -3569,7 +3569,7 @@
 										</select>
 									</label>
 								</li>
-								<li class="Ctrl" id="Ctrl_SettingsAttitudeBgFillEntirePFD">
+								<li class="Ctrl">
 									<label for="Checkbox_SettingsAttitudeBgFillEntirePFD">
 										<input class="Checkbox" id="Checkbox_SettingsAttitudeBgFillEntirePFD" type="checkbox" checked="false" onchange="SetAttitudeBgFillEntirePFD()" />
 										<span>姿态仪背景填满整个 PFD</span>
@@ -3670,7 +3670,7 @@
 										<span>播放声音</span>
 									</label>
 								</li>
-								<li class="Ctrl" id="Ctrl_SettingsAudioScheme">
+								<li class="Ctrl">
 									<label for="Combobox_SettingsAudioScheme">
 										<span>方案：</span>
 										<select class="Combobox" id="Combobox_SettingsAudioScheme" onchange="SetAudioScheme()">
@@ -3680,23 +3680,23 @@
 									</label>
 								</li>
 							</ul>
-							<p id="Label_SettingsAudio">请注意区分「警报」(alert) 与「<a href="#Item_SettingsWarningSystem" onclick="ShowIAmHere('SettingsWarningSystem')">警告</a>」(warning)。「警报」包括「播报」(callout) 与「警告」。</p>
+							<p>请注意区分「警报」(alert) 与「<a href="#Item_SettingsWarningSystem" onclick="ShowIAmHere('SettingsWarningSystem')">警告</a>」(warning)。「警报」包括「播报」(callout) 与「警告」。</p>
 							<ul class="CtrlGroup BelowParagraph">
-								<li class="Ctrl" id="Ctrl_SettingsAttitudeAlertVolume">
+								<li class="Ctrl">
 									<label for="Slider_SettingsAttitudeAlertVolume">
 										<span>姿态警报：</span>
 										<input class="Slider Width200" id="Slider_SettingsAttitudeAlertVolume" type="range" min="0" max="100" step="1" value="100" onpointerup="PreviewAttitudeAlertVolume()" oninput="SetAttitudeAlertVolume()" />
 										<span id="Label_SettingsAttitudeAlertVolume">音量</span>
 									</label>
 								</li>
-								<li class="Ctrl" id="Ctrl_SettingsSpeedAlertVolume">
+								<li class="Ctrl">
 									<label for="Slider_SettingsSpeedAlertVolume">
 										<span>速度警报：</span>
 										<input class="Slider Width200" id="Slider_SettingsSpeedAlertVolume" type="range" min="0" max="100" step="1" value="100" onpointerup="PreviewSpeedAlertVolume()" oninput="SetSpeedAlertVolume()" />
 										<span id="Label_SettingsSpeedAlertVolume">音量</span>
 									</label>
 								</li>
-								<li class="Ctrl" id="Ctrl_SettingsAltitudeAlertVolume">
+								<li class="Ctrl">
 									<label for="Slider_SettingsAltitudeAlertVolume">
 										<span>高度警报：</span>
 										<input class="Slider Width200" id="Slider_SettingsAltitudeAlertVolume" type="range" min="0" max="100" step="1" value="100" onpointerup="PreviewAltitudeAlertVolume()" oninput="SetAltitudeAlertVolume()" />

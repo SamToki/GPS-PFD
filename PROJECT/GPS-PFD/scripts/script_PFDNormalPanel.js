@@ -118,7 +118,7 @@
 						Show("Ctrl_PFDNormalPanelAttitudePitch");
 						Show("Ctrl_PFDNormalPanelAttitudeRoll");
 						Show("Ctrl_PFDNormalPanelAttitudeAircraftSymbol");
-						if(System.Display.Anim > 0) {
+						if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 							ChangeAnim("Ctrl_PFDNormalPanelAttitudeBg", "100ms");
 							ChangeAnim("Ctrl_PFDNormalPanelAttitudePitch", "100ms");
 							ChangeAnim("Ctrl_PFDNormalPanelAttitudeRoll", "100ms");
@@ -147,7 +147,7 @@
 						}
 						if(PFD0.Stats.Speed.IsValid && PFD0.Stats.Altitude.IsValid) {
 							Show("Ctrl_PFDNormalPanelAttitudeSpeedPitch");
-							if(System.Display.Anim > 0) {
+							if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 								ChangeAnim("Ctrl_PFDNormalPanelAttitudeSpeedPitch", "100ms");
 							} else {
 								ChangeAnim("Ctrl_PFDNormalPanelAttitudeSpeedPitch", "");
@@ -178,7 +178,7 @@
 					Show("Ctrl_PFDNormalPanelSpeedTape");
 					Show("Ctrl_PFDNormalPanelSpeedAdditionalIndicators");
 					Show("Ctrl_PFDNormalPanelSpeedBalloon");
-					if(System.Display.Anim > 0) {
+					if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 						ChangeAnim("Ctrl_PFDNormalPanelSpeedTape", "100ms");
 						ChangeAnim("Ctrl_PFDNormalPanelSpeedAdditionalIndicators", "100ms");
 					} else {
@@ -315,7 +315,7 @@
 					Show("Ctrl_PFDNormalPanelAltitudeTape");
 					Show("Ctrl_PFDNormalPanelAltitudeAdditionalIndicators");
 					Show("Ctrl_PFDNormalPanelAltitudeBalloon");
-					if(System.Display.Anim > 0) {
+					if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 						ChangeAnim("Ctrl_PFDNormalPanelAltitudeTape", "100ms");
 						ChangeAnim("Ctrl_PFDNormalPanelAltitudeAdditionalIndicators", "100ms");
 					} else {
@@ -456,7 +456,7 @@
 					Show("Ctrl_PFDNormalPanelVerticalSpeedTape");
 					Show("Ctrl_PFDNormalPanelVerticalSpeedAdditionalIndicators");
 					Show("Ctrl_PFDNormalPanelVerticalSpeedNeedle");
-					if(System.Display.Anim > 0) {
+					if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 						ChangeAnim("Ctrl_PFDNormalPanelVerticalSpeedNeedle", "100ms");
 					} else {
 						ChangeAnim("Ctrl_PFDNormalPanelVerticalSpeedNeedle", "");
@@ -651,7 +651,7 @@
 					Show("Ctrl_PFDNormalPanelHeadingTape");
 					Show("Ctrl_PFDNormalPanelHeadingAdditionalIndicators");
 					Show("Ctrl_PFDNormalPanelHeadingBalloon");
-					if(System.Display.Anim > 0) {
+					if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 						ChangeAnim("Ctrl_PFDNormalPanelHeadingTape", "100ms");
 						ChangeAnim("Ctrl_PFDNormalPanelHeadingAdditionalIndicators", "100ms");
 					} else {
@@ -728,7 +728,7 @@
 									AlertSystemError("The value of PFD0.Stats.Nav.LocalizerDeviation \"" + PFD0.Stats.Nav.LocalizerDeviation + "\" in function RefreshNormalPanel is invalid.");
 									break;
 							}
-							if(System.Display.Anim > 0) {
+							if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 								ChangeAnim("PFDNormalPanelLocalizerPointer", "100ms");
 							} else {
 								ChangeAnim("PFDNormalPanelLocalizerPointer", "");
@@ -766,7 +766,7 @@
 									AlertSystemError("The value of PFD0.Stats.Nav.GlideSlopeDeviation \"" + PFD0.Stats.Nav.GlideSlopeDeviation + "\" in function RefreshNormalPanel is invalid.");
 									break;
 							}
-							if(System.Display.Anim > 0) {
+							if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 								ChangeAnim("PFDNormalPanelGlideSlopePointer", "100ms");
 							} else {
 								ChangeAnim("PFDNormalPanelGlideSlopePointer", "");
@@ -875,7 +875,7 @@
 						if(ConvertedRadioAltitude >= 0) {
 							Show("Progring_PFDNormalPanelRadioAltitude");
 							document.getElementById("ProgringFg_PFDNormalPanelRadioAltitude").style.strokeDasharray = (Math.PI * 82) * (ConvertedRadioAltitude / 1000) + "px, " + (Math.PI * 82) * (1 - ConvertedRadioAltitude / 1000) + "px";
-							if(System.Display.Anim > 0) {
+							if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 								ChangeAnim("ProgringFg_PFDNormalPanelRadioAltitude", "100ms");
 							} else {
 								ChangeAnim("ProgringFg_PFDNormalPanelRadioAltitude", "");

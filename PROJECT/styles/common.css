@@ -480,20 +480,17 @@
 				min-width: 100px; margin: 0 0 0 10px;
 			}
 
-			/* Watermarks */
+			/* Watermark */
 			.Watermark {
-				position: fixed; top: unset; left: unset; z-index: 121;
-				color: #00000080; text-shadow: 0 0 5px #FFFFFF; font-weight: bold; text-align: center;
+				position: fixed; top: 60px; left: 0; z-index: 121;
+				width: 100%; height: calc(100vh - 60px); height: calc(100dvh - 60px); transform: rotate(-15deg);
+				color: #00000010; font-size: 20.00em; font-weight: bold; text-align: center;
 				display: flex; justify-content: center; align-items: center;
 				pointer-events: none;
 			}
-			#Watermark_TestVersion {
-				top: 100vh; top: 100dvh; left: 0;
-				width: 100%;
-			}
-			#Watermark_TestVersion span {
-				position: absolute; bottom: 0; left: unset;
-				padding: 15px;
+			#Html:has(#Topbar.Hidden) .Watermark {
+				top: 0;
+				height: 100vh; height: 100dvh;
 			}
 
 	/* Variants */
@@ -714,11 +711,11 @@
 		}
 
 		/* Disabled */
-		*:disabled {
+		*:disabled, label:has(:disabled:not(option)) span {
 			opacity: 0.4;
 		}
 		*:disabled * {
-			opacity: unset;
+			opacity: unset !important;
 		}
 
 		/* Text selection */

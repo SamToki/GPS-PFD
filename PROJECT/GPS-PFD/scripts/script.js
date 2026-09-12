@@ -817,12 +817,7 @@
 
 		// Settings
 			// Display
-			if(window.matchMedia("(prefers-contrast: more)").matches == false) {
-				ChangeDisabled("Combobox_SettingsTheme", false);
-			} else {
-				System.Display.Theme = "HighContrast";
-				ChangeDisabled("Combobox_SettingsTheme", true);
-			}
+			ChangeEnabled("Combobox_SettingsTheme", !IsOSHighContrast());
 			ChangeValue("Combobox_SettingsTheme", System.Display.Theme);
 			switch(System.Display.Theme) {
 				case "Auto":
@@ -865,16 +860,16 @@
 					AlertSystemError("The value of System.Display.Theme \"" + System.Display.Theme + "\" in function RefreshSystem is invalid.");
 					break;
 			}
-			if(System.Display.Theme != "HighContrast" && Subsystem.Display.PFDStyle == "Normal") {
-				Show("Ctrl_SettingsAttitudeBgFillEntirePFD");
-				ChangeChecked("Checkbox_SettingsAttitudeBgFillEntirePFD", Subsystem.Display.AttitudeBgFillEntirePFD);
-				if(Subsystem.Display.AttitudeBgFillEntirePFD) {
-					AddClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
-				} else {
-					RemoveClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
-				}
+			if(IsOSHighContrast() == false && System.Display.Theme != "HighContrast" && Subsystem.Display.PFDStyle == "Normal") {
+				ChangeEnabled("Checkbox_SettingsAttitudeBgFillEntirePFD", true);
 			} else {
-				Hide("Ctrl_SettingsAttitudeBgFillEntirePFD");
+				ChangeEnabled("Checkbox_SettingsAttitudeBgFillEntirePFD", false);
+			}
+			ChangeChecked("Checkbox_SettingsAttitudeBgFillEntirePFD", Subsystem.Display.AttitudeBgFillEntirePFD);
+			if(Subsystem.Display.AttitudeBgFillEntirePFD) {
+				AddClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
+			} else {
+				RemoveClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
 			}
 			ChangeValue("Combobox_SettingsCursor", System.Display.Cursor);
 			switch(System.Display.Cursor) {
@@ -913,53 +908,46 @@
 					AlertSystemError("The value of System.Display.HotkeyIndicators \"" + System.Display.HotkeyIndicators + "\" in function RefreshSystem is invalid.");
 					break;
 			}
-			if(window.matchMedia("(prefers-reduced-motion: reduce)").matches == false) {
-				ChangeDisabled("Combobox_SettingsAnim", false);
-			} else {
-				System.Display.Anim = 0;
-				ChangeDisabled("Combobox_SettingsAnim", true);
-			}
+			ChangeEnabled("Combobox_SettingsAnim", IsOSAnimEnabled());
 			ChangeValue("Combobox_SettingsAnim", System.Display.Anim);
 			ChangeAnimOverall(System.Display.Anim);
 
 			// Audio
 			ChangeChecked("Checkbox_SettingsPlayAudio", System.Audio.PlayAudio);
 			if(System.Audio.PlayAudio) {
-				Show("Ctrl_SettingsAudioScheme");
-				Show("Label_SettingsAudio");
-				Show("Ctrl_SettingsAttitudeAlertVolume");
-				Show("Ctrl_SettingsSpeedAlertVolume");
-				Show("Ctrl_SettingsAltitudeAlertVolume");
-				ChangeValue("Combobox_SettingsAudioScheme", Subsystem.Audio.Scheme);
-				ChangeValue("Slider_SettingsAttitudeAlertVolume", Subsystem.Audio.AttitudeAlertVolume);
-				if(Subsystem.Audio.AttitudeAlertVolume > 0) {
-					ChangeText("Label_SettingsAttitudeAlertVolume", Subsystem.Audio.AttitudeAlertVolume + "%");
-				} else {
-					ChangeText("Label_SettingsAttitudeAlertVolume", "禁用");
-				}
-				ChangeVolume("Audio_AttitudeAlert", Subsystem.Audio.AttitudeAlertVolume);
-				ChangeValue("Slider_SettingsSpeedAlertVolume", Subsystem.Audio.SpeedAlertVolume);
-				if(Subsystem.Audio.SpeedAlertVolume > 0) {
-					ChangeText("Label_SettingsSpeedAlertVolume", Subsystem.Audio.SpeedAlertVolume + "%");
-				} else {
-					ChangeText("Label_SettingsSpeedAlertVolume", "禁用");
-				}
-				ChangeVolume("Audio_SpeedAlert", Subsystem.Audio.SpeedAlertVolume);
-				ChangeValue("Slider_SettingsAltitudeAlertVolume", Subsystem.Audio.AltitudeAlertVolume);
-				if(Subsystem.Audio.AltitudeAlertVolume > 0) {
-					ChangeText("Label_SettingsAltitudeAlertVolume", Subsystem.Audio.AltitudeAlertVolume + "%");
-				} else {
-					ChangeText("Label_SettingsAltitudeAlertVolume", "禁用");
-				}
-				ChangeVolume("Audio_AltitudeAlert", Subsystem.Audio.AltitudeAlertVolume);
+				ChangeEnabled("Combobox_SettingsAudioScheme", true);
+				ChangeEnabled("Slider_SettingsAttitudeAlertVolume", true);
+				ChangeEnabled("Slider_SettingsSpeedAlertVolume", true);
+				ChangeEnabled("Slider_SettingsAltitudeAlertVolume", true);
 			} else {
 				StopAllAudio();
-				Hide("Ctrl_SettingsAudioScheme");
-				Hide("Label_SettingsAudio");
-				Hide("Ctrl_SettingsAttitudeAlertVolume");
-				Hide("Ctrl_SettingsSpeedAlertVolume");
-				Hide("Ctrl_SettingsAltitudeAlertVolume");
+				ChangeEnabled("Combobox_SettingsAudioScheme", false);
+				ChangeEnabled("Slider_SettingsAttitudeAlertVolume", false);
+				ChangeEnabled("Slider_SettingsSpeedAlertVolume", false);
+				ChangeEnabled("Slider_SettingsAltitudeAlertVolume", false);
 			}
+			ChangeValue("Combobox_SettingsAudioScheme", Subsystem.Audio.Scheme);
+			ChangeValue("Slider_SettingsAttitudeAlertVolume", Subsystem.Audio.AttitudeAlertVolume);
+			if(Subsystem.Audio.AttitudeAlertVolume > 0) {
+				ChangeText("Label_SettingsAttitudeAlertVolume", Subsystem.Audio.AttitudeAlertVolume + "%");
+			} else {
+				ChangeText("Label_SettingsAttitudeAlertVolume", "禁用");
+			}
+			ChangeVolume("Audio_AttitudeAlert", Subsystem.Audio.AttitudeAlertVolume);
+			ChangeValue("Slider_SettingsSpeedAlertVolume", Subsystem.Audio.SpeedAlertVolume);
+			if(Subsystem.Audio.SpeedAlertVolume > 0) {
+				ChangeText("Label_SettingsSpeedAlertVolume", Subsystem.Audio.SpeedAlertVolume + "%");
+			} else {
+				ChangeText("Label_SettingsSpeedAlertVolume", "禁用");
+			}
+			ChangeVolume("Audio_SpeedAlert", Subsystem.Audio.SpeedAlertVolume);
+			ChangeValue("Slider_SettingsAltitudeAlertVolume", Subsystem.Audio.AltitudeAlertVolume);
+			if(Subsystem.Audio.AltitudeAlertVolume > 0) {
+				ChangeText("Label_SettingsAltitudeAlertVolume", Subsystem.Audio.AltitudeAlertVolume + "%");
+			} else {
+				ChangeText("Label_SettingsAltitudeAlertVolume", "禁用");
+			}
+			ChangeVolume("Audio_AltitudeAlert", Subsystem.Audio.AltitudeAlertVolume);
 
 			// PWA
 			if(window.matchMedia("(display-mode: standalone)").matches) {
@@ -976,6 +964,11 @@
 			} else {
 				RemoveClass("Html", "TryToOptimizePerformance");
 				Automation.ClockRate = 20;
+			}
+			if(IsOSHighContrast() == false && System.Display.Theme != "HighContrast") {
+				ChangeEnabled("Checkbox_SettingsShowDebugOutlines", true);
+			} else {
+				ChangeEnabled("Checkbox_SettingsShowDebugOutlines", false);
 			}
 			ChangeChecked("Checkbox_SettingsShowDebugOutlines", System.Dev.ShowDebugOutlines);
 			if(System.Dev.ShowDebugOutlines) {
@@ -999,17 +992,12 @@
 			HideHorizontally("Ctnr_PFDBocchi737Panel");
 			HideHorizontally("Ctnr_PFDAnalogGaugesPanel");
 			RemoveClass("PFD", "PFDStyleIsHUD");
-			RemoveClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
-			Hide("Ctrl_SettingsAttitudeBgFillEntirePFD");
+			ChangeEnabled("Checkbox_SettingsAttitudeBgFillEntirePFD", false);
 			switch(Subsystem.Display.PFDStyle) {
 				case "Normal":
 					Show("Ctnr_PFDNormalPanel");
-					if(System.Display.Theme != "HighContrast") {
-						Show("Ctrl_SettingsAttitudeBgFillEntirePFD");
-						ChangeChecked("Checkbox_SettingsAttitudeBgFillEntirePFD", Subsystem.Display.AttitudeBgFillEntirePFD);
-						if(Subsystem.Display.AttitudeBgFillEntirePFD) {
-							AddClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
-						}
+					if(IsOSHighContrast() == false && System.Display.Theme != "HighContrast") {
+						ChangeEnabled("Checkbox_SettingsAttitudeBgFillEntirePFD", true);
 					}
 					break;
 				case "HUD":
@@ -1023,6 +1011,12 @@
 				default:
 					AlertSystemError("The value of Subsystem.Display.PFDStyle \"" + Subsystem.Display.PFDStyle + "\" in function RefreshSubsystem is invalid.");
 					break;
+			}
+			ChangeChecked("Checkbox_SettingsAttitudeBgFillEntirePFD", Subsystem.Display.AttitudeBgFillEntirePFD);
+			if(Subsystem.Display.AttitudeBgFillEntirePFD) {
+				AddClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
+			} else {
+				RemoveClass("Ctnr_PFDNormalPanelAttitude", "BgFillEntirePFD");
 			}
 			ChangeValue("Combobox_SettingsPFDFont", Subsystem.Display.PFDFont);
 			let PFDPanels = document.getElementsByClassName("PFDPanel");
@@ -1059,30 +1053,28 @@
 			}
 
 			// Audio
-			if(System.Audio.PlayAudio) {
-				ChangeValue("Combobox_SettingsAudioScheme", Subsystem.Audio.Scheme);
-				ChangeValue("Slider_SettingsAttitudeAlertVolume", Subsystem.Audio.AttitudeAlertVolume);
-				if(Subsystem.Audio.AttitudeAlertVolume > 0) {
-					ChangeText("Label_SettingsAttitudeAlertVolume", Subsystem.Audio.AttitudeAlertVolume + "%");
-				} else {
-					ChangeText("Label_SettingsAttitudeAlertVolume", "禁用");
-				}
-				ChangeVolume("Audio_AttitudeAlert", Subsystem.Audio.AttitudeAlertVolume);
-				ChangeValue("Slider_SettingsSpeedAlertVolume", Subsystem.Audio.SpeedAlertVolume);
-				if(Subsystem.Audio.SpeedAlertVolume > 0) {
-					ChangeText("Label_SettingsSpeedAlertVolume", Subsystem.Audio.SpeedAlertVolume + "%");
-				} else {
-					ChangeText("Label_SettingsSpeedAlertVolume", "禁用");
-				}
-				ChangeVolume("Audio_SpeedAlert", Subsystem.Audio.SpeedAlertVolume);
-				ChangeValue("Slider_SettingsAltitudeAlertVolume", Subsystem.Audio.AltitudeAlertVolume);
-				if(Subsystem.Audio.AltitudeAlertVolume > 0) {
-					ChangeText("Label_SettingsAltitudeAlertVolume", Subsystem.Audio.AltitudeAlertVolume + "%");
-				} else {
-					ChangeText("Label_SettingsAltitudeAlertVolume", "禁用");
-				}
-				ChangeVolume("Audio_AltitudeAlert", Subsystem.Audio.AltitudeAlertVolume);
+			ChangeValue("Combobox_SettingsAudioScheme", Subsystem.Audio.Scheme);
+			ChangeValue("Slider_SettingsAttitudeAlertVolume", Subsystem.Audio.AttitudeAlertVolume);
+			if(Subsystem.Audio.AttitudeAlertVolume > 0) {
+				ChangeText("Label_SettingsAttitudeAlertVolume", Subsystem.Audio.AttitudeAlertVolume + "%");
+			} else {
+				ChangeText("Label_SettingsAttitudeAlertVolume", "禁用");
 			}
+			ChangeVolume("Audio_AttitudeAlert", Subsystem.Audio.AttitudeAlertVolume);
+			ChangeValue("Slider_SettingsSpeedAlertVolume", Subsystem.Audio.SpeedAlertVolume);
+			if(Subsystem.Audio.SpeedAlertVolume > 0) {
+				ChangeText("Label_SettingsSpeedAlertVolume", Subsystem.Audio.SpeedAlertVolume + "%");
+			} else {
+				ChangeText("Label_SettingsSpeedAlertVolume", "禁用");
+			}
+			ChangeVolume("Audio_SpeedAlert", Subsystem.Audio.SpeedAlertVolume);
+			ChangeValue("Slider_SettingsAltitudeAlertVolume", Subsystem.Audio.AltitudeAlertVolume);
+			if(Subsystem.Audio.AltitudeAlertVolume > 0) {
+				ChangeText("Label_SettingsAltitudeAlertVolume", Subsystem.Audio.AltitudeAlertVolume + "%");
+			} else {
+				ChangeText("Label_SettingsAltitudeAlertVolume", "禁用");
+			}
+			ChangeVolume("Audio_AltitudeAlert", Subsystem.Audio.AltitudeAlertVolume);
 
 			// I18n
 				// English terminology on PFD
@@ -1555,7 +1547,7 @@
 				PFD0.Stats.Altitude.BalloonDisplay[2] = Math.trunc(ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) % 10000 / 1000);
 				PFD0.Stats.Altitude.BalloonDisplay[3] = Math.trunc(ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) % 1000 / 100);
 				PFD0.Stats.Altitude.BalloonDisplay[4] = ConvertUnit(PFD0.Stats.Altitude.TapeDisplay, "Meter", Subsystem.I18n.MeasurementUnit.Altitude) % 100;
-				if(System.Display.Anim > 0) {
+				if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 					if(PFD0.Stats.Altitude.BalloonDisplay[4] > 80) {PFD0.Stats.Altitude.BalloonDisplay[3] += ((PFD0.Stats.Altitude.BalloonDisplay[4] - 80) / 20);} // Imitating the cockpit PFD rolling digits.
 					if(PFD0.Stats.Altitude.BalloonDisplay[4] < -80) {PFD0.Stats.Altitude.BalloonDisplay[3] += ((PFD0.Stats.Altitude.BalloonDisplay[4] + 80) / 20);}
 					if(PFD0.Stats.Altitude.BalloonDisplay[3] > 9) {PFD0.Stats.Altitude.BalloonDisplay[2] += (PFD0.Stats.Altitude.BalloonDisplay[3] - 9);}
@@ -1682,7 +1674,7 @@
 					PFD0.Stats.Speed.BalloonDisplay[1] = Math.trunc(ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) / 100);
 					PFD0.Stats.Speed.BalloonDisplay[2] = Math.trunc(ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) % 100 / 10);
 					PFD0.Stats.Speed.BalloonDisplay[3] = ConvertUnit(PFD0.Stats.Speed.TapeDisplay, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed) % 10;
-					if(System.Display.Anim > 0) {
+					if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 						if(PFD0.Stats.Speed.BalloonDisplay[3] > 9) {PFD0.Stats.Speed.BalloonDisplay[2] += (PFD0.Stats.Speed.BalloonDisplay[3] - 9);}
 						if(PFD0.Stats.Speed.BalloonDisplay[2] > 9) {PFD0.Stats.Speed.BalloonDisplay[1] += (PFD0.Stats.Speed.BalloonDisplay[2] - 9);}
 					} else {
@@ -2256,7 +2248,7 @@
 					Show("Ctrl_PFDAutoSwitchRunwayActive");
 					Show("Label_AirportLibraryAutoSwitchRunwayActive");
 					for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length; Looper++) {
-						ChangeDisabled("Radiobtn_PFDRunway" + Looper, true);
+						ChangeEnabled("Radiobtn_PFDRunway" + Looper, false);
 					}
 					if(AirportLibrary0.ActiveAirport.RunwaySelection != RecommendedRunway) {
 						SetRunwayAtPFD(RecommendedRunway);
@@ -2265,7 +2257,7 @@
 					Hide("Ctrl_PFDAutoSwitchRunwayActive");
 					Hide("Label_AirportLibraryAutoSwitchRunwayActive");
 					for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length; Looper++) {
-						ChangeDisabled("Radiobtn_PFDRunway" + Looper, false);
+						ChangeEnabled("Radiobtn_PFDRunway" + Looper, true);
 					}
 					if(AirportLibrary0.ActiveAirport.RunwaySelection != RecommendedRunway) {
 						AddClass("Label_PFDRunway" + RecommendedRunway, "Glow");
@@ -2276,7 +2268,7 @@
 				Hide("Label_AirportLibraryAutoSwitchRunwayActive");
 				for(let Looper = 1; Looper < AirportLibrary0.ActiveAirport.Runway.length; Looper++) {
 					RemoveClass("Label_PFDRunway" + Looper, "Glow");
-					ChangeDisabled("Radiobtn_PFDRunway" + Looper, false);
+					ChangeEnabled("Radiobtn_PFDRunway" + Looper, true);
 					Fade("Label_PFDRunway" + Looper + "NavData");
 				}
 			}
@@ -2483,52 +2475,47 @@
 			// Menu
 				// Ctrl
 					// Manual maneuver
-					if((PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") || PFD.Speed.Mode == "Manual" || PFD.Altitude.Mode == "Manual" || PFD.Heading.Mode == "Manual") {
-						Show("Ctrl_PFDManualManeuver");
-						if(PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") {
-							ChangeDisabled("Button_PFDPitchDown", false);
-							ChangeDisabled("Button_PFDPitchUp", false);
-							ChangeDisabled("Button_PFDRollLeft", false);
-							ChangeDisabled("Button_PFDRollRight", false);
-							ChangeDisabled("Button_PFDMaintainAttitude", false);
-							ChangeDisabled("Button_PFDResetAttitude", false);
-						} else {
-							ChangeDisabled("Button_PFDPitchDown", true);
-							ChangeDisabled("Button_PFDPitchUp", true);
-							ChangeDisabled("Button_PFDRollLeft", true);
-							ChangeDisabled("Button_PFDRollRight", true);
-							ChangeDisabled("Button_PFDMaintainAttitude", true);
-							ChangeDisabled("Button_PFDResetAttitude", true);
-						}
-						if(PFD.Speed.Mode == "Manual") {
-							ChangeDisabled("Button_PFDSpeedUp", false);
-							ChangeDisabled("Button_PFDSpeedDown", false);
-							ChangeDisabled("Button_PFDMaintainSpeed", false);
-						} else {
-							ChangeDisabled("Button_PFDSpeedUp", true);
-							ChangeDisabled("Button_PFDSpeedDown", true);
-							ChangeDisabled("Button_PFDMaintainSpeed", true);
-						}
-						if(PFD.Altitude.Mode == "Manual") {
-							ChangeDisabled("Button_PFDAltitudeUp", false);
-							ChangeDisabled("Button_PFDAltitudeDown", false);
-							ChangeDisabled("Button_PFDMaintainAltitude", false);
-						} else {
-							ChangeDisabled("Button_PFDAltitudeUp", true);
-							ChangeDisabled("Button_PFDAltitudeDown", true);
-							ChangeDisabled("Button_PFDMaintainAltitude", true);
-						}
-						if(PFD.Heading.Mode == "Manual") {
-							ChangeDisabled("Button_PFDHeadingLeft", false);
-							ChangeDisabled("Button_PFDHeadingRight", false);
-							ChangeDisabled("Button_PFDMaintainHeading", false);
-						} else {
-							ChangeDisabled("Button_PFDHeadingLeft", true);
-							ChangeDisabled("Button_PFDHeadingRight", true);
-							ChangeDisabled("Button_PFDMaintainHeading", true);
-						}
+					if(PFD.Attitude.IsEnabled && PFD.Attitude.Mode == "Manual") {
+						ChangeEnabled("Button_PFDPitchDown", true);
+						ChangeEnabled("Button_PFDPitchUp", true);
+						ChangeEnabled("Button_PFDRollLeft", true);
+						ChangeEnabled("Button_PFDRollRight", true);
+						ChangeEnabled("Button_PFDMaintainAttitude", true);
+						ChangeEnabled("Button_PFDResetAttitude", true);
 					} else {
-						Hide("Ctrl_PFDManualManeuver");
+						ChangeEnabled("Button_PFDPitchDown", false);
+						ChangeEnabled("Button_PFDPitchUp", false);
+						ChangeEnabled("Button_PFDRollLeft", false);
+						ChangeEnabled("Button_PFDRollRight", false);
+						ChangeEnabled("Button_PFDMaintainAttitude", false);
+						ChangeEnabled("Button_PFDResetAttitude", false);
+					}
+					if(PFD.Speed.Mode == "Manual") {
+						ChangeEnabled("Button_PFDSpeedUp", true);
+						ChangeEnabled("Button_PFDSpeedDown", true);
+						ChangeEnabled("Button_PFDMaintainSpeed", true);
+					} else {
+						ChangeEnabled("Button_PFDSpeedUp", false);
+						ChangeEnabled("Button_PFDSpeedDown", false);
+						ChangeEnabled("Button_PFDMaintainSpeed", false);
+					}
+					if(PFD.Altitude.Mode == "Manual") {
+						ChangeEnabled("Button_PFDAltitudeUp", true);
+						ChangeEnabled("Button_PFDAltitudeDown", true);
+						ChangeEnabled("Button_PFDMaintainAltitude", true);
+					} else {
+						ChangeEnabled("Button_PFDAltitudeUp", false);
+						ChangeEnabled("Button_PFDAltitudeDown", false);
+						ChangeEnabled("Button_PFDMaintainAltitude", false);
+					}
+					if(PFD.Heading.Mode == "Manual") {
+						ChangeEnabled("Button_PFDHeadingLeft", true);
+						ChangeEnabled("Button_PFDHeadingRight", true);
+						ChangeEnabled("Button_PFDMaintainHeading", true);
+					} else {
+						ChangeEnabled("Button_PFDHeadingLeft", false);
+						ChangeEnabled("Button_PFDHeadingRight", false);
+						ChangeEnabled("Button_PFDMaintainHeading", false);
 					}
 
 					// MCP
@@ -2587,11 +2574,7 @@
 
 				// Quick settings
 				ChangeChecked("Checkbox_PFDQuickSettingsEnableAttitudeIndicator", PFD.Attitude.IsEnabled);
-				if(PFD.Attitude.IsEnabled) {
-					Show("Ctrl_PFDQuickSettingsAttitudeMode");
-				} else {
-					Hide("Ctrl_PFDQuickSettingsAttitudeMode");
-				}
+				ChangeEnabled("Combobox_PFDQuickSettingsAttitudeMode", PFD.Attitude.IsEnabled);
 				ChangeValue("Combobox_PFDQuickSettingsAttitudeMode", PFD.Attitude.Mode);
 				ChangeValue("Combobox_PFDQuickSettingsSpeedMode", PFD.Speed.Mode);
 				ChangeValue("Combobox_PFDQuickSettingsAltitudeMode", PFD.Altitude.Mode);
@@ -2613,43 +2596,35 @@
 			// Attitude
 			ChangeChecked("Checkbox_SettingsEnableAttitudeIndicator", PFD.Attitude.IsEnabled);
 			if(PFD.Attitude.IsEnabled) {
-				Show("Ctrl_SettingsAttitudeMode");
-				Show("Label_SettingsAttitudeSensitivityInfo");
-				Show("Ctrl_SettingsAttitudeSensitivity");
-				ChangeValue("Combobox_SettingsAttitudeMode", PFD.Attitude.Mode);
-				ChangeValue("Slider_SettingsAttitudeSensitivity", PFD.Attitude.Sensitivity);
-				ChangeText("Label_SettingsAttitudeSensitivity", PFD.Attitude.Sensitivity);
+				ChangeEnabled("Combobox_SettingsAttitudeMode", true);
+				ChangeEnabled("Slider_SettingsAttitudeSensitivity", true);
 				switch(PFD.Attitude.Mode) {
 					case "Sensor":
-						Show("Label_SettingsAttitudeOffset");
-						Show("Label_SettingsAttitudeOffsetInfo");
-						Show("Ctrl_SettingsAttitudeOffsetPitch");
-						Show("Ctrl_SettingsAttitudeOffsetRoll");
-						Show("Ctrl_SettingsCalibrateAttitudeToZero");
-						ChangeValue("Textbox_SettingsAttitudeOffsetPitch", PFD.Attitude.Offset.Pitch.toFixed(0));
-						ChangeValue("Textbox_SettingsAttitudeOffsetRoll", PFD.Attitude.Offset.Roll.toFixed(0));
+						ChangeEnabled("Textbox_SettingsAttitudeOffsetPitch", true);
+						ChangeEnabled("Textbox_SettingsAttitudeOffsetRoll", true);
+						ChangeEnabled("Button_SettingsCalibrateAttitudeToZero", true);
 						break;
 					case "Manual":
-						Hide("Label_SettingsAttitudeOffset");
-						Hide("Label_SettingsAttitudeOffsetInfo");
-						Hide("Ctrl_SettingsAttitudeOffsetPitch");
-						Hide("Ctrl_SettingsAttitudeOffsetRoll");
-						Hide("Ctrl_SettingsCalibrateAttitudeToZero");
+						ChangeEnabled("Textbox_SettingsAttitudeOffsetPitch", false);
+						ChangeEnabled("Textbox_SettingsAttitudeOffsetRoll", false);
+						ChangeEnabled("Button_SettingsCalibrateAttitudeToZero", false);
 						break;
 					default:
 						AlertSystemError("The value of PFD.Attitude.Mode \"" + PFD.Attitude.Mode + "\" in function RefreshPFD is invalid.");
 						break;
 				}
 			} else {
-				Hide("Ctrl_SettingsAttitudeMode");
-				Hide("Label_SettingsAttitudeSensitivityInfo");
-				Hide("Ctrl_SettingsAttitudeSensitivity");
-				Hide("Label_SettingsAttitudeOffset");
-				Hide("Label_SettingsAttitudeOffsetInfo");
-				Hide("Ctrl_SettingsAttitudeOffsetPitch");
-				Hide("Ctrl_SettingsAttitudeOffsetRoll");
-				Hide("Ctrl_SettingsCalibrateAttitudeToZero");
+				ChangeEnabled("Combobox_SettingsAttitudeMode", false);
+				ChangeEnabled("Slider_SettingsAttitudeSensitivity", false);
+				ChangeEnabled("Textbox_SettingsAttitudeOffsetPitch", false);
+				ChangeEnabled("Textbox_SettingsAttitudeOffsetRoll", false);
+				ChangeEnabled("Button_SettingsCalibrateAttitudeToZero", false);
 			}
+			ChangeValue("Combobox_SettingsAttitudeMode", PFD.Attitude.Mode);
+			ChangeValue("Slider_SettingsAttitudeSensitivity", PFD.Attitude.Sensitivity);
+			ChangeText("Label_SettingsAttitudeSensitivity", PFD.Attitude.Sensitivity);
+			ChangeValue("Textbox_SettingsAttitudeOffsetPitch", PFD.Attitude.Offset.Pitch.toFixed(0));
+			ChangeValue("Textbox_SettingsAttitudeOffsetRoll", PFD.Attitude.Offset.Roll.toFixed(0));
 
 			// Speed
 			ChangeValue("Combobox_SettingsSpeedMode", PFD.Speed.Mode);
@@ -2670,20 +2645,20 @@
 			ChangeValue("Textbox_SettingsSpeedLimitMin", ConvertUnit(PFD.Speed.Limit.Min, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0));
 			ChangeChecked("Checkbox_SettingsCalcStallSpeed", PFD.Speed.CalcStallSpeed);
 			if(PFD.Speed.CalcStallSpeed) {
-				Show("Ctrl_SettingsWeight");
-				Show("Ctrl_SettingsWingArea");
-				Show("Ctrl_SettingsMaxLiftCoefficientOnFlapsUp");
-				Show("Ctrl_SettingsMaxLiftCoefficientOnFlapsFull");
-				ChangeValue("Textbox_SettingsWeight", ConvertUnit(PFD.Speed.Limit.Weight, "Kilogram", Subsystem.I18n.MeasurementUnit.Weight).toFixed(0));
-				ChangeValue("Textbox_SettingsWingArea", ConvertUnit(PFD.Speed.Limit.WingArea, "SquareMeter", Subsystem.I18n.MeasurementUnit.Area).toFixed(0));
-				ChangeValue("Textbox_SettingsMaxLiftCoefficientOnFlapsUp", PFD.Speed.Limit.MaxLiftCoefficient.OnFlapsUp.toFixed(1));
-				ChangeValue("Textbox_SettingsMaxLiftCoefficientOnFlapsFull", PFD.Speed.Limit.MaxLiftCoefficient.OnFlapsFull.toFixed(1));
+				ChangeEnabled("Textbox_SettingsWeight", true);
+				ChangeEnabled("Textbox_SettingsWingArea", true);
+				ChangeEnabled("Textbox_SettingsMaxLiftCoefficientOnFlapsUp", true);
+				ChangeEnabled("Textbox_SettingsMaxLiftCoefficientOnFlapsFull", true);
 			} else {
-				Hide("Ctrl_SettingsWeight");
-				Hide("Ctrl_SettingsWingArea");
-				Hide("Ctrl_SettingsMaxLiftCoefficientOnFlapsUp");
-				Hide("Ctrl_SettingsMaxLiftCoefficientOnFlapsFull");
+				ChangeEnabled("Textbox_SettingsWeight", false);
+				ChangeEnabled("Textbox_SettingsWingArea", false);
+				ChangeEnabled("Textbox_SettingsMaxLiftCoefficientOnFlapsUp", false);
+				ChangeEnabled("Textbox_SettingsMaxLiftCoefficientOnFlapsFull", false);
 			}
+			ChangeValue("Textbox_SettingsWeight", ConvertUnit(PFD.Speed.Limit.Weight, "Kilogram", Subsystem.I18n.MeasurementUnit.Weight).toFixed(0));
+			ChangeValue("Textbox_SettingsWingArea", ConvertUnit(PFD.Speed.Limit.WingArea, "SquareMeter", Subsystem.I18n.MeasurementUnit.Area).toFixed(0));
+			ChangeValue("Textbox_SettingsMaxLiftCoefficientOnFlapsUp", PFD.Speed.Limit.MaxLiftCoefficient.OnFlapsUp.toFixed(1));
+			ChangeValue("Textbox_SettingsMaxLiftCoefficientOnFlapsFull", PFD.Speed.Limit.MaxLiftCoefficient.OnFlapsFull.toFixed(1));
 			ChangeValue("Textbox_SettingsVMO", ConvertUnit(PFD.Speed.Limit.VMO, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0));
 			ChangeValue("Textbox_SettingsVFE", ConvertUnit(PFD.Speed.Limit.VFE, "MeterPerSec", Subsystem.I18n.MeasurementUnit.Speed).toFixed(0));
 			ChangeValue("Textbox_SettingsMMO", PFD.Speed.Limit.MMO.toFixed(3));
@@ -2698,14 +2673,14 @@
 			// Nav
 			ChangeChecked("Checkbox_SettingsEnableNav", PFD.Nav.IsEnabled);
 			if(PFD.Nav.IsEnabled) {
-				Show("Ctrl_SettingsETACalcMethod");
-				Show("Ctrl_SettingsAutoSwitchRunwayWhenLanding");
-				ChangeValue("Combobox_SettingsETACalcMethod", PFD.Nav.ETACalcMethod);
-				ChangeChecked("Checkbox_SettingsAutoSwitchRunwayWhenLanding", PFD.Nav.AutoSwitchRunwayWhenLanding);
+				ChangeEnabled("Combobox_SettingsETACalcMethod", true);
+				ChangeEnabled("Checkbox_SettingsAutoSwitchRunwayWhenLanding", true);
 			} else {
-				Hide("Ctrl_SettingsETACalcMethod");
-				Hide("Ctrl_SettingsAutoSwitchRunwayWhenLanding");
+				ChangeEnabled("Combobox_SettingsETACalcMethod", false);
+				ChangeEnabled("Checkbox_SettingsAutoSwitchRunwayWhenLanding", false);
 			}
+			ChangeValue("Combobox_SettingsETACalcMethod", PFD.Nav.ETACalcMethod);
+			ChangeChecked("Checkbox_SettingsAutoSwitchRunwayWhenLanding", PFD.Nav.AutoSwitchRunwayWhenLanding);
 
 			// Flight mode
 			ChangeValue("Combobox_SettingsFlightMode", PFD.FlightMode.FlightMode);
@@ -2888,7 +2863,7 @@
 				AlertSystemError("The airport library is empty.");
 			}
 			if(AirportLibrary.Airport.length == 2) {
-				ChangeDisabled("Button_AirportLibraryAirport1Delete", true);
+				ChangeEnabled("Button_AirportLibraryAirport1Delete", false);
 			}
 
 			// Selection
@@ -2944,7 +2919,7 @@
 				AlertSystemError("The departure airport has no runways.");
 			}
 			if(AirportLibrary0.DepartureAirport.Runway.length == 2) {
-				ChangeDisabled("Button_AirportLibraryRunway1Delete", true);
+				ChangeEnabled("Button_AirportLibraryRunway1Delete", false);
 			}
 
 			// Selection

@@ -107,6 +107,14 @@
 			return document.getElementById(ID).readyState == 4;
 		}
 
+		// Accessibility
+		function IsOSHighContrast() {
+			return window.matchMedia("(prefers-contrast: more)").matches;
+		}
+		function IsOSAnimEnabled() {
+			return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		}
+
 	// Write
 		// Element
 		function RemoveElement(ID) {
@@ -405,14 +413,14 @@
 		function ChangeMediaCondition(ID, Value) {
 			document.getElementById(ID).media = Value;
 		}
-		function ChangeChecked(ID, Value) {
-			document.getElementById(ID).checked = Value;
-		}
-		function ChangeDisabled(ID, Value) {
-			document.getElementById(ID).disabled = Value;
-		}
 		function ChangeInert(ID, Value) {
 			document.getElementById(ID).inert = Value;
+		}
+		function ChangeEnabled(ID, Value) {
+			document.getElementById(ID).disabled = !Value;
+		}
+		function ChangeChecked(ID, Value) {
+			document.getElementById(ID).checked = Value;
 		}
 		function ChangeCursor(ID, Value) {
 			document.getElementById(ID).style.cursor = Value;
@@ -492,7 +500,7 @@
 	}
 	function ShowIAmHere(Name) {
 		let ID = "Item_" + Name;
-		if(System.Display.Anim > 0) {
+		if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 			setTimeout(function() {
 				ChangeAnim(ID, "250ms");
 				AddClass(ID, "IAmHere");
@@ -683,6 +691,14 @@
 		RefreshSystem();
 	});
 
+	// On toggling OS accessibility features
+	window.matchMedia("(prefers-contrast: more)").addEventListener("change", function() {
+		RefreshSystem();
+	});
+	window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", function() {
+		RefreshSystem();
+	});
+
 	// Screen wake lock (https://developer.chrome.com/docs/capabilities/web-apis/wake-lock)
 	document.addEventListener("visibilitychange", function() {
 		if(System0.ScreenWakeLock != null && document.visibilityState == "visible") {
@@ -693,7 +709,7 @@
 	// When PWA installation is available
 	window.addEventListener("beforeinstallprompt", function(Event) { // Works on Google Chrome for Android.
 		System0.PWAInstallation = Event;
-		ChangeDisabled("Button_SettingsInstallPWA", false);
+		ChangeEnabled("Button_SettingsInstallPWA", true);
 	});
 
 // Features
@@ -894,7 +910,7 @@
 			ChangeChecked("Checkbox_DialogCheckboxOption", false);
 			ChangeText("Label_DialogCheckboxOption", System0.Dialog[System0.Dialog.length - 1].CheckboxOption);
 		} else {
-			HideHorizontally("Ctrl_DialogCheckboxOption");
+			Fade("Ctrl_DialogCheckboxOption");
 		}
 		if(System0.Dialog[System0.Dialog.length - 1].Option1 != "") {
 			Show("Ctrl_DialogOption1");

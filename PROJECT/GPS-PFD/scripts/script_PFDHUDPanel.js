@@ -81,7 +81,7 @@
 						Show("Ctrl_PFDHUDPanelAttitudePitch");
 						Show("Ctrl_PFDHUDPanelAttitudeRoll");
 						Show("Ctrl_PFDHUDPanelAttitudeAircraftSymbol");
-						if(System.Display.Anim > 0) {
+						if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 							ChangeAnim("Ctrl_PFDHUDPanelAttitudePitch", "100ms");
 							ChangeAnim("Ctrl_PFDHUDPanelAttitudeRoll", "100ms");
 						} else {
@@ -105,7 +105,7 @@
 						}
 						if(PFD0.Stats.Speed.IsValid && PFD0.Stats.Altitude.IsValid) {
 							Show("Ctrl_PFDHUDPanelAttitudeSpeedPitch");
-							if(System.Display.Anim > 0) {
+							if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 								ChangeAnim("Ctrl_PFDHUDPanelAttitudeSpeedPitch", "100ms");
 							} else {
 								ChangeAnim("Ctrl_PFDHUDPanelAttitudeSpeedPitch", "");
@@ -136,7 +136,7 @@
 					Show("Ctrl_PFDHUDPanelSpeedAdditionalIndicators");
 					Show("Ctrl_PFDHUDPanelSpeedBalloon");
 					Show("Ctrl_PFDHUDPanelSpeedGS");
-					if(System.Display.Anim > 0) {
+					if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 						ChangeAnim("Ctrl_PFDHUDPanelSpeedTape", "100ms");
 						ChangeAnim("Ctrl_PFDHUDPanelSpeedAdditionalIndicators", "100ms");
 					} else {
@@ -276,7 +276,7 @@
 					Show("Ctrl_PFDHUDPanelAltitudeTape");
 					Show("Ctrl_PFDHUDPanelAltitudeAdditionalIndicators");
 					Show("Ctrl_PFDHUDPanelAltitudeBalloon");
-					if(System.Display.Anim > 0) {
+					if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 						ChangeAnim("Ctrl_PFDHUDPanelAltitudeTape", "100ms");
 						ChangeAnim("Ctrl_PFDHUDPanelAltitudeAdditionalIndicators", "100ms");
 					} else {
@@ -415,7 +415,7 @@
 					Show("Ctrl_PFDHUDPanelHeadingTape");
 					Show("Ctrl_PFDHUDPanelHeadingAdditionalIndicators");
 					Show("Ctrl_PFDHUDPanelHeadingBalloon");
-					if(System.Display.Anim > 0) {
+					if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 						ChangeAnim("Ctrl_PFDHUDPanelHeadingTape", "100ms");
 						ChangeAnim("Ctrl_PFDHUDPanelHeadingAdditionalIndicators", "100ms");
 					} else {
@@ -533,7 +533,7 @@
 									AlertSystemError("The value of PFD0.Stats.Nav.LocalizerDeviation \"" + PFD0.Stats.Nav.LocalizerDeviation + "\" in function RefreshHUDPanel is invalid.");
 									break;
 							}
-							if(System.Display.Anim > 0) {
+							if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 								ChangeAnim("PFDHUDPanelLocalizerPointer", "100ms");
 							} else {
 								ChangeAnim("PFDHUDPanelLocalizerPointer", "");
@@ -571,7 +571,7 @@
 									AlertSystemError("The value of PFD0.Stats.Nav.GlideSlopeDeviation \"" + PFD0.Stats.Nav.GlideSlopeDeviation + "\" in function RefreshHUDPanel is invalid.");
 									break;
 							}
-							if(System.Display.Anim > 0) {
+							if(IsOSAnimEnabled() && System.Display.Anim > 0) {
 								ChangeAnim("PFDHUDPanelGlideSlopePointer", "100ms");
 							} else {
 								ChangeAnim("PFDHUDPanelGlideSlopePointer", "");
