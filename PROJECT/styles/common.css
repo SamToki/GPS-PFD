@@ -45,16 +45,16 @@
 			font-variant-numeric: inherit; font-size: inherit; font-style: inherit; /* These properties need to be set as inherit due to buttons, textboxes and cheating mode. */
 			transition: inherit; scroll-behavior: inherit;
 		}
-		*:lang(en-US) {
+		:lang(en-US) {
 			font-family: "Inter", "Helvetica", "Arial", sans-serif;
 		}
-		*:lang(ja-JP) {
+		:lang(ja-JP) {
 			font-family: "Inter", "Sarasa UI J", "Source Han Sans", "Noto Sans JP", "HiraginoKaku", "Yu Gothic UI", "MS UI Gothic", sans-serif;
 		}
-		*:lang(zh-CN) {
+		:lang(zh-CN) {
 			font-family: "Inter", "Sarasa UI SC", "Source Han Sans SC", "Noto Sans SC", "Hiragino Sans GB", "PingFang SC", "Microsoft YaHei UI", sans-serif;
 		}
-		*:lang(zh-TW) {
+		:lang(zh-TW) {
 			font-family: "Inter", "Sarasa UI TC", "Source Han Sans TC", "Noto Sans TC", "Hiragino Sans TC", "PingFang TC", "Microsoft JhengHei UI", sans-serif;
 		}
 		#Html {
@@ -692,12 +692,12 @@
 		.Button.Shaped:enabled:active .Shape, .Button.Shaped.Active:enabled:active .Shape {
 			fill: #8040A0;
 		}
-		/* *:active {
-			transition: none; // Disabled due to SVG icon incompatibility.
+		/* :active {
+			transition: none; // Disabled due to Combobox incompatibility.
 		} */
 
 		/* Focus */
-		*:focus-visible {
+		:focus-visible {
 			outline: none; box-shadow: 0 0 0 2px #8040A0 !important;
 		}
 		.Button.Shaped:focus-visible {
@@ -711,10 +711,10 @@
 		}
 
 		/* Disabled */
-		*:disabled, label:has(:disabled:not(option)) span {
+		:disabled, label:has(:disabled:not(option)) span {
 			opacity: 0.4;
 		}
-		*:disabled * {
+		:disabled * {
 			opacity: unset !important;
 		}
 

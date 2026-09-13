@@ -190,7 +190,7 @@
 		}
 
 		/* Focus */
-		*:focus-visible {
+		:focus-visible {
 			box-shadow: 0 0 0 2px #D090F0 !important;
 		}
 		.Button.Shaped:focus-visible .Shape {
