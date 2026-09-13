@@ -92,7 +92,7 @@
 					</nav>
 				</li>
 				<li class="Ctrl" id="Ctrl_CollapseAllFieldsets">
-					<button class="Button" onclick="CollapseAllFieldsets()" title="折叠所有 fieldset" aria-label="折叠所有 fieldset">
+					<button class="Button" onclick="CollapseAllFieldsets()" title="折叠所有板块" aria-label="折叠所有板块">
 						<svg class="Icon Larger" viewBox="0 0 16 16" aria-hidden="true">
 							<path d="M1 8a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 8m7-8a.5.5 0 0 1 .5.5v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 1 1 .708-.708L7.5 4.293V.5A.5.5 0 0 1 8 0m-.5 11.707-1.146 1.147a.5.5 0 0 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 11.707V15.5a.5.5 0 0 1-1 0z"/>
 						</svg>
@@ -3008,18 +3008,18 @@
 							</ul>
 						</fieldset>
 					</li>
-					<li class="Item" id="Item_AirportLibraryRunwayProperties">
+					<li class="Item">
 						<ul class="CtrlGroup">
 							<li class="Ctrl">
-								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('AirportLibraryRunwayProperties')">
-									<h2>跑道属性</h2>
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('AirportLibraryRunwayGeographicalProperties')">
+									<h2>跑道地理属性</h2>
 									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
 										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
 									</svg>
 								</button>
 							</li>
 						</ul>
-						<fieldset id="Fieldset_AirportLibraryRunwayProperties">
+						<fieldset id="Fieldset_AirportLibraryRunwayGeographicalProperties">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryRunwayHeading">
@@ -3044,7 +3044,6 @@
 									</label>
 								</li>
 							</ul>
-							<h3>地理</h3>
 							<p>北纬、东经是正值，南纬、西经是负值。</p>
 							<ul class="CtrlGroup BelowParagraph">
 								<li class="Ctrl" id="Ctrl_AirportLibraryLat">
@@ -3073,8 +3072,21 @@
 									<button class="Button" onclick="ReplaceRunwayElevationWithCurrent()">替换为当前高度</button>
 								</li>
 							</ul>
-							<h3>进近 (Final Approach)</h3>
-							<ul class="CtrlGroup BelowParagraph">
+						</fieldset>
+					</li>
+					<li class="Item">
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('AirportLibraryRunwayApproachProperties')">
+									<h2>跑道进近属性</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_AirportLibraryRunwayApproachProperties">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryGlideSlopeAngle">
 										<span><a href="https://zh.wikipedia.org/wiki/仪表着陆系统#航向台和下滑台">下滑道</a>角度：</span>
@@ -3275,7 +3287,7 @@
 							</ul>
 						</fieldset>
 					</li>
-					<li class="Item" id="Item_SettingsSpeed">
+					<li class="Item">
 						<ul class="CtrlGroup">
 							<li class="Ctrl">
 								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsSpeed')">
@@ -3319,7 +3331,7 @@
 								</li>
 								<li class="Ctrl">
 									<label for="Combobox_SettingsSpeedPreset">
-										<span>预设：</span>
+										<span>起飞速度与限速预设：</span>
 										<select class="Combobox" id="Combobox_SettingsSpeedPreset" onchange="SetSpeedPreset()">
 											<option value="Boeing737-800" selected>波音 737-800</option>
 											<option value="AirbusA320">空客 A320</option>
@@ -3328,8 +3340,21 @@
 									</label>
 								</li>
 							</ul>
-							<h3>起飞</h3>
-							<ul class="CtrlGroup BelowParagraph">
+						</fieldset>
+					</li>
+					<li class="Item">
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsTakeoffSpeeds')">
+									<h2>起飞速度</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsTakeoffSpeeds">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_SettingsV1">
 										<span><a href="https://zh.wikipedia.org/wiki/V速度">V<sub>1</sub> (中断起飞速度)</a>：</span>
@@ -3345,8 +3370,21 @@
 									</label>
 								</li>
 							</ul>
-							<h3>限速</h3>
-							<ul class="CtrlGroup BelowParagraph">
+						</fieldset>
+					</li>
+					<li class="Item">
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsSpeedLimits')">
+									<h2>限速</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsSpeedLimits">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_SettingsSpeedLimitMin">
 										<span>最小表速：</span>
@@ -3529,18 +3567,18 @@
 							</ul>
 						</fieldset>
 					</li>
-					<li class="Item" id="Item_SettingsDisplay">
+					<li class="Item">
 						<ul class="CtrlGroup">
 							<li class="Ctrl">
-								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsDisplay')">
-									<h2>显示</h2>
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsAppearance')">
+									<h2>外观</h2>
 									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
 										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
 									</svg>
 								</button>
 							</li>
 						</ul>
-						<fieldset id="Fieldset_SettingsDisplay">
+						<fieldset id="Fieldset_SettingsAppearance">
 							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsTheme">
@@ -3609,6 +3647,33 @@
 									</label>
 								</li>
 								<li class="Ctrl">
+									<label for="Combobox_SettingsAnim">
+										<span>动画：</span>
+										<select class="Combobox" id="Combobox_SettingsAnim" onchange="SetAnim()">
+											<option value="0">禁用</option>
+											<option value="100">快速 (100ms)</option>
+											<option value="250" selected>中速 (250ms)</option>
+											<option value="500">慢速 (500ms)</option>
+										</select>
+									</label>
+								</li>
+							</ul>
+						</fieldset>
+					</li>
+					<li class="Item">
+						<ul class="CtrlGroup">
+							<li class="Ctrl">
+								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsFeatureDisplay')">
+									<h2>功能显示</h2>
+									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
+										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+						<fieldset id="Fieldset_SettingsFeatureDisplay">
+							<ul class="CtrlGroup">
+								<li class="Ctrl">
 									<label for="Checkbox_SettingsHideTopbarWhenNotScrolling">
 										<input class="Checkbox" id="Checkbox_SettingsHideTopbarWhenNotScrolling" type="checkbox" checked="false" onchange="SetHideTopbarWhenNotScrolling()" />
 										<span>未滚动网页时隐藏顶栏</span>
@@ -3632,21 +3697,16 @@
 									</label>
 								</li>
 								<li class="Ctrl">
-									<label for="Combobox_SettingsAnim">
-										<span>动画：</span>
-										<select class="Combobox" id="Combobox_SettingsAnim" onchange="SetAnim()">
-											<option value="0">禁用</option>
-											<option value="100">快速 (100ms)</option>
-											<option value="250" selected>中速 (250ms)</option>
-											<option value="500">慢速 (500ms)</option>
-										</select>
-									</label>
-								</li>
-								<li class="Ctrl">
 									<label for="Checkbox_SettingsKeepScreenOn">
 										<input class="Checkbox" id="Checkbox_SettingsKeepScreenOn" type="checkbox" checked="false" onchange="SetKeepScreenOn()" />
 										<span>保持屏幕常亮</span>
 									</label>
+								</li>
+								<li class="Ctrl">
+									<button class="Button" onclick="ExpandAllFieldsets()">展开所有板块</button>
+								</li>
+								<li class="Ctrl">
+									<button class="Button" onclick="ResetDontShowAgainDialogs()">重置不再显示的对话框</button>
 								</li>
 							</ul>
 						</fieldset>
@@ -3837,28 +3897,6 @@
 							<p>PWA standalone display：<span id="Label_SettingsPWAStandaloneDisplay">未知</span><br />
 								PWA service worker registration：<span id="Label_SettingsPWAServiceWorkerRegistration">未知</span><br />
 								PWA service worker controller：<span id="Label_SettingsPWAServiceWorkerController">未知</span></p>
-						</fieldset>
-					</li>
-					<li class="Item">
-						<ul class="CtrlGroup">
-							<li class="Ctrl">
-								<button class="Button ShownAsLabel" onclick="ToggleFieldsetCollapsing('SettingsMisc')">
-									<h2>其他</h2>
-									<svg class="Icon Smaller CollapseCaret" viewBox="0 0 16 16" aria-hidden="true">
-										<path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/>
-									</svg>
-								</button>
-							</li>
-						</ul>
-						<fieldset id="Fieldset_SettingsMisc">
-							<ul class="CtrlGroup">
-								<li class="Ctrl">
-									<button class="Button" onclick="ResetFieldsetCollapsing()">重置 fieldset 折叠</button>
-								</li>
-								<li class="Ctrl">
-									<button class="Button" onclick="ResetAllDontShowAgainDialogs()">重置所有「不再显示」的对话框</button>
-								</li>
-							</ul>
 						</fieldset>
 					</li>
 					<li class="Item">

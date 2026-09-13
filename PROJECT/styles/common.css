@@ -123,7 +123,7 @@
 			height: 35px;
 		}
 		.Ctrl:has(h2) {
-			width: 100%; height: auto;
+			height: auto; /* "width: 100%" is removed to prevent unintentionally collapsing fieldsets. */
 		}
 		.Ctrl:has(textarea) {
 			height: 80px;

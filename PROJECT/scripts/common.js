@@ -19,8 +19,10 @@
 		},
 		System0 = {
 			IsPointerDown: false, IsInIMEComposition: false,
-			DoNotHide: [0], Dialog: [0],
-			ScreenWakeLock: null, PWAInstallation: null
+			DoNotHide: [0],
+			Dialog: [0],
+			ScreenWakeLock: null,
+			PWAInstallation: null
 		},
 		Automation = {
 			ClockRate: 20,
@@ -33,8 +35,10 @@
 			Display: {
 				Theme: "Auto", Cursor: "None",
 				BlurBgImage: true,
+				Anim: 250,
 				HotkeyIndicators: "ShowOnAnyKeyPress",
-				Anim: 250
+				CollapsedFieldset: [0],
+				DontShowAgain: [0]
 			},
 			Audio: {
 				PlayAudio: true
@@ -42,7 +46,6 @@
 			I18n: {
 				Language: "Auto"
 			},
-			CollapsedFieldset: [0], DontShowAgain: [0],
 			Dev: {
 				TryToOptimizePerformance: false,
 				ShowDebugOutlines: false
@@ -486,15 +489,15 @@
 	// General
 	function ToggleFieldsetCollapsing(Name) {
 		let IsFieldsetCollapsed = false;
-		for(let Looper = 1; Looper < System.CollapsedFieldset.length; Looper++) {
-			if(System.CollapsedFieldset[Looper] == Name) {
+		for(let Looper = 1; Looper < System.Display.CollapsedFieldset.length; Looper++) {
+			if(System.Display.CollapsedFieldset[Looper] == Name) {
 				IsFieldsetCollapsed = true;
-				System.CollapsedFieldset.splice(Looper, 1);
+				System.Display.CollapsedFieldset.splice(Looper, 1);
 				break;
 			}
 		}
 		if(IsFieldsetCollapsed == false) {
-			System.CollapsedFieldset[System.CollapsedFieldset.length] = Name;
+			System.Display.CollapsedFieldset[System.Display.CollapsedFieldset.length] = Name;
 		}
 		RefreshSystem();
 	}
@@ -543,7 +546,7 @@
 				RemoveClass(ID, "IAmHere");
 			}, 1500);
 		}
-		if(System.CollapsedFieldset.includes(Name)) {
+		if(System.Display.CollapsedFieldset.includes(Name)) {
 			ToggleFieldsetCollapsing(Name);
 		}
 	}
@@ -564,8 +567,8 @@
 	function CollapseAllFieldsets() {
 		let Elements = document.getElementsByTagName("fieldset");
 		for(let Looper = 0; Looper < Elements.length; Looper++) {
-			if(System.CollapsedFieldset.includes(Elements[Looper].id.replace("Fieldset_", "")) == false && Elements[Looper].id != "") {
-				System.CollapsedFieldset[System.CollapsedFieldset.length] = Elements[Looper].id.replace("Fieldset_", "");
+			if(System.Display.CollapsedFieldset.includes(Elements[Looper].id.replace("Fieldset_", "")) == false && Elements[Looper].id != "") {
+				System.Display.CollapsedFieldset[System.Display.CollapsedFieldset.length] = Elements[Looper].id.replace("Fieldset_", "");
 			}
 		}
 		RefreshSystem();
@@ -585,12 +588,16 @@
 			System.Display.BlurBgImage = IsChecked("Checkbox_SettingsBlurBgImage");
 			RefreshSystem();
 		}
+		function SetAnim() {
+			System.Display.Anim = Number(ReadValue("Combobox_SettingsAnim"));
+			RefreshSystem();
+		}
 		function SetHotkeyIndicators() {
 			System.Display.HotkeyIndicators = ReadValue("Combobox_SettingsHotkeyIndicators");
 			RefreshSystem();
 		}
-		function SetAnim() {
-			System.Display.Anim = Number(ReadValue("Combobox_SettingsAnim"));
+		function ExpandAllFieldsets() {
+			System.Display.CollapsedFieldset = [0];
 			RefreshSystem();
 		}
 
@@ -611,18 +618,6 @@
 			if(System0.PWAInstallation != null) {
 				System0.PWAInstallation.prompt();
 			}
-		}
-
-		// Misc
-		function ResetFieldsetCollapsing() {
-			System.CollapsedFieldset = [0];
-			RefreshSystem();
-			ShowToast("已重置");
-		}
-		function ResetAllDontShowAgainDialogs() {
-			System.DontShowAgain = [0];
-			RefreshSystem();
-			ShowToast("已重置");
 		}
 
 		// Dev

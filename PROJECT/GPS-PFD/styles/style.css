@@ -1330,18 +1330,3 @@
 			height: 142px;
 		}
 }
-@media (min-width: 830px) { /* Optimization for long fieldsets exceeding 600px height. */
-	/* Area specific */
-		/* Main */
-		#Item_AirportLibraryRunwayProperties, #Item_SettingsSpeed, #Item_SettingsDisplay {
-			width: 800px;
-		}
-		#Fieldset_AirportLibraryRunwayProperties .Ctrl, #Fieldset_SettingsSpeed .Ctrl, #Fieldset_SettingsDisplay .Ctrl { /* .WidthDividedBy2 */
-			width: calc((100% - 10px) / 2);
-		}
-		#Fieldset_AirportLibraryRunwayProperties #Ctrl_AirportLibraryLat,
-		#Fieldset_AirportLibraryRunwayProperties #Ctrl_AirportLibraryLon,
-		#Fieldset_AirportLibraryRunwayProperties #Ctrl_AirportLibraryReplaceRunwayCoordinatesWithCurrent { /* .WidthDividedBy3 */
-			width: calc((100% - 20px) / 3);
-		}
-}

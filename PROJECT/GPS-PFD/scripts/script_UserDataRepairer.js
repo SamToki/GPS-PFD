@@ -23,8 +23,18 @@
 			// New feature (Fieldset collapsing)
 			if(localStorage.System != undefined) {
 				let System = JSON.parse(localStorage.getItem("System"));
-				if(System.CollapsedFieldset == undefined) {
-					System.CollapsedFieldset = [0];
+				if(System.Display.CollapsedFieldset == undefined) {
+					System.Display.CollapsedFieldset = [0];
+					localStorage.setItem("System", JSON.stringify(System));
+				}
+			}
+
+			// v11.01 (2026/09/13)
+			// Rearrange
+			if(localStorage.System != undefined) {
+				let System = JSON.parse(localStorage.getItem("System"));
+				if(System.Display.DontShowAgain == undefined) {
+					System.Display.DontShowAgain = [0];
 					localStorage.setItem("System", JSON.stringify(System));
 				}
 			}

@@ -739,7 +739,7 @@
 
 		// Ready
 		setTimeout(HideToast, 0);
-		if(System.DontShowAgain.includes("GPSPFD_System_Welcome") == false) {
+		if(System.Display.DontShowAgain.includes("GPSPFD_System_Welcome") == false) {
 			ShowDialog("System_Welcome",
 				"Info",
 				"欢迎使用 GPS-PFD。若您是首次使用，请先前往阅读「使用前须知」。",
@@ -796,7 +796,7 @@
 		let Elements = document.getElementsByTagName("fieldset");
 		for(let Looper = 0; Looper < Elements.length; Looper++) {
 			if(Elements[Looper].id != "") {
-				if(System.CollapsedFieldset.includes(Elements[Looper].id.replace("Fieldset_", "")) == false) {
+				if(System.Display.CollapsedFieldset.includes(Elements[Looper].id.replace("Fieldset_", "")) == false) {
 					Show(Elements[Looper].id);
 				} else {
 					Hide(Elements[Looper].id);
@@ -893,6 +893,9 @@
 			} else {
 				RemoveClass("BgImage", "Blur");
 			}
+			ChangeEnabled("Combobox_SettingsAnim", IsOSAnimEnabled());
+			ChangeValue("Combobox_SettingsAnim", System.Display.Anim);
+			ChangeAnimOverall(System.Display.Anim);
 			ChangeValue("Combobox_SettingsHotkeyIndicators", System.Display.HotkeyIndicators);
 			switch(System.Display.HotkeyIndicators) {
 				case "Disabled":
@@ -908,9 +911,6 @@
 					AlertSystemError("The value of System.Display.HotkeyIndicators \"" + System.Display.HotkeyIndicators + "\" in function RefreshSystem is invalid.");
 					break;
 			}
-			ChangeEnabled("Combobox_SettingsAnim", IsOSAnimEnabled());
-			ChangeValue("Combobox_SettingsAnim", System.Display.Anim);
-			ChangeAnimOverall(System.Display.Anim);
 
 			// Audio
 			ChangeChecked("Checkbox_SettingsPlayAudio", System.Audio.PlayAudio);
@@ -3190,7 +3190,7 @@
 		}
 		function ExportAirport(Number) {
 			navigator.clipboard.writeText(JSON.stringify(AirportLibrary.Airport[Number]));
-			if(System.DontShowAgain.includes("GPSPFD_AirportLibrary_AirportExported") == false) {
+			if(System.Display.DontShowAgain.includes("GPSPFD_AirportLibrary_AirportExported") == false) {
 				ShowDialog("AirportLibrary_AirportExported",
 					"Info",
 					"已导出机场「" + ConvertEmptyName(AirportLibrary.Airport[Number].Name) + "」至剪贴板。",
@@ -3723,6 +3723,11 @@
 			Subsystem.Display.KeepScreenOn = IsChecked("Checkbox_SettingsKeepScreenOn");
 			RefreshSubsystem();
 		}
+		function ResetDontShowAgainDialogs() {
+			System.Display.DontShowAgain = [0];
+			RefreshSystem();
+			ShowToast("已重置");
+		}
 
 		// Audio
 		function SetAudioScheme() {
@@ -3881,7 +3886,7 @@
 				switch(Selector) {
 					case 2:
 						if(IsChecked("Checkbox_DialogCheckboxOption")) {
-							System.DontShowAgain[System.DontShowAgain.length] = "GPSPFD_System_Welcome";
+							System.Display.DontShowAgain[System.Display.DontShowAgain.length] = "GPSPFD_System_Welcome";
 							RefreshSystem();
 						}
 						ScrollIntoView("Item_HelpReadBeforeUse");
@@ -3889,7 +3894,7 @@
 						break;
 					case 3:
 						if(IsChecked("Checkbox_DialogCheckboxOption")) {
-							System.DontShowAgain[System.DontShowAgain.length] = "GPSPFD_System_Welcome";
+							System.Display.DontShowAgain[System.Display.DontShowAgain.length] = "GPSPFD_System_Welcome";
 							RefreshSystem();
 						}
 						break;
@@ -3944,7 +3949,7 @@
 				switch(Selector) {
 					case 3:
 						if(IsChecked("Checkbox_DialogCheckboxOption")) {
-							System.DontShowAgain[System.DontShowAgain.length] = "GPSPFD_AirportLibrary_AirportExported";
+							System.Display.DontShowAgain[System.Display.DontShowAgain.length] = "GPSPFD_AirportLibrary_AirportExported";
 							RefreshSystem();
 						}
 						break;
