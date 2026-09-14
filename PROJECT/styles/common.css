@@ -822,6 +822,11 @@
 					top: calc(50vh - 17.5px); top: calc(50dvh - 17.5px);
 				}
 
+				/* Watermark */
+				.Watermark {
+					font-size: 10.00em;
+				}
+
 	/* Area specific */
 		/* Header */
 		#Ctrl_Title {
