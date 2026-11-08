@@ -16,6 +16,9 @@
 		left: calc(50% - 240px);
 		width: 480px;
 	}
+	.Nav {
+		width: calc(100% / 4);
+	}
 
 	/* Main */
 		/* PFD */
@@ -1059,7 +1062,7 @@
 			}
 			#Window_PFDMenu {
 				position: absolute; top: 0; right: 0;
-				width: 320px; height: 600px; max-height: calc(100vh - 90px); max-height: calc(100dvh - 90px); /* dvh compatibility fallback */
+				width: 305px; height: 600px; max-height: calc(100vh - 90px); max-height: calc(100dvh - 90px); padding: 10px; /* dvh compatibility fallback */
 				overflow: auto;
 			}
 			#Html:has(#Topbar.Hidden) #Window_PFDMenu {
@@ -1070,11 +1073,11 @@
 					position: sticky; top: 0; right: 0; z-index: 1;
 				}
 				#CtrlGroup_PFDMenuCloseButton .Ctrl {
-					position: absolute; top: -15px; right: -15px;
+					position: absolute; top: -10px; right: -10px;
 					width: 35px;
 				}
 				#CtrlGroup_PFDMenuContent {
-					width: 290px;
+					width: 285px;
 				}
 				.PFDMenuItem {
 					width: 100%; margin: 0 0 15px 0;
@@ -1295,19 +1298,8 @@
 			#CtrlGroup_AirportLibraryAirportList .Radiobtn {
 				width: 31px;
 			}
-			.AirportLibraryAirportLabel {
-				width: calc(100% - 76px);
-			}
 			#CtrlGroup_AirportLibraryAirportList .ListItemName {
-				max-width: 216px;
-			}
-
-			/* Runways */
-			.AirportLibraryRunwayLabel {
-				width: calc(100% - 32px);
-			}
-			#CtrlGroup_AirportLibraryRunwayList .ListItemName {
-				max-width: 313px;
+				max-width: calc(100% - 153px);
 			}
 
 			/* Management */
@@ -1321,12 +1313,3 @@
 			#Ctrl_AirportLibraryImport2 {
 				width: 80px; height: 80px;
 			}
-
-/* Responsive web design */
-@media (max-width: 920px) {
-	/* Area specific */
-		/* Header */
-		#DropctrlGroup_Nav {
-			height: 142px;
-		}
-}

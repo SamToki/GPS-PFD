@@ -12,7 +12,7 @@
 		}
 
 		/* Group frameworks */
-		.Item {
+		fieldset {
 			background-color: #202020E0;
 		}
 
@@ -120,7 +120,7 @@
 
 			/* Watermark */
 			.Watermark {
-				color: #FFFFFF10;
+				color: #FFFFFF08;
 			}
 
 	/* Variants */
@@ -162,10 +162,10 @@
 
 	/* Interactions */
 		/* Hover */
-		a:hover, label:not(:has(:disabled:not(option))):hover, .Button:enabled:hover /* .Combobox:enabled:hover, .Textbox:enabled:hover */ {
+		a:hover, .Button:enabled:hover {
 			background-color: #583868;
 		}
-		.Active:enabled:hover, .Active:not(:has(:disabled:not(option))):hover {
+		.Active:enabled:hover {
 			background-color: #185818;
 		}
 		.Button.Shaped:enabled:hover .Shape {
@@ -179,9 +179,7 @@
 		}
 
 		/* Click */
-		a:active, label:not(:has(:disabled:not(option))):active, .Button:enabled:active,
-		.Combobox:enabled:active, .Textbox:enabled:active, .Textbox.ShownAsLabel:enabled:active,
-		.Active:enabled:active, .Active:not(:has(:disabled:not(option))):active {
+		a:active, .Button:enabled:active {
 			background-color: #D090F0;
 			color: #000000;
 		}
@@ -211,6 +209,9 @@
 	#Topbar {
 		background-color: #303030E0;
 	}
+	.Nav:not(.ActiveSection) .Button:not(:hover):not(:active) {
+		color: #FFFFFF80;
+	}
 	#Ctrl_NavUnderline {
 		background-color: #FFFFFF;
 	}
@@ -225,16 +226,6 @@
 		background-color: #000000E0;
 		color: #FFFFFF80;
 	}
-
-/* Responsive web design */
-@media (max-width: 920px) {
-	/* Area specific */
-		/* Header */
-		#DropctrlGroup_Nav {
-			border: 1px solid #FFFFFF40;
-			background-color: #303030;
-		}
-}
 
 /* Dev */
 #Html.ShowDebugOutlines * {

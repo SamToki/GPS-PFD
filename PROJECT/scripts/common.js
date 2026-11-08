@@ -93,7 +93,7 @@
 
 		// Layout
 		function IsMobileLayout() {
-			return window.innerWidth <= 920;
+			return window.innerWidth <= 910;
 		}
 		function IsFullscreen() {
 			return document.fullscreenElement != null;
@@ -293,7 +293,6 @@
 			RemoveClass(ID, "Hidden");
 			RemoveClass(ID, "HiddenHorizontally");
 			RemoveClass(ID, "HiddenToCorner");
-			RemoveClass(ID, "HiddenInMobileLayout");
 			RemoveClass(ID, "Faded");
 			ChangeInert(ID, false);
 			System0.DoNotHide[System0.DoNotHide.length] = ID;
@@ -305,7 +304,6 @@
 			RemoveClass(ID, "Hidden");
 			RemoveClass(ID, "HiddenHorizontally");
 			RemoveClass(ID, "HiddenToCorner");
-			RemoveClass(ID, "HiddenInMobileLayout");
 			RemoveClass(ID, "Faded");
 			ChangeInert(ID, false);
 		}
@@ -315,7 +313,6 @@
 				Elements[Looper].classList.remove("Hidden");
 				Elements[Looper].classList.remove("HiddenHorizontally");
 				Elements[Looper].classList.remove("HiddenToCorner");
-				Elements[Looper].classList.remove("HiddenInMobileLayout");
 				Elements[Looper].classList.remove("Faded");
 				Elements[Looper].inert = false;
 			}
@@ -669,18 +666,6 @@
 		System0.IsInIMEComposition = false;
 	})
 
-	// On resizing window
-	window.addEventListener("resize", function() {
-		if(IsMobileLayout() == false) {
-			HideHorizontally("Button_Nav");
-			ChangeInert("DropctrlGroup_Nav", false);
-		} else {
-			Show("Button_Nav");
-			ChangeInert("DropctrlGroup_Nav", true);
-		}
-		HideDropctrlGroups();
-	});
-
 	// On toggling fullscreen
 	document.addEventListener("fullscreenchange", function() { // Here an anonymous function must be used. Because the function "RefreshSystem" is defined in the "script.js" file, which is after this "common.js" file. Writing "RefreshSystem" straightforwardly will cause an error.
 		RefreshSystem();
@@ -746,18 +731,15 @@
 			}
 		}
 		for(let Looper = 0; Looper < TheDocument.NavCtrls.length; Looper++) {
-			if(TheDocument.NavCtrls[Looper].getAttribute("id") == "Nav_" + TheDocument.ActiveSectionID) {
-				if(IsMobileLayout() == false) {
-					ChangeTop("Ctrl_NavUnderline", "calc(100% - 2px)");
-					ChangeLeft("Ctrl_NavUnderline", TheDocument.NavCtrls[Looper].offsetLeft + 4 + "px");
-					ChangeWidth("Ctrl_NavUnderline", TheDocument.NavCtrls[Looper].offsetWidth - 8 + "px");
-					ChangeHeight("Ctrl_NavUnderline", "2px");
-				} else {
-					ChangeTop("Ctrl_NavUnderline", TheDocument.NavCtrls[Looper].offsetTop + 4 + "px");
-					ChangeLeft("Ctrl_NavUnderline", "0");
-					ChangeWidth("Ctrl_NavUnderline", "2px");
-					ChangeHeight("Ctrl_NavUnderline", TheDocument.NavCtrls[Looper].offsetHeight - 8 + "px");
-				}
+			let NavButtonID = TheDocument.NavCtrls[Looper].getAttribute("id");
+			if(NavButtonID == "Nav_" + TheDocument.ActiveSectionID) {
+				AddClass(NavButtonID, "ActiveSection");
+				ChangeTop("Ctrl_NavUnderline", "calc(100% - 2px)");
+				ChangeLeft("Ctrl_NavUnderline", TheDocument.NavCtrls[Looper].offsetLeft + 4 + "px");
+				ChangeWidth("Ctrl_NavUnderline", TheDocument.NavCtrls[Looper].offsetWidth - 8 + "px");
+				ChangeHeight("Ctrl_NavUnderline", "2px");
+			} else {
+				RemoveClass(NavButtonID, "ActiveSection");
 			}
 		}
 	}
@@ -767,15 +749,8 @@
 		let DropctrlGroups = document.getElementsByClassName("DropctrlGroup");
 		for(let Looper = 0; Looper < DropctrlGroups.length; Looper++) {
 			if(System0.DoNotHide.includes(DropctrlGroups[Looper].id) == false) {
-				if(DropctrlGroups[Looper].id != "DropctrlGroup_Nav") {
-					DropctrlGroups[Looper].classList.add("HiddenToCorner");
-					DropctrlGroups[Looper].inert = true;
-				} else {
-					DropctrlGroups[Looper].classList.add("HiddenInMobileLayout");
-					if(IsMobileLayout()) {
-						DropctrlGroups[Looper].inert = true;
-					}
-				}
+				DropctrlGroups[Looper].classList.add("HiddenToCorner");
+				DropctrlGroups[Looper].inert = true;
 			}
 		}
 	}

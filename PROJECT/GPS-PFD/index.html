@@ -46,14 +46,9 @@
 					</a>
 				</li>
 				<li class="Ctrl" id="Ctrl_Nav">
-					<button class="Button HiddenHorizontally" id="Button_Nav" inert="true" onclick="Show('DropctrlGroup_Nav')" title="导航菜单" aria-label="导航菜单">
-						<svg class="Icon Larger" viewBox="0 0 16 16" aria-hidden="true">
-							<path d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-						</svg>
-					</button>
 					<nav>
-						<ul class="DropctrlGroup HiddenInMobileLayout" id="DropctrlGroup_Nav">
-							<li class="Dropctrl Nav" id="Nav_PFD">
+						<ul class="CtrlGroup">
+							<li class="Ctrl Nav" id="Nav_PFD">
 								<a class="Button" href="#PFD">
 									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
 										<path d="M0 4s0-2 2-2h12s2 0 2 2v6s0 2-2 2h-4q0 1 .25 1.5H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.75Q6 13 6 12H2s-2 0-2-2zm1.398-.855a.76.76 0 0 0-.254.302A1.5 1.5 0 0 0 1 4.01V10c0 .325.078.502.145.602q.105.156.302.254a1.5 1.5 0 0 0 .538.143L2.01 11H14c.325 0 .502-.078.602-.145a.76.76 0 0 0 .254-.302 1.5 1.5 0 0 0 .143-.538L15 9.99V4c0-.325-.078-.502-.145-.602a.76.76 0 0 0-.302-.254A1.5 1.5 0 0 0 13.99 3H2c-.325 0-.502.078-.602.145"/>
@@ -61,7 +56,7 @@
 									<span class="LabelAfterIcon">PFD</span>
 								</a>
 							</li>
-							<li class="Dropctrl Nav" id="Nav_AirportLibrary">
+							<li class="Ctrl Nav" id="Nav_AirportLibrary">
 								<a class="Button" href="#AirportLibrary">
 									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
 										<path d="M6.428 1.151C6.708.591 7.213 0 8 0s1.292.592 1.572 1.151C9.861 1.73 10 2.431 10 3v3.691l5.17 2.585a1.5 1.5 0 0 1 .83 1.342V12a.5.5 0 0 1-.582.493l-5.507-.918-.375 2.253 1.318 1.318A.5.5 0 0 1 10.5 16h-5a.5.5 0 0 1-.354-.854l1.319-1.318-.376-2.253-5.507.918A.5.5 0 0 1 0 12v-1.382a1.5 1.5 0 0 1 .83-1.342L6 6.691V3c0-.568.14-1.271.428-1.849m.894.448C7.111 2.02 7 2.569 7 3v4a.5.5 0 0 1-.276.447l-5.448 2.724a.5.5 0 0 0-.276.447v.792l5.418-.903a.5.5 0 0 1 .575.41l.5 3a.5.5 0 0 1-.14.437L6.708 15h2.586l-.647-.646a.5.5 0 0 1-.14-.436l.5-3a.5.5 0 0 1 .576-.411L15 11.41v-.792a.5.5 0 0 0-.276-.447L9.276 7.447A.5.5 0 0 1 9 7V3c0-.432-.11-.979-.322-1.401C8.458 1.159 8.213 1 8 1s-.458.158-.678.599"/>
@@ -69,7 +64,7 @@
 									<span class="LabelAfterIcon">机场库</span>
 								</a>
 							</li>
-							<li class="Dropctrl Nav" id="Nav_Settings">
+							<li class="Ctrl Nav" id="Nav_Settings">
 								<a class="Button" href="#Settings">
 									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
 										<path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/>
@@ -78,7 +73,7 @@
 									<span class="LabelAfterIcon">设定</span>
 								</a>
 							</li>
-							<li class="Dropctrl Nav" id="Nav_Help">
+							<li class="Ctrl Nav" id="Nav_Help">
 								<a class="Button" href="#Help">
 									<svg class="Icon" viewBox="0 0 16 16" aria-hidden="true">
 										<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
@@ -2473,7 +2468,7 @@
 													</li>
 													<li class="Ctrl" id="Ctrl_PFDManualManeuver">
 														<h3>手动操作</h3>
-														<ul class="CtrlGroup BelowParagraph">
+														<ul class="CtrlGroup">
 															<li class="Ctrl" id="Ctrl_PFDAttitudeManeuver">
 																<span>姿态</span>
 																<ul class="CtrlGroup" id="CtrlGroup_PFDAttitudeManeuver">
@@ -2619,7 +2614,7 @@
 													</li>
 													<li class="Ctrl" id="Ctrl_PFDMCP">
 														<h3>MCP</h3>
-														<ul class="CtrlGroup BelowParagraph">
+														<ul class="CtrlGroup">
 															<li class="Ctrl">
 																<label for="Checkbox_PFDMCPSpeed">
 																	<input class="Checkbox" id="Checkbox_PFDMCPSpeed" type="checkbox" checked="false" onchange="SetEnableMCPSpeed()" />
@@ -2663,7 +2658,7 @@
 													</li>
 													<li class="Ctrl" id="Ctrl_PFDFlaps">
 														<h3>襟翼</h3>
-														<ul class="CtrlGroup BelowParagraph">
+														<ul class="CtrlGroup">
 															<li class="Ctrl" id="Ctrl_PFDFlapsSlider">
 																<label for="Slider_PFDFlaps">
 																	<span id="Label_PFDFlaps">未知</span>
@@ -2955,7 +2950,7 @@
 								</li>
 							</ul>
 							<p>请记得在起飞前更新两座机场的天气数据。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryTemperature">
 										<span>气温：</span>
@@ -2996,7 +2991,7 @@
 						</ul>
 						<fieldset id="Fieldset_AirportLibraryRunways">
 							<p class="Hidden" id="Label_AirportLibraryAutoSwitchRunwayActive" inert="true"><span class="RedText">注意：</span>「<a href="#Item_SettingsNav" onclick="ShowIAmHere('SettingsNav')">自动切换跑道</a>」工作中。这里可能无法操作。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl ScrollableList">
 									<ul class="CtrlGroup" id="CtrlGroup_AirportLibraryRunwayList">
 										<!-- Content will be inserted using script. -->
@@ -3045,7 +3040,7 @@
 								</li>
 							</ul>
 							<p>北纬、东经是正值，南纬、西经是负值。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl" id="Ctrl_AirportLibraryLat">
 									<label for="Textbox_AirportLibraryLat">
 										<span>纬度：</span>
@@ -3117,7 +3112,7 @@
 								</li>
 							</ul>
 							<p>跑道高度＋<a href="#Item_SettingsAltitude" onclick="ShowIAmHere('SettingsAltitude')">座位高度</a>＝地面高度。地面高度＋相对决断高度 (decision height)＝<a href="https://en.wikipedia.org/wiki/Instrument_approach#Decision_height_or_altitude">决断高度 (decision altitude)</a>。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_AirportLibraryDecisionHeight">
 										<span>相对决断高度：</span>
@@ -3141,7 +3136,7 @@
 						</ul>
 						<fieldset id="Fieldset_AirportLibraryManagement">
 							<p>「导入」功能可导入机场或整个机场库。支持批量导入，每行一个对象。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl" id="Ctrl_AirportLibraryImport">
 									<textarea class="Textbox" id="Textbox_AirportLibraryImport" placeholder="粘贴 JSON 字符串" title="粘贴 JSON 字符串"></textarea>
 								</li>
@@ -3150,7 +3145,7 @@
 								</li>
 							</ul>
 							<p>若要分享导出的数据，请注意其中是否包含个人信息。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl WidthDividedBy2">
 									<button class="Button" onclick="ExportAirportLibrary()">导出机场库</button>
 								</li>
@@ -3180,7 +3175,7 @@
 						<fieldset id="Fieldset_SettingsPermissions">
 							<p>本应用程序需要使用位置服务与传感器来实现核心功能。请阅读<a href="#Item_HelpPrivacyStatement" onclick="ShowIAmHere('HelpPrivacyStatement')">隐私权声明</a>。</p>
 							<p class="Hidden" id="Label_SettingsRequestSensorPermission" inert="true"><a href="https://zh.wikipedia.org/wiki/苹果公司">苹果公司</a>出于加强保护用户隐私的理由，在 <a href="https://zh.wikipedia.org/wiki/iOS">iOS</a> 13+ 环境下，您需要手动允许本应用程序使用传感器。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl Hidden" id="Ctrl_SettingsRequestSensorPermission" inert="true">
 									<button class="Button" onclick="RequestSensorPermission()">请求传感器权限</button>
 								</li>
@@ -3255,7 +3250,7 @@
 								</li>
 							</ul>
 							<p>敏感度设定的数值越小，姿态仪越敏感。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Slider_SettingsAttitudeSensitivity">
 										<span>敏感度：</span>
@@ -3266,7 +3261,7 @@
 							</ul>
 							<h3>姿态偏移</h3>
 							<p><a href="https://zh.wikipedia.org/wiki/航空器三主轴">俯仰 (pitch) </a>抬头是正值，低头是负值。<a href="https://zh.wikipedia.org/wiki/航空器三主轴">横滚 (roll) </a>右倾是正值，左倾是负值。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_SettingsAttitudeOffsetPitch">
 										<span>俯仰：</span>
@@ -3401,7 +3396,7 @@
 								<li class="Ctrl">
 									<label for="Textbox_SettingsWeight">
 										<span>重量：</span>
-										<input class="Textbox Width120" id="Textbox_SettingsWeight" type="number" min="0" max="100000" step="100" value="60000" onclick="SelectText('Textbox_SettingsWeight')" onchange="SetWeight()" placeholder="0~100000" title="0~100000" />
+										<input class="Textbox Width120" id="Textbox_SettingsWeight" type="number" min="0" max="1000000" step="100" value="60000" onclick="SelectText('Textbox_SettingsWeight')" onchange="SetWeight()" placeholder="0~1000000" title="0~1000000" />
 										<span id="Label_SettingsWeightUnit">公斤</span>
 									</label>
 								</li>
@@ -3557,7 +3552,7 @@
 						</ul>
 						<fieldset id="Fieldset_SettingsWarningSystem">
 							<p><span class="RedText">注意：</span>启用警告系统前请先阅读<a href="#Item_HelpDisclaimer" onclick="ShowIAmHere('HelpDisclaimer')">免责声明</a>。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Checkbox_SettingsEnableWarningSystem">
 										<input class="Checkbox" id="Checkbox_SettingsEnableWarningSystem" type="checkbox" checked="false" onchange="SetEnableWarningSystem()" />
@@ -3595,7 +3590,7 @@
 								</li>
 							</ul>
 							<p>「<a href="https://zh.wikipedia.org/wiki/主飞行显示器">PFD</a> 样式」中，普通样式的配色取决于主题。除此之外的样式均不受主题的影响。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsPFDStyle">
 										<span>PFD 样式：</span>
@@ -3741,7 +3736,7 @@
 								</li>
 							</ul>
 							<p>请注意区分「警报」(alert) 与「<a href="#Item_SettingsWarningSystem" onclick="ShowIAmHere('SettingsWarningSystem')">警告</a>」(warning)。「警报」包括「播报」(callout) 与「警告」。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Slider_SettingsAttitudeAlertVolume">
 										<span>姿态警报：</span>
@@ -3787,7 +3782,7 @@
 								</li>
 							</ul>
 							<h3>计量单位</h3>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Combobox_SettingsMeasurementUnitPreset">
 										<span>预设：</span>
@@ -3888,7 +3883,7 @@
 						</ul>
 						<fieldset id="Fieldset_SettingsPWA">
 							<p>您可将本应用程序安装至桌面，以 <a href="https://zh.wikipedia.org/wiki/progressive_web_app">PWA</a> (俗称小程序) 的形式更方便地使用。若下面的按钮不可用，请尝试前往浏览器的菜单来安装。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<button class="Button" id="Button_SettingsInstallPWA" disabled="true" onclick="InstallPWA()">安装</button>
 								</li>
@@ -3940,7 +3935,7 @@
 						</ul>
 						<fieldset id="Fieldset_SettingsUserData">
 							<p>本功能可快速更改整个网站的用户数据。若要分享导出的数据，请注意其中是否包含个人信息。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<label for="Textbox_SettingsUserDataImport">
 										<span>导入：</span>
@@ -4014,7 +4009,7 @@
 						</ul>
 						<fieldset id="Fieldset_HelpTutorial">
 							<p>本应用程序的教程以 PDF 文档的形式提供。这方便您保存至本地，还可以打印出来备用。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl WidthDividedBy2">
 									<a class="Button" href="docs/GPS-PFD%20说明文档.pdf">说明文档</a>
 								</li>
@@ -4038,7 +4033,7 @@
 						<fieldset id="Fieldset_HelpGetInvolved">
 							<h3>反馈</h3>
 							<p>您可通过以下渠道向我提供反馈：</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<a class="Button" href="https://github.com/SamToki/GPS-PFD/issues">GitHub Issues</a>
 								</li>
@@ -4141,10 +4136,10 @@
 						<fieldset id="Fieldset_HelpAbout">
 							<p>GPS-PFD</p>
 							<p>by SAM TOKI STUDIO</p>
-							<p>v2.04 (<time datetime="2026-07-31" pubdate="pubdate">2026/07/31</time>)<br />
+							<p>v2.04 (2026/07/31)<br />
 								始于 2024/12/01</p>
 							<p class="GreenText Hidden" id="Label_HelpNewVersionReady" inert="true">新版本已就绪，将在下次启动时生效。</p>
-							<ul class="CtrlGroup BelowParagraph">
+							<ul class="CtrlGroup">
 								<li class="Ctrl">
 									<a class="Button" href="https://github.com/SamToki/GPS-PFD">查看 GitHub 项目</a>
 								</li>
@@ -4165,7 +4160,7 @@
 					<path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
 					<path d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
 				</svg>
-				<span class="LabelAfterIcon">正在初始化...</span>
+				<span class="LabelAfterIcon">正在载入...</span>
 				<noscript class="LabelAfterIcon RedText">请启用 JavaScript</noscript>
 			</span>
 		</div>

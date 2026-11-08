@@ -40,7 +40,7 @@
 			}
 
 		// GPS-PFD
-			// v0.31 (2025/06/08) Beta Test
+			// v0.31 Beta (2025/06/08)
 			// New feature
 			if(localStorage.GPSPFD_PFD != undefined) {
 				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
@@ -66,7 +66,7 @@
 				}
 			}
 
-			// v0.35 (2025/07/17) Beta Test
+			// v0.35 Beta (2025/07/17)
 			// New feature
 			if(localStorage.GPSPFD_PFD != undefined) {
 				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
@@ -79,7 +79,7 @@
 				}
 			}
 
-			// v0.41 (2025/08/12) Beta Test
+			// v0.41 Beta (2025/08/12)
 			// New feature
 			if(localStorage.GPSPFD_PFD != undefined) {
 				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
@@ -91,7 +91,7 @@
 				}
 			}
 
-			// v0.46 (2025/10/01) Beta Test
+			// v0.46 Beta (2025/10/01)
 			// New feature
 			if(localStorage.GPSPFD_PFD != undefined) {
 				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
@@ -106,7 +106,7 @@
 				}
 			}
 
-			// v0.48 (2025/10/27) Beta Test
+			// v0.48 Beta (2025/10/27)
 			// New feature
 			if(localStorage.GPSPFD_Subsystem != undefined) {
 				let Subsystem = JSON.parse(localStorage.getItem("GPSPFD_Subsystem"));
@@ -134,7 +134,7 @@
 				}
 			}
 
-			// v0.51 (2025/11/13) Beta Test
+			// v0.51 Beta (2025/11/13)
 			// New runway feature, causing airport library structure overhaul
 			if(localStorage.GPSPFD_PFD != undefined) {
 				let PFD = JSON.parse(localStorage.getItem("GPSPFD_PFD"));
@@ -150,7 +150,7 @@
 				}
 			}
 
-			// v0.55 (2025/11/25) Beta Test
+			// v0.55 Beta (2025/11/25)
 			// New feature (Custom PFD font)
 			if(localStorage.GPSPFD_Subsystem != undefined) {
 				let Subsystem = JSON.parse(localStorage.getItem("GPSPFD_Subsystem"));

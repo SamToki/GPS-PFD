@@ -106,30 +106,31 @@
 			display: flex; flex-wrap: wrap; justify-content: center;
 		}
 		.Item {
-			width: 410px; border-radius: 5px; padding: 15px; margin: 0 15px 30px 15px;
-			background-color: #F0F0F0E0;
+			width: 410px; border-radius: 5px; margin: 0 15px 30px 15px;
 		}
 		.Prolog {
-			width: unset; max-width: 410px;
+			width: unset;
 		}
 		.CtrlGroup {
 			display: flex; flex-wrap: wrap; justify-content: space-between;
-		}
-		.CtrlGroup.BelowParagraph {
-			margin: 10px 0 0 0;
 		}
 		.Ctrl {
 			position: relative;
 			height: 35px;
 		}
 		.Ctrl:has(h2) {
-			height: auto; /* "width: 100%" is removed to prevent unintentionally collapsing fieldsets. */
+			height: unset;
 		}
 		.Ctrl:has(textarea) {
 			height: 80px;
 		}
 		fieldset {
-			width: 100%; border: none; padding: 15px 0;
+			width: 100%; border: none; border-radius: 5px; padding: 15px; margin: 10px 0 0 0;
+			background-color: #F0F0F0E0;
+		}
+		.Window fieldset {
+			border-radius: 0; padding: 5px;
+			background-color: transparent;
 		}
 		fieldset > .CtrlGroup {
 			width: 100%;
@@ -138,7 +139,7 @@
 			width: 100%; max-width: 100%; margin: 0 0 10px 0;
 		}
 		.ScrollableLog {
-			height: unset; max-height: 180px;
+			height: unset; max-height: 200px;
 			overflow: auto;
 		}
 		.ScrollableList {
@@ -149,34 +150,36 @@
 			width: 100%;
 		}
 		.ListHeader {
-			padding: 5px;
 			display: flex; justify-content: space-between; align-items: center;
 		}
 		label {
-			width: 100%; height: 100%; border-radius: 5px;
+			height: 100%;
 			text-wrap: nowrap; /* "text-wrap: nowrap" improves animation on hiding horizontally. */
-			display: flex; align-items: center; /* "label" cannot have "overflow: hidden" because of "Textbox". */
+			display: inline-flex; align-items: center; /* "label" cannot have "overflow: hidden" because of "Textbox". */
 		}
 		label > * {
-			margin: 0 0 0 5px;
+			margin: 0 5px 0 0;
 		}
 
 		/* Texts */
 		.SectionTitle {
-			padding: 30px 10px;
+			margin: 30px 5px;
 			font-size: 2.50em; text-align: center;
 		}
 		h2 {
-			padding: 0 5px 0 0;
-			font-size: 1.50em;
+			margin: 0 5px 0 0;
+			font-size: 1.50em; font-weight: normal;
 		}
 		h3 {
-			padding: 5px 0;
-			font-size: 1.25em; font-weight: normal; line-height: 1.5;
+			margin: 0 0 10px 0;
+			font-size: 1.25em; line-height: 1.5;
 		}
 		p {
-			max-width: 400px; padding: 5px 0;
+			max-width: 400px; margin: 0 0 10px 0;
 			line-height: 1.5;
+		}
+		.Prolog p {
+			margin: 0 5px 10px 5px;
 		}
 		a {
 			border-radius: 5px;
@@ -324,7 +327,7 @@
 
 		/* Interactive ctrls */
 		.Button, .Combobox {
-			width: 100%; height: 100%; border: 1px solid #00000040; border-radius: 5px; padding: 5px 10px;
+			width: 100%; height: 100%; border: 1px solid #00000040; border-radius: 5px; padding: 5px;
 			background-color: #FFFFFF;
 			color: #000000; text-align: center; text-wrap: nowrap;
 			display: flex; justify-content: center; align-items: center; overflow: hidden;
@@ -343,13 +346,13 @@
 			justify-content: start;
 		}
 		.Button.ShownAsLabel:has(h2) {
-			width: calc(100% + 10px); height: calc(100% + 10px); padding: 5px; margin: -5px;
+			padding: 5px;
 		}
 		.DropctrlGroup {
 			position: absolute; top: unset; left: unset; z-index: 2;
 			width: 122px; border: 1px solid #00000040; border-radius: 5px;
 			background-color: #FFFFFF; box-shadow: 0 0 4px 2px #00000040;
-			display: flex; flex-wrap: wrap; overflow: hidden;
+			overflow: hidden;
 		}
 		.Dropctrl {
 			width: 100%; height: 35px;
@@ -358,7 +361,6 @@
 			border: none !important;
 		}
 		.Combobox {
-			padding: 5px;
 			text-align: unset;
 		}
 		fieldset .Combobox {
@@ -395,7 +397,7 @@
 		}
 		.Window {
 			z-index: 2;
-			border-radius: 5px; padding: 15px;
+			border-radius: 5px;
 			background-color: #F0F0F0E0; backdrop-filter: blur(5px); box-shadow: 0 0 4px 2px #00000040;
 			overflow: hidden;
 		}
@@ -421,7 +423,7 @@
 			/* Toast */
 			#Toast {
 				position: fixed; top: calc(50vh + 5px); top: calc(50dvh + 5px); left: 0; z-index: 102;
-				width: 100%; height: 50px; padding: 5px 10px;
+				width: 100%; height: 50px; padding: 5px 15px;
 				background-color: #F0D0FFE0; backdrop-filter: blur(5px); box-shadow: 0 0 4px 2px #00000040;
 				font-size: 2.00em; text-align: center;
 				display: flex; justify-content: center; align-items: center; overflow: hidden;
@@ -440,14 +442,13 @@
 			}
 			#Window_Dialog {
 				position: fixed; top: calc(50vh - 100px); top: calc(50dvh - 100px); left: calc(50% - 190px); z-index: 111;
-				width: 380px; height: 200px;
-				display: flex; flex-direction: column; justify-content: space-between;
+				width: 380px; height: 200px; padding: 15px;
 			}
 			#Window_Dialog .HiddenHorizontally {
 				display: none;
 			}
 			#CtrlGroup_DialogPrompt {
-				width: 100%; height: 80px;
+				width: 100%; height: 80px; margin: 0 0 10px 0;
 			}
 			.DialogIcon {
 				width: 35px; height: 35px;
@@ -467,7 +468,7 @@
 				overflow: auto;
 			}
 			#CtrlGroup_DialogCheckboxOption {
-				width: 100%; height: 35px;
+				width: 100%; height: 35px; margin: 0 0 10px 0;
 			}
 			#CtrlGroup_DialogCheckboxOption .Ctrl {
 				width: 100%;
@@ -482,9 +483,9 @@
 
 			/* Watermark */
 			.Watermark {
-				position: fixed; top: 60px; left: 0; z-index: 121;
-				width: 100%; height: calc(100vh - 60px); height: calc(100dvh - 60px); transform: rotate(-15deg);
-				color: #00000010; font-size: 20.00em; font-weight: bold; text-align: center;
+				position: fixed; top: 0; left: 0; z-index: 121;
+				width: 100%; height: 100vh; height: 100dvh; transform: rotate(-15deg);
+				color: #00000008; font-size: 20.00em; font-weight: bold; text-align: center;
 				display: flex; justify-content: center; align-items: center;
 				pointer-events: none;
 			}
@@ -659,17 +660,12 @@
 			pointer-events: none !important;
 		}
 
-		/* Functionality */
-		/* .NeedsTooltip {
-			cursor: help;
-		} */
-
 	/* Interactions */
 		/* Hover */
-		a:hover, label:not(:has(:disabled:not(option))):hover, .Button:enabled:hover /* .Combobox:enabled:hover, .Textbox:enabled:hover */ {
+		a:hover, .Button:enabled:hover {
 			background-color: #F0D0FF;
 		}
-		.Active:enabled:hover, .Active:not(:has(:disabled:not(option))):hover {
+		.Active:enabled:hover {
 			background-color: #B8E8B8;
 		}
 		.Button.Shaped:enabled:hover .Shape {
@@ -683,18 +679,14 @@
 		}
 
 		/* Click */
-		a:active, label:not(:has(:disabled:not(option))):active, .Button:enabled:active,
-		.Combobox:enabled:active, .Textbox:enabled:active, .Textbox.ShownAsLabel:enabled:active,
-		.Active:enabled:active, .Active:not(:has(:disabled:not(option))):active {
+		a:active, .Button:enabled:active {
 			background-color: #8040A0;
 			color: #FFFFFF;
+			transition: none;
 		}
 		.Button.Shaped:enabled:active .Shape, .Button.Shaped.Active:enabled:active .Shape {
 			fill: #8040A0;
 		}
-		/* :active {
-			transition: none; // Disabled due to Combobox incompatibility.
-		} */
 
 		/* Focus */
 		:focus-visible {
@@ -754,13 +746,8 @@
 	#Ctrl_Nav {
 		position: absolute; top: 0; left: unset;
 	}
-	#DropctrlGroup_Nav {
-		top: 0; left: 0;
-		width: 100%; border: none;
-		background-color: transparent; box-shadow: none;
-	}
-	.Nav {
-		width: 120px;
+	.Nav:not(.ActiveSection) .Button:not(:hover):not(:active) {
+		color: #00000080;
 	}
 	#Ctrl_NavUnderline {
 		position: absolute; top: calc(100% - 2px); left: 4px;
@@ -797,7 +784,7 @@
 	}
 
 /* Responsive web design */
-@media (max-width: 920px) {
+@media (max-width: 910px) {
 	/* General */
 		/* Basics */
 			/* Group frameworks */
@@ -829,19 +816,12 @@
 
 	/* Area specific */
 		/* Header */
-		#Ctrl_Title {
-			left: calc(50% - 17.5px);
-		}
 		#Ctrl_Nav {
-			left: 0 !important;
-			width: 35px !important;
+			left: 80px !important;
+			max-width: calc(100% - 160px);
 		}
-		#DropctrlGroup_Nav {
-			width: 122px; border: 1px solid #00000040;
-			background-color: #FFFFFF; box-shadow: 0 0 4px 2px #00000040;
-		}
-		.HiddenInMobileLayout { /* .HiddenToCorner */
-			width: 0 !important; height: 0 !important; border: none !important; padding: 0 !important; margin: 0 !important;
+		#Ctrl_Nav .LabelAfterIcon { /* .HiddenHorizontally */
+			width: 0 !important; border-left: none !important; border-right: none !important; padding-left: 0 !important; padding-right: 0 !important; margin: 0 !important;
 			opacity: 0 !important;
 			overflow: hidden !important;
 			pointer-events: none !important;

@@ -12,7 +12,7 @@
 		}
 
 		/* Group frameworks */
-		.Item {
+		fieldset {
 			background-color: #485267E0;
 		}
 
@@ -130,7 +130,7 @@
 
 			/* Watermark */
 			.Watermark {
-				color: #EEE4D910;
+				color: #EEE4D908;
 			}
 
 	/* Variants */
@@ -173,11 +173,11 @@
 
 	/* Interactions */
 		/* Hover */
-		a:hover, label:not(:has(:disabled:not(option))):hover, .Button:enabled:hover /* .Combobox:enabled:hover, .Textbox:enabled:hover */ {
+		a:hover, .Button:enabled:hover {
 			background-color: #EEE4D9; box-shadow: 0 0 0 3px #DEB76C;
 			color: #485267;
 		}
-		.Active:enabled:hover, .Active:not(:has(:disabled:not(option))):hover {
+		.Active:enabled:hover {
 			background-color: #C8EC86;
 		}
 		.Button.Shaped:enabled:hover {
@@ -199,9 +199,7 @@
 		}
 
 		/* Click */
-		a:active, label:not(:has(:disabled:not(option))):active, .Button:enabled:active,
-		.Combobox:enabled:active, .Textbox:enabled:active, .Textbox.ShownAsLabel:enabled:active,
-		.Active:enabled:active, .Active:not(:has(:disabled:not(option))):active {
+		a:active, .Button:enabled:active {
 			background-color: #D0C6BD;
 			color: #EEE4D9;
 		}
@@ -231,11 +229,14 @@
 	#Topbar {
 		background-color: #485267E0;
 	}
-	#Topbar .Button, #DropctrlGroup_Nav {
+	#Topbar .Button {
 		border-radius: 5px;
 	}
 	#Topbar .Button:not(:hover):not(:active) {
 		color: #EEE4D9;
+	}
+	#Topbar .Nav:not(.ActiveSection) .Button:not(:hover):not(:active) {
+		color: #EEE4D980;
 	}
 	#Ctrl_NavUnderline {
 		background-color: #EEE4D9;
@@ -251,22 +252,6 @@
 		background-color: #282D38E0;
 		color: #EEE4D980;
 	}
-
-/* Responsive web design */
-@media (max-width: 920px) {
-	/* Area specific */
-		/* Header */
-		#DropctrlGroup_Nav {
-			border: 1px solid #EEE4D9;
-			background-color: #EEE4D9;
-		}
-		#DropctrlGroup_Nav .Button:not(:hover):not(:active) {
-			color: #485267;
-		}
-		#Ctrl_NavUnderline {
-			background-color: #485267;
-		}
-}
 
 /* Dev */
 #Html.ShowDebugOutlines * {

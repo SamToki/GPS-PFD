@@ -663,7 +663,7 @@
 				ShowDialog("System_LanguageUnsupported",
 					"Caution",
 					"<span lang=\"zh-TW\">抱歉，本網頁暫不支援繁體中文。</span>",
-					"", "", "", "<span lang=\"zh-TW\">確定</span>");
+					"", "", "", "<span lang=\"zh-TW\">OK</span>");
 				break;
 			default:
 				AlertSystemError("The value of System.I18n.Language \"" + System.I18n.Language + "\" in function Load is invalid.");
@@ -783,15 +783,6 @@
 
 	// System
 	function RefreshSystem() {
-		// Topbar
-		if(IsMobileLayout() == false) {
-			HideHorizontally("Button_Nav");
-			ChangeInert("DropctrlGroup_Nav", false);
-		} else {
-			Show("Button_Nav");
-			ChangeInert("DropctrlGroup_Nav", true);
-		}
-
 		// Fieldsets
 		let Elements = document.getElementsByTagName("fieldset");
 		for(let Looper = 0; Looper < Elements.length; Looper++) {
@@ -1322,10 +1313,10 @@
 					ChangeValue("Combobox_SettingsWeightUnit", Subsystem.I18n.MeasurementUnit.Weight);
 					switch(Subsystem.I18n.MeasurementUnit.Weight) {
 						case "Kilogram":
-							ChangeNumberTextbox("Textbox_SettingsWeight", "0", "100000", "100", "0~100000");
+							ChangeNumberTextbox("Textbox_SettingsWeight", "0", "1000000", "100", "0~1000000");
 							break;
 						case "Pound":
-							ChangeNumberTextbox("Textbox_SettingsWeight", "0", "220462", "100", "0~220462");
+							ChangeNumberTextbox("Textbox_SettingsWeight", "0", "2204623", "100", "0~2204623");
 							break;
 						default:
 							AlertSystemError("The value of Subsystem.I18n.MeasurementUnit.Weight \"" + Subsystem.I18n.MeasurementUnit.Weight + "\" in function RefreshSubsystem is invalid.");
@@ -2836,7 +2827,7 @@
 			for(let Looper = 1; Looper < AirportLibrary.Airport.length; Looper++) {
 				AddText("CtrlGroup_AirportLibraryAirportList",
 					"<li class=\"Ctrl\" id=\"Ctrl_AirportLibraryAirport" + Looper + "\">" +
-					"	<label class=\"AirportLibraryAirportLabel\" id=\"Label_AirportLibraryAirport" + Looper + "\" for=\"Radiobtn_AirportLibraryAirport" + Looper + "Departure\">" +
+					"	<label id=\"Label_AirportLibraryAirport" + Looper + "\" for=\"Radiobtn_AirportLibraryAirport" + Looper + "Departure\">" +
 					"		<input class=\"Radiobtn\" id=\"Radiobtn_AirportLibraryAirport" + Looper + "Departure\" type=\"radio\" checked=\"false\" onchange=\"SetDepartureAirport(" + Looper + ")\" />" +
 					"		<input class=\"Radiobtn\" id=\"Radiobtn_AirportLibraryAirport" + Looper + "Arrival\" type=\"radio\" checked=\"false\" onchange=\"SetArrivalAirport(" + Looper + ")\" />" +
 					"		<span class=\"ListItemName\">" + ConvertEmptyName(AirportLibrary.Airport[Looper].Name) + "</span>" +
@@ -2870,10 +2861,8 @@
 			for(let Looper = 1; Looper < AirportLibrary.Airport.length; Looper++) {
 				if(AirportLibrary.AirportSelection.Departure == Looper) {
 					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Departure", true);
-					AddClass("Label_AirportLibraryAirport" + Looper, "Active");
 				} else {
 					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Departure", false);
-					RemoveClass("Label_AirportLibraryAirport" + Looper, "Active");
 				}
 				if(AirportLibrary.AirportSelection.Arrival == Looper) {
 					ChangeChecked("Radiobtn_AirportLibraryAirport" + Looper + "Arrival", true);
@@ -2902,7 +2891,7 @@
 			for(let Looper = 1; Looper < AirportLibrary0.DepartureAirport.Runway.length; Looper++) {
 				AddText("CtrlGroup_AirportLibraryRunwayList",
 					"<li class=\"Ctrl\" id=\"Ctrl_AirportLibraryRunway" + Looper + "\">" +
-					"	<label class=\"AirportLibraryRunwayLabel\" id=\"Label_AirportLibraryRunway" + Looper + "\" for=\"Radiobtn_AirportLibraryRunway" + Looper + "\">" +
+					"	<label id=\"Label_AirportLibraryRunway" + Looper + "\" for=\"Radiobtn_AirportLibraryRunway" + Looper + "\">" +
 					"		<input class=\"Radiobtn\" id=\"Radiobtn_AirportLibraryRunway" + Looper + "\" type=\"radio\" checked=\"false\" onchange=\"SetRunway(" + Looper + ")\" />" +
 					"		<span class=\"ListItemName\">" +
 							AirportLibrary0.DepartureAirport.Runway[Looper].Heading.toString().padStart(2, "0") +
@@ -2926,10 +2915,8 @@
 			for(let Looper = 1; Looper < AirportLibrary0.DepartureAirport.Runway.length; Looper++) {
 				if(AirportLibrary0.DepartureAirport.RunwaySelection == Looper) {
 					ChangeChecked("Radiobtn_AirportLibraryRunway" + Looper, true);
-					AddClass("Label_AirportLibraryRunway" + Looper, "Active");
 				} else {
 					ChangeChecked("Radiobtn_AirportLibraryRunway" + Looper, false);
-					RemoveClass("Label_AirportLibraryRunway" + Looper, "Active");
 				}
 			}
 
@@ -3611,7 +3598,7 @@
 			RefreshPFD();
 		}
 		function SetWeight() {
-			PFD.Speed.Limit.Weight = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsWeight")), Subsystem.I18n.MeasurementUnit.Weight, "Kilogram"), 0, 100000);
+			PFD.Speed.Limit.Weight = CheckRangeAndCorrect(ConvertUnit(Math.trunc(ReadValue("Textbox_SettingsWeight")), Subsystem.I18n.MeasurementUnit.Weight, "Kilogram"), 0, 1000000);
 			RefreshPFD();
 		}
 		function SetWingArea() {
